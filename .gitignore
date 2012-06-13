@@ -1,0 +1,11 @@
+*~
+.idea
+.gradle
+**out/**/*
+**classes/**/*
+**build/**/*
+**target
+**test-output
+**.log
+modelgenerator.iml
+models.js
