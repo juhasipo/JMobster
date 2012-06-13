@@ -39,18 +39,18 @@ public class AnnotationProcessor {
     private static ValidationAnnotationProcessor getValidator(Annotation annotation) {
         return annotationProcessors.get(annotation.annotationType());
     }
-    private static boolean appendType(boolean hasType, ModelWriter sb, String type) throws IOException {
+    private static boolean appendType(boolean hasType, ModelWriter sb, String type) {
         if( !hasType ) {
             sb.write( "type: \"" ).write( type ).writeLine( "\"," );
         }
         return true;
     }
 
-    public void writeValidation( List<Annotation> validationAnnotations, final ModelWriter writer ) throws IOException {
+    public void writeValidation( List<Annotation> validationAnnotations, final ModelWriter writer ) {
         ItemProcessor<Annotation> annotationItemProcessor = new ItemProcessor<Annotation>() {
             boolean hasPropertyTypeSet = false;
             @Override
-            protected void process( Annotation annotation, boolean isLast ) throws IOException {
+            protected void process( Annotation annotation, boolean isLast ) {
                 ValidationAnnotationProcessor annotationProcessor = getValidator(annotation);
                 if( annotationProcessor != null ) {
                     if( annotationProcessor.requiresType() ) {

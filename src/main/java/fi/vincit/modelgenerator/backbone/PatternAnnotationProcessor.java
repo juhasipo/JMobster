@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 
 public class PatternAnnotationProcessor extends BaseValidationAnnotationProcessor {
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) throws IOException {
+    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         Pattern pattern = (Pattern)annotation;
         String javaScriptRegExp = convertToJavaScriptRegExp( pattern.regexp(), pattern.flags() );
         writer.write( "pattern: " ).write( javaScriptRegExp );

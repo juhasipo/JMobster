@@ -15,7 +15,7 @@ public abstract class ItemProcessor<T> {
      * @param items Items to process
      * @throws IOException
      */
-    public void process(List<? extends T> items) throws IOException {
+    public void process(List<? extends T> items) {
         for( int i = 0; i < items.size(); ++i ) {
             boolean isLastItem = i == items.size() - 1;
             this.process( items.get( i ), isLastItem );
@@ -28,5 +28,5 @@ public abstract class ItemProcessor<T> {
      * @param isLast Is the given item last item in the list
      * @throws IOException
      */
-    protected abstract void process(T item, boolean isLast) throws IOException;
+    protected abstract void process(T item, boolean isLast);
 }

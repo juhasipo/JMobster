@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 public class NotNullAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) throws IOException {
+    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         writer.write( "required: true" );
     }
 }

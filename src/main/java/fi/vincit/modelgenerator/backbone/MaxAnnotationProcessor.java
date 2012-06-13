@@ -14,7 +14,7 @@ public class MaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
     }
 
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) throws IOException {
+    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         writer.write( "max: " ).write( "" + ((Max)annotation).value() );
     }
 

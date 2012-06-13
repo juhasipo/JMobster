@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 
 public interface ValidationAnnotationProcessor {
-    void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) throws IOException;
+    void writeValidatorsToStream( Annotation annotation, ModelWriter writer );
     void validateType(String type);
     String requiredType();
     boolean requiresType();

@@ -19,17 +19,20 @@ public class ModelGenerator {
     private List<Model> models;
 
     public ModelProcessor modelProcessor;
-    public FieldDefaultValueProcessor fieldDefaultValueProcessor;
+    private FieldScanner fieldScanner;
+
 
     public ModelGenerator( ModelProcessor modelProcessor, FieldDefaultValueProcessor fieldDefaultValueProcessor ) {
         this.modelProcessor = modelProcessor;
-        this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
+        this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor);
     }
 
     public void process(Class... classes) {
         models = getModels(classes);
+        LOG.debug("Found {} models", models.size());
 
         try {
+            LOG.debug("Start processing models");
             modelProcessor.startProcessing();
             for( int i = 0; i < models.size(); ++i ) {
                 Model model = models.get(i);
@@ -38,69 +41,29 @@ public class ModelGenerator {
             }
             modelProcessor.endProcessing();
         } catch (IOException e) {
-
+            LOG.error("Error", e);
         }
     }
 
     private List<Model> getModels( Class[] classes ) {
         List<Model> models = new ArrayList<Model>();
         for( Class clazz : classes ) {
-            Model m = new Model(clazz, getFields( clazz ));
-            models.add( m );
-            for( ModelField mf : m.getFields() ) {
-                if( mf.hasValidations() ) {
-                    m.setValidations(true);
-                    break;
-                }
-            }
+            List<ModelField> modelFields = fieldScanner.getFields(clazz);
+            LOG.debug("Added {} model fields for class {}", modelFields.size(), clazz.getSimpleName());
+            Model model = new Model(clazz, modelFields);
+            models.add( model );
+            checkAndSetValidationState( model );
         }
         return models;
     }
 
-    public List<ModelField> getFields(Class clazz) {
-        List<ModelField> fields = new ArrayList<ModelField>();
-
-        try {
-            Object defaultObject = clazz.newInstance();
-            for( Field field : clazz.getDeclaredFields() ) {
-                field.setAccessible(true);
-                if( shouldAddField(field) ) {
-                    LOG.error("Adding field {} to model fields", field.getName());
-                    ModelField modelField = new ModelField(field, getValidationAnnotations(field));
-                    modelField.setDefaultValue(fieldDefaultValueProcessor.getDefaultValue(field, defaultObject));
-                    fields.add( modelField );
-                } else {
-                    LOG.error("Field {} not added to model fields", field.getName());
-                }
-            }
-        } catch( InstantiationException e ) {
-            LOG.error("Instantiation failed", e);
-        } catch( IllegalAccessException e ) {
-            LOG.error( "Illegal access", e );
-        }
-
-        return fields;
-    }
-
-    private List<Annotation> getValidationAnnotations( Field field ) {
-        List<Annotation> validationAnnotations = new ArrayList<Annotation>();
-        for( Annotation annotation : field.getAnnotations() ) {
-            if( isValidationAnnotation(annotation) ) {
-                validationAnnotations.add(annotation);
+    private void checkAndSetValidationState( Model model ) {
+        for( ModelField modelField : model.getFields() ) {
+            if( modelField.hasValidations() ) {
+                model.setValidations(true);
+                break;
             }
         }
-        return validationAnnotations;
     }
 
-    private boolean isValidationAnnotation( Annotation annotation ) {
-        Class type = annotation.annotationType();
-        return type.equals(Size.class) || type.equals(NotNull.class) ||
-                type.equals(Min.class) || type.equals(Max.class) ||
-                type.equals(Pattern.class);
-
-    }
-
-    private boolean shouldAddField(Field field) {
-        return !field.isAnnotationPresent( IgnoreDefaultValue.class);
-    }
 }

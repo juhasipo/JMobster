@@ -14,7 +14,7 @@ public class MinAnnotationProcessor extends BaseValidationAnnotationProcessor {
     }
 
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) throws IOException {
+    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         writer.write( "min: " ).write( "" + (( Min )annotation).value() );
     }
 
