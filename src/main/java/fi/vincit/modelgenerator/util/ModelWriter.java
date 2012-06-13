@@ -13,6 +13,7 @@ public class ModelWriter {
 
     private static final Logger LOG = LoggerFactory
             .getLogger( ModelWriter.class );
+    public static final String LINE_SEPARATOR = "\n";
 
     private FileWriter file;
     private BufferedWriter writer;
@@ -34,27 +35,53 @@ public class ModelWriter {
     public void open() {
     }
 
-    private void indentIfNeeded() throws IOException {
+    private void indentIfNeeded() {
         if( !isLineIndented ) {
             int spacesNeeded = indentationInSpaces * indentationInUnits;
             for( int i = 0; i < spacesNeeded; ++i ) {
-                writer.write(" ");
+                writeInternal( " " );
             }
             isLineIndented = true;
         }
     }
 
-    public ModelWriter write( String modelString ) throws IOException {
+    private void writeInternal(String string) {
+        try {
+            writer.write(string);
+        } catch (IOException e) {
+            LOG.error("Could not write", e);
+        }
+    }
+
+    public ModelWriter write( String modelString ) {
         indentIfNeeded();
-        writer.write(modelString);
+        writeInternal( modelString );
         return this;
     }
 
-    public ModelWriter writeLine( String modelStringLine ) throws IOException {
+    public ModelWriter write( String modelString, String separator, boolean writeSeparator ) {
+        write(modelString);
+        if( writeSeparator ) {
+            write(separator);
+        }
+        return this;
+    }
+
+    public ModelWriter writeLine( String modelStringLine ) {
         indentIfNeeded();
-        writer.write(modelStringLine);
-        writer.write('\n');
+        writeInternal( modelStringLine );
+        writeInternal( LINE_SEPARATOR );
         isLineIndented = false;
+        return this;
+    }
+
+    public ModelWriter writeLine( String modelStringLine, String separator, boolean writeSeparator ) {
+        write(modelStringLine);
+        if( writeSeparator ) {
+            writeLine(separator);
+        } else {
+            writeLine("");
+        }
         return this;
     }
 
@@ -101,7 +128,7 @@ public class ModelWriter {
             --indentationInUnits;
         }
         if( isLineIndented ) {
-            try {writeLine("");} catch (IOException e) {}
+            writeLine("");
         }
         return this;
     }

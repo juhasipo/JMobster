@@ -42,11 +42,7 @@ public class ModelProcessor {
         writeValidators(model.getFields());
 
         writer.indentBack();
-        if( isLastModel ) {
-            writer.writeLine("})");
-        } else {
-            writer.writeLine("}),");
-        }
+        writer.writeLine("})", ",", !isLastModel);
     }
 
     private void writeValidators( List<ModelField> fields ) throws IOException {
@@ -59,13 +55,7 @@ public class ModelProcessor {
                 writer.write(field.getField().getName()).writeLine(": {").indent();
                 annotationProcessor.writeValidation(field.getAnnotations(), writer);
                 writer.indentBack();
-                writer.write("}");
-
-                if( isLastItem ) {
-                    writer.writeLine("");
-                } else {
-                    writer.writeLine(",");
-                }
+                writer.writeLine("}", ",", !isLastItem);
             }
         };
         modelFieldItemProcessor.process(fields);
@@ -81,22 +71,13 @@ public class ModelProcessor {
             @Override
             protected void process( ModelField field, boolean isLastItem ) throws IOException {
                 writer.write(field.getField().getName()).write(": ").write(field.getDefaultValue());
-                if( isLastItem ) {
-                    writer.writeLine("");
-                } else {
-                    writer.writeLine(",");
-                }
+                writer.writeLine("", ",", !isLastItem);
             }
         };
         modelFieldItemProcessor.process( fields );
         writer.indentBack();
         writer.writeLine("}").indentBack();
-        if( hasValidators ) {
-            writer.writeLine("},");
-        } else {
-            writer.writeLine("}");
-        }
-
+        writer.writeLine("}", ",", hasValidators);
     }
 
     public void endProcessing() throws IOException {

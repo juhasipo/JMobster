@@ -3,6 +3,7 @@ package fi.vincit.modelgenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -20,13 +21,8 @@ public class TestMain {
         @Pattern(regexp = "[a-z ]+")
         private String string2 = "test string";
 
-        public String getString() {
-            return string;
-        }
-
-        public void setString( String string ) {
-            this.string = string;
-        }
+        @Min(10)
+        Long longValue = 42L;
     }
 
     public static void main(String[] args) {

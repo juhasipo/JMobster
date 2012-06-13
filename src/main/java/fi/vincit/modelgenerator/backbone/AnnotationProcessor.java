@@ -61,11 +61,7 @@ public class AnnotationProcessor {
                     LOG.debug("No validator processor found");
                 }
 
-                if( !isLast ) {
-                    writer.writeLine(",");
-                } else {
-                    writer.writeLine("");
-                }
+                writer.writeLine("", ",", !isLast);
             }
         };
         annotationItemProcessor.process(validationAnnotations);
