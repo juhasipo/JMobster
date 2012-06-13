@@ -1,4 +1,4 @@
 package fi.vincit.modelgenerator.backbone;
 
-public class AnnotationProcessorTest {
+public class DefaultAnnotationProcessorTest {
 }

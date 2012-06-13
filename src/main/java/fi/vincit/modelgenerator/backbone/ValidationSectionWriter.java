@@ -4,7 +4,6 @@ import fi.vincit.modelgenerator.ModelField;
 import fi.vincit.modelgenerator.util.ItemProcessor;
 import fi.vincit.modelgenerator.util.ModelWriter;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ValidationSectionWriter {
@@ -18,7 +17,6 @@ public class ValidationSectionWriter {
 
     public void writeValidators( List<ModelField> fields ) {
         writer.writeLine("validate: {").indent();
-
         final ItemProcessor<ModelField> modelFieldItemProcessor = new ItemProcessor<ModelField>() {
             @Override
             protected void process( ModelField field, boolean isLastItem ) {

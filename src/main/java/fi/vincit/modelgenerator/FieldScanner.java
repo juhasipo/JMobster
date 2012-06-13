@@ -1,11 +1,10 @@
 package fi.vincit.modelgenerator;
 
 import fi.vincit.modelgenerator.annotation.IgnoreDefaultValue;
-import fi.vincit.modelgenerator.backbone.AnnotationProcessor;
+import fi.vincit.modelgenerator.backbone.DefaultAnnotationProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class FieldScanner {
     }
 
     private boolean isValidationAnnotation( Annotation annotation ) {
-        return AnnotationProcessor.isAnnotationForValidation(annotation);
+        return DefaultAnnotationProcessor.isAnnotationForValidation( annotation );
 
     }
 
