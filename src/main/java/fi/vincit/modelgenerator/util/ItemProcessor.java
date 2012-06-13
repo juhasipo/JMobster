@@ -3,13 +3,30 @@ package fi.vincit.modelgenerator.util;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Utility class for iterating over list. The reason this class
+ * exists is that the process method tells which processed item
+ * is the last item in the list.
+ * @param <T> Type of objects in the item list
+ */
 public abstract class ItemProcessor<T> {
-    public void process(List<? extends T> items, ItemProcessor<T> processor) throws IOException {
+    /**
+     * Process the given list.
+     * @param items Items to process
+     * @throws IOException
+     */
+    public void process(List<? extends T> items) throws IOException {
         for( int i = 0; i < items.size(); ++i ) {
             boolean isLastItem = i == items.size() - 1;
-            processor.process( items.get( i ), isLastItem );
+            this.process( items.get( i ), isLastItem );
         }
     }
 
+    /**
+     * Method that processes the items.
+     * @param item Item to process
+     * @param isLast Is the given item last item in the list
+     * @throws IOException
+     */
     protected abstract void process(T item, boolean isLast) throws IOException;
 }

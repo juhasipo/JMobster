@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
+/**
+ * Class that writes strings to file or given OutputStream. Also
+ * handles indentation.
+ */
 public class ModelWriter {
 
     private static final Logger LOG = LoggerFactory
@@ -54,6 +58,9 @@ public class ModelWriter {
         return this;
     }
 
+    /**
+     * Close the stream and file if necessary.
+     */
     public void close() {
         try {
             writer.close();
@@ -69,16 +76,30 @@ public class ModelWriter {
         }
     }
 
+    /**
+     * Sets indentation size in spaces
+     * @param spaces Indentation size in spaces
+     */
     public void setIndentation(int spaces) {
         this.indentationInSpaces = spaces;
     }
 
+    /**
+     * Indent (right)
+     * @return ModelWriter to enable chaining calls.
+     */
     public ModelWriter indent() {
         ++indentationInUnits;
         return this;
     }
+    /**
+     * Indent back (left). If not new line, will change line.
+     * @return ModelWriter to enable chaining calls.
+     */
     public ModelWriter indentBack() {
-        --indentationInUnits;
+        if( indentationInUnits > 0 ) {
+            --indentationInUnits;
+        }
         if( isLineIndented ) {
             try {writeLine("");} catch (IOException e) {}
         }

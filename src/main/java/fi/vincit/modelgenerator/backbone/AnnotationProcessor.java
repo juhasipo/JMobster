@@ -33,10 +33,6 @@ public class AnnotationProcessor {
         annotationProcessors.put(clazz, vap);
     }
 
-    public String getPropertyName( Field field ) {
-        return field.getName();
-    }
-
     public static boolean isAnnotationForValidation(Annotation annotation) {
         return annotationProcessors.containsKey(annotation.annotationType());
     }
@@ -72,8 +68,6 @@ public class AnnotationProcessor {
                 }
             }
         };
-        annotationItemProcessor.process(validationAnnotations, annotationItemProcessor);
-
-        writer.write( "}" );
+        annotationItemProcessor.process(validationAnnotations);
     }
 }

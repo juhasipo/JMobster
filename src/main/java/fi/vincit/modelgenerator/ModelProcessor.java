@@ -52,9 +52,14 @@ public class ModelProcessor {
     private void writeValidators( List<ModelField> fields ) throws IOException {
         writer.writeLine("validate: {").indent();
         final AnnotationProcessor annotationProcessor = new AnnotationProcessor();
-        final ItemProcessor<Annotation> annotationItemProcessor = new ItemProcessor<Annotation>() {
+
+        final ItemProcessor<ModelField> modelFieldItemProcessor = new ItemProcessor<ModelField>() {
             @Override
-            protected void process( Annotation annotation, boolean isLastItem ) throws IOException {
+            protected void process( ModelField field, boolean isLastItem ) throws IOException {
+                writer.write(field.getField().getName()).writeLine(": {").indent();
+                annotationProcessor.writeValidation(field.getAnnotations(), writer);
+                writer.indentBack();
+                writer.write("}");
 
                 if( isLastItem ) {
                     writer.writeLine("");
@@ -63,12 +68,9 @@ public class ModelProcessor {
                 }
             }
         };
-        for( ModelField field : fields ) {
-            writer.write(field.getField().getName()).write(": {").indent();
-            annotationProcessor.writeValidation(field.getAnnotations(), writer);
-            writer.indentBack();
-            writer.writeLine("}");
-        }
+        modelFieldItemProcessor.process(fields);
+        writer.indentBack();
+        writer.writeLine("}");
     }
 
 
@@ -86,7 +88,8 @@ public class ModelProcessor {
                 }
             }
         };
-        modelFieldItemProcessor.process( fields, modelFieldItemProcessor );
+        modelFieldItemProcessor.process( fields );
+        writer.indentBack();
         writer.writeLine("}").indentBack();
         if( hasValidators ) {
             writer.writeLine("},");
@@ -97,8 +100,8 @@ public class ModelProcessor {
     }
 
     public void endProcessing() throws IOException {
-        writer.writeLine("}");
         writer.indentBack();
+        writer.writeLine("};");
         writer.close();
     }
 }
