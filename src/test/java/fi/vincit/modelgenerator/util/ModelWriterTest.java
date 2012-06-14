@@ -3,9 +3,14 @@ package fi.vincit.modelgenerator.util;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ModelWriterTest {
 
@@ -22,6 +27,62 @@ public class ModelWriterTest {
 
         String actual = os.toString();
         String expected = "{\nFoo\n}\n";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteLinesWithSeparator() throws Exception {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ModelWriter mw = new ModelWriter(os);
+        mw.setIndentation(2);
+
+        mw.writeLine("Foo", ",", true);
+        mw.close();
+
+        String actual = os.toString();
+        String expected = "Foo,\n";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteLinesWithoutSeparator() throws Exception {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ModelWriter mw = new ModelWriter(os);
+        mw.setIndentation(2);
+
+        mw.writeLine("Foo", ",", false);
+        mw.close();
+
+        String actual = os.toString();
+        String expected = "Foo\n";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteWithSeparator() throws Exception {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ModelWriter mw = new ModelWriter(os);
+        mw.setIndentation(2);
+
+        mw.write( "Foo", ",", true );
+        mw.close();
+
+        String actual = os.toString();
+        String expected = "Foo,";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteWithoutSeparator() throws Exception {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ModelWriter mw = new ModelWriter(os);
+        mw.setIndentation(2);
+
+        mw.write( "Foo", ",", false );
+        mw.close();
+
+        String actual = os.toString();
+        String expected = "Foo";
         assertEquals(expected, actual);
     }
 
@@ -87,4 +148,5 @@ public class ModelWriterTest {
         String expected = "{Foo\n  Bar\n  FooBar\n}\n";
         assertEquals(expected, actual);
     }
+
 }
