@@ -1,7 +1,9 @@
 package fi.vincit.modelgenerator;
 
 import fi.vincit.modelgenerator.annotation.IgnoreDefaultValue;
-import fi.vincit.modelgenerator.backbone.DefaultAnnotationProcessor;
+import fi.vincit.modelgenerator.backbone.AnnotationProcessor;
+import fi.vincit.modelgenerator.backbone.AnnotationProcessorProvider;
+import fi.vincit.modelgenerator.backbone.DefaultAnnotationProcessorProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,9 +17,11 @@ public class FieldScanner {
             .getLogger( FieldScanner.class );
 
     private FieldDefaultValueProcessor fieldDefaultValueProcessor;
+    private AnnotationProcessorProvider annotationProcessorProvider;
 
-    public FieldScanner( FieldDefaultValueProcessor fieldDefaultValueProcessor ) {
+    public FieldScanner( FieldDefaultValueProcessor fieldDefaultValueProcessor, AnnotationProcessorProvider annotationProcessorProvider ) {
         this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
+        this.annotationProcessorProvider = annotationProcessorProvider;
     }
 
     public List<ModelField> getFields(Class clazz) {
@@ -56,7 +60,7 @@ public class FieldScanner {
     }
 
     private boolean isValidationAnnotation( Annotation annotation ) {
-        return DefaultAnnotationProcessor.isAnnotationForValidation( annotation );
+        return annotationProcessorProvider.isAnnotationForValidation( annotation );
 
     }
 

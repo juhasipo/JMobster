@@ -1,21 +1,21 @@
-package fi.vincit.modelgenerator.backbone;
+package fi.vincit.modelgenerator.backbone.annotation;
 
 import fi.vincit.modelgenerator.BaseValidationAnnotationProcessor;
 import fi.vincit.modelgenerator.util.ModelWriter;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Max;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 
-public class MinAnnotationProcessor extends BaseValidationAnnotationProcessor {
+public class MaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
-    public MinAnnotationProcessor() {
+    public MaxAnnotationProcessor() {
         super("number");
     }
 
     @Override
     public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
-        writer.write( "min: " ).write( "" + (( Min )annotation).value() );
+        writer.write( "max: " ).write( "" + ((Max)annotation).value() );
     }
 
 }

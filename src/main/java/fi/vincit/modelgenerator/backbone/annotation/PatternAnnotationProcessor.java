@@ -1,4 +1,4 @@
-package fi.vincit.modelgenerator.backbone;
+package fi.vincit.modelgenerator.backbone.annotation;
 
 import fi.vincit.modelgenerator.BaseValidationAnnotationProcessor;
 import fi.vincit.modelgenerator.util.ModelWriter;

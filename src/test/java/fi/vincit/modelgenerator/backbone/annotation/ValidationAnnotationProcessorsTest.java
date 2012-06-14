@@ -1,5 +1,6 @@
-package fi.vincit.modelgenerator.backbone;
+package fi.vincit.modelgenerator.backbone.annotation;
 
+import fi.vincit.modelgenerator.backbone.annotation.*;
 import fi.vincit.modelgenerator.util.ModelWriter;
 import org.junit.Before;
 import org.junit.Test;

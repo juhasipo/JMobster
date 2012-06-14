@@ -17,25 +17,12 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
     private static final Logger LOG = LoggerFactory
             .getLogger( DefaultAnnotationProcessor.class );
 
-    private static Map<Class, ValidationAnnotationProcessor> annotationProcessors;
-    static {
-        annotationProcessors = new HashMap<Class, ValidationAnnotationProcessor>();
-        addValidator(NotNull.class, new NotNullAnnotationProcessor());
-        addValidator(Size.class, new SizeAnnotationProcessor());
-        addValidator(Min.class, new MinAnnotationProcessor());
-        addValidator(Max.class, new MaxAnnotationProcessor());
-        addValidator(Pattern.class, new PatternAnnotationProcessor());
-    }
-    private static void addValidator(Class clazz, ValidationAnnotationProcessor vap) {
-        annotationProcessors.put(clazz, vap);
+    private AnnotationProcessorProvider annotationProcessorProvider;
+
+    public DefaultAnnotationProcessor( AnnotationProcessorProvider annotationProcessorProvider ) {
+        this.annotationProcessorProvider = annotationProcessorProvider;
     }
 
-    public static boolean isAnnotationForValidation(Annotation annotation) {
-        return annotationProcessors.containsKey(annotation.annotationType());
-    }
-    private static ValidationAnnotationProcessor getValidator(Annotation annotation) {
-        return annotationProcessors.get(annotation.annotationType());
-    }
     private static boolean appendType(boolean hasType, ModelWriter sb, String type) {
         if( !hasType ) {
             sb.write( "type: \"" ).write( type ).writeLine( "\"," );
@@ -49,7 +36,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
             boolean hasPropertyTypeSet = false;
             @Override
             protected void process( Annotation annotation, boolean isLast ) {
-                ValidationAnnotationProcessor annotationProcessor = getValidator(annotation);
+                ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getValidator( annotation );
                 if( annotationProcessor != null ) {
                     if( annotationProcessor.requiresType() ) {
                         hasPropertyTypeSet = appendType(hasPropertyTypeSet, writer, annotationProcessor.requiredType() );
@@ -63,5 +50,9 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
             }
         };
         annotationItemProcessor.process(validationAnnotations);
+    }
+
+    public AnnotationProcessorProvider getAnnotationProcessorProvider() {
+        return annotationProcessorProvider;
     }
 }

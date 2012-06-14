@@ -1,8 +1,6 @@
 package fi.vincit.modelgenerator;
 
-import fi.vincit.modelgenerator.backbone.DefaultAnnotationProcessor;
-import fi.vincit.modelgenerator.backbone.DefaultValueSectionWriter;
-import fi.vincit.modelgenerator.backbone.ValidationSectionWriter;
+import fi.vincit.modelgenerator.backbone.*;
 import fi.vincit.modelgenerator.util.ModelWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +13,11 @@ public class ModelProcessor {
 
     private ModelWriter writer;
     private String modelFilePath;
+    private AnnotationProcessor annotationProcessor;
 
     public ModelProcessor( String modelFilePath ) {
         this.modelFilePath = modelFilePath;
+        annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider());
     }
 
     public void startProcessing() throws IOException {
@@ -39,7 +39,8 @@ public class ModelProcessor {
         DefaultValueSectionWriter defaultValueSectionWriter = new DefaultValueSectionWriter(writer);
         defaultValueSectionWriter.writeDefaultValues( model.getFields(), model.hasValidations() );
 
-        ValidationSectionWriter validationSectionWriter = new ValidationSectionWriter(writer, new DefaultAnnotationProcessor());
+        ValidationSectionWriter validationSectionWriter =
+                new ValidationSectionWriter(writer, annotationProcessor);
         validationSectionWriter.writeValidators( model.getFields() );
 
         writer.indentBack();
@@ -50,5 +51,13 @@ public class ModelProcessor {
         writer.indentBack();
         writer.writeLine("};");
         writer.close();
+    }
+
+    public AnnotationProcessor getAnnotationProcessor() {
+        return annotationProcessor;
+    }
+
+    public String getModelFilePath() {
+        return modelFilePath;
     }
 }
