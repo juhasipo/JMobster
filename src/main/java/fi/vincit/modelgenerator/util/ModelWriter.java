@@ -33,6 +33,7 @@ public class ModelWriter {
     }
 
     public void open() {
+        // Nothing to do
     }
 
     private void indentIfNeeded() {

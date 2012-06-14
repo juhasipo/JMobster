@@ -23,11 +23,10 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
         this.annotationProcessorProvider = annotationProcessorProvider;
     }
 
-    private static boolean appendType(boolean hasType, ModelWriter sb, String type) {
+    private static void appendType(boolean hasType, ModelWriter sb, String type) {
         if( !hasType ) {
             sb.write( "type: \"" ).write( type ).writeLine( "\"," );
         }
-        return true;
     }
 
     @Override
@@ -39,7 +38,8 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
                 ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getValidator( annotation );
                 if( annotationProcessor != null ) {
                     if( annotationProcessor.requiresType() ) {
-                        hasPropertyTypeSet = appendType(hasPropertyTypeSet, writer, annotationProcessor.requiredType() );
+                        appendType(hasPropertyTypeSet, writer, annotationProcessor.requiredType() );
+                        hasPropertyTypeSet = true;
                     }
                     annotationProcessor.writeValidatorsToStream( annotation, writer );
                 } else {

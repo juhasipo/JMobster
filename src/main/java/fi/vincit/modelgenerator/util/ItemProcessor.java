@@ -13,7 +13,6 @@ public abstract class ItemProcessor<T> {
     /**
      * Process the given list.
      * @param items Items to process
-     * @throws IOException
      */
     public void process(List<? extends T> items) {
         for( int i = 0; i < items.size(); ++i ) {
@@ -26,7 +25,6 @@ public abstract class ItemProcessor<T> {
      * Method that processes the items.
      * @param item Item to process
      * @param isLast Is the given item last item in the list
-     * @throws IOException
      */
     protected abstract void process(T item, boolean isLast);
 }

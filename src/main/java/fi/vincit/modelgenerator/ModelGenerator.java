@@ -17,8 +17,6 @@ public class ModelGenerator {
     private static final Logger LOG = LoggerFactory
             .getLogger( ModelGenerator.class );
 
-    private List<Model> models;
-
     public ModelProcessor modelProcessor;
     private FieldScanner fieldScanner;
 
@@ -29,14 +27,14 @@ public class ModelGenerator {
     }
 
     public void process(Class... classes) {
-        models = getModels(classes);
+        List<Model> models = getModels( classes );
         LOG.debug("Found {} models", models.size());
 
         try {
             LOG.debug("Start processing models");
             modelProcessor.startProcessing();
             for( int i = 0; i < models.size(); ++i ) {
-                Model model = models.get(i);
+                Model model = models.get( i );
                 boolean isLastModel = i == models.size() - 1;
                 modelProcessor.processModel( model, isLastModel );
             }
