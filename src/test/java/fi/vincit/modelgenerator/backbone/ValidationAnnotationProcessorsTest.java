@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 import static org.junit.Assert.assertEquals;
 
-public class AnnotationProcessorsTest {
+public class ValidationAnnotationProcessorsTest {
 
     private OutputStream os;
     private ModelWriter modelWriter;
