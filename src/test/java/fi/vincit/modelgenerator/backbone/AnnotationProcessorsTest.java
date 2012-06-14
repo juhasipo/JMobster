@@ -4,15 +4,12 @@ import fi.vincit.modelgenerator.util.ModelWriter;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class AnnotationProcessorsTest {
 
@@ -42,5 +39,32 @@ public class AnnotationProcessorsTest {
         m.writeValidatorsToStream(T.class.getDeclaredFields()[0].getAnnotations()[0], modelWriter);
         modelWriter.close();
         assertEquals("max: 100", os.toString());
+    }
+
+    @Test
+    public void testPatternAnnotationProcessorSimple() {
+        class T { @Pattern(regexp = "[\\dA-Z]") int i; }
+        PatternAnnotationProcessor m = new PatternAnnotationProcessor();
+        m.writeValidatorsToStream(T.class.getDeclaredFields()[0].getAnnotations()[0], modelWriter);
+        modelWriter.close();
+        assertEquals("pattern: /[\\dA-Z]/", os.toString());
+    }
+
+    @Test
+    public void testSizeAnnotationProcessorSimple() {
+        class T { @Size(min = 1, max = 255) String s; }
+        SizeAnnotationProcessor m = new SizeAnnotationProcessor();
+        m.writeValidatorsToStream(T.class.getDeclaredFields()[0].getAnnotations()[0], modelWriter);
+        modelWriter.close();
+        assertEquals("minlength: 1,\nmaxlength: 255", os.toString());
+    }
+
+    @Test
+    public void testNotNullAnnotationProcessorSimple() {
+        class T { @NotNull String s; }
+        NotNullAnnotationProcessor m = new NotNullAnnotationProcessor();
+        m.writeValidatorsToStream(T.class.getDeclaredFields()[0].getAnnotations()[0], modelWriter);
+        modelWriter.close();
+        assertEquals("required: true", os.toString());
     }
 }
