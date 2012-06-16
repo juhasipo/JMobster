@@ -52,24 +52,6 @@ public class ValidationAnnotationProcessorsTest {
     }
 
     @Test
-    public void testPatternAnnotationProcessorWithOneFlags() {
-        class T { @Pattern(regexp = "[\\dA-Z]", flags = {Pattern.Flag.CASE_INSENSITIVE}) int i; }
-        PatternAnnotationProcessor m = new PatternAnnotationProcessor();
-        m.writeValidatorsToStream(T.class.getDeclaredFields()[0].getAnnotations()[0], modelWriter);
-        modelWriter.close();
-        assertEquals("pattern: /[\\dA-Z]/i", os.toString());
-    }
-
-    @Test
-    public void testPatternAnnotationProcessorWithTwoFlags() {
-        class T { @Pattern(regexp = "[\\dA-Z]", flags = {Pattern.Flag.CASE_INSENSITIVE, Pattern.Flag.MULTILINE}) int i; }
-        PatternAnnotationProcessor m = new PatternAnnotationProcessor();
-        m.writeValidatorsToStream(T.class.getDeclaredFields()[0].getAnnotations()[0], modelWriter);
-        modelWriter.close();
-        assertEquals("pattern: /[\\dA-Z]/im", os.toString());
-    }
-
-    @Test
     public void testSizeAnnotationProcessor() {
         class T { @Size(min = 1, max = 255) String s; }
         SizeAnnotationProcessor m = new SizeAnnotationProcessor();
