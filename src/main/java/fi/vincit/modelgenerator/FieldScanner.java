@@ -1,9 +1,8 @@
 package fi.vincit.modelgenerator;
 
 import fi.vincit.modelgenerator.annotation.IgnoreDefaultValue;
-import fi.vincit.modelgenerator.backbone.AnnotationProcessor;
 import fi.vincit.modelgenerator.backbone.AnnotationProcessorProvider;
-import fi.vincit.modelgenerator.backbone.DefaultAnnotationProcessorProvider;
+import fi.vincit.modelgenerator.converter.JavaToJSValueConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +15,10 @@ public class FieldScanner {
     private static final Logger LOG = LoggerFactory
             .getLogger( FieldScanner.class );
 
-    private FieldDefaultValueProcessor fieldDefaultValueProcessor;
+    private JavaToJSValueConverter fieldDefaultValueProcessor;
     private AnnotationProcessorProvider annotationProcessorProvider;
 
-    public FieldScanner( FieldDefaultValueProcessor fieldDefaultValueProcessor, AnnotationProcessorProvider annotationProcessorProvider ) {
+    public FieldScanner( JavaToJSValueConverter fieldDefaultValueProcessor, AnnotationProcessorProvider annotationProcessorProvider ) {
         this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
         this.annotationProcessorProvider = annotationProcessorProvider;
     }
@@ -34,7 +33,7 @@ public class FieldScanner {
                 if( shouldAddField(field) ) {
                     LOG.error("Adding field {} to model fields", field.getName());
                     ModelField modelField = new ModelField(field, getValidationAnnotations(field));
-                    modelField.setDefaultValue(fieldDefaultValueProcessor.getDefaultValue(field, defaultObject));
+                    modelField.setDefaultValue(fieldDefaultValueProcessor.convert( field, defaultObject ));
                     fields.add( modelField );
                 } else {
                     LOG.error("Field {} not added to model fields", field.getName());

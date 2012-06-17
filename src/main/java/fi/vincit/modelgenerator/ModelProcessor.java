@@ -20,8 +20,15 @@ public class ModelProcessor {
         annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider());
     }
 
+    public ModelProcessor( ModelWriter writer ) {
+        this((String)null);
+        this.writer = writer;
+    }
+
     public void startProcessing() throws IOException {
-        writer = new ModelWriter(modelFilePath);
+        if( writer == null ) {
+            writer = new ModelWriter(modelFilePath);
+        }
         writer.open();
 
         writer.writeLine("/*\n" +
@@ -47,6 +54,7 @@ public class ModelProcessor {
         writer.writeLine("})", ",", !isLastModel);
     }
 
+    @SuppressWarnings( "RedundantThrows" )
     public void endProcessing() throws IOException {
         writer.indentBack();
         writer.writeLine("};");

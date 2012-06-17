@@ -32,6 +32,7 @@ public class ModelWriter {
         writer = new BufferedWriter(outputStreamWriter);
     }
 
+    @SuppressWarnings( "EmptyMethod" )
     public void open() {
         // Nothing to do
     }

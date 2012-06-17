@@ -2,6 +2,7 @@ package fi.vincit.modelgenerator;
 
 import fi.vincit.modelgenerator.annotation.IgnoreDefaultValue;
 import fi.vincit.modelgenerator.backbone.DefaultAnnotationProcessorProvider;
+import fi.vincit.modelgenerator.converter.JavaToJSValueConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ public class ModelGenerator {
     private FieldScanner fieldScanner;
 
 
-    public ModelGenerator( ModelProcessor modelProcessor, FieldDefaultValueProcessor fieldDefaultValueProcessor ) {
+    public ModelGenerator( ModelProcessor modelProcessor, JavaToJSValueConverter fieldDefaultValueProcessor ) {
         this.modelProcessor = modelProcessor;
         this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor, new DefaultAnnotationProcessorProvider());
     }
