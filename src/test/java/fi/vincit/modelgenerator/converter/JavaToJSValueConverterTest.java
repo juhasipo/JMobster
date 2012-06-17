@@ -5,10 +5,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -181,6 +178,16 @@ public class JavaToJSValueConverterTest {
         assertEquals( "[1, 19, 100]", result );
     }
 
+    @Test
+    public void test2dIntValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        int[][] array = { {1, 19, 100}, {2, 29, 200} };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[[1, 19, 100], [2, 29, 200]]", result );
+    }
+
 
     @Test
     public void testStringList() {
@@ -216,5 +223,68 @@ public class JavaToJSValueConverterTest {
 
         String result = valueConverter.convert( set.getClass(), set );
         assertEquals( "[\"ABC\", \"DEF\", \"QWERTY\"]", result );
+    }
+
+    @Test
+    public void test2dStringCollectionOfLists() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        Collection<List<String>> collection = new ArrayList<List<String>>();
+        List<String> list1 = new Vector<String>();
+        list1.add( "A1" );
+        list1.add( "B1" );
+        list1.add( "C1" );
+        collection.add(list1);
+        List<String> list2 = new Vector<String>();
+        list2.add( "A2" );
+        list2.add( "B2" );
+        list2.add( "C2" );
+        collection.add(list2);
+
+        String result = valueConverter.convert( collection.getClass(), collection );
+        assertEquals( "[[\"A1\", \"B1\", \"C1\"], [\"A2\", \"B2\", \"C2\"]]", result );
+    }
+
+    @Test
+    public void test2dStringCollectionObjects() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        Collection<Object> collection = new ArrayList<Object>();
+        List<String> list1 = new Vector<String>();
+        list1.add( "A1" );
+        list1.add( "B1" );
+        list1.add( "C1" );
+        collection.add(list1);
+        collection.add("Foo");
+        collection.add(42);
+
+        String result = valueConverter.convert( collection.getClass(), collection );
+        assertEquals( "[[\"A1\", \"B1\", \"C1\"], \"Foo\", 42]", result );
+    }
+
+    @Test
+    public void testStringStringMap() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        Map<String, String> map = new TreeMap<String, String>();
+        map.put("A", "A entry");
+        map.put("B", "B entry");
+        map.put("C", "C entry");
+
+        String result = valueConverter.convert( map.getClass(), map );
+        assertEquals( "{\"A\": \"A entry\", \"B\": \"B entry\", \"C\": \"C entry\"}", result );
+    }
+
+    @Test
+    public void testStringStringMapWithNullEntry() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        Map<String, String> map = new TreeMap<String, String>();
+        map.put("A", "A entry");
+        map.put("B", null);
+        map.put("C", "C entry");
+
+        String result = valueConverter.convert( map.getClass(), map );
+        assertEquals( "{\"A\": \"A entry\", \"B\": null, \"C\": \"C entry\"}", result );
     }
 }

@@ -121,6 +121,7 @@ public class JavaToJSValueConverter {
         addConverter( new DoubleConverter(), Double.class, double.class );
         addConverter( new FloatConverter(), Float.class, float.class );
         addConverter( new CollectionConverter( this ), Collection.class );
+        addConverter( new MapConverter( this ), Map.class );
         addConverter( new EnumConverter(), Enum.class );
         addConverter( new ArrayConverter( this ), Array.class );
     }
