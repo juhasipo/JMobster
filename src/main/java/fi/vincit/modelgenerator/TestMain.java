@@ -11,6 +11,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class TestMain {
     private static final Logger LOG = LoggerFactory
@@ -38,9 +40,15 @@ public class TestMain {
         @NotNull
         protected List<Long> longList = new ArrayList<Long>();
 
+        private Map<Integer, String> intStringMap = new TreeMap<Integer, String>();
+
         public TestModel() {
             longList.add(1L);
             longList.add(100L);
+
+            intStringMap.put(1, "1 value");
+            intStringMap.put(2, "2 value");
+            intStringMap.put(100, "100 value");
         }
 
     }

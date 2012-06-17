@@ -16,8 +16,11 @@ public final class ArrayConverter extends BaseValueConverter {
     }
 
     @Override
-    public String convertValue( Object value ) {
-        return convertArrayFromObject( value );
+    public String convertValue( Object values ) {
+        if( values == null ) {
+            return getTypeDefaultValue();
+        }
+        return convertArrayFromObject( values );
     }
 
     private String convertArrayFromObject( Object value ) {

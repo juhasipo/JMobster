@@ -19,6 +19,9 @@ public class MapConverter extends BaseValueConverter {
 
     @Override
     public String convertValue( Object values ) {
+        if( values == null ) {
+            return getTypeDefaultValue();
+        }
         Map<Object,Object> map = (Map)values;
         StringBuilder sb = new StringBuilder();
         sb.append("{");

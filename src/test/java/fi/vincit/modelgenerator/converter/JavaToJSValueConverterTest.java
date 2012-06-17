@@ -179,6 +179,13 @@ public class JavaToJSValueConverterTest {
     }
 
     @Test
+    public void testNullIntArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        String result = valueConverter.convert( int[].class, null );
+        assertEquals( "[]", result );
+    }
+
+    @Test
     public void test2dIntValueArray() {
         JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
 
@@ -209,6 +216,16 @@ public class JavaToJSValueConverterTest {
         List<String> list = new ArrayList<String>();
 
         String result = valueConverter.convert( list.getClass(), list );
+        assertEquals( "[]", result );
+    }
+
+    @Test
+    public void testNullList() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+
+        List<String> list = null;
+
+        String result = valueConverter.convert( List.class, list );
         assertEquals( "[]", result );
     }
 
@@ -286,5 +303,15 @@ public class JavaToJSValueConverterTest {
 
         String result = valueConverter.convert( map.getClass(), map );
         assertEquals( "{\"A\": \"A entry\", \"B\": null, \"C\": \"C entry\"}", result );
+    }
+
+    @Test
+    public void testNullMap() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+
+        Map<String, String> map = null;
+
+        String result = valueConverter.convert( Map.class, map );
+        assertEquals( "{}", result );
     }
 }
