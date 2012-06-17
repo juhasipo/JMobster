@@ -9,6 +9,10 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
+/**
+ * Default annotation processor containing the basic structure
+ * for converting Backbone.js compatible validation properties.
+ */
 public class DefaultAnnotationProcessor implements AnnotationProcessor {
 
     private static final Logger LOG = LoggerFactory
@@ -32,6 +36,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
             boolean hasPropertyTypeSet = false;
             @Override
             protected void process( Annotation annotation, boolean isLast ) {
+                // TODO: Don't return null if annotation processor is not found. Instead return some object that just doesn't do anything
                 ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getValidator( annotation );
                 if( annotationProcessor != null ) {
                     if( annotationProcessor.requiresType() ) {

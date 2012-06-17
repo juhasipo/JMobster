@@ -19,6 +19,11 @@ public class JavaToJSValueConverter {
 
     private ConverterMode mode;
 
+    /**
+     * Creates new Java to JavaScript value converter with
+     * the given converter mode.
+     * @param mode Converter mode to use
+     */
     public JavaToJSValueConverter(ConverterMode mode) {
         this();
         this.mode = mode;

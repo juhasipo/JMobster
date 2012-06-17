@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used to create a client side model from
+ * server side Java entity/DTO/POJO.
+ */
 public class ModelGenerator {
 
     private static final Logger LOG = LoggerFactory
@@ -23,6 +27,11 @@ public class ModelGenerator {
         this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor, new DefaultAnnotationProcessorProvider());
     }
 
+    /**
+     * Process and create the client side model(s) for
+     * the given classes.
+     * @param classes One or more classes for which the models should be generated.
+     */
     public void process(Class... classes) {
         List<Model> models = getModels( classes );
         LOG.debug("Found {} models", models.size());
@@ -41,6 +50,11 @@ public class ModelGenerator {
         }
     }
 
+    /**
+     * Get a list of internal model objects from the given classes.
+     * @param classes Found model classes.
+     * @return List of models. If no models are suitable returns an empty list.
+     */
     private List<Model> getModels( Class[] classes ) {
         List<Model> models = new ArrayList<Model>();
         for( Class clazz : classes ) {

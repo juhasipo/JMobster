@@ -6,6 +6,9 @@ import fi.vincit.jmobster.util.ModelWriter;
 
 import java.util.List;
 
+/**
+ * Class writes the Backbone.js defaults section.
+ */
 public class DefaultValueSectionWriter {
     private ModelWriter writer;
 
@@ -13,6 +16,11 @@ public class DefaultValueSectionWriter {
         this.writer = writer;
     }
 
+    /**
+     * Write default values to model
+     * @param fields Model fields
+     * @param hasValidators Set to true if the model contains validations.
+     */
     public void writeDefaultValues( List<ModelField> fields, boolean hasValidators ) {
         writer.writeLine( "defaults: function() {" ).indent();
         writer.writeLine("return {").indent();

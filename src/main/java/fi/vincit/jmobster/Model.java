@@ -2,6 +2,10 @@ package fi.vincit.jmobster;
 
 import java.util.List;
 
+/**
+ * A single model that is converted to
+ * the target platform.
+ */
 public class Model {
     private Class modelClass;
     private List<ModelField> fields;
@@ -20,6 +24,10 @@ public class Model {
         return fields;
     }
 
+    /**
+     *
+     * @return True if one or more model fields has one or more validation annotations.
+     */
     public boolean hasValidations() {
         return validations;
     }
