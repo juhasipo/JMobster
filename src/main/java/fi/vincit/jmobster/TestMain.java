@@ -16,8 +16,7 @@ package fi.vincit.jmobster;
 */
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
-import fi.vincit.jmobster.converter.valueconverters.ConverterMode;
-import fi.vincit.jmobster.converter.JavaToJSValueConverter;
+import fi.vincit.jmobster.util.StreamModelWriter;
 import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +81,7 @@ public class TestMain {
     }
 
     public static void main(String[] args) throws IOException {
-        ModelWriter modelWriter = new ModelWriter("models.js");
+        ModelWriter modelWriter = new StreamModelWriter("models.js");
         ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", modelWriter);
 
         generator.process( TestModel.class );

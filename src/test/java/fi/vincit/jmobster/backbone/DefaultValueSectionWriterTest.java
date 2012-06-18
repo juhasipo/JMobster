@@ -17,6 +17,7 @@ package fi.vincit.jmobster.backbone;
 
 import fi.vincit.jmobster.processor.ModelField;
 import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.util.StreamModelWriter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,7 +58,7 @@ public class DefaultValueSectionWriterTest {
     @Before
     public void initModelWriter() {
         os = new ByteArrayOutputStream();
-        modelWriter = new ModelWriter(os);
+        modelWriter = new StreamModelWriter(os);
         modelWriter.setIndentation( 0 );
     }
 

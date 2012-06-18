@@ -15,6 +15,7 @@ package fi.vincit.jmobster.backbone.annotation;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.util.StreamModelWriter;
 import fi.vincit.jmobster.util.ModelWriter;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class ValidationAnnotationProcessorsTest {
     @Before
     public void initModelWriter() {
         os = new ByteArrayOutputStream();
-        modelWriter = new ModelWriter(os);
+        modelWriter = new StreamModelWriter(os);
         modelWriter.setIndentation( 0 );
     }
 

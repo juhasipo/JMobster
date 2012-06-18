@@ -23,12 +23,12 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-public class ModelWriterTest {
+public class StreamModelWriterTest {
 
     @Test
     public void testWriteLines() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.writeLine("{");
@@ -44,7 +44,7 @@ public class ModelWriterTest {
     @Test
     public void testWriteLinesWithSeparator() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.writeLine("Foo", ",", true);
@@ -58,7 +58,7 @@ public class ModelWriterTest {
     @Test
     public void testWriteLinesWithoutSeparator() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.writeLine("Foo", ",", false);
@@ -72,7 +72,7 @@ public class ModelWriterTest {
     @Test
     public void testWriteWithSeparator() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.write( "Foo", ",", true );
@@ -86,7 +86,7 @@ public class ModelWriterTest {
     @Test
     public void testWriteWithoutSeparator() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.write( "Foo", ",", false );
@@ -100,7 +100,7 @@ public class ModelWriterTest {
     @Test
     public void testWriteChained() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.write("{").write("Foo").write("}").close();
@@ -113,7 +113,7 @@ public class ModelWriterTest {
     @Test
     public void testIndentationLines() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.writeLine( "{" );
@@ -131,7 +131,7 @@ public class ModelWriterTest {
     @Test
     public void testIndentationChained() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.write( "{" ).indent();
@@ -147,7 +147,7 @@ public class ModelWriterTest {
     @Test
     public void testIndentationChained2() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ModelWriter mw = new ModelWriter(os);
+        ModelWriter mw = new StreamModelWriter(os);
         mw.setIndentation(2);
 
         mw.write( "{" ).indent();

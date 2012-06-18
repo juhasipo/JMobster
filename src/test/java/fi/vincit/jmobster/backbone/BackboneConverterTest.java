@@ -18,7 +18,7 @@ package fi.vincit.jmobster.backbone;
 import fi.vincit.jmobster.processor.DefaultModelGenerator;
 import fi.vincit.jmobster.converter.JavaToJSValueConverter;
 import fi.vincit.jmobster.converter.valueconverters.ConverterMode;
-import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.util.StreamModelWriter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,12 +63,12 @@ public class BackboneConverterTest {
     }
 
     private OutputStream os;
-    private ModelWriter modelWriter;
+    private StreamModelWriter modelWriter;
 
     @Before
     public void initModelWriter() {
         os = new ByteArrayOutputStream();
-        modelWriter = new ModelWriter(os);
+        modelWriter = new StreamModelWriter(os);
         modelWriter.setIndentation( 4 );
     }
 

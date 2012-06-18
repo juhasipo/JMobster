@@ -16,8 +16,8 @@ package fi.vincit.jmobster.backbone;
 */
 
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
-import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.util.ItemProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

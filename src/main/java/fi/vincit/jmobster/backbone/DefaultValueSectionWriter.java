@@ -16,8 +16,8 @@ package fi.vincit.jmobster.backbone;
 */
 
 import fi.vincit.jmobster.processor.ModelField;
-import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.util.ItemProcessor;
 
 import java.util.List;
 

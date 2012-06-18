@@ -17,6 +17,7 @@ package fi.vincit.jmobster.backbone;
 
 import fi.vincit.jmobster.processor.Model;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.util.StreamModelWriter;
 import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class BackboneModelProcessor implements ModelProcessor {
     @Override
     public void startProcessing() throws IOException {
         if( writer == null ) {
-            writer = new ModelWriter(modelFilePath);
+            writer = new StreamModelWriter(modelFilePath);
         }
         writer.open();
 

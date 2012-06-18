@@ -16,8 +16,8 @@ package fi.vincit.jmobster.backbone.annotation;
 */
 
 import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
-import fi.vincit.jmobster.util.JavaToJSPatternConverter;
 import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.util.JavaToJSPatternConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
