@@ -16,7 +16,6 @@ package fi.vincit.jmobster.backbone;
 */
 
 import fi.vincit.jmobster.processor.DefaultModelGenerator;
-import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.converter.JavaToJSValueConverter;
 import fi.vincit.jmobster.converter.valueconverters.ConverterMode;
 import fi.vincit.jmobster.util.ModelWriter;
@@ -76,7 +75,7 @@ public class BackboneConverterTest {
     @Test
     public void testSimpleClass() {
 
-        DefaultModelGenerator mg = new DefaultModelGenerator(new ModelProcessor(modelWriter),
+        DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
                 new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ));
 
         mg.process(TestModel.class);

@@ -1,5 +1,4 @@
-package fi.vincit.jmobster.processor;
-/*
+package fi.vincit.jmobster.processor;/*
  * Copyright 2012 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,79 +14,38 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.backbone.*;
-import fi.vincit.jmobster.util.ModelWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fi.vincit.jmobster.backbone.AnnotationProcessor;
 
 import java.io.IOException;
 
 /**
- * <p>
- *     ModelProcessor controls how the models given from {@link fi.vincit.jmobster.ModelGenerator}
- * are processed. This Backbone.js implementation will put all the given
- * models inside a single namespace called "Models".
- * </p>
+ * BackboneModelProcessor controls how the models given from {@link fi.vincit.jmobster.ModelGenerator}
+ * are processed.
  */
-public class ModelProcessor {
-    private static final Logger LOG = LoggerFactory
-            .getLogger( ModelProcessor.class );
+public interface ModelProcessor {
+    /**
+     * Called before the first model is processed.
+     * @throws IOException If something goes wrong with writing the data
+     */
+    void startProcessing() throws IOException;
 
-    private ModelWriter writer;
-    private String modelFilePath;
-    private AnnotationProcessor annotationProcessor;
+    /**
+     * Called for each model once in the order the models
+     * were given to the {@link fi.vincit.jmobster.ModelGenerator}.
+     * @param model Model to process
+     * @param isLastModel True if the given model is the last model to process. Otherwise false.
+     */
+    void processModel( Model model, boolean isLastModel );
 
-    public ModelProcessor( String modelFilePath ) {
-        this.modelFilePath = modelFilePath;
-        annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider());
-    }
+    /**
+     * Called when the last model has been processed.
+     * @throws IOException If something goes wrong with writing the data
+     */
+    void endProcessing() throws IOException;
 
-    public ModelProcessor( ModelWriter writer ) {
-        this((String)null);
-        this.writer = writer;
-    }
-
-    public void startProcessing() throws IOException {
-        if( writer == null ) {
-            writer = new ModelWriter(modelFilePath);
-        }
-        writer.open();
-
-        writer.writeLine("/*\n" +
-                " * Auto-generated file\n" +
-                " */\n" +
-                "var Models = {");
-        writer.indent();
-    }
-
-    public void processModel(Model model, boolean isLastModel) {
-        String modelName = model.getModelClass().getSimpleName();
-
-        writer.write(modelName).writeLine( ": Backbone.Model.extend({" ).indent();
-
-        DefaultValueSectionWriter defaultValueSectionWriter = new DefaultValueSectionWriter(writer);
-        defaultValueSectionWriter.writeDefaultValues( model.getFields(), model.hasValidations() );
-
-        ValidationSectionWriter validationSectionWriter =
-                new ValidationSectionWriter(writer, annotationProcessor);
-        validationSectionWriter.writeValidators( model.getFields() );
-
-        writer.indentBack();
-        writer.writeLine("})", ",", !isLastModel);
-    }
-
-    @SuppressWarnings( "RedundantThrows" )
-    public void endProcessing() throws IOException {
-        writer.indentBack();
-        writer.writeLine("};");
-        writer.close();
-    }
-
-    public AnnotationProcessor getAnnotationProcessor() {
-        return annotationProcessor;
-    }
-
-    public String getModelFilePath() {
-        return modelFilePath;
-    }
+    /**
+     * Returns the used annotation processor.
+     * @return Used annotation processor.
+     */
+    AnnotationProcessor getAnnotationProcessor();
 }
