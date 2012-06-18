@@ -18,6 +18,7 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.converter.valueconverters.ConverterMode;
 import fi.vincit.jmobster.converter.JavaToJSValueConverter;
+import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -79,10 +81,10 @@ public class TestMain {
 
     }
 
-    public static void main(String[] args) {
-        LOG.debug("Start");
-        ModelGenerator mg = new ModelGenerator(new ModelProcessor("models.js"), new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ));
+    public static void main(String[] args) throws IOException {
+        ModelWriter modelWriter = new ModelWriter("models.js");
+        ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", modelWriter);
 
-        mg.process(TestModel.class);
+        generator.process( TestModel.class );
     }
 }

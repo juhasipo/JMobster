@@ -15,7 +15,7 @@ package fi.vincit.jmobster.backbone;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.ModelGenerator;
+import fi.vincit.jmobster.DefaultModelGenerator;
 import fi.vincit.jmobster.ModelProcessor;
 import fi.vincit.jmobster.converter.JavaToJSValueConverter;
 import fi.vincit.jmobster.converter.valueconverters.ConverterMode;
@@ -76,7 +76,7 @@ public class BackboneConverterTest {
     @Test
     public void testSimpleClass() {
 
-        ModelGenerator mg = new ModelGenerator(new ModelProcessor(modelWriter),
+        DefaultModelGenerator mg = new DefaultModelGenerator(new ModelProcessor(modelWriter),
                 new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ));
 
         mg.process(TestModel.class);
