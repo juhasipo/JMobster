@@ -22,6 +22,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * <p>
+ *     ModelProcessor controls how the models given from {@link fi.vincit.jmobster.ModelGenerator}
+ * are processed. This Backbone.js implementation will put all the given
+ * models inside a single namespace called "Models".
+ * </p>
+ */
 public class ModelProcessor {
     private static final Logger LOG = LoggerFactory
             .getLogger( ModelProcessor.class );

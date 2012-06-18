@@ -14,6 +14,23 @@ package fi.vincit.jmobster;/*
  * limitations under the License.
 */
 
+/**
+ * <p>
+ *     Interface for generating models. Use {@link JMobsterFactory} to
+ * create instances of model generators. The interface is very simple.
+ * Once the ModelGenerator object is instantiated, just call the
+ * {@link ModelGenerator#process(Class[])} method and give the method
+ * all the classes that should be processed.
+ * </p>
+ *
+ * <p>
+ *     Only call the {@link ModelGenerator#process(Class[])} method once.
+ * If the method is called multiple times, the default behaviour is that
+ * the previous models are overwritten. This of course depends on what kind
+ * of {@link fi.vincit.jmobster.util.ModelWriter} or {@link fi.vincit.jmobster.processor.ModelProcessor}
+ * has been configured.
+ * </p>
+ */
 public interface ModelGenerator {
     /**
      * Process and create the client side model(s) for

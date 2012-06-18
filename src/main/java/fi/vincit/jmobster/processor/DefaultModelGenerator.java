@@ -64,13 +64,22 @@ public class DefaultModelGenerator implements ModelGenerator {
         return models;
     }
 
+    /**
+     * Checks and sets the validation state for the given model.
+     * If the given model has at least one field that requires
+     * validation the model property validations will be set
+     * to true. If the model doesn't have any validation
+     * requirements the property will be set to false.
+     * @param model Model to check
+     */
     private void checkAndSetValidationState( Model model ) {
         for( ModelField modelField : model.getFields() ) {
             if( modelField.hasValidations() ) {
                 model.setValidations(true);
-                break;
+                return;
             }
         }
+        model.setValidations(false);
     }
 
 }
