@@ -48,9 +48,8 @@ give the models to the generator.
 
 And now you can create a model generator instance:
 
-    ModelGenerator generator = new ModelGenerator(
-            new ModelProcessor("models.js"),
-            new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT ));
+    ModelWriter modelWriter = new ModelWriter("models.js");
+    ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", modelWriter);
 
 And give the model class to the generator:
 
