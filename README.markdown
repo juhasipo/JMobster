@@ -48,7 +48,7 @@ give the models to the generator.
 
 And now you can create a model generator instance:
 
-    ModelWriter modelWriter = new ModelWriter("models.js");
+    ModelWriter modelWriter = new StreamModelWriter("models.js");
     ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", modelWriter);
 
 And give the model class to the generator:
