@@ -66,8 +66,8 @@ directory.
         UserDto: Backbone.Model.extend({
             defaults: function() {
                 return {
-                    fullName: "null",
-                    username: "null",
+                    fullName: "",
+                    username: "",
                     birthYear: 1900,
                     roles: ["VIEW_PAGES", "EDIT_OWN_PAGES"]
                 }
