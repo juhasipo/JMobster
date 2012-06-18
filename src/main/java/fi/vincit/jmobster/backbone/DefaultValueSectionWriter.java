@@ -15,7 +15,7 @@ package fi.vincit.jmobster.backbone;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.ModelField;
+import fi.vincit.jmobster.processor.ModelField;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
 

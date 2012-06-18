@@ -15,8 +15,8 @@ package fi.vincit.jmobster.backbone;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.DefaultModelGenerator;
-import fi.vincit.jmobster.ModelProcessor;
+import fi.vincit.jmobster.processor.DefaultModelGenerator;
+import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.converter.JavaToJSValueConverter;
 import fi.vincit.jmobster.converter.valueconverters.ConverterMode;
 import fi.vincit.jmobster.util.ModelWriter;

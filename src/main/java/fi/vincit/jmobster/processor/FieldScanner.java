@@ -1,4 +1,4 @@
-package fi.vincit.jmobster;
+package fi.vincit.jmobster.processor;
 /*
  * Copyright 2012 Juha Siponen
  *

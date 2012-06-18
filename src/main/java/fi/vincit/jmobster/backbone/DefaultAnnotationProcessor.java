@@ -15,7 +15,7 @@ package fi.vincit.jmobster.backbone;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;

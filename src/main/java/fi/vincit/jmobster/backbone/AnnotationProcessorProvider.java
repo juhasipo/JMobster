@@ -15,7 +15,7 @@ package fi.vincit.jmobster.backbone;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 
 import java.lang.annotation.Annotation;
 

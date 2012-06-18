@@ -2,6 +2,8 @@ package fi.vincit.jmobster;
 
 import fi.vincit.jmobster.converter.JavaToJSValueConverter;
 import fi.vincit.jmobster.converter.valueconverters.ConverterMode;
+import fi.vincit.jmobster.processor.DefaultModelGenerator;
+import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
 
 public class JMobsterFactory {

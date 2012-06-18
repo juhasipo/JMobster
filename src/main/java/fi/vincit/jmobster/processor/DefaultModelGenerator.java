@@ -1,5 +1,6 @@
-package fi.vincit.jmobster;
+package fi.vincit.jmobster.processor;
 
+import fi.vincit.jmobster.ModelGenerator;
 import fi.vincit.jmobster.backbone.DefaultAnnotationProcessorProvider;
 import fi.vincit.jmobster.converter.FieldValueConverter;
 import org.slf4j.Logger;
