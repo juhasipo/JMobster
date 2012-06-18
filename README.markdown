@@ -59,39 +59,39 @@ And give the model class to the generator:
 This will write a Backbone.js model file `models.js` to your working
 directory.
 
-/*
- * Auto-generated file
- */
-var Models = {
-    UserDto: Backbone.Model.extend({
-        defaults: function() {
-            return {
-                fullName: "null",
-                username: "null",
-                birthYear: 1900,
-                roles: ["VIEW_PAGES", "EDIT_OWN_PAGES"]
+    /*
+     * Auto-generated file
+     */
+    var Models = {
+        UserDto: Backbone.Model.extend({
+            defaults: function() {
+                return {
+                    fullName: "null",
+                    username: "null",
+                    birthYear: 1900,
+                    roles: ["VIEW_PAGES", "EDIT_OWN_PAGES"]
+                }
+            },
+            validate: {
+                fullName: {
+                    required: true,
+                    minlength: 0,
+                    maxlength: 255
+                },
+                username: {
+                    required: true,
+                    minlength: 0,
+                    maxlength: 255
+                },
+                birthYear: {
+                    required: true,
+                    type: "number",
+                    min: 1900
+                },
+                roles: {
+                    minlength: 1
+                }
             }
-        },
-        validate: {
-            fullName: {
-                required: true,
-                minlength: 0,
-                maxlength: 255
-            },
-            username: {
-                required: true,
-                minlength: 0,
-                maxlength: 255
-            },
-            birthYear: {
-                required: true,
-                type: "number",
-                min: 1900
-            },
-            roles: {
-                minlength: 1
-            }
-        }
-    })
-};
+        })
+    };
 
