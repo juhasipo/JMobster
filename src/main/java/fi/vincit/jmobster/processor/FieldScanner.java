@@ -60,12 +60,11 @@ public class FieldScanner {
             for( Field field : clazz.getDeclaredFields() ) {
                 field.setAccessible(true);
                 if( shouldAddField(field) ) {
-                    LOG.error("Adding field {} to model fields", field.getName());
                     ModelField modelField = new ModelField(field, getValidationAnnotations(field));
                     modelField.setDefaultValue(fieldDefaultValueProcessor.convert( field, defaultObject ));
                     fields.add( modelField );
                 } else {
-                    LOG.error("Field {} not added to model fields", field.getName());
+                    LOG.warn("Field {} not added to model fields", field.getName());
                 }
             }
         } catch( InstantiationException e ) {
