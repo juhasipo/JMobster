@@ -32,7 +32,7 @@ public class MapConverter extends BaseValueConverter {
     }
 
     @Override
-    public String convertValue( Object values ) {
+    protected String getValueAsString( Object values ) {
         if( values == null ) {
             return getTypeDefaultValue();
         }

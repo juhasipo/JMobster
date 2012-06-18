@@ -23,14 +23,27 @@ public abstract class BaseValueConverter implements ValueConverter {
      * Return handled type default value. Returned value should
      * be formatted as it appears in target platform. E.g. string for
      * JavaScript should contain the quotation marks around the value.
-     * @return Default value as string.
+     * @return Default value as string. Null must not be returned from this method.
      */
     protected abstract String getTypeDefaultValue();
+
+    /**
+     * <p>Converts the value to string format. Default implementation uses
+     * toString() method and it works well for many cases like BigDecimals.
+     * </p>
+     * <p>Override this method to implement custom value converter.</p>
+     * @param value
+     * @return Value as string. If null is returned the default value is used.
+     */
+    protected String getValueAsString(Object value) {
+        return value.toString();
+    }
 
     @Override
     public String convertValue(Object value) {
         if( value != null ) {
-            return value.toString();
+            String valueAsString = getValueAsString(value);
+            return valueAsString != null ? valueAsString : getTypeDefaultValue();
         } else {
             return getTypeDefaultValue();
         }

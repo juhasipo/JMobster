@@ -33,6 +33,8 @@ public class JavaToJSValueConverter {
     public static final String NULL_VALUE = "null";
 
     private ConverterMode mode;
+    private Map<Class, ValueConverter> converters;
+    private NullConverter nullConverter = new NullConverter();
 
     /**
      * Creates new Java to JavaScript value converter with
@@ -88,7 +90,7 @@ public class JavaToJSValueConverter {
      */
     private ValueConverter getConverterByClass( Class clazz ) {
         if( clazz == null ) {
-            return new NullConverter();
+            return nullConverter;
         }
         if( clazz.isArray() ) {
             return converters.get(Array.class);
@@ -131,7 +133,6 @@ public class JavaToJSValueConverter {
         return null;
     }
 
-    private Map<Class, ValueConverter> converters;
     public JavaToJSValueConverter() {
         converters = new HashMap<Class, ValueConverter>();
         addConverter( new BooleanConverter(), Boolean.class, boolean.class );

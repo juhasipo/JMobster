@@ -116,6 +116,30 @@ public class JavaToJSValueConverterTest {
         assertEquals( "0", result );
     }
 
+    @Test
+    public void testString() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        String value = "test string value";
+        String result = valueConverter.convert( String.class, value );
+        assertEquals( "\"test string value\"", result );
+    }
+
+    @Test
+    public void testNullString() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        String value = null;
+        String result = valueConverter.convert( String.class, value );
+        assertEquals( "null", result );
+    }
+
+    @Test
+    public void testNullStringAsDefault() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        String value = null;
+        String result = valueConverter.convert( String.class, value );
+        assertEquals( "\"\"", result );
+    }
+
     public enum TestEnum {
         ENUM_1,
         ENUM_2

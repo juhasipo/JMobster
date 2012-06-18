@@ -22,7 +22,7 @@ public class StringConverter extends BaseValueConverter {
     }
 
     @Override
-    public String convertValue( Object value ) {
+    protected String getValueAsString( Object value ) {
         return "\"" + value + "\"";
     }
 }

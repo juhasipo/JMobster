@@ -33,10 +33,7 @@ public final class CollectionConverter extends BaseValueConverter {
     }
 
     @Override
-    public String convertValue( Object values ) {
-        if( values == null ) {
-            return getTypeDefaultValue();
-        }
+    protected String getValueAsString( Object values ) {
         Collection collectionObject = (Collection)values;
         StringBuilder sb = new StringBuilder();
         sb.append("[");

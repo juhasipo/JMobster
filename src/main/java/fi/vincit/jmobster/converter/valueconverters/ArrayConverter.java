@@ -31,14 +31,7 @@ public final class ArrayConverter extends BaseValueConverter {
     }
 
     @Override
-    public String convertValue( Object values ) {
-        if( values == null ) {
-            return getTypeDefaultValue();
-        }
-        return convertArrayFromObject( values );
-    }
-
-    private String convertArrayFromObject( Object value ) {
+    protected String getValueAsString( Object value ) {
         Class componentType = value.getClass().getComponentType();
 
         //  Need to figure out the type for primitives by hand
