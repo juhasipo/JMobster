@@ -55,6 +55,8 @@ And give the model class to the generator:
 
     generator.process(UserDto.class);
 
+Note: You can also give multiple classes or an array of classes.
+
 This will write a Backbone.js model file `models.js` to your working
 directory.
 
