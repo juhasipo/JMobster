@@ -16,7 +16,24 @@ package fi.vincit.jmobster.converter.valueconverters;
 */
 
 /**
- * Base implementation for value converters.
+ * <p>
+ *     Base implementation for value converters. The class can be
+ * extended to create custom value converters if the default
+ * ones are not enough. The default implementation will
+ * try to convert the value with Java's toString() method
+ * and in some cases it won't give correct results.
+ * </p>
+ *
+ * <p>
+ *     All extended classes have to implement method
+ * {@link fi.vincit.jmobster.converter.valueconverters.BaseValueConverter#getTypeDefaultValue()}
+ * which will be used for default values as well as, in the default
+ * implementation, for null values. Additionally method
+ * {@link BaseValueConverter#getValueAsString(Object)} can be overridden
+ * to format the value as required. Note that string and similar
+ * values (like enums) may need to have quotation marks added
+ * around the value.
+ * </p>
  */
 public abstract class BaseValueConverter implements ValueConverter {
     /**
