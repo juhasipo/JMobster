@@ -28,6 +28,10 @@ public class JavaToJSValueConverterTest {
 
     public static final String NULL_STRING = "null";
 
+    /*
+    Standard Java data types
+     */
+
     @Test
     public void testBooleanValue() {
         JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
@@ -175,6 +179,10 @@ public class JavaToJSValueConverterTest {
         assertEquals( "Test value", result );
     }
 
+    /*
+    Other standard Java data types
+     */
+
     @Test
     public void testBigInteger() {
         JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
@@ -192,6 +200,11 @@ public class JavaToJSValueConverterTest {
         String result = valueConverter.convert( value.getClass(), value );
         assertEquals( "123456789.123456789", result );
     }
+
+
+    /*
+    Sets, lists and arrays
+     */
 
     @Test
     public void testIntegerList() {
@@ -317,6 +330,10 @@ public class JavaToJSValueConverterTest {
         String result = valueConverter.convert( collection.getClass(), collection );
         assertEquals( "[[\"A1\", \"B1\", \"C1\"], \"Foo\", 42]", result );
     }
+
+    /*
+    Maps
+     */
 
     @Test
     public void testStringStringMap() {
