@@ -1,7 +1,7 @@
 package fi.vincit.jmobster;
 
 import fi.vincit.jmobster.backbone.DefaultAnnotationProcessorProvider;
-import fi.vincit.jmobster.converter.JavaToJSValueConverter;
+import fi.vincit.jmobster.converter.FieldValueConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public class DefaultModelGenerator implements ModelGenerator {
     private FieldScanner fieldScanner;
 
 
-    public DefaultModelGenerator( ModelProcessor modelProcessor, JavaToJSValueConverter fieldDefaultValueProcessor ) {
+    public DefaultModelGenerator( ModelProcessor modelProcessor, FieldValueConverter fieldDefaultValueProcessor ) {
         this.modelProcessor = modelProcessor;
         this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor, new DefaultAnnotationProcessorProvider());
     }

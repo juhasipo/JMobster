@@ -15,14 +15,14 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.converter.JavaToJSValueConverter;
+import fi.vincit.jmobster.converter.FieldValueConverter;
 
 public final class ArrayConverter extends BaseValueConverter {
 
-    private JavaToJSValueConverter javaToJSValueConverter;
+    private FieldValueConverter fieldValueConverter;
 
-    public ArrayConverter( JavaToJSValueConverter javaToJSValueConverter ) {
-        this.javaToJSValueConverter = javaToJSValueConverter;
+    public ArrayConverter( FieldValueConverter fieldValueConverter ) {
+        this.fieldValueConverter = fieldValueConverter;
     }
 
     @Override
@@ -141,7 +141,7 @@ public final class ArrayConverter extends BaseValueConverter {
     }
 
     private int convertObject( StringBuilder sb, final int size, final int i, final Object value ) {
-        String convertedValue = javaToJSValueConverter.convert( value.getClass(), value );
+        String convertedValue = fieldValueConverter.convert( value.getClass(), value );
         sb.append(convertedValue);
         if( i != size - 1 ) {
             sb.append(", ");

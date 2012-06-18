@@ -15,15 +15,15 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.converter.JavaToJSValueConverter;
+import fi.vincit.jmobster.converter.FieldValueConverter;
 
 import java.util.Map;
 
 public class MapConverter extends BaseValueConverter {
-    private JavaToJSValueConverter javaToJSValueConverter;
+    private FieldValueConverter fieldValueConverter;
 
-    public MapConverter( JavaToJSValueConverter javaToJSValueConverter ) {
-        this.javaToJSValueConverter = javaToJSValueConverter;
+    public MapConverter( FieldValueConverter fieldValueConverter ) {
+        this.fieldValueConverter = fieldValueConverter;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class MapConverter extends BaseValueConverter {
             Object key = entry.getKey();
             Object value = entry.getValue();
 
-            String convertedKey = javaToJSValueConverter.convert(key.getClass(), key);
+            String convertedKey = fieldValueConverter.convert(key.getClass(), key);
             String convertedValue = getEntryValue( value );
 
             sb.append(convertedKey).append(": ");
@@ -63,9 +63,9 @@ public class MapConverter extends BaseValueConverter {
 
     private String getEntryValue( Object value ) {
         if( value != null ) {
-            return javaToJSValueConverter.convert(value.getClass(), value);
+            return fieldValueConverter.convert(value.getClass(), value);
         } else {
-            return javaToJSValueConverter.convert((Class)null, null);
+            return fieldValueConverter.convert((Class)null, null);
         }
     }
 }

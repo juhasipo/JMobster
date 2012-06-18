@@ -28,7 +28,7 @@ import java.util.Map;
  * Note that null values in ALLOW_NULL mode are converted
  * to "null" (as a string).
  */
-public class JavaToJSValueConverter {
+public class JavaToJSValueConverter implements FieldValueConverter {
 
     public static final String NULL_VALUE = "null";
 
@@ -46,9 +46,10 @@ public class JavaToJSValueConverter {
         this.mode = mode;
     }
 
-    public String convert(Field field, Object defaultObject) {
+    @Override
+    public String convert( Field field, Object defaultValueObject ) {
         try {
-            Object defaultValue = field.get(defaultObject);
+            Object defaultValue = field.get( defaultValueObject );
             if( mode == ConverterMode.ALLOW_NULL && defaultValue == null ) {
                 return NULL_VALUE;
             } else {
@@ -59,6 +60,7 @@ public class JavaToJSValueConverter {
         }
     }
 
+    @Override
     public String convert(Class type, Object fieldValue) {
         if( mode == ConverterMode.ALLOW_NULL && fieldValue == null ) {
             return NULL_VALUE;

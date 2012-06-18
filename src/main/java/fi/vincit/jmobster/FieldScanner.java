@@ -17,7 +17,7 @@ package fi.vincit.jmobster;
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.backbone.AnnotationProcessorProvider;
-import fi.vincit.jmobster.converter.JavaToJSValueConverter;
+import fi.vincit.jmobster.converter.FieldValueConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +34,7 @@ public class FieldScanner {
     private static final Logger LOG = LoggerFactory
             .getLogger( FieldScanner.class );
 
-    private JavaToJSValueConverter fieldDefaultValueProcessor;
+    private FieldValueConverter fieldDefaultValueProcessor;
     private AnnotationProcessorProvider annotationProcessorProvider;
 
     /**
@@ -42,7 +42,7 @@ public class FieldScanner {
      * @param fieldDefaultValueProcessor Field default value processor
      * @param annotationProcessorProvider Annotation processor provider
      */
-    public FieldScanner( JavaToJSValueConverter fieldDefaultValueProcessor, AnnotationProcessorProvider annotationProcessorProvider ) {
+    public FieldScanner( FieldValueConverter fieldDefaultValueProcessor, AnnotationProcessorProvider annotationProcessorProvider ) {
         this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
         this.annotationProcessorProvider = annotationProcessorProvider;
     }
