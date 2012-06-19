@@ -16,11 +16,13 @@ once in a while due to sudden urges to refactor the code. The current
 version is not well tested yet with real Backbone.js client nor
 a working server so there will be a lot of bugs.
 
+
 Requirements
 ------------
 At the moment only Java to Backbone.js model conversion is supported.
 Validation will require [Backbone.Validations](https://github.com/n-time/backbone.validations) plugin
-to work.
+to work. Java dependencies are handled in gradle build file.
+
 
 Usage
 -----
@@ -33,7 +35,7 @@ give the models to the generator.
     public class UserDto {
         @NotNull
         @Size(max = 255)
-        private String fullName;
+        private String fullname;
 
         @NotNull
         @Size(max = 255)
@@ -61,13 +63,14 @@ And give the model class to the generator:
 Note: You can also give multiple classes or an array of classes.
 
 This will write a Backbone.js model file `models.js` to your working
-directory.
+directory. The default naming strategy will remove Dto suffix from the
+model class name.
 
     /*
      * Auto-generated file
      */
     var Models = {
-        UserDto: Backbone.Model.extend({
+        User: Backbone.Model.extend({
             defaults: function() {
                 return {
                     fullName: "",
@@ -77,7 +80,7 @@ directory.
                 }
             },
             validate: {
-                fullName: {
+                fullname: {
                     required: true,
                     minlength: 0,
                     maxlength: 255
