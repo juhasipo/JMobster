@@ -56,4 +56,15 @@ public class DefaultNamingStrategyTest {
         String modelName = dns.getName(model);
         assertEquals("TestClass2DtoModel", modelName);
     }
+
+    @fi.vincit.jmobster.annotation.Model(name="NewClassname")
+    public static class OverriddenTestClass {}
+
+    @Test
+    public void testOverriddenTestClass() {
+        DefaultNamingStrategy dns = new DefaultNamingStrategy();
+        Model model = new Model(OverriddenTestClass.class, null);
+        String modelName = dns.getName(model);
+        assertEquals("NewClassname", modelName);
+    }
 }

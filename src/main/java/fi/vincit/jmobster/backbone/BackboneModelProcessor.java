@@ -83,10 +83,11 @@ public class BackboneModelProcessor implements ModelProcessor {
         DefaultValueSectionWriter defaultValueSectionWriter = new DefaultValueSectionWriter(writer);
         defaultValueSectionWriter.writeDefaultValues( model.getFields(), model.hasValidations() );
 
-        ValidationSectionWriter validationSectionWriter =
-                new ValidationSectionWriter(writer, annotationProcessor);
-        validationSectionWriter.writeValidators( model.getFields() );
-
+        if( model.hasValidations() ) {
+            ValidationSectionWriter validationSectionWriter =
+                    new ValidationSectionWriter(writer, annotationProcessor);
+            validationSectionWriter.writeValidators( model.getFields() );
+        }
         writer.indentBack();
         writer.writeLine( MODEL_EXTEND_END, ",", !isLastModel);
     }

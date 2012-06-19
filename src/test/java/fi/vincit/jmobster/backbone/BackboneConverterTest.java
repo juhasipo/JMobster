@@ -55,6 +55,8 @@ public class BackboneConverterTest {
         @NotNull
         List<Long> longList = new ArrayList<Long>();
 
+        int fieldWithNoValidation = 12;
+
         public TestModel() {
             longList.add(1L);
             longList.add(100L);
@@ -92,7 +94,8 @@ public class BackboneConverterTest {
                 "                longValue: 42,\n" +
                 "                longArray: [1, 2],\n" +
                 "                stringArray: [\"Foo\", \"Bar\", \"FooBar\", \"123\"],\n" +
-                "                longList: [1, 100]\n" +
+                "                longList: [1, 100],\n" +
+                "                fieldWithNoValidation: 12\n" +
                 "            }\n" +
                 "        },\n" +
                 "        validate: {\n" +
@@ -120,6 +123,40 @@ public class BackboneConverterTest {
                 "            },\n" +
                 "            longList: {\n" +
                 "                required: true\n" +
+                "            },\n" +
+                "            fieldWithNoValidation: {\n" +
+                "            }\n" +
+                "        }\n" +
+                "    })\n" +
+                "};\n";
+        assertEquals(referenceModel, os.toString());
+    }
+
+    public static class NoValidationsClass {
+        private String stringValue = "String value";
+        private double[] doubleArray = {1.0d, 1.5d};
+        private float[] floatArray = { 0.0f, 0.1f, 0.2f };
+        private boolean[] booleanArray = { true, false, true, true };
+    }
+
+    @Test
+    public void testNoValidationsClass() {
+        DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
+                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ));
+
+        mg.process(NoValidationsClass.class);
+
+        String referenceModel = "/*\n" +
+                " * Auto-generated file\n" +
+                " */\n" +
+                "var Models = {\n" +
+                "    NoValidationsClass: Backbone.Model.extend({\n" +
+                "        defaults: function() {\n" +
+                "            return {\n" +
+                "                stringValue: \"String value\",\n" +
+                "                doubleArray: [1.0, 1.5],\n" +
+                "                floatArray: [0.0, 0.1, 0.2],\n" +
+                "                booleanArray: [true, false, true, true]\n" +
                 "            }\n" +
                 "        }\n" +
                 "    })\n" +
