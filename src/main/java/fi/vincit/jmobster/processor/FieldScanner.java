@@ -19,6 +19,8 @@ import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.backbone.AnnotationProcessorProvider;
 import fi.vincit.jmobster.converter.FieldValueConverter;
+import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
+import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +54,8 @@ public class FieldScanner {
      * Scans the given class for model fields.
      * @param clazz Class to scan
      * @return List of model fields. Empty list if nothing found.
+     * @throws CannotAccessDefaultConstructorError If the default constructor exists but cannot be accessed
+     * @throws DefaultConstructorMissingError If the given model does not have a default constructor
      */
     public List<ModelField> getFields(Class clazz) {
         List<ModelField> fields = new ArrayList<ModelField>();
@@ -70,8 +74,10 @@ public class FieldScanner {
             }
         } catch( InstantiationException e ) {
             LOG.error("Instantiation failed", e);
+            throw new DefaultConstructorMissingError("Class " + clazz + " does not have a default constructor");
         } catch( IllegalAccessException e ) {
             LOG.error( "Illegal access", e );
+            throw new CannotAccessDefaultConstructorError(e.getMessage());
         }
 
         return fields;
