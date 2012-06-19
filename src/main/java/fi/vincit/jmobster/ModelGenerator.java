@@ -14,6 +14,8 @@ package fi.vincit.jmobster;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.ModelProcessor;
+
 /**
  * <p>
  *     Interface for generating models. Use {@link JMobsterFactory} to
@@ -38,4 +40,11 @@ public interface ModelGenerator {
      * @param classes One or more classes for which the models should be generated.
      */
     void process( Class... classes );
+
+    /**
+     * Returns used model processor. Use this to configure
+     * the model processor as you wish.
+     * @return
+     */
+    ModelProcessor getModelProcessor();
 }

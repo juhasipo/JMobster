@@ -48,4 +48,10 @@ public interface ModelProcessor {
      * @return Used annotation processor.
      */
     AnnotationProcessor getAnnotationProcessor();
+
+    /**
+     * Set naming strategy for the processor
+     * @param modelNamingStrategy Naming strategy
+     */
+    void setModelNamingStrategy( ModelNamingStrategy modelNamingStrategy );
 }

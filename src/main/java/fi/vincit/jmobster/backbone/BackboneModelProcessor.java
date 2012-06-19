@@ -35,20 +35,30 @@ import java.io.IOException;
 public class BackboneModelProcessor implements ModelProcessor {
     private static final Logger LOG = LoggerFactory
             .getLogger( BackboneModelProcessor.class );
+    private static final String NAMESPACE_START = "{";
+    private static final String MODEL_EXTEND_START = ": Backbone.Model.extend({";
+    private static final String MODEL_EXTEND_END = "})";
+    private static final String VARIABLE = "var";
+    private static final String NAMESPACE_END = "};";
 
     private ModelWriter writer;
     private String modelFilePath;
     private AnnotationProcessor annotationProcessor;
     private ModelNamingStrategy modelNamingStrategy;
 
+    private String startComment;
+    private String namespaceName;
+
     public BackboneModelProcessor( String modelFilePath ) {
         this.modelFilePath = modelFilePath;
         annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider());
         modelNamingStrategy = new DefaultNamingStrategy();
+        startComment = "/*\n * Auto-generated file\n */";
+        namespaceName = "Models";
     }
 
     public BackboneModelProcessor( ModelWriter writer ) {
-        this((String)null);
+        this( (String)null );
         this.writer = writer;
     }
 
@@ -59,10 +69,8 @@ public class BackboneModelProcessor implements ModelProcessor {
         }
         writer.open();
 
-        writer.writeLine("/*\n" +
-                " * Auto-generated file\n" +
-                " */\n" +
-                "var Models = {");
+        writer.writeLine( startComment );
+        writer.writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
         writer.indent();
     }
 
@@ -70,7 +78,7 @@ public class BackboneModelProcessor implements ModelProcessor {
     public void processModel( Model model, boolean isLastModel ) {
         String modelName = modelNamingStrategy.getName(model);
 
-        writer.write(modelName).writeLine( ": Backbone.Model.extend({" ).indent();
+        writer.write(modelName).writeLine( MODEL_EXTEND_START ).indent();
 
         DefaultValueSectionWriter defaultValueSectionWriter = new DefaultValueSectionWriter(writer);
         defaultValueSectionWriter.writeDefaultValues( model.getFields(), model.hasValidations() );
@@ -80,14 +88,14 @@ public class BackboneModelProcessor implements ModelProcessor {
         validationSectionWriter.writeValidators( model.getFields() );
 
         writer.indentBack();
-        writer.writeLine("})", ",", !isLastModel);
+        writer.writeLine( MODEL_EXTEND_END, ",", !isLastModel);
     }
 
     @Override
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing() throws IOException {
         writer.indentBack();
-        writer.writeLine("};");
+        writer.writeLine( NAMESPACE_END );
         writer.close();
     }
 
@@ -98,5 +106,27 @@ public class BackboneModelProcessor implements ModelProcessor {
 
     public String getModelFilePath() {
         return modelFilePath;
+    }
+
+    @Override
+    public void setModelNamingStrategy( ModelNamingStrategy modelNamingStrategy ) {
+        this.modelNamingStrategy = modelNamingStrategy;
+    }
+
+    /**
+     * Set start commend for the model file. Note that you have include
+     * comment start and end marks and wrap the comment appropriately.
+     * @param startComment Start comment
+     */
+    public void setStartComment( String startComment ) {
+        this.startComment = startComment;
+    }
+
+    /**
+     * Set namespace in which the models are created
+     * @param namespaceName Namespace
+     */
+    public void setNamespaceName( String namespaceName ) {
+        this.namespaceName = namespaceName;
     }
 }

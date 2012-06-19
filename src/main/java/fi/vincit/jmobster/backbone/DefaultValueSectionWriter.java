@@ -25,6 +25,11 @@ import java.util.List;
  * Class writes the Backbone.js defaults section.
  */
 public class DefaultValueSectionWriter {
+    private static final String DEFAULT_SECTION_START = "defaults: function() {";
+    private static final String DEFAULT_RETURN_START = "return {";
+    private static final String MODEL_NAME_ASSIGN = ": ";
+    private static final String DEFAULT_RETURN_END = "}";
+    private static final String DEFAULT_SECTION_END = "}";
     private ModelWriter writer;
 
     public DefaultValueSectionWriter( ModelWriter writer ) {
@@ -37,18 +42,18 @@ public class DefaultValueSectionWriter {
      * @param hasValidators Set to true if the model contains validations.
      */
     public void writeDefaultValues( List<ModelField> fields, boolean hasValidators ) {
-        writer.writeLine( "defaults: function() {" ).indent();
-        writer.writeLine("return {").indent();
+        writer.writeLine( DEFAULT_SECTION_START ).indent();
+        writer.writeLine( DEFAULT_RETURN_START ).indent();
         final ItemProcessor<ModelField> modelFieldItemProcessor = new ItemProcessor<ModelField>() {
             @Override
             protected void process( ModelField field, boolean isLastItem ) {
-                writer.write(field.getField().getName()).write(": ").write(field.getDefaultValue());
+                writer.write(field.getField().getName()).write( MODEL_NAME_ASSIGN ).write( field.getDefaultValue() );
                 writer.writeLine("", ",", !isLastItem);
             }
         };
         modelFieldItemProcessor.process( fields );
         writer.indentBack();
-        writer.writeLine("}").indentBack();
-        writer.writeLine("}", ",", hasValidators);
+        writer.writeLine( DEFAULT_RETURN_END ).indentBack();
+        writer.writeLine( DEFAULT_SECTION_END, ",", hasValidators);
     }
 }

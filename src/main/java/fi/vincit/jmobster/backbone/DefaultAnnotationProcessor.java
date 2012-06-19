@@ -32,6 +32,8 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
 
     private static final Logger LOG = LoggerFactory
             .getLogger( DefaultAnnotationProcessor.class );
+    private static final String FIELD_TYPE_START = "type: \"";
+    private static final String FIELD_TYPE_END = "\",";
 
     private AnnotationProcessorProvider annotationProcessorProvider;
 
@@ -41,7 +43,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
 
     private static void appendType(boolean hasType, ModelWriter sb, String type) {
         if( !hasType ) {
-            sb.write( "type: \"" ).write( type ).writeLine( "\"," );
+            sb.write( FIELD_TYPE_START ).write( type ).writeLine( FIELD_TYPE_END );
         }
     }
 
