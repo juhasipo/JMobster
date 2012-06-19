@@ -24,6 +24,9 @@ to work.
 
 Usage
 -----
+
+### Basic usage
+
 Basic usage is simple. Create Java objects, use JSR-303 annotations and
 give the models to the generator.
 
@@ -96,3 +99,12 @@ directory.
         })
     };
 
+### Classes and Default Values
+
+Classes that are processed with JMobster have to have a default constructor. This
+constructor is used for field default values. If a field shouldn't have a default
+value, annotation IgnoreDefaultValue can be used. This can be handy e.g. for
+id values that should not have default value in client side model.
+
+The class fields' visibility doesn't matter and no getters nor setters are required
+in order to JMobster to work.
