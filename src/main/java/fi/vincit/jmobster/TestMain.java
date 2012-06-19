@@ -16,6 +16,7 @@ package fi.vincit.jmobster;
 */
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
+import fi.vincit.jmobster.annotation.Model;
 import fi.vincit.jmobster.util.StreamModelWriter;
 import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;
@@ -41,7 +42,8 @@ public class TestMain {
     }
 
     @SuppressWarnings( "MismatchedReadAndWriteOfArray" )
-    public static class TestModel {
+    @Model(name="TestModelRenamed")
+    public static class MyModelDto {
 
         @IgnoreDefaultValue
         @Size(min = 5)
@@ -69,7 +71,7 @@ public class TestMain {
 
         private Map<Integer, String> intStringMap = new TreeMap<Integer, String>();
 
-        public TestModel() {
+        public MyModelDto() {
             longList.add(1L);
             longList.add(100L);
 
@@ -84,6 +86,6 @@ public class TestMain {
         ModelWriter modelWriter = new StreamModelWriter("models.js");
         ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", modelWriter);
 
-        generator.process( TestModel.class );
+        generator.process( MyModelDto.class );
     }
 }

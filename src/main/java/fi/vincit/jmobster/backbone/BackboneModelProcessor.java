@@ -15,7 +15,9 @@ package fi.vincit.jmobster.backbone;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.DefaultNamingStrategy;
 import fi.vincit.jmobster.processor.Model;
+import fi.vincit.jmobster.processor.ModelNamingStrategy;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.util.StreamModelWriter;
 import fi.vincit.jmobster.util.ModelWriter;
@@ -37,10 +39,12 @@ public class BackboneModelProcessor implements ModelProcessor {
     private ModelWriter writer;
     private String modelFilePath;
     private AnnotationProcessor annotationProcessor;
+    private ModelNamingStrategy modelNamingStrategy;
 
     public BackboneModelProcessor( String modelFilePath ) {
         this.modelFilePath = modelFilePath;
         annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider());
+        modelNamingStrategy = new DefaultNamingStrategy();
     }
 
     public BackboneModelProcessor( ModelWriter writer ) {
@@ -64,7 +68,7 @@ public class BackboneModelProcessor implements ModelProcessor {
 
     @Override
     public void processModel( Model model, boolean isLastModel ) {
-        String modelName = model.getModelClass().getSimpleName();
+        String modelName = modelNamingStrategy.getName(model);
 
         writer.write(modelName).writeLine( ": Backbone.Model.extend({" ).indent();
 
