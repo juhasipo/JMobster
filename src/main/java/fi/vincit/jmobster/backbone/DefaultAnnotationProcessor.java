@@ -61,11 +61,10 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
                         hasPropertyTypeSet = true;
                     }
                     annotationProcessor.writeValidatorsToStream( annotation, writer );
+                    writer.writeLine("", ",", !isLast);
                 } else {
                     LOG.debug("No validator processor found");
                 }
-
-                writer.writeLine("", ",", !isLast);
             }
         };
         annotationItemProcessor.process(validationAnnotations);
