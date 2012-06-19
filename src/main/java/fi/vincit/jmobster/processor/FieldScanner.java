@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor;
 */
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
+import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.backbone.AnnotationProcessorProvider;
 import fi.vincit.jmobster.converter.FieldValueConverter;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public class FieldScanner {
                     modelField.setDefaultValue(fieldDefaultValueProcessor.convert( field, defaultObject ));
                     fields.add( modelField );
                 } else {
-                    LOG.warn("Field {} not added to model fields", field.getName());
+                    LOG.warn( "Field {} not added to model fields", field.getName() );
                 }
             }
         } catch( InstantiationException e ) {
@@ -107,6 +108,6 @@ public class FieldScanner {
      * @return True if the field should be included in model fields. Otherwise false.
      */
     private boolean shouldAddField(Field field) {
-        return !field.isAnnotationPresent( IgnoreDefaultValue.class);
+        return !field.isAnnotationPresent( IgnoreField.class );
     }
 }

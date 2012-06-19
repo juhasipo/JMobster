@@ -15,6 +15,7 @@ package fi.vincit.jmobster.converter;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.converter.valueconverters.*;
 
 import java.lang.reflect.Array;
@@ -49,12 +50,18 @@ public class JavaToJSValueConverter implements FieldValueConverter {
     @Override
     public String convert( Field field, Object defaultValueObject ) {
         try {
-            Object defaultValue = field.get( defaultValueObject );
+            Object defaultValue;
+            if( !field.isAnnotationPresent( IgnoreDefaultValue.class ) ) {
+                defaultValue = field.get( defaultValueObject );
+            } else {
+                defaultValue = null;
+            }
             if( mode == ConverterMode.ALLOW_NULL && defaultValue == null ) {
                 return NULL_VALUE;
             } else {
                 return convertByClass( defaultValue, field.getType() );
             }
+
         } catch( IllegalAccessException e ) {
             return null;
         }
