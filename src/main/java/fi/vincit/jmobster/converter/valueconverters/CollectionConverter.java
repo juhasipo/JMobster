@@ -19,8 +19,15 @@ import fi.vincit.jmobster.converter.FieldValueConverter;
 
 import java.util.Collection;
 
+/**
+ * Converter for Java Collections (Lists, Sets, ...)
+ */
 public final class CollectionConverter extends BaseValueConverter {
 
+    private static final String EMPTY_COLLECTION = "[]";
+    private static final String COLLECTION_START = "[";
+    private static final String COLLECTION_END = "]";
+    private static final String COLLECTION_ITEM_SEPARATOR = ", ";
     private FieldValueConverter fieldValueConverter;
 
     public CollectionConverter( FieldValueConverter fieldValueConverter ) {
@@ -29,26 +36,26 @@ public final class CollectionConverter extends BaseValueConverter {
 
     @Override
     protected String getTypeDefaultValue() {
-        return "[]";
+        return EMPTY_COLLECTION;
     }
 
     @Override
     protected String getValueAsString( Object values ) {
         Collection collectionObject = (Collection)values;
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append( COLLECTION_START );
         final int size = collectionObject.size();
         int i = 0;
         for( Object value : collectionObject ) {
             String convertedValue = fieldValueConverter.convert(value.getClass(), value);
             sb.append(convertedValue);
             if( i != size - 1 ) {
-                sb.append(", ");
+                sb.append( COLLECTION_ITEM_SEPARATOR );
             }
             ++i;
         }
 
-        sb.append("]");
+        sb.append( COLLECTION_END );
 
         return sb.toString();
     }

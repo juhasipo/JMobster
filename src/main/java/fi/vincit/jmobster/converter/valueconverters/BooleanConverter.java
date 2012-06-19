@@ -15,6 +15,11 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
+/**
+ * Converter for Java Boolean objects. Primitive booleans
+ * are boxed to Boolean objects and converted with this
+ * converter.
+ */
 public final class BooleanConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {

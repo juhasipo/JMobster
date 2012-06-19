@@ -15,7 +15,11 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
-
+/**
+ * Converter for Java Double objects. Primitive doubles
+ * are boxed to Double objects and converted with this
+ * converter.
+ */
 public final class DoubleConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {

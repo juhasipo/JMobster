@@ -15,6 +15,11 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
+/**
+ * Converter for Java Long objects. Primitive longs
+ * are boxed to Long objects and converted with this
+ * converter.
+ */
 public final class LongConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {

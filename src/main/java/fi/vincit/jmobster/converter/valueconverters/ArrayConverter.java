@@ -17,8 +17,15 @@ package fi.vincit.jmobster.converter.valueconverters;
 
 import fi.vincit.jmobster.converter.FieldValueConverter;
 
+/**
+ * Converter for Java primitive and object arrays.
+ */
 public final class ArrayConverter extends BaseValueConverter {
 
+    private static final String ARRAY_START = "[";
+    private static final String EMPTY_ARRAY = "[]";
+    private static final String ARRAY_END = "]";
+    private static final String ARRAY_ITEM_SEPARATOR = ", ";
     private FieldValueConverter fieldValueConverter;
 
     public ArrayConverter( FieldValueConverter fieldValueConverter ) {
@@ -27,7 +34,7 @@ public final class ArrayConverter extends BaseValueConverter {
 
     @Override
     protected String getTypeDefaultValue() {
-        return "[]";
+        return EMPTY_ARRAY;
     }
 
     @Override
@@ -57,14 +64,14 @@ public final class ArrayConverter extends BaseValueConverter {
 
     private String convertArray( Object[] values ) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append( ARRAY_START );
         final int size = values.length;
         int i = 0;
         for( Object value : values ) {
             i = convertObject( sb, size, i, value );
         }
 
-        sb.append("]");
+        sb.append( ARRAY_END );
 
         return sb.toString();
     }
@@ -72,70 +79,70 @@ public final class ArrayConverter extends BaseValueConverter {
 
     private String convertArray( int[] values ) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append( ARRAY_START );
         final int size = values.length;
         int i = 0;
         for( Object value : values ) {
             i = convertObject( sb, size, i, value );
         }
 
-        sb.append("]");
+        sb.append( ARRAY_END );
 
         return sb.toString();
     }
 
     private String convertArray( long[] values ) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append( ARRAY_START );
         final int size = values.length;
         int i = 0;
         for( Object value : values ) {
             i = convertObject( sb, size, i, value );
         }
 
-        sb.append("]");
+        sb.append( ARRAY_END );
 
         return sb.toString();
     }
 
     private String convertArray( float[] values ) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append( ARRAY_START );
         final int size = values.length;
         int i = 0;
         for( Object value : values ) {
             i = convertObject( sb, size, i, value );
         }
 
-        sb.append("]");
+        sb.append( ARRAY_END );
 
         return sb.toString();
     }
 
     private String convertArray( double[] values ) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append( ARRAY_START );
         final int size = values.length;
         int i = 0;
         for( Object value : values ) {
             i = convertObject( sb, size, i, value );
         }
 
-        sb.append("]");
+        sb.append( ARRAY_END );
 
         return sb.toString();
     }
 
     private String convertArray( boolean[] values ) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append( ARRAY_START );
         final int size = values.length;
         int i = 0;
         for( Object value : values ) {
             i = convertObject( sb, size, i, value );
         }
 
-        sb.append("]");
+        sb.append( ARRAY_END );
 
         return sb.toString();
     }
@@ -144,7 +151,7 @@ public final class ArrayConverter extends BaseValueConverter {
         String convertedValue = fieldValueConverter.convert( value.getClass(), value );
         sb.append(convertedValue);
         if( i != size - 1 ) {
-            sb.append(", ");
+            sb.append( ARRAY_ITEM_SEPARATOR );
         }
         return i + 1;
     }

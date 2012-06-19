@@ -19,7 +19,16 @@ import fi.vincit.jmobster.converter.FieldValueConverter;
 
 import java.util.Map;
 
+/**
+ * Converter for Java Map objects
+ */
 public class MapConverter extends BaseValueConverter {
+    private static final String EMPTY_MAP = "{}";
+    private static final String MAP_START = "{";
+    private static final String MAP_END = "}";
+    private static final String MAP_KEY_VALUE_SEPARATOR = ": ";
+    private static final String MAP_KEY_VALUE_PAIR_SEPARATOR = ", ";
+
     private FieldValueConverter fieldValueConverter;
 
     public MapConverter( FieldValueConverter fieldValueConverter ) {
@@ -28,7 +37,7 @@ public class MapConverter extends BaseValueConverter {
 
     @Override
     protected String getTypeDefaultValue() {
-        return "{}";
+        return EMPTY_MAP;
     }
 
     @Override
@@ -38,7 +47,7 @@ public class MapConverter extends BaseValueConverter {
         }
         Map<Object,Object> map = (Map)values;
         StringBuilder sb = new StringBuilder();
-        sb.append("{");
+        sb.append( MAP_START );
         final int size = map.size();
         int i = 0;
         for( Map.Entry<Object,Object> entry : map.entrySet() ) {
@@ -48,15 +57,15 @@ public class MapConverter extends BaseValueConverter {
             String convertedKey = fieldValueConverter.convert(key.getClass(), key);
             String convertedValue = getEntryValue( value );
 
-            sb.append(convertedKey).append(": ");
+            sb.append(convertedKey).append( MAP_KEY_VALUE_SEPARATOR );
             sb.append(convertedValue);
             if( i != size - 1 ) {
-                sb.append(", ");
+                sb.append( MAP_KEY_VALUE_PAIR_SEPARATOR );
             }
             ++i;
         }
 
-        sb.append("}");
+        sb.append( MAP_END );
 
         return sb.toString();
     }

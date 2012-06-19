@@ -15,6 +15,11 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
+/**
+ * Converter for Java Float objects. Primitive floats
+ * are boxed to Float objects and converted with this
+ * converter.
+ */
 public final class FloatConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {

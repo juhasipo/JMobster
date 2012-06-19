@@ -15,5 +15,11 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
+/**
+ * Converter for Java Enums. Primitive enum types are
+ * boxed to Enum objects and converted using this
+ * converter. Enums are considered as Strings in JavaScript.
+ * TODO: Support for ordinal enums
+ */
 public final class EnumConverter extends StringConverter {
 }

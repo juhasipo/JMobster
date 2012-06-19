@@ -15,6 +15,11 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
+/**
+ * Converter for Java Integer objects. Primitive integers
+ * are boxed to Integer objects and converted with this
+ * converter.
+ */
 public final class IntegerConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {

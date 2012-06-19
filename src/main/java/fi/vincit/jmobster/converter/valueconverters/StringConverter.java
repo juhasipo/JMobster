@@ -15,6 +15,9 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
+/**
+ * Converter for Java Strings.
+ */
 public class StringConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {

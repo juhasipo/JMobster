@@ -15,6 +15,10 @@ package fi.vincit.jmobster.converter.valueconverters;
  * limitations under the License.
 */
 
+/**
+ * Converter for null values. Used when the converted object
+ * class is null.
+ */
 public final class NullConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {
