@@ -51,7 +51,7 @@ public class DefaultAnnotationProcessorProvider implements AnnotationProcessorPr
 
     /**
      * Returns the best annotation processor for the given annotation type.
-     * @param annotation
+     * @param annotation Annotation for which the validator should be returned.
      * @return Annotation processor if found, otherwise null.
      */
     @Override

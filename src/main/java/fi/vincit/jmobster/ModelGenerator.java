@@ -44,7 +44,7 @@ public interface ModelGenerator {
     /**
      * Returns used model processor. Use this to configure
      * the model processor as you wish.
-     * @return
+     * @return Model processor used
      */
     ModelProcessor getModelProcessor();
 }

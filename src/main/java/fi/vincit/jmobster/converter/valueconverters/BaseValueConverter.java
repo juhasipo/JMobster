@@ -49,7 +49,7 @@ public abstract class BaseValueConverter implements ValueConverter {
      * toString() method and it works well for many cases like BigDecimals.
      * </p>
      * <p>Override this method to implement custom value converter.</p>
-     * @param value
+     * @param value Value as object
      * @return Value as string. If null is returned the default value is used.
      */
     protected String getValueAsString(Object value) {
