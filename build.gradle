@@ -1,5 +1,14 @@
 apply plugin: 'java'
 
+sourceCompatibility = 1.6
+version = '0.1-preview-alpha'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'JMobster', 'Implementation-Version': version, 'Main-Class': 'fi.vincit.jmobster.TestMain'
+    }
+}
+
 repositories {
     mavenCentral()
 }
