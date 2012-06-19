@@ -82,4 +82,8 @@ public class DefaultModelGenerator implements ModelGenerator {
         model.setValidations(false);
     }
 
+    @Override
+    public ModelProcessor getModelProcessor() {
+        return modelProcessor;
+    }
 }
