@@ -50,6 +50,26 @@ public interface ValidationAnnotationProcessor {
      * @return True if type is required
      */
     boolean requiresType();
+
+    /**
+     * Returns groups that the given annotation has
+     * @param annotation Annotation which groups are returned
+     * @return Found groups, empty array if none.
+     */
     Class[] getGroups(Annotation annotation);
+
+    /**
+     * Checks if the given annotation has at least one group
+     * @param annotation Annotation to check
+     * @return True if the annotation has at least one group, otherwise false.
+     */
     boolean hasGroups(Annotation annotation);
+
+    /**
+     * Returns the supported annotations. Method should return an empty
+     * array if it doesn't support any annotation even though an annotation
+     * processor should always support at least one annotation.
+     * @return Supported annotation, empty array if none.
+     */
+    Class[] getSupportedAnnotations();
 }

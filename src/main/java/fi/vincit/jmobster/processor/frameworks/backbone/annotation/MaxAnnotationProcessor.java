@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 public class MaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public MaxAnnotationProcessor() {
-        super("number");
+        super("number", Max.class);
     }
 
     @Override

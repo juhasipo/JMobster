@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 public class MinAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public MinAnnotationProcessor() {
-        super("number");
+        super("number", Min.class);
     }
 
     @Override

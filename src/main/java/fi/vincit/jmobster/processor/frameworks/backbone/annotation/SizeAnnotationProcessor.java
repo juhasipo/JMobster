@@ -23,6 +23,10 @@ import java.lang.annotation.Annotation;
 
 public class SizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
+    public SizeAnnotationProcessor() {
+        super(Size.class);
+    }
+
     @Override
     public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         Size size = (Size)annotation;

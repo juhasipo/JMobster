@@ -28,6 +28,10 @@ public class PatternAnnotationProcessor extends BaseValidationAnnotationProcesso
     private static final Logger LOG = LoggerFactory
             .getLogger( PatternAnnotationProcessor.class );
 
+    public PatternAnnotationProcessor() {
+        super(Pattern.class);
+    }
+
     @Override
     public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         Pattern pattern = (Pattern)annotation;

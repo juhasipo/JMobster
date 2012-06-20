@@ -23,6 +23,10 @@ import java.lang.annotation.Annotation;
 
 public class NotNullAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
+    public NotNullAnnotationProcessor() {
+        super(NotNull.class);
+    }
+
     @Override
     public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         writer.write( "required: true" );
