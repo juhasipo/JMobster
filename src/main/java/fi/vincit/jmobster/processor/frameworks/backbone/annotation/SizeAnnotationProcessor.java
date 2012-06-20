@@ -30,8 +30,17 @@ public class SizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
     @Override
     public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         Size size = (Size)annotation;
-        writer.write( "minlength: " ).writeLine( "" + size.min() + "," );
-        writer.write( "maxlength: " ).write( "" + size.max() );
+        boolean minAvailable = size.min() > 0;
+        boolean maxAvailable = size.max() > 0 && size.max() < Integer.MAX_VALUE;
+        if( minAvailable ) {
+            writer.write( "minlength: " ).write( "" + size.min());
+        }
+        if( minAvailable && maxAvailable ) {
+            writer.writeLine(",");
+        }
+        if( maxAvailable ) {
+            writer.write( "maxlength: " ).write( "" + size.max() );
+        }
     }
 
     @Override

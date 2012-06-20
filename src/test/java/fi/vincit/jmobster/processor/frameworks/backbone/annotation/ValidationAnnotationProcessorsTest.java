@@ -76,6 +76,24 @@ public class ValidationAnnotationProcessorsTest {
     }
 
     @Test
+    public void testSizeMinOnlyAnnotationProcessor() {
+        class T { @Size(min = 10) String s; }
+        SizeAnnotationProcessor m = new SizeAnnotationProcessor();
+        m.writeValidatorsToStream(T.class.getDeclaredFields()[0].getAnnotations()[0], modelWriter);
+        modelWriter.close();
+        assertEquals("minlength: 10", os.toString());
+    }
+
+    @Test
+    public void testSizeMaxOnlyAnnotationProcessor() {
+        class T { @Size(max = 1000) String s; }
+        SizeAnnotationProcessor m = new SizeAnnotationProcessor();
+        m.writeValidatorsToStream(T.class.getDeclaredFields()[0].getAnnotations()[0], modelWriter);
+        modelWriter.close();
+        assertEquals("maxlength: 1000", os.toString());
+    }
+
+    @Test
     public void testNotNullAnnotationProcessor() {
         class T { @NotNull String s; }
         NotNullAnnotationProcessor m = new NotNullAnnotationProcessor();

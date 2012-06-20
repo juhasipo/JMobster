@@ -50,7 +50,7 @@ public class BackboneConverterTest {
         @Size(min = 5, max = 255)
         long[] longArray = {1L, 2L};
 
-        @Size(min = 0, max = 100)
+        @Size(min = 1, max = 100)
         String[] stringArray = {"Foo", "Bar", "FooBar", "123"};
 
         @NotNull
@@ -119,7 +119,7 @@ public class BackboneConverterTest {
                 "                maxlength: 255\n" +
                 "            },\n" +
                 "            stringArray: {\n" +
-                "                minlength: 0,\n" +
+                "                minlength: 1,\n" +
                 "                maxlength: 100\n" +
                 "            },\n" +
                 "            longList: {\n" +
