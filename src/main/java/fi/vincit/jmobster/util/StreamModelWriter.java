@@ -21,8 +21,10 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 
 /**
- * Class that writes strings to file or given OutputStream. Also
- * handles indentation.
+ * Class that writes strings to a file or given OutputStream. Also
+ * handles indentation. Default indentation is four spaces. The
+ * indentation character and length can be configured with {@link ModelWriter#setIndentationChar(char, int)}
+ * method.
  */
 public class StreamModelWriter implements ModelWriter {
 
@@ -32,14 +34,15 @@ public class StreamModelWriter implements ModelWriter {
 
     private FileWriter file;
     private BufferedWriter writer;
-    private int indentationInSpaces;
+    private int indentationInChars;
     private int indentationInUnits;
     private boolean isLineIndented;
+    private Character indentationChar = ' ';
 
     public StreamModelWriter( String path ) throws IOException {
         file = new FileWriter(path);
         writer = new BufferedWriter(file);
-        indentationInSpaces = 4;
+        indentationInChars = 4;
     }
 
     public StreamModelWriter( OutputStream outputStream ) {
@@ -55,11 +58,19 @@ public class StreamModelWriter implements ModelWriter {
 
     private void indentIfNeeded() {
         if( !isLineIndented ) {
-            int spacesNeeded = indentationInSpaces * indentationInUnits;
+            int spacesNeeded = indentationInChars * indentationInUnits;
             for( int i = 0; i < spacesNeeded; ++i ) {
-                writeInternal( " " );
+                writeInternal( indentationChar );
             }
             isLineIndented = true;
+        }
+    }
+
+    private void writeInternal(char c) {
+        try {
+            writer.write(c);
+        } catch (IOException e) {
+            LOG.error("Could not write", e);
         }
     }
 
@@ -124,8 +135,8 @@ public class StreamModelWriter implements ModelWriter {
     }
 
     @Override
-    public void setIndentation( int spaces ) {
-        this.indentationInSpaces = spaces;
+    public void setIndentation( int characterCount ) {
+        this.indentationInChars = characterCount;
     }
 
     @Override
@@ -142,5 +153,11 @@ public class StreamModelWriter implements ModelWriter {
             writeLine("");
         }
         return this;
+    }
+
+    @Override
+    public void setIndentationChar( char indentationChar, int characterCount ) {
+        this.indentationInChars = characterCount;
+        this.indentationChar = indentationChar;
     }
 }

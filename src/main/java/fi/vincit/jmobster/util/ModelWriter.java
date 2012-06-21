@@ -48,4 +48,12 @@ public interface ModelWriter {
      * @return ModelWriter to enable chaining calls.
      */
     ModelWriter indentBack();
+
+    /**
+     * Sets character that is used for indentation. Usually
+     * a space or a tab. Default value is space.
+     * @param indentationChar Character to use for indentation
+     * @param characterCount Number or characters to indent with the given character
+     */
+    void setIndentationChar( char indentationChar, int characterCount );
 }

@@ -158,4 +158,20 @@ public class StreamModelWriterTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testIndentationWithTabs() throws Exception {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ModelWriter mw = new StreamModelWriter(os);
+        mw.setIndentationChar('\t', 1);
+
+        mw.write( "{" ).indent();
+        mw.writeLine("Foo").writeLine("Bar").write("FooBar").indentBack();
+        mw.writeLine("}");
+        mw.close();
+
+        String actual = os.toString();
+        String expected = "{Foo\n\tBar\n\tFooBar\n}\n";
+        assertEquals(expected, actual);
+    }
+
 }
