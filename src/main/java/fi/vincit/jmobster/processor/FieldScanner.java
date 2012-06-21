@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,8 @@ public class FieldScanner {
 
     private FieldValueConverter fieldDefaultValueProcessor;
     private AnnotationProcessorProvider annotationProcessorProvider;
+    private boolean allowStaticFields;
+    private boolean allowFinalFields;
 
     /**
      * Creates new field scanner
@@ -48,6 +51,8 @@ public class FieldScanner {
     public FieldScanner( FieldValueConverter fieldDefaultValueProcessor, AnnotationProcessorProvider annotationProcessorProvider ) {
         this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
         this.annotationProcessorProvider = annotationProcessorProvider;
+        allowStaticFields = false;
+        allowFinalFields = false;
     }
 
     /**
@@ -105,7 +110,6 @@ public class FieldScanner {
      */
     private boolean isValidationAnnotation( Annotation annotation ) {
         return annotationProcessorProvider.isAnnotationForValidation( annotation );
-
     }
 
     /**
@@ -114,6 +118,16 @@ public class FieldScanner {
      * @return True if the field should be included in model fields. Otherwise false.
      */
     private boolean shouldAddField(Field field) {
-        return !field.isAnnotationPresent( IgnoreField.class );
+        return !field.isAnnotationPresent( IgnoreField.class )
+                && (allowStaticFields || !Modifier.isStatic(field.getModifiers()))
+                && (allowFinalFields || !Modifier.isFinal(field.getModifiers()));
+    }
+
+    public void setAllowStaticFields( boolean allowStaticFields ) {
+        this.allowStaticFields = allowStaticFields;
+    }
+
+    public void setAllowFinalFields( boolean allowFinalFields ) {
+        this.allowFinalFields = allowFinalFields;
     }
 }

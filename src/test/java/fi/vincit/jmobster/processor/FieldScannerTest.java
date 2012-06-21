@@ -125,6 +125,89 @@ public class FieldScannerTest {
         fs.getFields(TestClassPrivateDefaultConstructor.class);
     }
 
+    public static class TestClassWithStaticMember {
+        public static int staticMember;
+        public final int finalInt = 1;
+        public Long publicLongField;
+        protected Integer protectedIntegerField;
+        private String privateStringField;
+    }
+
+    @Test
+    public void testStaticMember() {
+        FieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        assertFieldFound( models, "publicLongField" );
+        assertFieldFound( models, "protectedIntegerField" );
+        assertFieldFound( models, "privateStringField" );
+        assertFieldNotFound( models, "staticMember" );
+        assertFieldNotFound( models, "finalInt" );
+    }
+
+    @Test
+    public void testAllowFinalMember() {
+        FieldScanner fs = getFieldScanner();
+        fs.setAllowFinalFields(true);
+        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        assertFieldFound( models, "publicLongField" );
+        assertFieldFound( models, "protectedIntegerField" );
+        assertFieldFound( models, "privateStringField" );
+        assertFieldNotFound( models, "staticMember" );
+        assertFieldFound( models, "finalInt" );
+    }
+
+    @Test
+    public void testDontAllowFinalMember() {
+        FieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        assertFieldFound( models, "publicLongField" );
+        assertFieldFound( models, "protectedIntegerField" );
+        assertFieldFound( models, "privateStringField" );
+        assertFieldNotFound( models, "staticMember" );
+        assertFieldNotFound( models, "finalInt" );
+    }
+
+    @Test
+    public void testAllowStaticMember() {
+        FieldScanner fs = getFieldScanner();
+        fs.setAllowFinalFields(false);
+        fs.setAllowStaticFields(true);
+        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        assertFieldFound( models, "publicLongField" );
+        assertFieldFound( models, "protectedIntegerField" );
+        assertFieldFound( models, "privateStringField" );
+        assertFieldFound( models, "staticMember" );
+    }
+
+    public static class TestClassWithStaticFinalMember {
+        public static final int staticMember = 10;
+        public Long publicLongField;
+        protected Integer protectedIntegerField;
+        private String privateStringField;
+    }
+
+    @Test
+    public void testStaticFinalMember() {
+        FieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        assertFieldFound( models, "publicLongField" );
+        assertFieldFound( models, "protectedIntegerField" );
+        assertFieldFound( models, "privateStringField" );
+        assertFieldNotFound( models, "staticMember" );
+    }
+
+    @Test
+    public void testAllowStaticFinalMember() {
+        FieldScanner fs = getFieldScanner();
+        fs.setAllowFinalFields(true);
+        fs.setAllowStaticFields(true);
+        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        assertFieldFound( models, "publicLongField" );
+        assertFieldFound( models, "protectedIntegerField" );
+        assertFieldFound( models, "privateStringField" );
+        assertFieldFound( models, "staticMember" );
+    }
+
 
     private int assertFieldFound(List<ModelField> models, String fieldName) {
         for( int i = 0; i < models.size(); ++i ) {
