@@ -56,4 +56,10 @@ public interface ModelWriter {
      * @param characterCount Number or characters to indent with the given character
      */
     void setIndentationChar( char indentationChar, int characterCount );
+
+    /**
+     * Sets line separation string.
+     * @param lineSeparator String to use for line changes
+     */
+    void setLineSeparator( String lineSeparator );
 }

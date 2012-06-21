@@ -24,20 +24,20 @@ import java.io.*;
  * Class that writes strings to a file or given OutputStream. Also
  * handles indentation. Default indentation is four spaces. The
  * indentation character and length can be configured with {@link ModelWriter#setIndentationChar(char, int)}
- * method.
+ * method. Also line change characters can be changed with {@link ModelWriter#setLineSeparator(String)}.
  */
 public class StreamModelWriter implements ModelWriter {
 
     private static final Logger LOG = LoggerFactory
             .getLogger( StreamModelWriter.class );
-    public static final String LINE_SEPARATOR = "\n";
 
     private FileWriter file;
     private BufferedWriter writer;
     private int indentationInChars;
     private int indentationInUnits;
     private boolean isLineIndented;
-    private Character indentationChar = ' ';
+    private char indentationChar = ' ';
+    private String lineSeparator = "\n";
 
     public StreamModelWriter( String path ) throws IOException {
         file = new FileWriter(path);
@@ -102,7 +102,7 @@ public class StreamModelWriter implements ModelWriter {
     public ModelWriter writeLine( String modelStringLine ) {
         indentIfNeeded();
         writeInternal( modelStringLine );
-        writeInternal( LINE_SEPARATOR );
+        writeInternal( lineSeparator );
         isLineIndented = false;
         return this;
     }
@@ -159,5 +159,10 @@ public class StreamModelWriter implements ModelWriter {
     public void setIndentationChar( char indentationChar, int characterCount ) {
         this.indentationInChars = characterCount;
         this.indentationChar = indentationChar;
+    }
+
+    @Override
+    public void setLineSeparator( String lineSeparator ) {
+        this.lineSeparator = lineSeparator;
     }
 }

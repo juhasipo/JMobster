@@ -174,4 +174,21 @@ public class StreamModelWriterTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testLineSeparatorChange() throws Exception {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ModelWriter mw = new StreamModelWriter(os);
+        mw.setLineSeparator("\r\n");
+        mw.setIndentation(4);
+
+        mw.write( "{" ).indent();
+        mw.writeLine("Foo").writeLine("Bar").write("FooBar").indentBack();
+        mw.writeLine("}");
+        mw.close();
+
+        String actual = os.toString();
+        String expected = "{Foo\r\n    Bar\r\n    FooBar\r\n}\r\n";
+        assertEquals(expected, actual);
+    }
+
 }
