@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor.defaults;/*
 
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.processor.frameworks.backbone.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;

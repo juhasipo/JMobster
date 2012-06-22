@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.backbone;
+package fi.vincit.jmobster.processor;
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -24,5 +24,10 @@ import java.util.List;
  * Interface for writing given annotations to the given model writer.
  */
 public interface AnnotationProcessor {
+    /**
+     * Writes validation annotations to the given writer
+     * @param validationAnnotations List of annotations
+     * @param writer Model writer
+     */
     void writeValidation( List<Annotation> validationAnnotations, ModelWriter writer );
 }

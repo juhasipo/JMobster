@@ -14,7 +14,6 @@ package fi.vincit.jmobster.processor;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.frameworks.backbone.AnnotationProcessor;
 import fi.vincit.jmobster.processor.model.Model;
 
 import java.io.IOException;

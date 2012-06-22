@@ -16,6 +16,14 @@ package fi.vincit.jmobster.processor;/*
 
 import fi.vincit.jmobster.processor.model.Model;
 
+/**
+ * Interface for generating model name
+ */
 public interface ModelNamingStrategy {
+    /**
+     * Returns the model name in correct format
+     * @param model Model which name should be converted
+     * @return Model name.
+     */
     String getName( Model model );
 }

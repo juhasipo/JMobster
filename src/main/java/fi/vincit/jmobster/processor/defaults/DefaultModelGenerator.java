@@ -4,7 +4,7 @@ import fi.vincit.jmobster.ModelGenerator;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.frameworks.backbone.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

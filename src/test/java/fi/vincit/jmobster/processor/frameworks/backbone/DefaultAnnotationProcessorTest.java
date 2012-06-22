@@ -15,6 +15,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.MaxAnnotationProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.MinAnnotationProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.SizeAnnotationProcessor;
@@ -30,7 +31,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import static fi.vincit.jmobster.util.TestUtil.listFromObjects;

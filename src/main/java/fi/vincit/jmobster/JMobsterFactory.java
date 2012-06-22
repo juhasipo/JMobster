@@ -1,6 +1,6 @@
 package fi.vincit.jmobster;
 
-import fi.vincit.jmobster.processor.frameworks.backbone.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.frameworks.backbone.DefaultAnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;

@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.frameworks.backbone.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

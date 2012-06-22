@@ -15,6 +15,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.AnnotationProcessor;
 import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;

@@ -15,6 +15,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.AnnotationProcessor;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.StreamModelWriter;

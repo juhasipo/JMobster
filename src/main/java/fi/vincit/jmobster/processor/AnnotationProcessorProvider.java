@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.backbone;
+package fi.vincit.jmobster.processor;
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -19,7 +19,25 @@ import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * Provides annotation processors
+ */
 public interface AnnotationProcessorProvider {
+    /**
+     * Returns the most suitable annotation processor for the given
+     * annotation
+     * @param annotation Annotation
+     * @return Best suitable annotation processor. Null if no processor
+     *         suits for the given annotation.
+     */
     ValidationAnnotationProcessor getValidator( Annotation annotation );
+
+    /**
+     * Checks if the given annotation is used to validate data. This
+     * mostly depends on the validation processors set in the
+     * provider.
+     * @param annotation Annotation
+     * @return True if the given annotation is for validation.
+     */
     boolean isAnnotationForValidation(Annotation annotation);
 }
