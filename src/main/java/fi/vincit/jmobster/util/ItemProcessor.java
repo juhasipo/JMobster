@@ -26,9 +26,12 @@ import java.util.List;
 public abstract class ItemProcessor<T> {
     /**
      * Process the given list.
-     * @param items Items to process
+     * @param items Items to process. If null nothing is done.
      */
     public void process(List<? extends T> items) {
+        if( items == null ) {
+            return;
+        }
         for( int i = 0; i < items.size(); ++i ) {
             boolean isLastItem = i == items.size() - 1;
             this.process( items.get( i ), isLastItem );

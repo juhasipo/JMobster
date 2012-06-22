@@ -18,24 +18,101 @@ package fi.vincit.jmobster.util;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 
 public class ItemProcessorTest {
+
+    public static class LastItemCaller {
+        public int calledWithLastTrue;
+        public int calledWithLastFalse;
+        void call(boolean last) {
+            if( last ) {
+                ++calledWithLastTrue;
+            } else {
+                ++calledWithLastFalse;
+            }
+        }
+    }
+
+    public ItemProcessor<String> getItemProcessor(final StringBuilder sb, final LastItemCaller lic) {
+        ItemProcessor<String> itemProcessor = new ItemProcessor<String>() {
+            @Override
+            protected void process(String item, boolean isLast) {
+                sb.append(item);
+                lic.call(isLast);
+            }
+        };
+        return itemProcessor;
+    }
+
     @Test
     public void testOneItem() {
+        List<String> list = new ArrayList<String>();
+        list.add("item1");
+
+        StringBuilder sb = new StringBuilder();
+        LastItemCaller lic = new LastItemCaller();
+        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+
+        itemProcessor.process(list);
+
+        assertEquals("item1", sb.toString());
+        assertEquals(1, lic.calledWithLastTrue);
+        assertEquals(0, lic.calledWithLastFalse);
     }
 
     @Test
     public void testNoItems() {
+        List<String> list = new ArrayList<String>();
 
+        StringBuilder sb = new StringBuilder();
+        LastItemCaller lic = new LastItemCaller();
+        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+
+        itemProcessor.process(list);
+
+        assertEquals("", sb.toString());
+        assertEquals(0, lic.calledWithLastTrue);
+        assertEquals(0, lic.calledWithLastFalse);
     }
 
     @Test
     public void testMultipleItems() {
+        List<String> list = new ArrayList<String>();
+        list.add("item1");
+        list.add("item2");
+        list.add("item3");
+        list.add("item4");
 
+        StringBuilder sb = new StringBuilder();
+        LastItemCaller lic = new LastItemCaller();
+        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+
+        itemProcessor.process(list);
+
+        assertEquals("item1item2item3item4", sb.toString());
+        assertEquals(1, lic.calledWithLastTrue);
+        assertEquals(3, lic.calledWithLastFalse);
     }
 
     @Test
     public void testNullItems() {
+        List<String> list = null;
 
+        StringBuilder sb = new StringBuilder();
+        LastItemCaller lic = new LastItemCaller();
+        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+
+        itemProcessor.process(list);
+
+        assertEquals("", sb.toString());
+        assertEquals(0, lic.calledWithLastTrue);
+        assertEquals(0, lic.calledWithLastFalse);
     }
 }
