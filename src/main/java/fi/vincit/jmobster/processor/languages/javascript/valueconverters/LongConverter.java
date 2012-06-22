@@ -1,4 +1,5 @@
-package fi.vincit.jmobster.processor;/*
+package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
+/*
  * Copyright 2012 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +15,14 @@ package fi.vincit.jmobster.processor;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.model.Model;
-
-public interface ModelNamingStrategy {
-    String getName( Model model );
+/**
+ * Converter for Java Long objects. Primitive longs
+ * are boxed to Long objects and converted with this
+ * converter.
+ */
+public final class LongConverter extends BaseValueConverter {
+    @Override
+    protected String getTypeDefaultValue() {
+        return "0";
+    }
 }

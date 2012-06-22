@@ -1,11 +1,11 @@
 package fi.vincit.jmobster;
 
-import fi.vincit.jmobster.backbone.AnnotationProcessorProvider;
-import fi.vincit.jmobster.backbone.DefaultAnnotationProcessorProvider;
-import fi.vincit.jmobster.converter.JavaToJSValueConverter;
-import fi.vincit.jmobster.converter.valueconverters.ConverterMode;
-import fi.vincit.jmobster.processor.DefaultModelGenerator;
-import fi.vincit.jmobster.backbone.BackboneModelProcessor;
+import fi.vincit.jmobster.processor.frameworks.backbone.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.frameworks.backbone.DefaultAnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
+import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
+import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
 

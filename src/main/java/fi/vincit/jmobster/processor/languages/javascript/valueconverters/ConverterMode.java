@@ -1,4 +1,5 @@
-package fi.vincit.jmobster.processor;/*
+package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
+/*
  * Copyright 2012 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +15,19 @@ package fi.vincit.jmobster.processor;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.model.Model;
 
-public interface ModelNamingStrategy {
-    String getName( Model model );
+/**
+ * Describes how null values should be handled.
+ */
+public enum ConverterMode {
+    /**
+     * Allow nulls as they are. E.g. null string will have JS value null
+     * if the given value is null.
+     */
+    ALLOW_NULL,
+    /**
+     * Null values are replaced with default value. E.g. null Long will
+     * be replaced with 0 and null string with "".
+     */
+    NULL_AS_DEFAULT
 }

@@ -1,4 +1,5 @@
-package fi.vincit.jmobster.processor;/*
+package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
+/*
  * Copyright 2012 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +15,17 @@ package fi.vincit.jmobster.processor;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.model.Model;
-
-public interface ModelNamingStrategy {
-    String getName( Model model );
+/**
+ * Interface for converting Java values to target
+ * platform's values.
+ */
+public interface ValueConverter {
+    /**
+     * Return given value in string form. Returned value should
+     * be formatted as it appears in target platform. E.g. string for
+     * JavaScript should contain the quotation marks around the value.
+     * @param value Value to convert
+     * @return Value as string.
+     */
+    String convertValue(Object value);
 }

@@ -29,7 +29,7 @@ import fi.vincit.jmobster.processor.ModelProcessor;
  *     Only call the {@link ModelGenerator#process(Class[])} method once.
  * If the method is called multiple times, the default behaviour is that
  * the previous models are overwritten. This of course depends on what kind
- * of {@link fi.vincit.jmobster.util.StreamModelWriter} or {@link fi.vincit.jmobster.backbone.BackboneModelProcessor}
+ * of {@link fi.vincit.jmobster.util.StreamModelWriter} or {@link fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor}
  * has been configured.
  * </p>
  */

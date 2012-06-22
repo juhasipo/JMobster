@@ -1,4 +1,5 @@
-package fi.vincit.jmobster.processor;/*
+package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
+/*
  * Copyright 2012 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +15,17 @@ package fi.vincit.jmobster.processor;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.model.Model;
+/**
+ * Converter for Java Strings.
+ */
+public class StringConverter extends BaseValueConverter {
+    @Override
+    protected String getTypeDefaultValue() {
+        return "\"\"";
+    }
 
-public interface ModelNamingStrategy {
-    String getName( Model model );
+    @Override
+    protected String getValueAsString( Object value ) {
+        return "\"" + value + "\"";
+    }
 }
