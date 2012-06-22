@@ -231,6 +231,46 @@ public class JavaToJSValueConverterTest {
     }
 
     @Test
+    public void testLongValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        long[] array = { 1L, 19L, 100L };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[1, 19, 100]", result );
+    }
+
+    @Test
+    public void testFloatValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        float[] array = { 1f, 19.0f, 0.1f };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[1.0, 19.0, 0.1]", result );
+    }
+
+    @Test
+    public void testDoubleValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        double[] array = { 1d, 20.0d, 0.2d };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[1.0, 20.0, 0.2]", result );
+    }
+
+    @Test
+    public void testBooleanValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        boolean[] array = { true, false, false, true };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[true, false, false, true]", result );
+    }
+
+    @Test
     public void testNullIntArray() {
         JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
         String result = valueConverter.convert( int[].class, null );

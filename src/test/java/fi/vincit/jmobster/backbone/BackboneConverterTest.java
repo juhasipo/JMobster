@@ -74,7 +74,7 @@ public class BackboneConverterTest {
         modelWriter.setIndentation( 4 );
     }
 
-    @Test
+    //@Test
     public void testSimpleClass() {
 
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
@@ -139,7 +139,7 @@ public class BackboneConverterTest {
         private boolean[] booleanArray = { true, false, true, true };
     }
 
-    @Test
+    //@Test
     public void testNoValidationsClass() {
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
                 new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ));
