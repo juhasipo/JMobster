@@ -1,6 +1,7 @@
 package fi.vincit.jmobster.processor;
 
 import fi.vincit.jmobster.ModelGenerator;
+import fi.vincit.jmobster.backbone.AnnotationProcessorProvider;
 import fi.vincit.jmobster.backbone.DefaultAnnotationProcessorProvider;
 import fi.vincit.jmobster.converter.FieldValueConverter;
 import org.slf4j.Logger;
@@ -23,18 +24,18 @@ public class DefaultModelGenerator implements ModelGenerator {
     private FieldScanner fieldScanner;
 
 
-    public DefaultModelGenerator( ModelProcessor modelProcessor, FieldValueConverter fieldDefaultValueProcessor ) {
+    public DefaultModelGenerator(
+            ModelProcessor modelProcessor,
+            FieldValueConverter fieldDefaultValueProcessor,
+            AnnotationProcessorProvider annotationProcessorProvider) {
         this.modelProcessor = modelProcessor;
-        this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor, new DefaultAnnotationProcessorProvider());
+        this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor, annotationProcessorProvider);
     }
 
     @Override
     public void process( Class... classes ) {
         List<Model> models = getModels( classes );
-        LOG.debug("Found {} models", models.size());
-
         try {
-            LOG.debug("Start processing models");
             modelProcessor.startProcessing();
             for( int i = 0; i < models.size(); ++i ) {
                 Model model = models.get( i );
@@ -56,7 +57,6 @@ public class DefaultModelGenerator implements ModelGenerator {
         List<Model> models = new ArrayList<Model>();
         for( Class clazz : classes ) {
             List<ModelField> modelFields = fieldScanner.getFields(clazz);
-            LOG.debug("Added {} model fields for class {}", modelFields.size(), clazz.getSimpleName());
             Model model = new Model(clazz, modelFields);
             models.add( model );
             checkAndSetValidationState( model );

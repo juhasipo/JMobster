@@ -76,9 +76,9 @@ public class BackboneConverterTest {
 
     //@Test
     public void testSimpleClass() {
-
+        AnnotationProcessorProvider app = new DefaultAnnotationProcessorProvider();
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
-                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ));
+                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ), app);
 
         mg.process(TestModel.class);
 
@@ -141,8 +141,9 @@ public class BackboneConverterTest {
 
     //@Test
     public void testNoValidationsClass() {
+        AnnotationProcessorProvider app = new DefaultAnnotationProcessorProvider();
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
-                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ));
+                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ), app);
 
         mg.process(NoValidationsClass.class);
 
