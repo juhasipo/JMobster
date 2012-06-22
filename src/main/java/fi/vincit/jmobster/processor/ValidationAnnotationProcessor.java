@@ -50,4 +50,6 @@ public interface ValidationAnnotationProcessor {
      * @return True if type is required
      */
     boolean requiresType();
+    Class[] getGroups(Annotation annotation);
+    boolean hasGroups(Annotation annotation);
 }

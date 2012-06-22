@@ -14,6 +14,7 @@ package fi.vincit.jmobster;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.exception.UnsupportedFramework;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.StreamModelWriter;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class JMobsterFactoryTest {
         assertNotNull(generator);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = UnsupportedFramework.class)
     public void testCreateUnsupportedInstance() throws IOException {
         JMobsterFactory.getInstance("Invalid framework", getModelWriter());
     }

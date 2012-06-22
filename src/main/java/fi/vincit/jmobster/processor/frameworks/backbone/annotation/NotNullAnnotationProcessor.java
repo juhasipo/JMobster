@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
 import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
 
+import javax.validation.constraints.NotNull;
 import java.lang.annotation.Annotation;
 
 public class NotNullAnnotationProcessor extends BaseValidationAnnotationProcessor {
@@ -25,5 +26,10 @@ public class NotNullAnnotationProcessor extends BaseValidationAnnotationProcesso
     @Override
     public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
         writer.write( "required: true" );
+    }
+
+    @Override
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((NotNull)annotation).groups();
     }
 }

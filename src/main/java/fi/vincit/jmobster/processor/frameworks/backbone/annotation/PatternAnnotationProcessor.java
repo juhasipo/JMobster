@@ -35,4 +35,9 @@ public class PatternAnnotationProcessor extends BaseValidationAnnotationProcesso
         writer.write( "pattern: " ).write( javaScriptRegExp );
     }
 
+    @Override
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((Pattern)annotation).groups();
+    }
+
 }

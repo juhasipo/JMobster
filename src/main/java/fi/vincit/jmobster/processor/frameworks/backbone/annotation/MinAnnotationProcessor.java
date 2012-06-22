@@ -32,4 +32,9 @@ public class MinAnnotationProcessor extends BaseValidationAnnotationProcessor {
         writer.write( "min: " ).write( "" + (( Min )annotation).value() );
     }
 
+    @Override
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((Min)annotation).groups();
+    }
+
 }

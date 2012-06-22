@@ -15,7 +15,10 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
 */
 
+
 import fi.vincit.jmobster.exception.InvalidType;
+
+import java.lang.annotation.Annotation;
 
 public abstract class BaseValidationAnnotationProcessor implements ValidationAnnotationProcessor {
     private String requiredType;
@@ -44,6 +47,20 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
                 throw new InvalidType("Required type <" + requiredType() + "> given type <" + type + ">");
             }
         }
+    }
+
+    @Override
+    public Class[] getGroups(Annotation annotation) {
+        Class[] groups = getGroupsInternal(annotation);
+        return groups != null ? groups : new Class[0];
+    }
+
+    protected abstract Class[] getGroupsInternal(Annotation annotation);
+
+    @Override
+    public boolean hasGroups(Annotation annotation) {
+        Class[] groups = getGroups(annotation);
+        return groups != null && groups.length > 0;
     }
 
 }

@@ -32,4 +32,8 @@ public class MaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
         writer.write( "max: " ).write( "" + ((Max)annotation).value() );
     }
 
+    @Override
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((Max)annotation).groups();
+    }
 }

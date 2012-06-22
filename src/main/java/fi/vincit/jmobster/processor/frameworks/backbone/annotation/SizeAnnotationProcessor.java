@@ -30,4 +30,9 @@ public class SizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
         writer.write( "maxlength: " ).write( "" + size.max() );
     }
 
+    @Override
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((Size)annotation).groups();
+    }
+
 }

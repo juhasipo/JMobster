@@ -15,11 +15,11 @@ package fi.vincit.jmobster.processor.defaults;/*
 */
 
 import fi.vincit.jmobster.annotation.IgnoreField;
-import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
-import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
+import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.model.ModelField;
 import org.junit.Test;
 
 import javax.validation.constraints.Min;
@@ -28,7 +28,6 @@ import java.util.List;
 import static fi.vincit.jmobster.util.TestUtil.assertFieldFound;
 import static fi.vincit.jmobster.util.TestUtil.assertFieldNotFound;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

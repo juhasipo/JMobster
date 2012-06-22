@@ -7,5 +7,6 @@
 **target
 **test-output
 **.log
+*.iml
 modelgenerator.iml
 models.js
