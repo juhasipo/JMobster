@@ -20,6 +20,7 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.util.StreamModelWriter;
 import org.junit.Before;
+import org.junit.Test;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -73,7 +74,7 @@ public class BackboneConverterTest {
         modelWriter.setIndentation( 4 );
     }
 
-    //@Test
+    @Test
     public void testSimpleClass() {
         AnnotationProcessorProvider app = new DefaultAnnotationProcessorProvider();
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
@@ -138,7 +139,7 @@ public class BackboneConverterTest {
         private boolean[] booleanArray = { true, false, true, true };
     }
 
-    //@Test
+    @Test
     public void testNoValidationsClass() {
         AnnotationProcessorProvider app = new DefaultAnnotationProcessorProvider();
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),

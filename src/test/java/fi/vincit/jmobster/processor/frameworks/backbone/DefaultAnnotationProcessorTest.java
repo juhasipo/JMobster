@@ -33,6 +33,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fi.vincit.jmobster.util.TestUtil.listFromObjects;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -54,13 +55,7 @@ public class DefaultAnnotationProcessorTest {
         modelWriter = new StreamModelWriter(os);
     }
 
-    private static <T>List<T> listFromObjects(T... objects) {
-        List<T> arrayList = new ArrayList<T>(objects.length);
-        for( T t : objects ) {
-            arrayList.add(t);
-        }
-        return arrayList;
-    }
+
 
     @Test
     public void testWithNoProcessors() {

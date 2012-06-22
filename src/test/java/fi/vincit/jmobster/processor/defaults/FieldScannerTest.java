@@ -25,6 +25,8 @@ import org.junit.Test;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+import static fi.vincit.jmobster.util.TestUtil.assertFieldFound;
+import static fi.vincit.jmobster.util.TestUtil.assertFieldNotFound;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -203,29 +205,12 @@ public class FieldScannerTest {
         fs.setAllowFinalFields(true);
         fs.setAllowStaticFields(true);
         List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
-        assertFieldFound( models, "publicLongField" );
+        assertFieldFound(models, "publicLongField");
         assertFieldFound( models, "protectedIntegerField" );
         assertFieldFound( models, "privateStringField" );
         assertFieldFound( models, "staticMember" );
     }
 
 
-    private int assertFieldFound(List<ModelField> models, String fieldName) {
-        for( int i = 0; i < models.size(); ++i ) {
-            ModelField field = models.get(i);
-            if( field.getField().getName().equals(fieldName) ) {
-                return i;
-            }
-        }
-        assertTrue( "Field with name <" + fieldName + "> not found.", false );
-        return -1; // Never returned due to assertion
-    }
 
-    private void assertFieldNotFound(List<ModelField> models, String fieldName) {
-        for( ModelField field : models ) {
-            if( field.getField().getName().equals(fieldName) ) {
-                assertTrue( "Field with name <" + fieldName + "> found when it should be ignored.", false );
-            }
-        }
-    }
 }
