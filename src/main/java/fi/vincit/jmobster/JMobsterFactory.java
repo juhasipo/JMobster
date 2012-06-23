@@ -2,6 +2,7 @@ package fi.vincit.jmobster;
 
 import fi.vincit.jmobster.exception.UnsupportedFramework;
 import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.ModelProvider;
 import fi.vincit.jmobster.processor.frameworks.backbone.DefaultAnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
@@ -39,5 +40,9 @@ public class JMobsterFactory {
         } else {
             throw new UnsupportedFramework("Framework " + framework + " not supported");
         }
+    }
+
+    public static ModelGenerator getInstance(String framework, ModelProvider provider) {
+        return getInstance(framework, provider.getModelWriter());
     }
 }
