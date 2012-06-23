@@ -21,6 +21,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * General utility methods for unit and integration tests.
+ */
 public class TestUtil {
 
     /**

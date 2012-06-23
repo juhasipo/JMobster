@@ -15,7 +15,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -29,5 +29,5 @@ public interface AnnotationProcessor {
      * @param validationAnnotations List of annotations
      * @param writer Model writer
      */
-    void writeValidation( List<Annotation> validationAnnotations, ModelWriter writer );
+    void writeValidation( List<Annotation> validationAnnotations, JavaScriptWriter writer );
 }

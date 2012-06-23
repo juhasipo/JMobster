@@ -17,7 +17,9 @@ package fi.vincit.jmobster.util;
 
 import org.junit.Test;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -156,6 +158,29 @@ public class StreamModelWriterTest {
         String actual = os.toString();
         String expected = "{Foo\n  Bar\n  FooBar\n}\n";
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testDefaultIndentationForOutputStream() {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ModelWriter mw = new StreamModelWriter(os);
+        mw.indent();
+        mw.writeLine("Stuff");
+        mw.close();
+
+        assertEquals("    Stuff\n", os.toString());
+    }
+
+    @Test
+    public void testDefaultIndentationForBufferedStream() {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(os);
+        ModelWriter mw = new StreamModelWriter(new BufferedWriter(outputStreamWriter));
+        mw.indent();
+        mw.writeLine("Stuff");
+        mw.close();
+
+        assertEquals("    Stuff\n", os.toString());
     }
 
     @Test

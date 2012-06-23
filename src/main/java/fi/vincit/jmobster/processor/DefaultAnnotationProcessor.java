@@ -15,6 +15,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.ItemProcessor;
 import org.slf4j.Logger;
@@ -77,7 +78,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
     }
 
     @Override
-    public void writeValidation( List<Annotation> validationAnnotations, final ModelWriter writer ) {
+    public void writeValidation( List<Annotation> validationAnnotations, final JavaScriptWriter writer ) {
         ItemProcessor<Annotation> annotationItemProcessor = new ItemProcessor<Annotation>() {
             boolean hasPropertyTypeSet = false;
             @Override

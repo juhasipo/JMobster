@@ -19,6 +19,7 @@ import fi.vincit.jmobster.processor.frameworks.backbone.annotation.MaxAnnotation
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.MinAnnotationProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.PatternAnnotationProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.SizeAnnotationProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.StreamModelWriter;
 import org.junit.Before;
@@ -41,7 +42,7 @@ import static org.mockito.Mockito.*;
 public class DefaultAnnotationProcessorTest {
 
     private OutputStream os;
-    private ModelWriter modelWriter;
+    private JavaScriptWriter modelWriter;
 
     public Min minAnnotation;
     public Max maxAnnotation;
@@ -55,7 +56,7 @@ public class DefaultAnnotationProcessorTest {
     @Before
     public void initTest() {
         os = new ByteArrayOutputStream();
-        modelWriter = new StreamModelWriter(os);
+        modelWriter = new JavaScriptWriter(new StreamModelWriter(os));
         modelWriter.setLineSeparator("");
     }
 

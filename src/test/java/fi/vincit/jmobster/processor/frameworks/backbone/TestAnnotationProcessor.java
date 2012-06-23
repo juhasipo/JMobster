@@ -16,14 +16,14 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 */
 
 import fi.vincit.jmobster.processor.AnnotationProcessor;
-import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
 public class TestAnnotationProcessor implements AnnotationProcessor {
     @Override
-    public void writeValidation( List<Annotation> validationAnnotations, ModelWriter writer ) {
+    public void writeValidation( List<Annotation> validationAnnotations, JavaScriptWriter writer ) {
         if( validationAnnotations.size() > 0 ) {
             writer.write("TEST");
         }

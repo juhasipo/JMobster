@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 */
 
 import fi.vincit.jmobster.processor.AnnotationProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
@@ -23,27 +24,25 @@ import fi.vincit.jmobster.util.ModelWriter;
 import java.util.List;
 
 public class ValidationSectionWriter {
-    private ModelWriter writer;
+    private JavaScriptWriter writer;
     private AnnotationProcessor annotationProcessor;
 
     public ValidationSectionWriter( ModelWriter writer, AnnotationProcessor annotationProcessor ) {
-        this.writer = writer;
+        this.writer = new JavaScriptWriter(writer);
         this.annotationProcessor = annotationProcessor;
     }
 
     public void writeValidators( List<ModelField> fields ) {
-        writer.writeLine("validate: {").indent();
+        writer.writeKey("validate").startBlock();
         final ItemProcessor<ModelField> modelFieldItemProcessor = new ItemProcessor<ModelField>() {
             @Override
             protected void process( ModelField field, boolean isLastItem ) {
-                writer.write(field.getField().getName()).writeLine( ": {" ).indent();
+                writer.writeKey(field.getField().getName()).startBlock();
                 annotationProcessor.writeValidation(field.getAnnotations(), writer);
-                writer.indentBack();
-                writer.writeLine( "}", ",", !isLastItem );
+                writer.endBlock(isLastItem);
             }
         };
         modelFieldItemProcessor.process(fields);
-        writer.indentBack();
-        writer.writeLine( "}" );
+        writer.endBlock();
     }
 }

@@ -40,14 +40,25 @@ public class StreamModelWriter implements ModelWriter {
     private String lineSeparator = "\n";
 
     public StreamModelWriter( String path ) throws IOException {
+        this();
         file = new FileWriter(path);
         writer = new BufferedWriter(file);
-        indentationInChars = 4;
     }
 
     public StreamModelWriter( OutputStream outputStream ) {
+        this();
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
         writer = new BufferedWriter(outputStreamWriter);
+    }
+
+    public StreamModelWriter(BufferedWriter writer) {
+        this();
+        this.writer = writer;
+    }
+
+    private StreamModelWriter() {
+        indentationInChars = 4;
+        indentationInUnits = 0;
     }
 
     @Override

@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.processor.AnnotationProcessor;
 import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.ItemProcessor;
 import org.slf4j.Logger;
@@ -50,7 +51,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
     }
 
     @Override
-    public void writeValidation( List<Annotation> validationAnnotations, final ModelWriter writer ) {
+    public void writeValidation( List<Annotation> validationAnnotations, final JavaScriptWriter writer ) {
         ItemProcessor<Annotation> annotationItemProcessor = new ItemProcessor<Annotation>() {
             boolean hasPropertyTypeSet = false;
             @Override

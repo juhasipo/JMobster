@@ -25,7 +25,7 @@ import java.util.List;
  */
 public abstract class ItemProcessor<T> {
     /**
-     * Process the given list.
+     * Process the given list of items.
      * @param items Items to process. If null nothing is done.
      */
     public void process(List<? extends T> items) {
@@ -35,6 +35,20 @@ public abstract class ItemProcessor<T> {
         for( int i = 0; i < items.size(); ++i ) {
             boolean isLastItem = i == items.size() - 1;
             this.process( items.get( i ), isLastItem );
+        }
+    }
+
+    /**
+     * Process the given array of items.
+     * @param items Items to process. If null nothing is done.
+     */
+    public void process(T... items) {
+        if( items == null ) {
+            return;
+        }
+        for( int i = 0; i < items.length; ++i ) {
+            boolean isLastItem = i == items.length - 1;
+            this.process( items[i], isLastItem );
         }
     }
 

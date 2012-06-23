@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 */
 
 import fi.vincit.jmobster.processor.model.ModelField;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.ItemProcessor;
 
@@ -25,15 +26,12 @@ import java.util.List;
  * Class writes the Backbone.js defaults section.
  */
 public class DefaultValueSectionWriter {
-    private static final String DEFAULT_SECTION_START = "defaults: function() {";
-    private static final String DEFAULT_RETURN_START = "return {";
-    private static final String MODEL_NAME_ASSIGN = ": ";
-    private static final String DEFAULT_RETURN_END = "}";
-    private static final String DEFAULT_SECTION_END = "}";
-    private ModelWriter writer;
+    private static final String DEFAULTS_BLOCK_NAME = "defaults";
+    private static final String RETURN_BLOCK = "return "; // Note the space
+    private JavaScriptWriter writer;
 
     public DefaultValueSectionWriter( ModelWriter writer ) {
-        this.writer = writer;
+        this.writer = new JavaScriptWriter(writer);
     }
 
     /**
@@ -42,18 +40,16 @@ public class DefaultValueSectionWriter {
      * @param hasValidators Set to true if the model contains validations.
      */
     public void writeDefaultValues( List<ModelField> fields, boolean hasValidators ) {
-        writer.writeLine( DEFAULT_SECTION_START ).indent();
-        writer.writeLine( DEFAULT_RETURN_START ).indent();
+        writer.writeKey(DEFAULTS_BLOCK_NAME).startAnonFunction();
+        writer.write(RETURN_BLOCK).startBlock();
         final ItemProcessor<ModelField> modelFieldItemProcessor = new ItemProcessor<ModelField>() {
             @Override
             protected void process( ModelField field, boolean isLastItem ) {
-                writer.write(field.getField().getName()).write( MODEL_NAME_ASSIGN ).write( field.getDefaultValue() );
-                writer.writeLine("", ",", !isLastItem);
+                writer.writeKeyValue(field.getField().getName(), field.getDefaultValue(), isLastItem);
             }
         };
-        modelFieldItemProcessor.process( fields );
-        writer.indentBack();
-        writer.writeLine( DEFAULT_RETURN_END ).indentBack();
-        writer.writeLine( DEFAULT_SECTION_END, ",", hasValidators);
+        modelFieldItemProcessor.process(fields);
+        writer.endBlock();
+        writer.endBlock(!hasValidators);
     }
 }
