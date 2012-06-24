@@ -30,7 +30,4 @@ public class UnsupportedFramework extends RuntimeException {
         super(throwable);
     }
 
-    public UnsupportedFramework(String s, Throwable throwable, boolean b, boolean b1) {
-        super(s, throwable, b, b1);
-    }
 }

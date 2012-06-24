@@ -30,7 +30,4 @@ public class InvalidType extends RuntimeException {
         super(throwable);
     }
 
-    public InvalidType(String s, Throwable throwable, boolean b, boolean b1) {
-        super(s, throwable, b, b1);
-    }
 }
