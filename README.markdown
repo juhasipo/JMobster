@@ -2,23 +2,23 @@ JMobster - Java Model to Backbone.js generator
 ==============================================
 Version Preview-Alpha 0.1
 
-The Project
------------
+### Purpose and Current Status
 The purpose of this project is to enable automatic model generation
 from Java POJOs to Backbone.js models. It also supports client side
 validation generation from standard JSR-303 validation annotations.
 
-
-Current Status
---------------
 The project has just started so the backwards compatibility may break
 once in a while due to sudden urges to refactor the code. The current
 version is not well tested yet with real Backbone.js client nor
 a working server so there will be a lot of bugs.
 
 
-Requirements
-------------
+### Requirements
+
+* JDK 6 (SE or EE)
+* Backbone.js
+* Backbone.Validations
+
 At the moment only Java to Backbone.js model conversion is supported.
 Validation will require [Backbone.Validations](https://github.com/n-time/backbone.validations) plugin
 to work. Java dependencies are handled in gradle build file.
