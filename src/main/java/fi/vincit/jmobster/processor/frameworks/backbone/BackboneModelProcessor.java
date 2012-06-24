@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 */
 
 import fi.vincit.jmobster.processor.AnnotationProcessor;
+import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
@@ -50,16 +51,16 @@ public class BackboneModelProcessor implements ModelProcessor {
     private String startComment;
     private String namespaceName;
 
-    public BackboneModelProcessor( String modelFilePath ) {
+    public BackboneModelProcessor( String modelFilePath, GroupMode groupMode ) {
         this.modelFilePath = modelFilePath;
-        annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider());
+        annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider(), groupMode);
         modelNamingStrategy = new DefaultNamingStrategy();
         startComment = "/*\n * Auto-generated file\n */";
         namespaceName = "Models";
     }
 
     public BackboneModelProcessor( ModelWriter writer ) {
-        this( (String)null );
+        this( (String)null, GroupMode.ANY_OF_REQUIRED );
         this.writer = writer;
     }
 
