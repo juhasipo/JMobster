@@ -20,9 +20,12 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -51,7 +54,7 @@ public class DefaultModelGeneratorTest {
     }
 
     @Test
-    public void testProcess() throws Exception {
+    public void testProcessVarArgs() throws Exception {
         ModelProcessor mp = mock(ModelProcessor.class);
         FieldValueConverter fvc = mock(FieldValueConverter.class);
         AnnotationProcessorProvider app = mock(AnnotationProcessorProvider.class);
@@ -60,6 +63,30 @@ public class DefaultModelGeneratorTest {
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;
         dmg.process(testClass, testClass2);
+
+        InOrder mpInOrder = inOrder(mp);
+        ArgumentCaptor<Model> firstModelCaptor = ArgumentCaptor.forClass(Model.class);
+        ArgumentCaptor<Model> secondModelCaptor = ArgumentCaptor.forClass(Model.class);
+        mpInOrder.verify(mp, times(1)).startProcessing();
+        mpInOrder.verify(mp, times(1)).processModel(firstModelCaptor.capture(), eq(false));
+        mpInOrder.verify(mp, times(1)).processModel(secondModelCaptor.capture(), eq(true));
+        mpInOrder.verify(mp, times(1)).endProcessing();
+
+        assertEquals(TestClass1.class.getName(), firstModelCaptor.getValue().getModelClass().getName());
+        assertEquals(TestClass2.class.getName(), secondModelCaptor.getValue().getModelClass().getName());
+    }
+
+    @Test
+    public void testProcessWithList() throws Exception {
+        ModelProcessor mp = mock(ModelProcessor.class);
+        FieldValueConverter fvc = mock(FieldValueConverter.class);
+        AnnotationProcessorProvider app = mock(AnnotationProcessorProvider.class);
+        DefaultModelGenerator dmg = new DefaultModelGenerator(mp, fvc, app);
+
+        Class testClass = TestClass1.class;
+        Class testClass2 = TestClass2.class;
+        List<Class> testClasses = TestUtil.listFromObjects(testClass, testClass2);
+        dmg.process(testClasses);
 
         InOrder mpInOrder = inOrder(mp);
         ArgumentCaptor<Model> firstModelCaptor = ArgumentCaptor.forClass(Model.class);

@@ -16,6 +16,8 @@ package fi.vincit.jmobster;/*
 
 import fi.vincit.jmobster.processor.ModelProcessor;
 
+import java.util.List;
+
 /**
  * <p>
  *     Interface for generating models. Use {@link JMobsterFactory} to
@@ -40,6 +42,13 @@ public interface ModelGenerator {
      * @param classes One or more classes for which the models should be generated.
      */
     void process( Class... classes );
+
+    /**
+     * Process and create the client side model(s) for
+     * the given classes.
+     * @param classes One or more classes for which the models should be generated.
+     */
+    void process( List<Class> classes );
 
     /**
      * Returns used model processor. Use this to configure
