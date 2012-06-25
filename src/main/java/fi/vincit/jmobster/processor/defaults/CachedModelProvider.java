@@ -14,10 +14,11 @@ package fi.vincit.jmobster.processor.defaults;/*
  * limitations under the License.
 */
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import fi.vincit.jmobster.processor.ModelProvider;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.StreamModelWriter;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Cached model provider caches processed models so that the models
@@ -34,9 +35,9 @@ public class CachedModelProvider implements ModelProvider {
 
     private String cachedModel;
     private ModelWriter modelWriter;
-    private ByteOutputStream bos;
+    private ByteArrayOutputStream bos;
     public CachedModelProvider(Mode mode) {
-        this.bos = new ByteOutputStream();
+        this.bos = new ByteArrayOutputStream();
         this.modelWriter = new StreamModelWriter(bos);
         switch (mode) {
             case COMPACT: configureCompactMode(modelWriter); break;
