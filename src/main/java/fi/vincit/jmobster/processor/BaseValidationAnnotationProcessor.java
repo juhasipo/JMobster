@@ -16,19 +16,48 @@ package fi.vincit.jmobster.processor;
 */
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.List;
+
 import fi.vincit.jmobster.exception.InvalidType;
+import fi.vincit.jmobster.util.ModelWriter;
 
 public abstract class BaseValidationAnnotationProcessor implements ValidationAnnotationProcessor {
     private String requiredType;
-    private Class[] supportedAnnotations = new Class[0];
+    private CombinationManager combinationManager;
+    private HashMap<Class, Annotation> annotationBag;
+    private Class baseValidatorForClass;
 
-    protected BaseValidationAnnotationProcessor( String requiredType, Class... annotations ) {
+    protected BaseValidationAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation) {
         this.requiredType = requiredType;
-        setSupportedAnnotations(annotations);
+        this.combinationManager = new CombinationManager(requiredAnnotation);
     }
 
-    protected BaseValidationAnnotationProcessor( Class... annotations ) {
-        setSupportedAnnotations(annotations);
+    protected BaseValidationAnnotationProcessor( RequiredTypes requiredAnnotation) {
+        this.combinationManager = new CombinationManager(requiredAnnotation);
+    }
+
+    protected BaseValidationAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation, OptionalTypes supportedAnnotations) {
+        this.requiredType = requiredType;
+        this.combinationManager = new CombinationManager(requiredAnnotation, supportedAnnotations);
+    }
+
+    protected BaseValidationAnnotationProcessor(RequiredTypes requiredAnnotation, OptionalTypes supportedAnnotations) {
+        this.combinationManager = new CombinationManager(requiredAnnotation, supportedAnnotations);
+    }
+
+    protected void setBaseValidatorForClass( Class baseValidatorForClass ) {
+        this.baseValidatorForClass = baseValidatorForClass;
+    }
+
+    @Override
+    public Class getBaseValidatorForClass() {
+        return baseValidatorForClass;
+    }
+
+    @Override
+    public boolean isBaseValidator() {
+        return getBaseValidatorForClass() != null;
     }
 
     @Override
@@ -64,12 +93,46 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
         return groups != null && groups.length > 0;
     }
 
-    protected void setSupportedAnnotations(Class... annotations) {
-        supportedAnnotations = annotations;
-    }
     @Override
-    public Class[] getSupportedAnnotations() {
-        return supportedAnnotations;
+    public boolean canProcess( List<Annotation> annotations ) {
+        return combinationManager.supports(annotations);
     }
+
+
+    private void prepareForWrite(List<Annotation> annotations) {
+        annotationBag = new HashMap<Class, Annotation>();
+        for( Annotation a : annotations ) {
+            if( combinationManager.containsClass(a.annotationType()) ) {
+                annotationBag.put(a.annotationType(), a);
+            }
+        }
+    }
+
+    private void finishWrite() {
+        annotationBag.clear();
+        annotationBag = null;
+    }
+
+    protected <T> boolean containsAnnotation(Class<T> clazz) {
+        return annotationBag.containsKey(clazz);
+    }
+
+    protected <T> T findAnnotation(Class<T> clazz) {
+        if( annotationBag.containsKey(clazz) ) {
+            return (T)annotationBag.get(clazz);
+        } else {
+            throw new RuntimeException("Annotation of type " + clazz.getName() + " not found");
+        }
+    }
+
+    @Override
+    public void writeValidatorsToStream( List<Annotation> annotations, ModelWriter writer ) {
+        prepareForWrite(annotations);
+        writeValidatorsToStreamInternal(writer);
+        finishWrite();
+    }
+
+    protected abstract void writeValidatorsToStreamInternal(ModelWriter writer);
+
 
 }

@@ -15,12 +15,17 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.OptionalTypes;
+import fi.vincit.jmobster.processor.RequiredTypes;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.JavaToJSPatternConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.lang.annotation.Annotation;
 
@@ -29,14 +34,23 @@ public class PatternAnnotationProcessor extends BaseValidationAnnotationProcesso
             .getLogger( PatternAnnotationProcessor.class );
 
     public PatternAnnotationProcessor() {
-        super(Pattern.class);
+        super( RequiredTypes.get( Pattern.class ), OptionalTypes.get(OverridePattern.class) );
+        setBaseValidatorForClass(Pattern.class);
     }
 
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
-        Pattern pattern = (Pattern)annotation;
-        String javaScriptRegExp = JavaToJSPatternConverter.convertFromJava( pattern.regexp(), pattern.flags() );
-        writer.write( "pattern: " ).write( javaScriptRegExp );
+    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
+        if( containsAnnotation(Pattern.class) ) {
+            String javaScriptRegExp;
+            if( containsAnnotation(OverridePattern.class) ) {
+                OverridePattern pattern = findAnnotation(OverridePattern.class);
+                javaScriptRegExp = pattern.regexp();
+            } else {
+                Pattern pattern = findAnnotation(Pattern.class);
+                javaScriptRegExp = JavaToJSPatternConverter.convertFromJava( pattern.regexp(), pattern.flags() );
+            }
+            writer.write( "pattern: " ).write( javaScriptRegExp );
+        }
     }
 
     @Override

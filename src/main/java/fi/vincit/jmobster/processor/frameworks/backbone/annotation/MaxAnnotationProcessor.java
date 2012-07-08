@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
 */
 
 import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.RequiredTypes;
 import fi.vincit.jmobster.util.ModelWriter;
 
 import javax.validation.constraints.Max;
@@ -24,12 +25,16 @@ import java.lang.annotation.Annotation;
 public class MaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public MaxAnnotationProcessor() {
-        super("number", Max.class);
+        super( "number", RequiredTypes.get(Max.class) );
+        setBaseValidatorForClass(Max.class);
     }
 
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
-        writer.write( "max: " ).write( "" + ((Max)annotation).value() );
+    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
+        if( containsAnnotation(Max.class) ) {
+            Max annotation = findAnnotation(Max.class);
+            writer.write( "max: " ).write( "" + ((Max)annotation).value() );
+        }
     }
 
     @Override

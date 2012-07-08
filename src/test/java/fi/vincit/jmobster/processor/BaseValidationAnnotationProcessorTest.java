@@ -14,10 +14,11 @@ import static org.mockito.Mockito.when;
 public class BaseValidationAnnotationProcessorTest {
     public static class TestImplementation extends BaseValidationAnnotationProcessor {
         public TestImplementation() {
+            super(RequiredTypes.get());
         }
 
         public TestImplementation( String requiredType ) {
-            super( requiredType );
+            super( requiredType, RequiredTypes.get() );
         }
 
         @Override
@@ -26,7 +27,8 @@ public class BaseValidationAnnotationProcessorTest {
         }
 
         @Override
-        public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {}
+        protected void writeValidatorsToStreamInternal( ModelWriter writer ) {
+        }
     }
 
     @Test

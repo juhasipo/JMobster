@@ -16,19 +16,23 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
 */
 
 import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.RequiredTypes;
 import fi.vincit.jmobster.util.ModelWriter;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.lang.annotation.Annotation;
 
 public class NotNullAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public NotNullAnnotationProcessor() {
-        super(NotNull.class);
+        super( RequiredTypes.get( NotNull.class ) );
+        setBaseValidatorForClass(NotNull.class);
     }
 
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
+    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
         writer.write( "required: true" );
     }
 

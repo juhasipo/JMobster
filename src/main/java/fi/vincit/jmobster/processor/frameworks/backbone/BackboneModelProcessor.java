@@ -51,16 +51,39 @@ public class BackboneModelProcessor implements ModelProcessor {
     private String startComment;
     private String namespaceName;
 
+    private DefaultValueSectionWriter defaultValueSectionWriter;
+    private ValidationSectionWriter validationSectionWriter;
+
     public BackboneModelProcessor( String modelFilePath, GroupMode groupMode ) {
         this.modelFilePath = modelFilePath;
-        annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider(), groupMode);
-        modelNamingStrategy = new DefaultNamingStrategy();
-        startComment = "/*\n * Auto-generated file\n */";
-        namespaceName = "Models";
+        this.annotationProcessor = new DefaultAnnotationProcessor(new DefaultAnnotationProcessorProvider(), groupMode);
+        this.modelNamingStrategy = new DefaultNamingStrategy();
+        this.startComment = "/*\n * Auto-generated file\n */";
+        this.namespaceName = "Models";
+        this.defaultValueSectionWriter = new DefaultValueSectionWriter();
+        this.validationSectionWriter = new ValidationSectionWriter(this.annotationProcessor);
+    }
+
+    public BackboneModelProcessor(
+            ModelWriter writer,
+            String modelFilePath,
+            AnnotationProcessor annotationProcessor,
+            ModelNamingStrategy modelNamingStrategy,
+            String startComment, String namespaceName,
+            DefaultValueSectionWriter defaultValueSectionWriter,
+            ValidationSectionWriter validationSectionWriter ) {
+        this.writer = writer;
+        this.modelFilePath = modelFilePath;
+        this.annotationProcessor = annotationProcessor;
+        this.modelNamingStrategy = modelNamingStrategy;
+        this.startComment = startComment;
+        this.namespaceName = namespaceName;
+        this.defaultValueSectionWriter = defaultValueSectionWriter;
+        this.validationSectionWriter = validationSectionWriter;
     }
 
     public BackboneModelProcessor( ModelWriter writer ) {
-        this( (String)null, GroupMode.ANY_OF_REQUIRED );
+        this((String)null, GroupMode.ANY_OF_REQUIRED );
         this.writer = writer;
     }
 
@@ -82,12 +105,11 @@ public class BackboneModelProcessor implements ModelProcessor {
 
         writer.write(modelName).writeLine( MODEL_EXTEND_START ).indent();
 
-        DefaultValueSectionWriter defaultValueSectionWriter = new DefaultValueSectionWriter(writer);
+        defaultValueSectionWriter.setWriter(writer);
         defaultValueSectionWriter.writeDefaultValues( model.getFields(), model.hasValidations() );
 
         if( model.hasValidations() ) {
-            ValidationSectionWriter validationSectionWriter =
-                    new ValidationSectionWriter(writer, annotationProcessor);
+            validationSectionWriter.setWriter(writer);
             validationSectionWriter.writeValidators( model.getFields() );
         }
         writer.indentBack();

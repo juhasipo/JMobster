@@ -16,20 +16,26 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
 */
 
 import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.RequiredTypes;
 import fi.vincit.jmobster.util.ModelWriter;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.lang.annotation.Annotation;
 
 public class MinAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public MinAnnotationProcessor() {
-        super("number", Min.class);
+        super("number", RequiredTypes.get( Min.class ) );
+        setBaseValidatorForClass(Min.class);
     }
 
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
-        writer.write( "min: " ).write( "" + (( Min )annotation).value() );
+    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
+        if( containsAnnotation(Min.class) ) {
+            Min annotation = findAnnotation(Min.class);
+            writer.write( "min: " ).write( "" + (( Min )annotation).value() );
+        }
     }
 
     @Override

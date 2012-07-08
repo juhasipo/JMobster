@@ -16,22 +16,15 @@ package fi.vincit.jmobster.processor;
 */
 
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.util.ModelWriter;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * Provides annotation processors
  */
 public interface AnnotationProcessorProvider {
-    /**
-     * Returns the most suitable annotation processor for the given
-     * annotation
-     * @param annotation Annotation
-     * @return Best suitable annotation processor. Null if no processor
-     *         suits for the given annotation.
-     */
-    ValidationAnnotationProcessor getValidator( Annotation annotation );
-
     /**
      * Checks if the given annotation is used to validate data. This
      * mostly depends on the validation processors set in the
@@ -40,4 +33,8 @@ public interface AnnotationProcessorProvider {
      * @return True if the given annotation is for validation.
      */
     boolean isAnnotationForValidation(Annotation annotation);
+
+    void process(List<Annotation> annotations, ModelWriter writer);
+
+    ValidationAnnotationProcessor getValidator(Annotation annotation);
 }

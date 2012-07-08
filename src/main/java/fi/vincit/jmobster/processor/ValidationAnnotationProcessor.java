@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor;
 import fi.vincit.jmobster.util.ModelWriter;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * Interface for writing validator to model writer
@@ -25,10 +26,9 @@ import java.lang.annotation.Annotation;
 public interface ValidationAnnotationProcessor {
     /**
      * Writes the given annotation to model writer
-     * @param annotation Annoation to write
      * @param writer Model writer
      */
-    void writeValidatorsToStream( Annotation annotation, ModelWriter writer );
+    void writeValidatorsToStream( List<Annotation> annotations, ModelWriter writer );
 
     /**
      * Checks that the existing field type is valid. If no
@@ -65,11 +65,8 @@ public interface ValidationAnnotationProcessor {
      */
     boolean hasGroups(Annotation annotation);
 
-    /**
-     * Returns the supported annotations. Method should return an empty
-     * array if it doesn't support any annotation even though an annotation
-     * processor should always support at least one annotation.
-     * @return Supported annotation, empty array if none.
-     */
-    Class[] getSupportedAnnotations();
+    boolean canProcess( List<Annotation> annotations );
+
+    Class getBaseValidatorForClass();
+    boolean isBaseValidator();
 }

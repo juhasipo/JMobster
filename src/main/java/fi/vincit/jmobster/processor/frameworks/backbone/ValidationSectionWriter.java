@@ -27,9 +27,17 @@ public class ValidationSectionWriter {
     private JavaScriptWriter writer;
     private AnnotationProcessor annotationProcessor;
 
-    public ValidationSectionWriter( ModelWriter writer, AnnotationProcessor annotationProcessor ) {
-        this.writer = new JavaScriptWriter(writer);
+    public ValidationSectionWriter( AnnotationProcessor annotationProcessor ) {
         this.annotationProcessor = annotationProcessor;
+    }
+
+    public ValidationSectionWriter( ModelWriter writer, AnnotationProcessor annotationProcessor ) {
+        this.annotationProcessor = annotationProcessor;
+        setWriter(writer);
+    }
+
+    public void setWriter( ModelWriter writer ) {
+        this.writer = new JavaScriptWriter(writer);
     }
 
     public void writeValidators( List<ModelField> fields ) {

@@ -16,30 +16,35 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
 */
 
 import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.RequiredTypes;
 import fi.vincit.jmobster.util.ModelWriter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.lang.annotation.Annotation;
 
 public class SizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public SizeAnnotationProcessor() {
-        super(Size.class);
+        super( RequiredTypes.get( Size.class ) );
+        setBaseValidatorForClass(Size.class);
     }
 
     @Override
-    public void writeValidatorsToStream( Annotation annotation, ModelWriter writer ) {
-        Size size = (Size)annotation;
-        boolean minAvailable = size.min() > 0;
-        boolean maxAvailable = size.max() > 0 && size.max() < Integer.MAX_VALUE;
-        if( minAvailable ) {
-            writer.write( "minlength: " ).write( "" + size.min());
-        }
-        if( minAvailable && maxAvailable ) {
-            writer.writeLine(",");
-        }
-        if( maxAvailable ) {
-            writer.write( "maxlength: " ).write( "" + size.max() );
+    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
+        if( containsAnnotation(Size.class) ) {
+            Size size = findAnnotation(Size.class);
+            boolean minAvailable = size.min() > 0;
+            boolean maxAvailable = size.max() > 0 && size.max() < Integer.MAX_VALUE;
+            if( minAvailable ) {
+                writer.write( "minlength: " ).write( "" + size.min());
+            }
+            if( minAvailable && maxAvailable ) {
+                writer.writeLine(",");
+            }
+            if( maxAvailable ) {
+                writer.write( "maxlength: " ).write( "" + size.max() );
+            }
         }
     }
 

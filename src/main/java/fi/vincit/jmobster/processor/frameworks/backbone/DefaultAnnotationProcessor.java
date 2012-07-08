@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,8 +38,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
 
     private static final Logger LOG = LoggerFactory
             .getLogger( DefaultAnnotationProcessor.class );
-    private static final String FIELD_TYPE_START = "type: \"";
-    private static final String FIELD_TYPE_END = "\",";
+
 
     private AnnotationProcessorProvider annotationProcessorProvider;
     private Class[] groups;
@@ -59,37 +59,18 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
         this.includeValidationsWithoutGroup = false;
     }
 
-    private static void appendType(boolean hasType, ModelWriter sb, String type) {
-        if( !hasType ) {
-            sb.write( FIELD_TYPE_START ).write( type ).writeLine( FIELD_TYPE_END );
-        }
-    }
-
     @Override
-    public void writeValidation( List<Annotation> validationAnnotations, final JavaScriptWriter writer ) {
-        ItemProcessor<Annotation> annotationItemProcessor = new ItemProcessor<Annotation>() {
-            boolean hasPropertyTypeSet = false;
-            @Override
-            protected void process( Annotation annotation, boolean isLast ) {
-                // TODO: Don't return null if annotation processor is not found. Instead return some object that just doesn't do anything
-                ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getValidator( annotation );
-                if( annotationProcessor != null ) {
-                    if( annotationProcessor.requiresType() ) {
-                        appendType(hasPropertyTypeSet, writer, annotationProcessor.requiredType() );
-                        hasPropertyTypeSet = true;
-                    }
-                    annotationProcessor.writeValidatorsToStream( annotation, writer );
-                    writer.writeLine("", ",", !isLast);
-                } else {
-                    LOG.debug("No validator processor found");
-                }
-            }
-        };
-
+    public void writeValidation( final List<Annotation> validationAnnotations, final JavaScriptWriter writer ) {
         List<Annotation> filteredAnnotations = filterByGroupRules(validationAnnotations);
-        annotationItemProcessor.process(filteredAnnotations);
+        annotationProcessorProvider.process(filteredAnnotations, writer);
     }
 
+    /**
+     * Filter annotations by groups. If groups are provided for this processor in constructor,
+     * only the annotations that match the group rules are processed.
+     * @param validationAnnotations All annotations
+     * @return Filtered annotations
+     */
     private List<Annotation> filterByGroupRules(List<Annotation> validationAnnotations) {
         final boolean hasAnnotationsWithGroup = findIfAnnotationsWithGroups(validationAnnotations);
         List<Annotation> annotations = new ArrayList<Annotation>();
@@ -106,7 +87,14 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
         return annotations;
     }
 
-    private void addByAnnotationGroup( Annotation annotation, ValidationAnnotationProcessor annotationProcessor, List<Annotation> annotations ) {
+    /**
+     * Adds annotation to the given Collection if the annotation matches
+     * group checks.
+     * @param annotation Annotation to add
+     * @param annotationProcessor Processor to use for fetching annotation groups
+     * @param annotations Collection to which annotation should be added
+     */
+    private void addByAnnotationGroup( Annotation annotation, ValidationAnnotationProcessor annotationProcessor, Collection<Annotation> annotations ) {
         final boolean hasAnnotationGroups = annotationProcessor.hasGroups(annotation);
         final boolean shouldBeIncludedByGroups = checkGroups(annotation, annotationProcessor);
         if( hasAnnotationGroups && shouldBeIncludedByGroups ) {
@@ -116,47 +104,70 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
         }
     }
 
+
+    /**
+     * Checks annotation groups using the current groupMode.
+     * @param annotation Annotation to check
+     * @param annotationProcessor Processor to use for getting groups for annotation
+     * @return True if groups match according to groupMode, otherwise false.
+     */
     private boolean checkGroups(Annotation annotation, ValidationAnnotationProcessor annotationProcessor) {
         Class[] groupsInAnnotation = annotationProcessor.getGroups(annotation);
         if( groupMode == GroupMode.ANY_OF_REQUIRED) {
-            for( Class group : groupsInAnnotation ) {
-                for( Class myGroup : this.groups ) {
-                    if( group.equals(myGroup) ) {
-                        return true;
-                    }
-                }
-            }
+            return checkAnyRequiredGroups( groupsInAnnotation );
         } else if( groupMode == GroupMode.AT_LEAST_REQUIRED) {
-            final int groupsNeededCount = this.groups.length;
-            if( groupsInAnnotation.length < groupsNeededCount ) {
-                return false;
-            }
-            int groupsFoundCount = 0;
-            for( Class aGroup : groupsInAnnotation ) {
-                for( Class vGroup : this.groups ) {
-                    if( aGroup.equals(vGroup) ) {
-                        ++groupsFoundCount;
-                    }
-                }
-            }
-            return groupsFoundCount == groupsNeededCount;
+            return checkAtLeastRequiredGroups( groupsInAnnotation );
         } else if( groupMode == GroupMode.EXACTLY_REQUIRED) {
-            final int groupsNeededCount = this.groups.length;
-            if( groupsInAnnotation.length != groupsNeededCount ) {
-                return false;
-            }
-            int groupsFoundCount = 0;
-            for( Class aGroup : groupsInAnnotation ) {
-                for( Class vGroup : this.groups ) {
-                    if( aGroup.equals(vGroup) ) {
-                        ++groupsFoundCount;
-                    }
-                }
-            }
-            return groupsFoundCount == groupsNeededCount;
+            return checkExactlyRequiredGroups( groupsInAnnotation );
         }
         return false;
     }
+
+    private boolean checkAnyRequiredGroups( Class[] groupsInAnnotation ) {
+        for( Class group : groupsInAnnotation ) {
+            for( Class myGroup : this.groups ) {
+                if( group.equals(myGroup) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkAtLeastRequiredGroups( Class[] groupsInAnnotation ) {
+        final int groupsNeededCount = this.groups.length;
+        if( groupsInAnnotation.length < groupsNeededCount ) {
+            return false;
+        }
+        int groupsFoundCount = 0;
+        for( Class aGroup : groupsInAnnotation ) {
+            for( Class vGroup : this.groups ) {
+                if( aGroup.equals(vGroup) ) {
+                    ++groupsFoundCount;
+                }
+            }
+        }
+        return groupsFoundCount == groupsNeededCount;
+    }
+
+    private boolean checkExactlyRequiredGroups( Class[] groupsInAnnotation ) {
+        final int groupsNeededCount = this.groups.length;
+        if( groupsInAnnotation.length != groupsNeededCount ) {
+            return false;
+        }
+        int groupsFoundCount = 0;
+        for( Class aGroup : groupsInAnnotation ) {
+            for( Class vGroup : this.groups ) {
+                if( aGroup.equals(vGroup) ) {
+                    ++groupsFoundCount;
+                }
+            }
+        }
+        return groupsFoundCount == groupsNeededCount;
+    }
+
+
+
 
     private boolean findIfAnnotationsWithGroups(List<Annotation> validationAnnotations) {
         for(Annotation a : validationAnnotations) {

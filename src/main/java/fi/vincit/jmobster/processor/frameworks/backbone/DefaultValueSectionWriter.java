@@ -30,7 +30,14 @@ public class DefaultValueSectionWriter {
     private static final String RETURN_BLOCK = "return "; // Note the space
     private JavaScriptWriter writer;
 
+    public DefaultValueSectionWriter() {
+    }
+
     public DefaultValueSectionWriter( ModelWriter writer ) {
+        setWriter(writer);
+    }
+
+    public void setWriter( ModelWriter writer ) {
         this.writer = new JavaScriptWriter(writer);
     }
 
