@@ -18,6 +18,8 @@ package fi.vincit.jmobster.processor.languages.javascript;
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -32,7 +34,11 @@ import java.util.Map;
  */
 public class JavaToJSValueConverter implements FieldValueConverter {
 
+    private static final Logger LOG = LoggerFactory
+            .getLogger( JavaToJSValueConverter.class );
+
     public static final String NULL_VALUE = "null";
+    private static final String UNDEFINED_VALUE = "undefined";
 
     private ConverterMode mode;
     private Map<Class, ValueConverter> converters;
@@ -84,11 +90,11 @@ public class JavaToJSValueConverter implements FieldValueConverter {
      * @return Converted value depending on settings
      */
     private String convertByClass( Object value, Class clazz ) {
-        ValueConverter c = getConverterByClass( clazz );
-        if( c != null ) {
-            return c.convertValue(value);
+        ValueConverter converter = getConverterByClass( clazz );
+        if( converter != null ) {
+            return converter.convertValue(value);
         } else {
-            return value != null ? value.toString() : "undefined";
+            return value != null ? value.toString() : UNDEFINED_VALUE;
         }
     }
 
@@ -101,17 +107,20 @@ public class JavaToJSValueConverter implements FieldValueConverter {
     private ValueConverter getConverterByClass( Class clazz ) {
         if( clazz == null ) {
             return nullConverter;
-        }
-        if( clazz.isArray() ) {
+        } else if( clazz.isArray() ) {
             return converters.get(Array.class);
+        } else {
+            ValueConverter converter = converters.get(clazz);
+            if( converter == null ) {
+                converter = getConverterBySuperClass( clazz );
+                if( converter == null ) { converter = getConverterByInterface(clazz); }
+                if( converter == null ) { converter = getConverterByClass(clazz.getSuperclass()); }
+            }
+            if( converter == null ) {
+                LOG.error("Converter not found for class {}", clazz.getName());
+            }
+            return converter;
         }
-        ValueConverter c = converters.get(clazz);
-        if( c == null ) {
-            c = getConverterBySuperClass( clazz );
-            if( c == null ) { c = getConverterByInterface(clazz); }
-            if( c == null ) { c = getConverterByClass(clazz.getSuperclass()); }
-        }
-        return c;
     }
 
     /**

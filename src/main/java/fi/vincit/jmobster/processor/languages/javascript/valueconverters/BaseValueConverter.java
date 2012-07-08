@@ -49,6 +49,9 @@ public abstract class BaseValueConverter implements ValueConverter {
      * toString() method and it works well for many cases like BigDecimals.
      * </p>
      * <p>Override this method to implement custom value converter.</p>
+     * <p>Value parameter must not be null. The default implementation will makes
+     * sure that null isn't passed, but custom implementations must handle this
+     * by themselves.</p>
      * @param value Value as object
      * @return Value as string. If null is returned the default value is used.
      */

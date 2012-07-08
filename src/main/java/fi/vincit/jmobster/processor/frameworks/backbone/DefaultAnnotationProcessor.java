@@ -97,19 +97,23 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
             ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getValidator( annotation );
             if( annotationProcessor != null ) {
                 if( hasAnnotationsWithGroup ) {
-                    final boolean hasAnnotationGroups = annotationProcessor.hasGroups(annotation);
-                    final boolean shouldBeIncludedByGroups = checkGroups(annotation, annotationProcessor);
-                    if( hasAnnotationGroups && shouldBeIncludedByGroups ) {
-                        annotations.add(annotation);
-                    } else if( !hasAnnotationGroups && includeValidationsWithoutGroup ) {
-                        annotations.add(annotation);
-                    }
+                    addByAnnotationGroup( annotation, annotationProcessor, annotations );
                 } else {
                     annotations.add(annotation);
                 }
             }
         }
         return annotations;
+    }
+
+    private void addByAnnotationGroup( Annotation annotation, ValidationAnnotationProcessor annotationProcessor, List<Annotation> annotations ) {
+        final boolean hasAnnotationGroups = annotationProcessor.hasGroups(annotation);
+        final boolean shouldBeIncludedByGroups = checkGroups(annotation, annotationProcessor);
+        if( hasAnnotationGroups && shouldBeIncludedByGroups ) {
+            annotations.add(annotation);
+        } else if( !hasAnnotationGroups && includeValidationsWithoutGroup ) {
+            annotations.add(annotation);
+        }
     }
 
     private boolean checkGroups(Annotation annotation, ValidationAnnotationProcessor annotationProcessor) {
@@ -162,10 +166,6 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
             }
         }
         return false;
-    }
-
-    public AnnotationProcessorProvider getAnnotationProcessorProvider() {
-        return annotationProcessorProvider;
     }
 
     public void setIncludeValidationsWithoutGroup(boolean includeValidationsWithoutGroup) {

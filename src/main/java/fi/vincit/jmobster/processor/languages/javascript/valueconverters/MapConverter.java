@@ -42,9 +42,6 @@ public class MapConverter extends BaseValueConverter {
 
     @Override
     protected String getValueAsString( Object values ) {
-        if( values == null ) {
-            return getTypeDefaultValue();
-        }
         Map<Object,Object> map = (Map)values;
         StringBuilder sb = new StringBuilder();
         sb.append( MAP_START );

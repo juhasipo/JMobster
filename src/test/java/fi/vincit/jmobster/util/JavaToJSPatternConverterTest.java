@@ -29,6 +29,29 @@ public class JavaToJSPatternConverterTest {
     }
 
     @Test
+    public void testPatternAnnotationProcessorEmpty() {
+        String result = JavaToJSPatternConverter.convertFromJava("");
+        assertEquals( "//", result );
+    }
+
+    @Test
+    public void testPatternAnnotationProcessorWhitespaceOnly() {
+        String result = JavaToJSPatternConverter.convertFromJava("   \t   ");
+        assertEquals( "//", result );
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testPatternAnnotationProcessorNull() {
+        String result = JavaToJSPatternConverter.convertFromJava(null);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testPatternAnnotationProcessorNullFlags() {
+        Pattern.Flag[] flags = null;
+        String result = JavaToJSPatternConverter.convertFromJava("", flags);
+    }
+
+    @Test
     public void testPatternAnnotationProcessorWithOneFlag() {
         String result = JavaToJSPatternConverter.convertFromJava("[\\dA-Z]", Pattern.Flag.CASE_INSENSITIVE);
         assertEquals("/[\\dA-Z]/i", result);

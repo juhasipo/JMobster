@@ -45,6 +45,9 @@ public final class JavaToJSPatternConverter {
      * @return Pattern in JavaScript form. If empty pattern is given, an empty pattern is returned.
      */
     public static String convertFromJava(String javaPattern, Pattern.Flag... flags ) {
+        assert javaPattern != null : "javaPattern must not be null";
+        assert flags != null : "flags must not be null";
+
         if( javaPattern.trim().length() == 0 ) {
             return convertToJSForm("");
         }

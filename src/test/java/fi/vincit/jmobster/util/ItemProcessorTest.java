@@ -141,4 +141,18 @@ public class ItemProcessorTest {
         assertEquals(0, lic.calledWithLastTrue);
         assertEquals(0, lic.calledWithLastFalse);
     }
+
+    @Test
+    public void testNullArrayItems() {
+        StringBuilder sb = new StringBuilder();
+        LastItemCaller lic = new LastItemCaller();
+        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+
+        String[] strings = null;
+        itemProcessor.process(strings);
+
+        assertEquals("", sb.toString());
+        assertEquals(0, lic.calledWithLastTrue);
+        assertEquals(0, lic.calledWithLastFalse);
+    }
 }
