@@ -22,20 +22,12 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
     private String requiredType;
     private Class[] supportedAnnotations = new Class[0];
 
-    protected BaseValidationAnnotationProcessor() {
-    }
-
-    protected BaseValidationAnnotationProcessor( String requiredType ) {
-        this.requiredType = requiredType;
-    }
-
     protected BaseValidationAnnotationProcessor( String requiredType, Class... annotations ) {
-        this(requiredType);
+        this.requiredType = requiredType;
         setSupportedAnnotations(annotations);
     }
 
     protected BaseValidationAnnotationProcessor( Class... annotations ) {
-        this();
         setSupportedAnnotations(annotations);
     }
 
