@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor;
+package fi.vincit.jmobster.processor.defaults;
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -20,12 +20,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import fi.vincit.jmobster.exception.InvalidType;
+import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.util.CombinationManager;
 import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.util.OptionalTypes;
+import fi.vincit.jmobster.util.RequiredTypes;
 
 /** Abstract base class for annotation processors.
  * <p>
  *     For each annotation type there should be at least one processor which is
- *     added to corresponding {@link AnnotationProcessorProvider} object. The purpose of
+ *     added to corresponding {@link fi.vincit.jmobster.processor.AnnotationProcessorProvider} object. The purpose of
  *     these processors is to:
  *     <ol>
  *         <li>Write the annotation to model writer</li>

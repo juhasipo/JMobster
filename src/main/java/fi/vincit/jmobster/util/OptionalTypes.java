@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor;
+package fi.vincit.jmobster.util;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,11 +16,11 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
-public class RequiredTypes extends TypeCollection<Class> {
-    public static RequiredTypes get(Class... annotations) {
-        return new RequiredTypes(annotations);
+public class OptionalTypes extends TypeCollection<Class> {
+    public static OptionalTypes get(Class... annotations) {
+        return new OptionalTypes(annotations);
     }
-    protected RequiredTypes(Class... annotations) {
+    protected OptionalTypes(Class... annotations) {
         super(annotations);
     }
 }

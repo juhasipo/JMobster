@@ -34,6 +34,7 @@ import java.util.Map;
  */
 public class JavaToJSValueConverter implements FieldValueConverter {
 
+    // TODO: Make more generic
     private static final Logger LOG = LoggerFactory
             .getLogger( JavaToJSValueConverter.class );
 

@@ -15,12 +15,10 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
-import fi.vincit.jmobster.processor.RequiredTypes;
+import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.util.RequiredTypes;
 import fi.vincit.jmobster.util.ModelWriter;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.lang.annotation.Annotation;
 

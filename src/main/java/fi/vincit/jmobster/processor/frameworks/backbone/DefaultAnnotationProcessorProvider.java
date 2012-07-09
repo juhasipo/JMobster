@@ -16,7 +16,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 */
 
 import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
-import fi.vincit.jmobster.processor.CombinationManager;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.*;
 import fi.vincit.jmobster.util.ItemProcessor;
@@ -24,7 +23,6 @@ import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
 import java.util.*;
 

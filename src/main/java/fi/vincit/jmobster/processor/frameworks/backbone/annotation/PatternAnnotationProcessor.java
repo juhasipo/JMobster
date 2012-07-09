@@ -16,16 +16,14 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
 */
 
 import fi.vincit.jmobster.annotation.OverridePattern;
-import fi.vincit.jmobster.processor.BaseValidationAnnotationProcessor;
-import fi.vincit.jmobster.processor.OptionalTypes;
-import fi.vincit.jmobster.processor.RequiredTypes;
+import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.util.OptionalTypes;
+import fi.vincit.jmobster.util.RequiredTypes;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.JavaToJSPatternConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.lang.annotation.Annotation;
 

@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor;
+package fi.vincit.jmobster.util;
 
 import org.junit.Test;
 
@@ -13,9 +13,9 @@ public class CombinationManagerTest {
 
     @Test
     public void testOneRequired() {
-        CombinationManager cm = new CombinationManager(RequiredTypes.get(String.class));
+        CombinationManager cm = new CombinationManager( RequiredTypes.get( String.class ));
         //assertTrue(cm.test(String.class));
-        assertTrue(cm.containsClass(String.class));
+        Assert.assertTrue( cm.containsClass( String.class ) );
         assertEquals(String.class, cm.findClass(String.class));
     }
 
@@ -25,7 +25,7 @@ public class CombinationManagerTest {
         //assertFalse( cm.test( String.class ) );
 
         //assertTrue( cm.test( String.class, Integer.class ) );
-        assertTrue(cm.containsClass(String.class));
+        Assert.assertTrue( cm.containsClass( String.class ) );
         assertEquals(String.class, cm.findClass(String.class));
         assertEquals(Integer.class, cm.findClass(Integer.class));
     }
@@ -34,14 +34,14 @@ public class CombinationManagerTest {
     public void testTwoRequiredOneOptional() {
         CombinationManager cm = new CombinationManager(
                 RequiredTypes.get(String.class, Integer.class),
-                OptionalTypes.get(Float.class)
+                OptionalTypes.get( Float.class )
         );
         //assertFalse( cm.matches( toList(String.class, Float.class) ) );
 
         //assertTrue( cm.matches( String.class, Integer.class ) );
         //assertTrue( cm.matches( String.class, Integer.class, Float.class ) );
-        assertTrue(cm.containsClass(String.class));
-        assertTrue(cm.containsClass(Float.class));
+        Assert.assertTrue( cm.containsClass( String.class ) );
+        Assert.assertTrue( cm.containsClass( Float.class ) );
         assertEquals(String.class, cm.findClass(String.class));
         assertEquals(Integer.class, cm.findClass(Integer.class));
         assertEquals(Float.class, cm.findClass(Float.class));

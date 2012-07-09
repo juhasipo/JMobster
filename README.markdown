@@ -111,3 +111,75 @@ id values that should not have default value in client side model.
 
 The class fields' visibility doesn't matter and no getters nor setters are required
 in order to JMobster to work.
+
+Extending
+---------
+
+### Model Processors
+
+Model processors are the basis for creating support for new framework. Model processors takes
+models one by one and writes them to a stream (or any other output). Processor implemetations are
+given to Model generator which calls appropriate methods of the processor.
+
+Model processor only acts as the basis for the model generation and it depends on other classes. For example
+the default Backbone.js implementation uses classes its own ValidationSectionWriter and DefaultValueSectionWriter
+for producing corrsponding sections to the output stream. In addition these classes rely heavily on annotation
+processors and providers as well as the value converters.
+
+### Annotation Processors
+
+Annotation processors are an important part of the model generation process. For each new framework
+user has to create suitable processors for each supported validation annotation. One processor can
+process one or more validation annotations at the same time. There are two types of annotations in
+the processors - required and optional.
+
+Required annotations have to present for a filed in order to be processed by an annotation processor.
+Optional annotations may be present, but processor can work without them.
+
+Each annotation processor must implement few basic features and may implement some extra features. Firstly the
+extended class has to define required annotations for the processor. This can be done in the constructor by calling
+the appropriate super class constructor. In addition a required type and optional annotations can be given.
+
+    public MaxAnnotationProcessor() {
+        super( "number", RequiredTypes.get(Max.class) );
+        setBaseValidatorForClass(Max.class);
+    }
+
+Secondly the processor has to able to write itself to model writer. For this, the _writeValidatorsToStreamInternal_
+method is implemented. In this method, the processed annotation can be aquired with _findAnnotation_ method. For example:
+
+    @Override
+    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
+        if( containsAnnotation(Max.class) ) {
+            Max annotation = findAnnotation(Max.class);
+            writer.write( "max: " ).write( "" + ((Max)annotation).value() );
+        }
+    }
+
+In order to work well with JSR-303 validations, annotation processors have to implement group extracting.
+This will basically take the groups parameter data and returns it the caller.
+
+    @Override
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((Max)annotation).groups();
+    }
+
+### Annotation Processors Providers
+
+Annotation processor providers are a storage for annotarion processors. Provider is configured to contain all
+required annotation processors and it contains the logic for generating the validation for the target
+framework.
+
+### Field Value Converters
+
+Field value converters are used for converting field default values to the target framework and language. They
+take an object and produce a string value the object represents in the target framework and language.
+
+To add support for new language, a new implementation for interface FieldValueConverter has to be created.
+FieldValueConverter takes a Field or a Class, and a defaultValueObject. With these it produces default value
+for the given field. The default value is taken from the given defaultValueObjects corresponding field.
+
+### Model Naming Strategies
+
+In order to customize the produced model's name, a model naming strategy can be implemented. It basically
+takes a Model object and returns the name for the model.

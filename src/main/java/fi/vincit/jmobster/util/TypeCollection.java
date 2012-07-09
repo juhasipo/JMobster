@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor;
+package fi.vincit.jmobster.util;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,11 +16,19 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
-public class OptionalTypes extends TypeCollection<Class> {
-    public static OptionalTypes get(Class... annotations) {
-        return new OptionalTypes(annotations);
+import java.lang.reflect.Array;
+
+public class TypeCollection<T> {
+    private T[] types;
+    public TypeCollection( T... types ) {
+        this.types = types;
     }
-    protected OptionalTypes(Class... annotations) {
-        super(annotations);
+
+    public T[] getTypes() {
+        if( types != null ) {
+            return types;
+        } else {
+            return (T[])Array.newInstance(types.getClass(), 0);
+        }
     }
 }
