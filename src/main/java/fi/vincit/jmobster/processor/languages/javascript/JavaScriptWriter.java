@@ -107,7 +107,7 @@ public class JavaScriptWriter implements ModelWriter {
      * Ends block. Indents back.
      * @return Writer itself for chaining writes
      */
-    public JavaScriptWriter endBlock() {;
+    public JavaScriptWriter endBlock() {
         --blocksOpen;
         return indentBack().writeLine(BLOCK_END);
     }
@@ -117,7 +117,7 @@ public class JavaScriptWriter implements ModelWriter {
      * @param isLast Writes list separator if set to false.
      * @return Writer itself for chaining writes
      */
-    public JavaScriptWriter endBlock(boolean isLast) {;
+    public JavaScriptWriter endBlock(boolean isLast) {
         return indentBack().write(BLOCK_END).writeLine("", LIST_SEPARATOR, !isLast);
     }
 
