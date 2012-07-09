@@ -34,15 +34,15 @@ public class BaseValidationAnnotationProcessorTest {
     public void testRequireType() {
         final String requiredType = "number";
         TestImplementation ti = new TestImplementation(requiredType);
-        Assert.assertTrue( ti.requiresType() );
+        assertTrue( ti.requiresType() );
         assertEquals(requiredType, ti.requiredType());
     }
 
     @Test
     public void testNoRequireType() {
         TestImplementation ti = new TestImplementation();
-        Assert.assertFalse( ti.requiresType() );
-        Assert.assertNull( ti.requiredType() );
+        assertFalse( ti.requiresType() );
+        assertNull( ti.requiredType() );
     }
 
     @Test
@@ -68,7 +68,7 @@ public class BaseValidationAnnotationProcessorTest {
     @Test
     public void testHasNoGroups() {
         TestImplementation ti = new TestImplementation();
-        Annotation a = Mockito.mock( Annotation.class );
-        Assert.assertFalse( ti.hasGroups( a ) );
+        Annotation a = mock( Annotation.class );
+        assertFalse( ti.hasGroups( a ) );
     }
 }

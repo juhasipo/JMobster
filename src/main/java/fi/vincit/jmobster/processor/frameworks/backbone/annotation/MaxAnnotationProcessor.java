@@ -33,7 +33,7 @@ public class MaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
     public void writeValidatorsToStreamInternal( ModelWriter writer ) {
         if( containsAnnotation(Max.class) ) {
             Max annotation = findAnnotation(Max.class);
-            writer.write( "max: " ).write( "" + ((Max)annotation).value() );
+            writer.write( "max: " ).write( "" + annotation.value() );
         }
     }
 

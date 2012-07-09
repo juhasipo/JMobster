@@ -15,7 +15,7 @@ public class CombinationManagerTest {
     public void testOneRequired() {
         CombinationManager cm = new CombinationManager( RequiredTypes.get( String.class ));
         //assertTrue(cm.test(String.class));
-        Assert.assertTrue( cm.containsClass( String.class ) );
+        assertTrue( cm.containsClass( String.class ) );
         assertEquals(String.class, cm.findClass(String.class));
     }
 
@@ -25,7 +25,7 @@ public class CombinationManagerTest {
         //assertFalse( cm.test( String.class ) );
 
         //assertTrue( cm.test( String.class, Integer.class ) );
-        Assert.assertTrue( cm.containsClass( String.class ) );
+        assertTrue( cm.containsClass( String.class ) );
         assertEquals(String.class, cm.findClass(String.class));
         assertEquals(Integer.class, cm.findClass(Integer.class));
     }
@@ -40,8 +40,8 @@ public class CombinationManagerTest {
 
         //assertTrue( cm.matches( String.class, Integer.class ) );
         //assertTrue( cm.matches( String.class, Integer.class, Float.class ) );
-        Assert.assertTrue( cm.containsClass( String.class ) );
-        Assert.assertTrue( cm.containsClass( Float.class ) );
+        assertTrue( cm.containsClass( String.class ) );
+        assertTrue( cm.containsClass( Float.class ) );
         assertEquals(String.class, cm.findClass(String.class));
         assertEquals(Integer.class, cm.findClass(Integer.class));
         assertEquals(Float.class, cm.findClass(Float.class));

@@ -33,7 +33,7 @@ public class MinAnnotationProcessor extends BaseValidationAnnotationProcessor {
     public void writeValidatorsToStreamInternal( ModelWriter writer ) {
         if( containsAnnotation(Min.class) ) {
             Min annotation = findAnnotation(Min.class);
-            writer.write( "min: " ).write( "" + (( Min )annotation).value() );
+            writer.write( "min: " ).write( "" + annotation.value() );
         }
     }
 

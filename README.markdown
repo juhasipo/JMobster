@@ -152,7 +152,7 @@ method is implemented. In this method, the processed annotation can be aquired w
     public void writeValidatorsToStreamInternal( ModelWriter writer ) {
         if( containsAnnotation(Max.class) ) {
             Max annotation = findAnnotation(Max.class);
-            writer.write( "max: " ).write( "" + ((Max)annotation).value() );
+            writer.write( "max: " ).write( "" + annotation.value() );
         }
     }
 

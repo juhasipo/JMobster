@@ -40,7 +40,6 @@ import static org.mockito.Mockito.*;
 
 public class DefaultAnnotationProcessorTest {
 
-    // TODO: Simplify these tests and move complicated tests to DefaultAnnotationProcessorProviderTest
     private OutputStream os;
     private JavaScriptWriter modelWriter;
 

@@ -33,6 +33,7 @@ import java.util.*;
  * only single property annotations are supported.
  */
 public class DefaultAnnotationProcessorProvider implements AnnotationProcessorProvider {
+    // TODO: Make more generic. At least writeTypeInfo could be moved to subclass
     private static final Logger LOG = LoggerFactory
             .getLogger( BackboneModelProcessor.class );
 
