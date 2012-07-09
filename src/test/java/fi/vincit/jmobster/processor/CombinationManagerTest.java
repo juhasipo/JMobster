@@ -36,10 +36,10 @@ public class CombinationManagerTest {
                 RequiredTypes.get(String.class, Integer.class),
                 OptionalTypes.get(Float.class)
         );
-        //assertFalse( cm.supports( toList(String.class, Float.class) ) );
+        //assertFalse( cm.matches( toList(String.class, Float.class) ) );
 
-        //assertTrue( cm.supports( String.class, Integer.class ) );
-        //assertTrue( cm.supports( String.class, Integer.class, Float.class ) );
+        //assertTrue( cm.matches( String.class, Integer.class ) );
+        //assertTrue( cm.matches( String.class, Integer.class, Float.class ) );
         assertTrue(cm.containsClass(String.class));
         assertTrue(cm.containsClass(Float.class));
         assertEquals(String.class, cm.findClass(String.class));

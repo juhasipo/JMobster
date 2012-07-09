@@ -21,7 +21,10 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
- * Interface for writing validator to model writer
+ * Interface for writing validator to model writer. User should not directly
+ * implement this interface. Instead extend {@link BaseValidationAnnotationProcessor}
+ * abstract base class.
+ * {@see BaseValidationAnnotationProcessor}
  */
 public interface ValidationAnnotationProcessor {
     /**
@@ -65,8 +68,24 @@ public interface ValidationAnnotationProcessor {
      */
     boolean hasGroups(Annotation annotation);
 
+    /**
+     * Checks if the processor can be used to process annotations
+     * in the given list of annotations
+     * @param annotations Annotation set to check against to
+     * @return True if the processor can be used to process the annotations.
+     */
     boolean canProcess( List<Annotation> annotations );
 
+    /**
+     * Returns the class (annotation class) for which this acts as
+     * a base validator.
+     * @return Class if acts as base validator. Null if doesn't
+     */
     Class getBaseValidatorForClass();
+
+    /**
+     * Is the processor a base validator
+     * @return True if it is, false if not.
+     */
     boolean isBaseValidator();
 }

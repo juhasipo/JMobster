@@ -19,6 +19,9 @@ package fi.vincit.jmobster.processor;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+/**
+ * Class manages required and optional class combinations.
+ */
 public class CombinationManager {
     private RequiredTypes requiredTypes;
     private OptionalTypes optionalTypes;
@@ -26,10 +29,19 @@ public class CombinationManager {
     private Map<Class, Class> requiredClasses;
     private Map<Class, Class> optionalClasses;
 
+    /**
+     * Constructs manager with only required types.
+     * @param requiredTypes Required
+     */
     public CombinationManager( RequiredTypes requiredTypes ) {
         this(requiredTypes, OptionalTypes.get());
     }
 
+    /**
+     * Constructs manager with required and optional types.
+     * @param requiredTypes Required types
+     * @param optionalTypes Optional types
+     */
     public CombinationManager( RequiredTypes requiredTypes, OptionalTypes optionalTypes ) {
         this.requiredTypes = requiredTypes;
         this.optionalTypes = optionalTypes;
@@ -44,7 +56,15 @@ public class CombinationManager {
         }
     }
 
-    public boolean supports(List<Annotation> classes) {
+    /**
+     * Checks whether the managers combination matches
+     * the given classes combination. The combination matches
+     * if and only if the all of the given classes are same set
+     * (same classes and count is same).
+     * @param classes Classes to check
+     * @return True if given classes match required classes, otherwise false.
+     */
+    public boolean matches( List<Annotation> classes ) {
         int matchesFound = 0;
         for( Annotation c : classes ) {
             if( requiredClasses.containsKey(c.annotationType()) ) {
@@ -54,10 +74,23 @@ public class CombinationManager {
         return matchesFound >= requiredClasses.size();
     }
 
+    /**
+     * Checks if the manager contains a class of given type.
+     * @param type Type to find
+     * @param <T> Class type
+     * @return True if the manager contains the given class either as required or as an optional class. Otherwise false.
+     */
     public <T> boolean containsClass(Class<T> type) {
         return requiredClasses.containsKey(type) || optionalClasses.containsKey(type);
     }
 
+    /**
+     * Finds the class with the given type. Always returns non-null
+     * value when {@link CombinationManager#containsClass(Class)} returns true.
+     * @param type Type to find
+     * @param <T> Class type
+     * @return Found class. If not found, null.
+     */
     public <T> T findClass(Class<T> type) {
         if( requiredClasses.containsKey(type) ) {
             return (T)requiredClasses.get(type);

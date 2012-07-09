@@ -19,6 +19,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Marks the entity/bean/POJO as a model that can
+ * be converted.
+ */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE})
 public @interface Model {

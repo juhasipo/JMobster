@@ -22,12 +22,53 @@ import java.util.List;
 import fi.vincit.jmobster.exception.InvalidType;
 import fi.vincit.jmobster.util.ModelWriter;
 
+/** Abstract base class for annotation processors.
+ * <p>
+ *     For each annotation type there should be at least one processor which is
+ *     added to corresponding {@link AnnotationProcessorProvider} object. The purpose of
+ *     these processors is to:
+ *     <ol>
+ *         <li>Write the annotation to model writer</li>
+ *         <li>Provide and validate the type of a field if the type is required by a validator in the target platform</li>
+ *         <li>Extract JSR-303 group information from an annotation</li>
+ *         <li>Check if the processor can be used for a set of annotations</li>
+ *     </ol>
+ *     The processor can be set to be a base validator or non-base validator. Base validators
+ *     represent an validation annotation for which it provides group and type information. Non-base
+ *     validators don't provide this information, it only is used to process a set of annotations.
+ * </p>
+ * <p>
+ *    The processor needs required annotations to be set via constructors. These
+ *    annotations determine whether the processor is used for a set of annotations.
+ * </p>
+ * <p>
+ *     In addition to required annotations, the processor can use optional annotations.
+ *     If these optional annotations are not present for a field. The processor may still
+ *     be used.
+ * </p>
+ * <p>
+ *     When implementing the processing logic, the annotations to process are available via
+ *     {@link BaseValidationAnnotationProcessor#findAnnotation(Class)} method. The presence
+ *     of an annotation should be first checked with {@link BaseValidationAnnotationProcessor#containsAnnotation(Class)}
+ *     method. For required methods this should always return true and the findAnnotation method should
+ *     return a non-null value.
+ * </p>
+ * <p>
+ *     Annotation grouping is managed by implementing the {@link BaseValidationAnnotationProcessor#getGroupsInternal(java.lang.annotation.Annotation)}.
+ *     This method extracts the group information of the annotation it represents.
+ * </p>
+ */
 public abstract class BaseValidationAnnotationProcessor implements ValidationAnnotationProcessor {
     private String requiredType;
     private CombinationManager combinationManager;
     private HashMap<Class, Annotation> annotationBag;
     private Class baseValidatorForClass;
 
+    /**
+     * Constructor for processor with required type and one or more required annotations.
+     * @param requiredType Required type
+     * @param requiredAnnotation Required annotations
+     */
     protected BaseValidationAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation) {
         this.requiredType = requiredType;
         this.combinationManager = new CombinationManager(requiredAnnotation);
@@ -95,7 +136,7 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
 
     @Override
     public boolean canProcess( List<Annotation> annotations ) {
-        return combinationManager.supports(annotations);
+        return combinationManager.matches( annotations );
     }
 
 

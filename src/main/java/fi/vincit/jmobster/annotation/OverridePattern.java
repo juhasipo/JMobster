@@ -24,11 +24,23 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * <p>Annotation for overriding default generated JSR-303 Pattern
+ * annotation regexp. The purpose of this annotation is to add flexibility
+ * to pattern annotations. In some cases the default pattern converter
+ * many not give the wanted target model pattern. E.g. target regexp doesn't
+ * support some Java feature. In these cases this annotation can be used to
+ * override the pattern with a correct pattern.
+ * </p>
+ * <p>
+ *     This annotation is always used with the JSR-303 Pattern annotation.
+ * </p>
+ */
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
 @Retention(RUNTIME)
 public @interface OverridePattern {
     /**
-     * @return The regular expression to match.
+     * @return The regular expression to override the generated one.
      */
     String regexp();
 

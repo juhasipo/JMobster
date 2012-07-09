@@ -18,6 +18,10 @@ package fi.vincit.jmobster.processor.defaults;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;
 
+/**
+ * Default naming strategy for model names. Uses the model name (simple name)
+ * but removes DTO (case insensitive) from the end of the model name.
+ */
 public class DefaultNamingStrategy implements ModelNamingStrategy {
     @Override
     public String getName( Model model ) {

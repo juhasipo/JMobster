@@ -21,8 +21,7 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
- * Single model field that is converted
- * to the target platform.
+ * Single model field that is converted to the target platform.
  */
 public class ModelField {
     private Field field;
@@ -51,7 +50,6 @@ public class ModelField {
     }
 
     /**
-     *
      * @return True if the model field contains one or more validation annotations.
      */
     public boolean hasValidations() {

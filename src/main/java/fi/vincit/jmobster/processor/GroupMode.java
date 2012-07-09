@@ -14,6 +14,10 @@ package fi.vincit.jmobster.processor;/*
  * limitations under the License.
 */
 
+/**
+ * Configuration for setting how annotation grouping
+ * is handled.
+ */
 public enum GroupMode {
     /**
      * If the annotation has any of the required groups

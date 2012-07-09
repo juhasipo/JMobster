@@ -18,8 +18,7 @@ package fi.vincit.jmobster.processor.model;
 import java.util.List;
 
 /**
- * A single model that is converted to
- * the target platform.
+ * A single model that is converted to the target platform.
  */
 public class Model {
     private Class modelClass;
