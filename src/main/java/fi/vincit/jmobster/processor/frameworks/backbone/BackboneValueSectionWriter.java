@@ -24,19 +24,35 @@ import java.util.List;
 
 /**
  * Class writes the Backbone.js defaults section.
+ * Internally uses {@link JavaScriptWriter}. Intended use
+ * is that this class is used before {@link BackboneValidationSectionWriter}
+ * and this class will handle the comma between the two sections.
  */
-public class DefaultValueSectionWriter {
+public class BackboneValueSectionWriter {
     private static final String DEFAULTS_BLOCK_NAME = "defaults";
     private static final String RETURN_BLOCK = "return "; // Note the space
+
     private JavaScriptWriter writer;
 
-    public DefaultValueSectionWriter() {
+    /**
+     * Constructs section writer without default model writer.
+     * Writer must be set before calling {@link BackboneValueSectionWriter#writeDefaultValues(java.util.List, boolean)}.
+     */
+    public BackboneValueSectionWriter() {
     }
 
-    public DefaultValueSectionWriter( ModelWriter writer ) {
+    /**
+     * Constructs section writer with default writer
+     * @param writer Model writer
+     */
+    public BackboneValueSectionWriter( ModelWriter writer ) {
         setWriter(writer);
     }
 
+    /**
+     * Sets default model writer
+     * @param writer Model writer
+     */
     public void setWriter( ModelWriter writer ) {
         this.writer = new JavaScriptWriter(writer);
     }
@@ -49,6 +65,7 @@ public class DefaultValueSectionWriter {
     public void writeDefaultValues( List<ModelField> fields, boolean hasValidators ) {
         writer.writeKey(DEFAULTS_BLOCK_NAME).startAnonFunction();
         writer.write(RETURN_BLOCK).startBlock();
+
         final ItemProcessor<ModelField> modelFieldItemProcessor = new ItemProcessor<ModelField>() {
             @Override
             protected void process( ModelField field, boolean isLastItem ) {
@@ -56,6 +73,7 @@ public class DefaultValueSectionWriter {
             }
         };
         modelFieldItemProcessor.process(fields);
+
         writer.endBlock();
         writer.endBlock(!hasValidators);
     }

@@ -47,11 +47,4 @@ public class CombinationManagerTest {
         assertEquals(Float.class, cm.findClass(Float.class));
     }
 
-    private static List<Class> toList(Class...classes) {
-        List<Class> list = new ArrayList<Class>(classes.length);
-        for( Class c : classes ) {
-            list.add(c);
-        }
-        return list;
-    }
 }

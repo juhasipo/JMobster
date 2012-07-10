@@ -23,25 +23,50 @@ import fi.vincit.jmobster.util.ModelWriter;
 
 import java.util.List;
 
-public class ValidationSectionWriter {
+/**
+ * Writes validators to model. Backbone.Validation implementation.
+ * Internally uses {@link JavaScriptWriter} to write the model.
+ */
+public class BackboneValidationSectionWriter {
+
+    private static final String VALIDATE_KEY_NAME = "validate";
+
     private JavaScriptWriter writer;
     private AnnotationProcessor annotationProcessor;
 
-    public ValidationSectionWriter( AnnotationProcessor annotationProcessor ) {
+    /**
+     * Constructor without default writer. Writer must be set
+     * before calling {@link BackboneValidationSectionWriter#writeValidators(java.util.List)}.
+     * @param annotationProcessor Annotation processor
+     */
+    public BackboneValidationSectionWriter( AnnotationProcessor annotationProcessor ) {
         this.annotationProcessor = annotationProcessor;
     }
 
-    public ValidationSectionWriter( ModelWriter writer, AnnotationProcessor annotationProcessor ) {
+    /**
+     * Constructor with default writer.
+     * @param writer Model writer
+     * @param annotationProcessor Annotation processor
+     */
+    public BackboneValidationSectionWriter( ModelWriter writer, AnnotationProcessor annotationProcessor ) {
         this.annotationProcessor = annotationProcessor;
         setWriter(writer);
     }
 
+    /**
+     * Sets writer to use
+     * @param writer Model writer
+     */
     public void setWriter( ModelWriter writer ) {
         this.writer = new JavaScriptWriter(writer);
     }
 
+    /**
+     * Writes validators for the given fields.
+     * @param fields Fields for which to write validators.
+     */
     public void writeValidators( List<ModelField> fields ) {
-        writer.writeKey("validate").startBlock();
+        writer.writeKey( VALIDATE_KEY_NAME ).startBlock();
         final ItemProcessor<ModelField> modelFieldItemProcessor = new ItemProcessor<ModelField>() {
             @Override
             protected void process( ModelField field, boolean isLastItem ) {

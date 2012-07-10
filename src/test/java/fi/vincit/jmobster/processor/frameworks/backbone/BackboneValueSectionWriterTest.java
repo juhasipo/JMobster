@@ -34,7 +34,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class DefaultValueSectionWriterTest {
+public class BackboneValueSectionWriterTest {
     private static class TestClassOneField {
         @Size(min = 1, max = 10)
         private String field;
@@ -69,7 +69,7 @@ public class DefaultValueSectionWriterTest {
 
     @Test
     public void testDefaultSectionWithNoFields() {
-        DefaultValueSectionWriter d = new DefaultValueSectionWriter(modelWriter);
+        BackboneValueSectionWriter d = new BackboneValueSectionWriter(modelWriter);
         List<ModelField> fields = Collections.EMPTY_LIST;
 
         d.writeDefaultValues(fields, false);
@@ -80,7 +80,7 @@ public class DefaultValueSectionWriterTest {
 
     @Test
     public void testDefaultSectionWithValidators() {
-        DefaultValueSectionWriter d = new DefaultValueSectionWriter(modelWriter);
+        BackboneValueSectionWriter d = new BackboneValueSectionWriter(modelWriter);
         List<ModelField> fields = getFields(TestClassOneField.class);
         fields.get(0).setDefaultValue("\"test default value\"");
 
@@ -92,7 +92,7 @@ public class DefaultValueSectionWriterTest {
 
     @Test
     public void testDefaultSectionWithoutValidators() {
-        DefaultValueSectionWriter d = new DefaultValueSectionWriter(modelWriter);
+        BackboneValueSectionWriter d = new BackboneValueSectionWriter(modelWriter);
         List<ModelField> fields = getFields(TestClassOneField.class);
         fields.get(0).setDefaultValue("\"test default value\"");
 
@@ -104,7 +104,7 @@ public class DefaultValueSectionWriterTest {
 
     @Test
     public void testDefaultSectionWithTwoFields() {
-        DefaultValueSectionWriter d = new DefaultValueSectionWriter(modelWriter);
+        BackboneValueSectionWriter d = new BackboneValueSectionWriter(modelWriter);
         List<ModelField> fields = getFields(TestClassTwoFields.class);
         fields.get(0).setDefaultValue("\"test default value\"");
         fields.get(1).setDefaultValue("1");

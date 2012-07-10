@@ -8,7 +8,6 @@ import fi.vincit.jmobster.util.ModelWriter;
 import org.junit.Test;
 import org.mockito.InOrder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +20,10 @@ public class BackboneModelProcessorTest {
         ModelWriter writer = mockWriter();
         AnnotationProcessor annotationProcessor = mock(AnnotationProcessor.class);
         ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultValueSectionWriter defaultValueSectionWriter = mock(DefaultValueSectionWriter.class);
-        ValidationSectionWriter validationSectionWriter = mock(ValidationSectionWriter.class);
+        BackboneValueSectionWriter backboneValueSectionWriter = mock(BackboneValueSectionWriter.class);
+        BackboneValidationSectionWriter backboneValidationSectionWriter = mock(BackboneValidationSectionWriter.class);
         BackboneModelProcessor bmp = new BackboneModelProcessor(
-                writer, "", annotationProcessor, modelNamingStrategy, "/**/", "ns", defaultValueSectionWriter, validationSectionWriter
+                writer, "", annotationProcessor, modelNamingStrategy, "/**/", "ns", backboneValueSectionWriter, backboneValidationSectionWriter
         );
 
         final List<ModelField> fields = new ArrayList<ModelField>();
@@ -35,10 +34,10 @@ public class BackboneModelProcessorTest {
         bmp.processModel(testModel, false);
         bmp.endProcessing();
 
-        InOrder order = inOrder(writer, annotationProcessor, modelNamingStrategy, defaultValueSectionWriter, validationSectionWriter);
+        InOrder order = inOrder(writer, annotationProcessor, modelNamingStrategy, backboneValueSectionWriter, backboneValidationSectionWriter );
         order.verify(modelNamingStrategy).getName(testModel);
-        order.verify(defaultValueSectionWriter).writeDefaultValues(fields, false);
-        order.verify(validationSectionWriter, times(0)).writeValidators(any(List.class));
+        order.verify( backboneValueSectionWriter ).writeDefaultValues(fields, false);
+        order.verify( backboneValidationSectionWriter, times(0)).writeValidators(any(List.class));
     }
 
     @Test
@@ -46,10 +45,10 @@ public class BackboneModelProcessorTest {
         ModelWriter writer = mockWriter();
         AnnotationProcessor annotationProcessor = mock(AnnotationProcessor.class);
         ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultValueSectionWriter defaultValueSectionWriter = mock(DefaultValueSectionWriter.class);
-        ValidationSectionWriter validationSectionWriter = mock(ValidationSectionWriter.class);
+        BackboneValueSectionWriter backboneValueSectionWriter = mock(BackboneValueSectionWriter.class);
+        BackboneValidationSectionWriter backboneValidationSectionWriter = mock(BackboneValidationSectionWriter.class);
         BackboneModelProcessor bmp = new BackboneModelProcessor(
-                writer, "", annotationProcessor, modelNamingStrategy, "/**/", "ns", defaultValueSectionWriter, validationSectionWriter
+                writer, "", annotationProcessor, modelNamingStrategy, "/**/", "ns", backboneValueSectionWriter, backboneValidationSectionWriter
         );
 
         final List<ModelField> fields = new ArrayList<ModelField>();
@@ -60,10 +59,10 @@ public class BackboneModelProcessorTest {
         bmp.processModel(testModel, true);
         bmp.endProcessing();
 
-        InOrder order = inOrder(writer, annotationProcessor, modelNamingStrategy, defaultValueSectionWriter, validationSectionWriter);
+        InOrder order = inOrder(writer, annotationProcessor, modelNamingStrategy, backboneValueSectionWriter, backboneValidationSectionWriter );
         order.verify(modelNamingStrategy).getName(testModel);
-        order.verify(defaultValueSectionWriter).writeDefaultValues(fields, true);
-        order.verify(validationSectionWriter).writeValidators(fields);
+        order.verify( backboneValueSectionWriter ).writeDefaultValues(fields, true);
+        order.verify( backboneValidationSectionWriter ).writeValidators(fields);
     }
 
     private ModelWriter mockWriter() {

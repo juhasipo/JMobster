@@ -33,7 +33,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class ValidationSectionWriterTest {
+public class BackboneValidationSectionWriterTest {
 
     private static class TestClassOneField {
         @Size(min = 1, max = 10)
@@ -70,7 +70,7 @@ public class ValidationSectionWriterTest {
 
     @Test
     public void testOneField() throws Exception {
-        ValidationSectionWriter testObject = new ValidationSectionWriter( modelWriter, ap);
+        BackboneValidationSectionWriter testObject = new BackboneValidationSectionWriter( modelWriter, ap);
         List<ModelField> modelFields = getFields(TestClassOneField.class);
 
         testObject.writeValidators( modelFields );
@@ -81,7 +81,7 @@ public class ValidationSectionWriterTest {
 
     @Test
     public void testOneFieldNoAnnotations() throws Exception {
-        ValidationSectionWriter testObject = new ValidationSectionWriter( modelWriter, ap);
+        BackboneValidationSectionWriter testObject = new BackboneValidationSectionWriter( modelWriter, ap);
         List<ModelField> modelFields = getFields(TestClassOneFieldNoValidation.class);
 
         testObject.writeValidators( modelFields );
@@ -92,7 +92,7 @@ public class ValidationSectionWriterTest {
 
     @Test
     public void testTwoFields() throws Exception {
-        ValidationSectionWriter testObject = new ValidationSectionWriter( modelWriter, ap);
+        BackboneValidationSectionWriter testObject = new BackboneValidationSectionWriter( modelWriter, ap);
         List<ModelField> modelFields = getFields(TestClassTwoFields.class);
 
         testObject.writeValidators( modelFields );

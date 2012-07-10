@@ -35,6 +35,7 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+import static fi.vincit.jmobster.util.TestUtil.listFromObjects;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -56,14 +57,6 @@ public class DefaultAnnotationProcessorTest {
     public void initTest() {
         os = new ByteArrayOutputStream();
         modelWriter = mock(JavaScriptWriter.class);
-    }
-
-    private static <T>List<T> listFromObjects(T... objects) {
-        List<T> arrayList = new ArrayList<T>(objects.length);
-        for( T t : objects ) {
-            arrayList.add(t);
-        }
-        return arrayList;
     }
 
     @Test
@@ -278,12 +271,4 @@ public class DefaultAnnotationProcessorTest {
     public static class TestGroup2 {};
     public static class TestGroup3 {};
 
-
-    private static List<Annotation> toList(Annotation...classes) {
-        List<Annotation> list = new ArrayList<Annotation>(classes.length);
-        for( Annotation c : classes ) {
-            list.add(c);
-        }
-        return list;
-    }
 }

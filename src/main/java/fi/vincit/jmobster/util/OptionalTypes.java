@@ -16,10 +16,19 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
  */
 
+/**
+ * Class to mark a set of classes as optional types.
+ */
 public class OptionalTypes extends TypeCollection<Class> {
+    /**
+     * Creates an OptionalTypes object with the given annotations
+     * @param annotations Annotations to use as optional types
+     * @return OptionalTypes object with given annotations
+     */
     public static OptionalTypes get(Class... annotations) {
         return new OptionalTypes(annotations);
     }
+
     protected OptionalTypes(Class... annotations) {
         super(annotations);
     }
