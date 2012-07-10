@@ -10,3 +10,4 @@
 *.iml
 modelgenerator.iml
 models.js
+**docs/*

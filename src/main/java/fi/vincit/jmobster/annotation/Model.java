@@ -20,8 +20,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks the entity/bean/POJO as a model that can
- * be converted.
+ * Overrides model name
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE})
