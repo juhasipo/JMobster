@@ -29,6 +29,10 @@ public class CombinationManager {
     private Map<Class, Class> requiredClasses;
     private Map<Class, Class> optionalClasses;
 
+    public CombinationManager() {
+        this(RequiredTypes.get(), OptionalTypes.get());
+    }
+
     /**
      * Constructs manager with only required types.
      * @param requiredTypes Required
@@ -65,6 +69,10 @@ public class CombinationManager {
      * @return True if given classes match required classes, otherwise false.
      */
     public boolean matches( List<Annotation> classes ) {
+        if( requiredClasses.isEmpty() && optionalClasses.isEmpty() ) {
+            return false;
+        }
+
         int matchesFound = 0;
         for( Annotation c : classes ) {
             if( requiredClasses.containsKey(c.annotationType()) ) {

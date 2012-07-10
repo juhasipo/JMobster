@@ -15,10 +15,14 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.FieldAnnotationWriter;
+import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
+import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.util.RequiredTypes;
 import fi.vincit.jmobster.util.StreamModelWriter;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,12 +33,33 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Integration test for Backbone processor
+ */
 public class BackboneConverterTest {
+
+    public static class NonBaseAnnotationProcessor extends BaseValidationAnnotationProcessor {
+        public NonBaseAnnotationProcessor() {
+            super( RequiredTypes.get(Size.class, NotNull.class) );
+        }
+
+        @Override
+        protected Class[] getGroupsInternal( Annotation annotation ) {
+            return new Class[0];
+        }
+
+        @Override
+        protected void writeValidatorsToStreamInternal( ModelWriter writer ) {
+            writer.write("nonbase: true");
+        }
+    }
+
     public static class TestModel {
         @NotNull
         @Size(min = 5, max = 255)
@@ -43,6 +68,11 @@ public class BackboneConverterTest {
         @Size(min = 5, max = 255)
         @Pattern(regexp = "[a-z ]+")
         private String string2 = "test string";
+
+        @Size(min = 5, max = 255)
+        @Pattern(regexp = "[a-zA-Z ]+")
+        @OverridePattern(regexp = "/[\\w ]+/")
+        private String string3 = "test string";
 
         @Min(10)
         Long longValue = 42L;
@@ -78,8 +108,11 @@ public class BackboneConverterTest {
     @Test
     public void testSimpleClass() {
         FieldAnnotationWriter app = new BackboneFieldAnnotationWriter();
-        DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
-                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ), app);
+        app.addAnnotationProcessor(new NonBaseAnnotationProcessor());
+        DefaultModelGenerator mg = new DefaultModelGenerator(
+                new BackboneModelProcessor(modelWriter, app),
+                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ),
+                app);
 
         mg.process(TestModel.class);
 
@@ -92,6 +125,7 @@ public class BackboneConverterTest {
                 "            return {\n" +
                 "                string: \"test string\",\n" +
                 "                string2: \"test string\",\n" +
+                "                string3: \"test string\",\n" +
                 "                longValue: 42,\n" +
                 "                longArray: [1, 2],\n" +
                 "                stringArray: [\"Foo\", \"Bar\", \"FooBar\", \"123\"],\n" +
@@ -103,12 +137,18 @@ public class BackboneConverterTest {
                 "            string: {\n" +
                 "                required: true,\n" +
                 "                minlength: 5,\n" +
-                "                maxlength: 255\n" +
+                "                maxlength: 255,\n" +
+                "                nonbase: true\n" +
                 "            },\n" +
                 "            string2: {\n" +
                 "                minlength: 5,\n" +
                 "                maxlength: 255,\n" +
                 "                pattern: /[a-z ]+/\n" +
+                "            },\n" +
+                "            string3: {\n" +
+                "                minlength: 5,\n" +
+                "                maxlength: 255,\n" +
+                "                pattern: /[\\w ]+/\n" +
                 "            },\n" +
                 "            longValue: {\n" +
                 "                type: \"number\",\n" +
@@ -143,7 +183,7 @@ public class BackboneConverterTest {
     @Test
     public void testNoValidationsClass() {
         FieldAnnotationWriter app = new BackboneFieldAnnotationWriter();
-        DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
+        DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter, app),
                 new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ), app);
 
         mg.process(NoValidationsClass.class);

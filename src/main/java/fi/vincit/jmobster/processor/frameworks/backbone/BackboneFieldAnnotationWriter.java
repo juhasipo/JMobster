@@ -52,7 +52,8 @@ public class BackboneFieldAnnotationWriter extends BaseFieldAnnotationWriter {
                 new SizeAnnotationProcessor(),
                 new MinAnnotationProcessor(),
                 new MaxAnnotationProcessor(),
-                new PatternAnnotationProcessor()
+                new PatternAnnotationProcessor(),
+                new OverridePatternAnnotationProcessor()
         );
     }
 

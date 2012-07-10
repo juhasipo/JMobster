@@ -31,8 +31,8 @@ public class JMobsterFactory {
      */
     public static ModelGenerator getInstance(String framework, ModelWriter writer) {
         if( "backbone.js".equalsIgnoreCase(framework) || "backbone".equalsIgnoreCase(framework) ) {
-            ModelProcessor modelProcessor = new BackboneModelProcessor(writer);
             FieldAnnotationWriter fieldAnnotationWriter = new BackboneFieldAnnotationWriter();
+            ModelProcessor modelProcessor = new BackboneModelProcessor(writer, fieldAnnotationWriter);
             return new DefaultModelGenerator(
                     modelProcessor,
                     new JavaToJSValueConverter(ConverterMode.NULL_AS_DEFAULT),

@@ -15,10 +15,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.AnnotationProcessor;
-import fi.vincit.jmobster.processor.GroupMode;
-import fi.vincit.jmobster.processor.ModelNamingStrategy;
-import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.defaults.DefaultAnnotationProcessor;
 import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
 import fi.vincit.jmobster.processor.model.Model;
@@ -55,9 +52,9 @@ public class BackboneModelProcessor implements ModelProcessor {
     private BackboneValueSectionWriter backboneValueSectionWriter;
     private BackboneValidationSectionWriter backboneValidationSectionWriter;
 
-    public BackboneModelProcessor( String modelFilePath, GroupMode groupMode ) {
+    public BackboneModelProcessor( String modelFilePath, GroupMode groupMode, FieldAnnotationWriter fieldAnnotationWriter ) {
         this.modelFilePath = modelFilePath;
-        this.annotationProcessor = new DefaultAnnotationProcessor(new BackboneFieldAnnotationWriter(), groupMode);
+        this.annotationProcessor = new DefaultAnnotationProcessor(fieldAnnotationWriter, groupMode);
         this.modelNamingStrategy = new DefaultNamingStrategy();
         this.startComment = "/*\n * Auto-generated file\n */";
         this.namespaceName = "Models";
@@ -70,7 +67,8 @@ public class BackboneModelProcessor implements ModelProcessor {
             String modelFilePath,
             AnnotationProcessor annotationProcessor,
             ModelNamingStrategy modelNamingStrategy,
-            String startComment, String namespaceName,
+            String startComment,
+            String namespaceName,
             BackboneValueSectionWriter backboneValueSectionWriter,
             BackboneValidationSectionWriter backboneValidationSectionWriter ) {
         this.writer = writer;
@@ -83,8 +81,8 @@ public class BackboneModelProcessor implements ModelProcessor {
         this.backboneValidationSectionWriter = backboneValidationSectionWriter;
     }
 
-    public BackboneModelProcessor( ModelWriter writer ) {
-        this((String)null, GroupMode.ANY_OF_REQUIRED );
+    public BackboneModelProcessor( ModelWriter writer, FieldAnnotationWriter fieldAnnotationWriter ) {
+        this((String)null, GroupMode.ANY_OF_REQUIRED, fieldAnnotationWriter );
         this.writer = writer;
     }
 

@@ -46,4 +46,10 @@ public interface FieldAnnotationWriter {
      * @return Base validator. If not found, returns null.
      */
     ValidationAnnotationProcessor getBaseValidationProcessor( Annotation annotation );
+
+    /**
+     * Adds annotation processor to provider.
+     * @param annotationProcessor Processor to add
+     */
+    void addAnnotationProcessor( ValidationAnnotationProcessor annotationProcessor );
 }

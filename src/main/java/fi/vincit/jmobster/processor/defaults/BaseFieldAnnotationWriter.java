@@ -54,11 +54,8 @@ public abstract class BaseFieldAnnotationWriter implements FieldAnnotationWriter
         }
     }
 
-    /**
-     * Adds annotation processor to provider.
-     * @param annotationProcessor Processor to add
-     */
-    protected void addAnnotationProcessor( ValidationAnnotationProcessor annotationProcessor ) {
+    @Override
+    public void addAnnotationProcessor( ValidationAnnotationProcessor annotationProcessor ) {
         annotationProcessors.add(annotationProcessor);
         if( annotationProcessor.isBaseValidator() ) {
             baseAnnotationProcessors.put(annotationProcessor.getBaseValidatorForClass(), annotationProcessor);
