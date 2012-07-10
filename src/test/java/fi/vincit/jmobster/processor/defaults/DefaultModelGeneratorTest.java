@@ -16,9 +16,9 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class DefaultModelGeneratorTest {
     public void testProcessWithoutClasses() throws Exception {
         ModelProcessor mp = mock(ModelProcessor.class);
         FieldValueConverter fvc = mock(FieldValueConverter.class);
-        AnnotationProcessorProvider app = mock(AnnotationProcessorProvider.class);
+        FieldAnnotationWriter app = mock(FieldAnnotationWriter.class);
         DefaultModelGenerator dmg = new DefaultModelGenerator(mp, fvc, app);
 
         dmg.process();
@@ -57,7 +57,7 @@ public class DefaultModelGeneratorTest {
     public void testProcessVarArgs() throws Exception {
         ModelProcessor mp = mock(ModelProcessor.class);
         FieldValueConverter fvc = mock(FieldValueConverter.class);
-        AnnotationProcessorProvider app = mock(AnnotationProcessorProvider.class);
+        FieldAnnotationWriter app = mock(FieldAnnotationWriter.class);
         DefaultModelGenerator dmg = new DefaultModelGenerator(mp, fvc, app);
 
         Class testClass = TestClass1.class;
@@ -80,7 +80,7 @@ public class DefaultModelGeneratorTest {
     public void testProcessWithList() throws Exception {
         ModelProcessor mp = mock(ModelProcessor.class);
         FieldValueConverter fvc = mock(FieldValueConverter.class);
-        AnnotationProcessorProvider app = mock(AnnotationProcessorProvider.class);
+        FieldAnnotationWriter app = mock(FieldAnnotationWriter.class);
         DefaultModelGenerator dmg = new DefaultModelGenerator(mp, fvc, app);
 
         Class testClass = TestClass1.class;

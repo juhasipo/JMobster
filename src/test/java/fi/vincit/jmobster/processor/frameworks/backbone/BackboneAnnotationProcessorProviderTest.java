@@ -26,7 +26,7 @@ public class BackboneAnnotationProcessorProviderTest {
             }
         };
         when(processor.canProcess(argThat(argumentMatcher))).thenReturn(true);
-        BackboneAnnotationProcessorProvider dapp = new BackboneAnnotationProcessorProvider(processor);
+        BackboneFieldAnnotationWriter dapp = new BackboneFieldAnnotationWriter(processor);
 
         List<Annotation> annotationsToTest = new ArrayList<Annotation>();
         annotationsToTest.add( annotation );
@@ -40,7 +40,7 @@ public class BackboneAnnotationProcessorProviderTest {
         ModelWriter writer = mockWriter();
         List<Annotation> annotationsToTest = new ArrayList<Annotation>();
         ValidationAnnotationProcessor processor = mockProcessor("number", annotationsToTest);
-        BackboneAnnotationProcessorProvider dapp = new BackboneAnnotationProcessorProvider(processor);
+        BackboneFieldAnnotationWriter dapp = new BackboneFieldAnnotationWriter(processor);
 
         dapp.writeValidatorsForField( annotationsToTest, writer );
 
@@ -55,7 +55,7 @@ public class BackboneAnnotationProcessorProviderTest {
         ValidationAnnotationProcessor processor1 = mockProcessor("number", annotationsToTest);
         ValidationAnnotationProcessor processor2 = mockProcessor("number", annotationsToTest);
 
-        BackboneAnnotationProcessorProvider dapp = new BackboneAnnotationProcessorProvider(processor1, processor2);
+        BackboneFieldAnnotationWriter dapp = new BackboneFieldAnnotationWriter(processor1, processor2);
 
         dapp.writeValidatorsForField( annotationsToTest, writer );
 
@@ -71,7 +71,7 @@ public class BackboneAnnotationProcessorProviderTest {
         ValidationAnnotationProcessor processor1 = mockProcessor("date", annotationsToTest);
         ValidationAnnotationProcessor processor2 = mockProcessor("number", annotationsToTest);
 
-        BackboneAnnotationProcessorProvider dapp = new BackboneAnnotationProcessorProvider(processor1, processor2);
+        BackboneFieldAnnotationWriter dapp = new BackboneFieldAnnotationWriter(processor1, processor2);
 
         dapp.writeValidatorsForField( annotationsToTest, writer );
 

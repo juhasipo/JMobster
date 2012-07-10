@@ -124,7 +124,7 @@ given to Model generator which calls appropriate methods of the processor.
 Model processor only acts as the basis for the model generation and it depends on other classes. For example
 the default Backbone.js implementation uses classes its own ValidationSectionWriter and DefaultValueSectionWriter
 for producing corrsponding sections to the output stream. In addition these classes rely heavily on annotation
-processors and providers as well as the value converters.
+processors and field annotation writer as well as the value converters.
 
 ### Annotation Processors
 
@@ -164,11 +164,12 @@ This will basically take the groups parameter data and returns it the caller.
         return ((Max)annotation).groups();
     }
 
-### Annotation Processors Providers
+### Field Annotation Writer
 
-Annotation processor providers are a storage for annotarion processors. Provider is configured to contain all
+Field annotation writers are a storage for annotarion processors. This annotation write is configured to contain all
 required annotation processors and it contains the logic for generating the validation for the target
-framework.
+framework. The base implementation contains the processor mangament, but the extended class has to implement the
+field annotation writing locic.
 
 ### Field Value Converters
 

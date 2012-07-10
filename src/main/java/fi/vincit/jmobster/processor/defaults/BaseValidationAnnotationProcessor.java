@@ -29,7 +29,7 @@ import fi.vincit.jmobster.util.RequiredTypes;
 /** Abstract base class for annotation processors.
  * <p>
  *     For each annotation type there should be at least one processor which is
- *     added to corresponding {@link fi.vincit.jmobster.processor.AnnotationProcessorProvider} object. The purpose of
+ *     added to corresponding {@link fi.vincit.jmobster.processor.FieldAnnotationWriter} object. The purpose of
  *     these processors is to:
  *     <ol>
  *         <li>Write the annotation to model writer</li>

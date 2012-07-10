@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.defaults;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.model.ModelField;
 import org.slf4j.Logger;
@@ -40,18 +40,18 @@ public class FieldScanner {
             .getLogger( FieldScanner.class );
 
     private FieldValueConverter fieldDefaultValueProcessor;
-    private AnnotationProcessorProvider annotationProcessorProvider;
+    private FieldAnnotationWriter fieldAnnotationWriter;
     private boolean allowStaticFields;
     private boolean allowFinalFields;
 
     /**
      * Creates new field scanner
      * @param fieldDefaultValueProcessor Field default value processor
-     * @param annotationProcessorProvider Annotation processor provider
+     * @param fieldAnnotationWriter Annotation processor provider
      */
-    public FieldScanner( FieldValueConverter fieldDefaultValueProcessor, AnnotationProcessorProvider annotationProcessorProvider ) {
+    public FieldScanner( FieldValueConverter fieldDefaultValueProcessor, FieldAnnotationWriter fieldAnnotationWriter ) {
         this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
-        this.annotationProcessorProvider = annotationProcessorProvider;
+        this.fieldAnnotationWriter = fieldAnnotationWriter;
         allowStaticFields = false;
         allowFinalFields = false;
     }
@@ -110,7 +110,7 @@ public class FieldScanner {
      * @return True if the given annotation is a validation annotation. Otherwise false.
      */
     private boolean isValidationAnnotation( Annotation annotation ) {
-        return annotationProcessorProvider.isAnnotationForValidation( annotation );
+        return fieldAnnotationWriter.isAnnotationForValidation( annotation );
     }
 
     /**

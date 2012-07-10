@@ -1,10 +1,10 @@
 package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.ModelGenerator;
+import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.util.ItemProcessor;
 import org.slf4j.Logger;
@@ -38,14 +38,14 @@ public class DefaultModelGenerator implements ModelGenerator {
      * Creates new DefaultModelGenerator
      * @param modelProcessor Model processor to use
      * @param fieldDefaultValueProcessor Field default value processor to use
-     * @param annotationProcessorProvider Annotation processor provider to use
+     * @param fieldAnnotationWriter Annotation processor provider to use
      */
     public DefaultModelGenerator(
             ModelProcessor modelProcessor,
             FieldValueConverter fieldDefaultValueProcessor,
-            AnnotationProcessorProvider annotationProcessorProvider) {
+            FieldAnnotationWriter fieldAnnotationWriter ) {
         this.modelProcessor = modelProcessor;
-        this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor, annotationProcessorProvider);
+        this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor, fieldAnnotationWriter );
     }
 
     @Override

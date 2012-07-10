@@ -17,7 +17,7 @@ package fi.vincit.jmobster.processor.defaults;/*
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.model.ModelField;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class FieldScannerTest {
 
     private FieldScanner getFieldScanner() {
         FieldValueConverter fvc = mock(FieldValueConverter.class);
-        AnnotationProcessorProvider app = mock(AnnotationProcessorProvider.class);
+        FieldAnnotationWriter app = mock(FieldAnnotationWriter.class);
         when(app.isAnnotationForValidation(any(Min.class))).thenReturn( true );
         return new FieldScanner(fvc, app);
     }

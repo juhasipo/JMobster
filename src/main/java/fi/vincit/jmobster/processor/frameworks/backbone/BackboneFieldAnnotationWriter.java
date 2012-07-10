@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 */
 
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
-import fi.vincit.jmobster.processor.defaults.BaseAnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.defaults.BaseFieldAnnotationWriter;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.*;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
@@ -32,9 +32,9 @@ import java.util.*;
  * be extended to support custom validation annotation. For now
  * only single property annotations are supported.
  */
-public class BackboneAnnotationProcessorProvider extends BaseAnnotationProcessorProvider {
+public class BackboneFieldAnnotationWriter extends BaseFieldAnnotationWriter {
 
-    private static final Logger LOG = LoggerFactory.getLogger( BackboneAnnotationProcessorProvider.class );
+    private static final Logger LOG = LoggerFactory.getLogger( BackboneFieldAnnotationWriter.class );
 
     private String requiredType = null;
     private boolean typeInfoWritten = false;
@@ -46,7 +46,7 @@ public class BackboneAnnotationProcessorProvider extends BaseAnnotationProcessor
     /**
      * Creates provider with default JSR-303 of annotation processors
      */
-    public BackboneAnnotationProcessorProvider() {
+    public BackboneFieldAnnotationWriter() {
         // TODO FIX ME: Support concurrency. Can't have instances created here because BaseValidationAnnotationProcessor have state
         super( new NotNullAnnotationProcessor(),
                 new SizeAnnotationProcessor(),
@@ -56,7 +56,7 @@ public class BackboneAnnotationProcessorProvider extends BaseAnnotationProcessor
         );
     }
 
-    public BackboneAnnotationProcessorProvider( ValidationAnnotationProcessor... processors ) {
+    public BackboneFieldAnnotationWriter( ValidationAnnotationProcessor... processors ) {
         super(processors);
     }
 
@@ -109,9 +109,9 @@ public class BackboneAnnotationProcessorProvider extends BaseAnnotationProcessor
             } else {
                 requiredType = processor.requiredType();
                 typeInfoWritten = true;
-                writer.write( BackboneAnnotationProcessorProvider.FIELD_TYPE_START )
+                writer.write( BackboneFieldAnnotationWriter.FIELD_TYPE_START )
                         .write( requiredType )
-                        .writeLine( BackboneAnnotationProcessorProvider.FIELD_TYPE_END );
+                        .writeLine( BackboneFieldAnnotationWriter.FIELD_TYPE_END );
             }
         }
     }

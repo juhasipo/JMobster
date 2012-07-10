@@ -16,26 +16,29 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
-import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-public abstract class BaseAnnotationProcessorProvider implements AnnotationProcessorProvider {
-    private static final Logger LOG = LoggerFactory.getLogger( BaseAnnotationProcessorProvider.class );
+/**
+ * Abstract base class for field annotation writers. Can be configured
+ * to contain necessary annotation processors.
+ */
+public abstract class BaseFieldAnnotationWriter implements FieldAnnotationWriter {
+    private static final Logger LOG = LoggerFactory.getLogger( BaseFieldAnnotationWriter.class );
 
     protected Collection<ValidationAnnotationProcessor> annotationProcessors;
     protected Map<Class, ValidationAnnotationProcessor> baseAnnotationProcessors;
 
     /**
-     * Initializes inner data structures. Add validators use {@link BaseAnnotationProcessorProvider#BaseAnnotationProcessorProvider(fi.vincit.jmobster.processor.ValidationAnnotationProcessor...)}
-     * constructor or {@link BaseAnnotationProcessorProvider#addAnnotationProcessor(fi.vincit.jmobster.processor.ValidationAnnotationProcessor)} method.
+     * Initializes inner data structures. Add validators use {@link BaseFieldAnnotationWriter#BaseFieldAnnotationWriter(fi.vincit.jmobster.processor.ValidationAnnotationProcessor...)}
+     * constructor or {@link BaseFieldAnnotationWriter#addAnnotationProcessor(fi.vincit.jmobster.processor.ValidationAnnotationProcessor)} method.
      */
-    protected BaseAnnotationProcessorProvider() {
+    protected BaseFieldAnnotationWriter() {
         baseAnnotationProcessors = new HashMap<Class, ValidationAnnotationProcessor>();
         annotationProcessors = new ArrayList<ValidationAnnotationProcessor>();
     }
@@ -44,7 +47,7 @@ public abstract class BaseAnnotationProcessorProvider implements AnnotationProce
      * Creates provider with custom set of annotation processors
      * @param processors Processors to add
      */
-    protected BaseAnnotationProcessorProvider( ValidationAnnotationProcessor... processors ) {
+    protected BaseFieldAnnotationWriter( ValidationAnnotationProcessor... processors ) {
         this();
         for( ValidationAnnotationProcessor processor : processors ) {
             addAnnotationProcessor( processor );

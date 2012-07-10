@@ -57,7 +57,7 @@ public class BackboneModelProcessor implements ModelProcessor {
 
     public BackboneModelProcessor( String modelFilePath, GroupMode groupMode ) {
         this.modelFilePath = modelFilePath;
-        this.annotationProcessor = new DefaultAnnotationProcessor(new BackboneAnnotationProcessorProvider(), groupMode);
+        this.annotationProcessor = new DefaultAnnotationProcessor(new BackboneFieldAnnotationWriter(), groupMode);
         this.modelNamingStrategy = new DefaultNamingStrategy();
         this.startComment = "/*\n * Auto-generated file\n */";
         this.namespaceName = "Models";

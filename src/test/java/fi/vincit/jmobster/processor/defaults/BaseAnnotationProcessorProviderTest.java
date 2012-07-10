@@ -13,8 +13,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class BaseAnnotationProcessorProviderTest {
-    private static class TestProvider extends BaseAnnotationProcessorProvider {
-        private TestProvider( ValidationAnnotationProcessor... processors ) {
+    private static class TestProviderField extends BaseFieldAnnotationWriter {
+        private TestProviderField( ValidationAnnotationProcessor... processors ) {
             super( processors );
         }
 
@@ -27,7 +27,7 @@ public class BaseAnnotationProcessorProviderTest {
         ValidationAnnotationProcessor processor = mockProcessor();
         Annotation annotation = mockAnnotation();
 
-        TestProvider provider = new TestProvider(processor);
+        TestProviderField provider = new TestProviderField(processor);
 
         ValidationAnnotationProcessor foundProcessor = provider.getBaseValidationProcessor(annotation);
 
@@ -36,7 +36,7 @@ public class BaseAnnotationProcessorProviderTest {
 
     @Test
     public void testProcessorNotFound() {
-        TestProvider provider = new TestProvider();
+        TestProviderField provider = new TestProviderField();
 
         Annotation annotation = mockAnnotation();
 

@@ -21,9 +21,9 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
- * Provides annotation processors
+ * Writes field annotations
  */
-public interface AnnotationProcessorProvider {
+public interface FieldAnnotationWriter {
     /**
      * Checks if the given annotation is used to validate data. This
      * mostly depends on the validation processors set in the

@@ -15,7 +15,7 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.MaxAnnotationProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.MinAnnotationProcessor;
@@ -61,7 +61,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testWithNoProcessors() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
         dap.writeValidation((List)listFromObjects(), modelWriter);
@@ -70,7 +70,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testWithOneProcessor() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
         dap.writeValidation((List)listFromObjects( minAnnotation ), modelWriter);
@@ -80,7 +80,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testWithMultipleProcessors() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
         dap.writeValidation((List)listFromObjects( minAnnotation, maxAnnotation, sizeAnnotation ), modelWriter);
@@ -90,7 +90,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testWithAnnotationWithoutProcessor() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
         dap.writeValidation((List)listFromObjects( minAnnotation, sizeAnnotationWithoutProcessor, maxAnnotation ), modelWriter);
@@ -101,7 +101,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testGroupsWithAnyMode() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.ANY_OF_REQUIRED, TestGroup1.class, TestGroup2.class);
 
         dap.writeValidation((List)listFromObjects(minAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
@@ -111,7 +111,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testGroupsWithExactMode() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class, TestGroup2.class);
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
@@ -121,7 +121,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testGroupsWithExactModeGroupedNotLast() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class, TestGroup2.class);
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
@@ -132,7 +132,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testGroupsWithAnyModeIncludeNoGrouped() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.ANY_OF_REQUIRED, TestGroup1.class, TestGroup2.class);
         dap.setIncludeValidationsWithoutGroup(true);
 
@@ -143,7 +143,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testGroupsWithExactModeIncludeNoGrouped() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class, TestGroup2.class);
         dap.setIncludeValidationsWithoutGroup(true);
 
@@ -154,7 +154,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testGroupsWithExactModeWithNotEnoughGroups() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class, TestGroup2.class, TestGroup3.class);
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
@@ -164,7 +164,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testGroupsWithExactModeWithTooManyGroups() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class);
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
@@ -174,7 +174,7 @@ public class DefaultAnnotationProcessorTest {
 
     @Test
     public void testGroupsWithAtLeastMode() {
-        AnnotationProcessorProvider app = mockAnnotationProcessorProvider();
+        FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.AT_LEAST_REQUIRED, TestGroup1.class);
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
@@ -199,11 +199,11 @@ public class DefaultAnnotationProcessorTest {
         return argThat(argumentMatcher);
     }
 
-    private AnnotationProcessorProvider mockAnnotationProcessorProvider() {
-        final AnnotationProcessorProvider annotationProcessorProvider = mock(AnnotationProcessorProvider.class);
+    private FieldAnnotationWriter mockAnnotationProcessorProvider() {
+        final FieldAnnotationWriter fieldAnnotationWriter = mock(FieldAnnotationWriter.class);
 
         sizeAnnotationWithoutProcessor = mock(Size.class);
-        when(annotationProcessorProvider.getBaseValidationProcessor( sizeAnnotationWithoutProcessor )).thenReturn( null );
+        when( fieldAnnotationWriter.getBaseValidationProcessor( sizeAnnotationWithoutProcessor )).thenReturn( null );
 
         // Mock annotation processors to write mock data to model writer
         minAnnotation = mock(Min.class);
@@ -211,14 +211,14 @@ public class DefaultAnnotationProcessorTest {
         when(minProcessor.getGroups(minAnnotation)).thenReturn(new Class[]{});
         when(minProcessor.hasGroups(minAnnotation)).thenReturn(false);
         when(minProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getBaseValidationProcessor( minAnnotation )).thenReturn( minProcessor );
+        when( fieldAnnotationWriter.getBaseValidationProcessor( minAnnotation )).thenReturn( minProcessor );
 
         maxAnnotation = mock(Max.class);
         MaxAnnotationProcessor maxProcessor = mock(MaxAnnotationProcessor.class);
         when(maxProcessor.getGroups(maxAnnotation)).thenReturn(new Class[]{});
         when(maxProcessor.hasGroups(maxAnnotation)).thenReturn(false);
         when(maxProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getBaseValidationProcessor( maxAnnotation )).thenReturn( maxProcessor );
+        when( fieldAnnotationWriter.getBaseValidationProcessor( maxAnnotation )).thenReturn( maxProcessor );
 
 
         sizeAnnotation = mock(Size.class);
@@ -226,7 +226,7 @@ public class DefaultAnnotationProcessorTest {
         when(sizeProcessor.getGroups(sizeAnnotation)).thenReturn(new Class[]{});
         when(sizeProcessor.hasGroups(sizeAnnotation)).thenReturn(false);
         when(sizeProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getBaseValidationProcessor( sizeAnnotation )).thenReturn( sizeProcessor );
+        when( fieldAnnotationWriter.getBaseValidationProcessor( sizeAnnotation )).thenReturn( sizeProcessor );
 
 
         minWithTypeNumberAnnotation = mock(Min.class);
@@ -235,7 +235,7 @@ public class DefaultAnnotationProcessorTest {
         when(minWithTypeNumberProcessor.hasGroups(minWithTypeNumberAnnotation)).thenReturn(false);
         when(minWithTypeNumberProcessor.requiresType()).thenReturn(true);
         when(minWithTypeNumberProcessor.requiredType()).thenReturn("number");
-        when(annotationProcessorProvider.getBaseValidationProcessor( minWithTypeNumberAnnotation )).thenReturn( minWithTypeNumberProcessor );
+        when( fieldAnnotationWriter.getBaseValidationProcessor( minWithTypeNumberAnnotation )).thenReturn( minWithTypeNumberProcessor );
 
 
         maxWithTypeDecimalAnnotation = mock(Max.class);
@@ -244,7 +244,7 @@ public class DefaultAnnotationProcessorTest {
         when(maxWithTypeDecimalProcessor.hasGroups(maxWithTypeDecimalAnnotation)).thenReturn(false);
         when(maxWithTypeDecimalProcessor.requiresType()).thenReturn(true);
         when(maxWithTypeDecimalProcessor.requiredType()).thenReturn("decimal");
-        when(annotationProcessorProvider.getBaseValidationProcessor( maxWithTypeDecimalAnnotation )).thenReturn( maxWithTypeDecimalProcessor );
+        when( fieldAnnotationWriter.getBaseValidationProcessor( maxWithTypeDecimalAnnotation )).thenReturn( maxWithTypeDecimalProcessor );
 
 
         sizeWithOneGroupAnnotation = mock(Size.class);
@@ -252,7 +252,7 @@ public class DefaultAnnotationProcessorTest {
         when(sizeWithOneGroupProcessor.getGroups(sizeWithOneGroupAnnotation)).thenReturn(new Class[]{TestGroup1.class});
         when(sizeWithOneGroupProcessor.hasGroups(sizeWithOneGroupAnnotation)).thenReturn(true);
         when(sizeWithOneGroupProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getBaseValidationProcessor( sizeWithOneGroupAnnotation )).thenReturn( sizeWithOneGroupProcessor );
+        when( fieldAnnotationWriter.getBaseValidationProcessor( sizeWithOneGroupAnnotation )).thenReturn( sizeWithOneGroupProcessor );
         when(sizeWithOneGroupAnnotation.groups()).thenReturn(new Class[]{TestGroup1.class});
 
 
@@ -261,10 +261,10 @@ public class DefaultAnnotationProcessorTest {
         when(patternWithTwoGroupsProcessor.getGroups(patternWithTwoGroupsAnnotation)).thenReturn(new Class[]{TestGroup1.class, TestGroup2.class});
         when(patternWithTwoGroupsProcessor.hasGroups(patternWithTwoGroupsAnnotation)).thenReturn(true);
         when(patternWithTwoGroupsProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getBaseValidationProcessor( patternWithTwoGroupsAnnotation )).thenReturn( patternWithTwoGroupsProcessor );
+        when( fieldAnnotationWriter.getBaseValidationProcessor( patternWithTwoGroupsAnnotation )).thenReturn( patternWithTwoGroupsProcessor );
         when(patternWithTwoGroupsAnnotation.groups()).thenReturn(new Class[]{TestGroup1.class, TestGroup2.class});
 
-        return annotationProcessorProvider;
+        return fieldAnnotationWriter;
     }
 
     public static class TestGroup1 {};

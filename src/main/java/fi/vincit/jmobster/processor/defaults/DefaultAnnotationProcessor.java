@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor.defaults;
 */
 
 import fi.vincit.jmobster.processor.AnnotationProcessor;
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
@@ -38,20 +38,20 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
             .getLogger( DefaultAnnotationProcessor.class );
 
 
-    private AnnotationProcessorProvider annotationProcessorProvider;
+    private FieldAnnotationWriter fieldAnnotationWriter;
     private Class[] groups;
     private GroupMode groupMode;
     private boolean includeValidationsWithoutGroup;
 
-    public DefaultAnnotationProcessor( AnnotationProcessorProvider annotationProcessorProvider ) {
-        this.annotationProcessorProvider = annotationProcessorProvider;
+    public DefaultAnnotationProcessor( FieldAnnotationWriter fieldAnnotationWriter ) {
+        this.fieldAnnotationWriter = fieldAnnotationWriter;
         this.groups = new Class[0];
         this.groupMode = GroupMode.ANY_OF_REQUIRED;
         this.includeValidationsWithoutGroup = false;
     }
 
-    public DefaultAnnotationProcessor(AnnotationProcessorProvider annotationProcessorProvider, GroupMode groupMode, Class... groups) {
-        this.annotationProcessorProvider = annotationProcessorProvider;
+    public DefaultAnnotationProcessor(FieldAnnotationWriter fieldAnnotationWriter, GroupMode groupMode, Class... groups) {
+        this.fieldAnnotationWriter = fieldAnnotationWriter;
         this.groups = groups;
         this.groupMode = groupMode;
         this.includeValidationsWithoutGroup = false;
@@ -60,7 +60,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
     @Override
     public void writeValidation( final List<Annotation> validationAnnotations, final JavaScriptWriter writer ) {
         List<Annotation> filteredAnnotations = filterByGroupRules(validationAnnotations);
-        annotationProcessorProvider.writeValidatorsForField( filteredAnnotations, writer );
+        fieldAnnotationWriter.writeValidatorsForField( filteredAnnotations, writer );
     }
 
     /**
@@ -73,7 +73,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
         final boolean hasAnnotationsWithGroup = findIfAnnotationsWithGroups(validationAnnotations);
         List<Annotation> annotations = new ArrayList<Annotation>();
         for( Annotation annotation : validationAnnotations ) {
-            ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getBaseValidationProcessor( annotation );
+            ValidationAnnotationProcessor annotationProcessor = fieldAnnotationWriter.getBaseValidationProcessor( annotation );
             if( annotationProcessor != null ) {
                 if( hasAnnotationsWithGroup ) {
                     addByAnnotationGroup( annotation, annotationProcessor, annotations );
@@ -169,7 +169,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
 
     private boolean findIfAnnotationsWithGroups(List<Annotation> validationAnnotations) {
         for(Annotation a : validationAnnotations) {
-            ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getBaseValidationProcessor( a );
+            ValidationAnnotationProcessor annotationProcessor = fieldAnnotationWriter.getBaseValidationProcessor( a );
             if( annotationProcessor != null && annotationProcessor.hasGroups(a) ) {
                 return true;
             }

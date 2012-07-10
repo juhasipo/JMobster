@@ -15,7 +15,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
@@ -77,7 +77,7 @@ public class BackboneConverterTest {
 
     @Test
     public void testSimpleClass() {
-        AnnotationProcessorProvider app = new BackboneAnnotationProcessorProvider();
+        FieldAnnotationWriter app = new BackboneFieldAnnotationWriter();
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
                 new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ), app);
 
@@ -142,7 +142,7 @@ public class BackboneConverterTest {
 
     @Test
     public void testNoValidationsClass() {
-        AnnotationProcessorProvider app = new BackboneAnnotationProcessorProvider();
+        FieldAnnotationWriter app = new BackboneFieldAnnotationWriter();
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter),
                 new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ), app);
 
