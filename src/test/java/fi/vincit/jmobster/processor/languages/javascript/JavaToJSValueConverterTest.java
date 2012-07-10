@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -200,6 +201,17 @@ public class JavaToJSValueConverterTest {
         BigDecimal value = new BigDecimal( "123456789.123456789" );
         String result = valueConverter.convert( value.getClass(), value );
         assertEquals( "123456789.123456789", result );
+    }
+
+
+    @Test
+    public void testDate() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        String result = valueConverter.convert( now.getClass(), now );
+        assertEquals( formatter.format(now), result );
     }
 
 

@@ -85,4 +85,72 @@ public class JavaScriptWriterTest {
         writer.startBlock();
         writer.close();
     }
+
+    @Test
+    public void testNoSanityChecksAnonFunctions() {
+        writer.setUseSanityChecks(false);
+        writer.startAnonFunction();
+        writer.close();
+    }
+
+    @Test
+    public void testNoSanityChecksNameFunctions() {
+        writer.setUseSanityChecks(false);
+        writer.startNamedFunction("func");
+        writer.close();
+    }
+
+    @Test
+    public void testNoSanityChecksBlocks() {
+        writer.setUseSanityChecks(false);
+        writer.startBlock();
+        writer.close();
+    }
+
+
+    @Test
+    public void testOpen() {
+        writer.open();
+    }
+
+    @Test
+    public void testSetIndentation() {
+        writer.setIndentation(3);
+        writer.startBlock();
+        writer.endBlock();
+        mw.close();
+
+        assertEquals("{\n}\n", os.toString());
+    }
+
+    @Test
+    public void testSetIndentationChar() {
+        writer.setIndentationChar('\t', 2);
+        writer.startBlock();
+        writer.write("test");
+        writer.endBlock();
+        mw.close();
+
+        assertEquals("{\n\t\ttest\n}\n", os.toString());
+    }
+
+    @Test
+     public void testSetLineSeparator() {
+        writer.setLineSeparator("l");
+        writer.startBlock();
+        writer.endBlock();
+        mw.close();
+
+        assertEquals("{l}l", os.toString());
+    }
+
+    @Test
+    public void testSetSpace() {
+        writer.setSpace("_SPACE_");
+        writer.startNamedFunction("func", "arg1");
+        writer.endFunction();
+        mw.close();
+
+        assertEquals("function_SPACE_func(arg1)_SPACE_{\n}\n", os.toString());
+    }
 }

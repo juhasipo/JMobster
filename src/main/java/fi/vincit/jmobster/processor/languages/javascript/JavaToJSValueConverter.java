@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +54,27 @@ public class JavaToJSValueConverter implements FieldValueConverter {
     public JavaToJSValueConverter(ConverterMode mode) {
         this();
         this.mode = mode;
+    }
+
+    public JavaToJSValueConverter() {
+        converters = new HashMap<Class, ValueConverter>();
+        addConverter( new BooleanConverter(), Boolean.class, boolean.class );
+        addConverter( new LongConverter(), Long.class, long.class );
+        addConverter( new IntegerConverter(), Integer.class, int.class );
+        addConverter( new StringConverter(), String.class, Enum.class );
+        addConverter( new DoubleConverter(), Double.class, double.class );
+        addConverter( new FloatConverter(), Float.class, float.class );
+        addConverter( new CollectionConverter( this ), Collection.class );
+        addConverter( new MapConverter( this ), Map.class );
+        addConverter( new EnumConverter(), Enum.class );
+        addConverter( new ArrayConverter( this ), Array.class );
+        addConverter( new DateTimeConverter("yyyy-MM-dd'T'HH:mm:ssZ"), Date.class);
+    }
+
+    protected void addConverter( ValueConverter proxy, Class... classes ) {
+        for( Class clazz: classes ) {
+            converters.put( clazz, proxy );
+        }
     }
 
     @Override
@@ -151,26 +173,6 @@ public class JavaToJSValueConverter implements FieldValueConverter {
             }
         }
         return null;
-    }
-
-    public JavaToJSValueConverter() {
-        converters = new HashMap<Class, ValueConverter>();
-        addConverter( new BooleanConverter(), Boolean.class, boolean.class );
-        addConverter( new LongConverter(), Long.class, long.class );
-        addConverter( new IntegerConverter(), Integer.class, int.class );
-        addConverter( new StringConverter(), String.class, Enum.class );
-        addConverter( new DoubleConverter(), Double.class, double.class );
-        addConverter( new FloatConverter(), Float.class, float.class );
-        addConverter( new CollectionConverter( this ), Collection.class );
-        addConverter( new MapConverter( this ), Map.class );
-        addConverter( new EnumConverter(), Enum.class );
-        addConverter( new ArrayConverter( this ), Array.class );
-    }
-
-    protected void addConverter( ValueConverter proxy, Class... classes ) {
-        for( Class clazz: classes ) {
-            converters.put( clazz, proxy );
-        }
     }
 
 }
