@@ -28,33 +28,54 @@ import java.io.ByteArrayOutputStream;
  */
 public class CachedModelProvider implements ModelProvider {
 
-    public static enum Mode {
+    /**
+     * How the model should be written
+     */
+    public static enum WriteMode {
+        /**
+         * Compact mode. No additional spaces, indentations or lines. Compact size but, hard to read by human.
+         */
         COMPACT,
+        /**
+         * Pretty mode. Normal spaces, indentations and line changes. Human readable.
+         */
         PRETTY
     }
 
     private String cachedModel;
     private ModelWriter modelWriter;
     private ByteArrayOutputStream bos;
-    public CachedModelProvider(Mode mode) {
+
+    /**
+     * Creates new model provider that caches the model output.
+     * @param writeMode Write mode
+     */
+    public CachedModelProvider( WriteMode writeMode ) {
         this.bos = new ByteArrayOutputStream();
         this.modelWriter = new StreamModelWriter(bos);
-        switch (mode) {
+        switch ( writeMode ) {
             case COMPACT: configureCompactMode(modelWriter); break;
             case PRETTY: configurePrettyMode(modelWriter); break;
         }
     }
 
+    /**
+     * Make necessary configurations for pretty write mode
+     * @param modelWriter Model writer to configure
+     */
     private void configurePrettyMode(ModelWriter modelWriter) {
         modelWriter.setIndentationChar(' ', 4);
         modelWriter.setLineSeparator("\n");
     }
 
+    /**
+     * Make necessary configurations for compact write mode
+     * @param modelWriter Model writer to configure
+     */
     private void configureCompactMode(ModelWriter modelWriter) {
         modelWriter.setIndentation(0);
         modelWriter.setLineSeparator("");
     }
-
 
     @Override
     public String getModel() {

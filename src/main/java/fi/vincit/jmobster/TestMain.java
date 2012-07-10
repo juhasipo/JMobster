@@ -18,8 +18,6 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.annotation.Model;
 import fi.vincit.jmobster.processor.defaults.CachedModelProvider;
-import fi.vincit.jmobster.util.StreamModelWriter;
-import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +83,7 @@ public class TestMain {
 
     public static void main(String[] args) throws IOException {
         //ModelWriter modelWriter = new StreamModelWriter("models.js");
-        CachedModelProvider provider = new CachedModelProvider(CachedModelProvider.Mode.COMPACT);
+        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.COMPACT);
         ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", provider);
 
         generator.process( MyModelDto.class );

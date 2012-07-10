@@ -23,8 +23,7 @@ import java.util.List;
 /**
  * Interface for writing validator to model writer. User should not directly
  * implement this interface. Instead extend {@link fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor}
- * abstract base class.
- * {@see BaseValidationAnnotationProcessor}
+ * abstract base class. See more {@link fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor}
  */
 public interface ValidationAnnotationProcessor {
     /**
