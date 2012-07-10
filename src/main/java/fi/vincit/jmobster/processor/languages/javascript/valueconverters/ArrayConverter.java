@@ -18,7 +18,10 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 
 /**
- * Converter for Java primitive and object arrays.
+ * Converter for Java primitive and object arrays. Implementation
+ * requires a {@link FieldValueConverter} in order to convert
+ * the array item values. This structure supports nested arrays
+ * as well as e.g. maps inside an array.
  */
 public final class ArrayConverter extends BaseValueConverter {
 

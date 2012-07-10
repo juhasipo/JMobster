@@ -20,7 +20,10 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import java.util.Collection;
 
 /**
- * Converter for Java Collections (Lists, Sets, ...)
+ * Converter for Java Collections (Lists, Sets, ...).  Implementation
+ * requires a {@link FieldValueConverter} in order to convert
+ * the map item values. This structure supports nested collections
+ * as well as e.g. arrays inside a collections.
  */
 public final class CollectionConverter extends BaseValueConverter {
 

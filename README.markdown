@@ -171,14 +171,59 @@ required annotation processors and it contains the logic for generating the vali
 framework. The base implementation contains the processor mangament, but the extended class has to implement the
 field annotation writing locic.
 
+As an example, here is the _writeValidatorsForField_ method from Backbone implementation:
+
+    @Override
+    public void writeValidatorsForField( final List<Annotation> annotations, final ModelWriter writer ) {
+        writeTypeForField( annotations, writer );
+
+        // First find processors that actually do somethings so that we can
+        // add commas to right places in the item processor
+        List<ValidationAnnotationProcessor> processorsToUse = filterProcessorsToUse( annotations );
+
+        ItemProcessor<ValidationAnnotationProcessor> processor = new ItemProcessor<ValidationAnnotationProcessor>() {
+            @Override
+            protected void process( ValidationAnnotationProcessor processor, boolean isLast ) {
+                processor.writeValidatorsToStream( annotations, writer );
+                writer.writeLine("", ANNOTATION_SEPARATOR, !isLast);
+            }
+        };
+        processor.process( processorsToUse );
+    }
+
+Basically it takes the annotations to write for a field and model writer. Then it first writes type information
+that some of the Backbone.Validation validator require and then it writes the validators themselves using
+validation annotation processors.
+
 ### Field Value Converters
 
 Field value converters are used for converting field default values to the target framework and language. They
 take an object and produce a string value the object represents in the target framework and language.
 
 To add support for new language, a new implementation for interface FieldValueConverter has to be created.
-FieldValueConverter takes a Field or a Class, and a defaultValueObject. With these it produces default value
-for the given field. The default value is taken from the given defaultValueObjects corresponding field.
+FieldValueConverter takes a Field or a Class, and a _defaultValueObject_. With these it produces default value
+for the given field. The default value is taken from the given _defaultValueObjects_ corresponding field.
+
+Often the conversion can be done by Java _toString()_ method and in these cases the implementing classes don't have
+to do anything but provide a default value in case there is no default value in _defaultValueObject_. BaseValueConverter
+class is able do that for you.
+
+For example the default StringConverter for JavaScript returns empty JavaScript string as default value and in
+conversion just adds quotations marks around string:
+
+    public class StringConverter extends BaseValueConverter {
+        private static final String JAVASCRIPT_STRING_QUOTE_MARK = "\"";
+
+        @Override
+        protected String getTypeDefaultValue() {
+            return JAVASCRIPT_STRING_QUOTE_MARK + JAVASCRIPT_STRING_QUOTE_MARK;
+        }
+
+        @Override
+        protected String getValueAsString( Object value ) {
+            return JAVASCRIPT_STRING_QUOTE_MARK + value + JAVASCRIPT_STRING_QUOTE_MARK;
+        }
+    }
 
 ### Model Naming Strategies
 

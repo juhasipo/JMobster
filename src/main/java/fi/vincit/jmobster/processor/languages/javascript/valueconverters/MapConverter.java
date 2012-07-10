@@ -20,7 +20,10 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import java.util.Map;
 
 /**
- * Converter for Java Map objects
+ * Converter for Java Map objects. Implementation
+ * requires a {@link FieldValueConverter} in order to convert
+ * the map item values. This structure supports nested maps
+ * as well as e.g. arrays inside a map.
  */
 public class MapConverter extends BaseValueConverter {
     private static final String EMPTY_MAP = "{}";

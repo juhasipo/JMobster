@@ -19,13 +19,15 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
  * Converter for Java Strings.
  */
 public class StringConverter extends BaseValueConverter {
+    private static final String JAVASCRIPT_STRING_QUOTE_MARK = "\"";
+
     @Override
     protected String getTypeDefaultValue() {
-        return "\"\"";
+        return JAVASCRIPT_STRING_QUOTE_MARK + JAVASCRIPT_STRING_QUOTE_MARK;
     }
 
     @Override
     protected String getValueAsString( Object value ) {
-        return "\"" + value + "\"";
+        return JAVASCRIPT_STRING_QUOTE_MARK + value + JAVASCRIPT_STRING_QUOTE_MARK;
     }
 }
