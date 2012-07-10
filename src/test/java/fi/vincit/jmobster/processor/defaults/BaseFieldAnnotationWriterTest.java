@@ -12,7 +12,7 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class BaseAnnotationProcessorProviderTest {
+public class BaseFieldAnnotationWriterTest {
     private static class TestProviderField extends BaseFieldAnnotationWriter {
         private TestProviderField( ValidationAnnotationProcessor... processors ) {
             super( processors );
