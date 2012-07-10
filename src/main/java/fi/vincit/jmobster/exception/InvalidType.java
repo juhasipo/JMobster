@@ -14,6 +14,9 @@ package fi.vincit.jmobster.exception;/*
  * limitations under the License.
 */
 
+/**
+ * Thrown when a field has an invalid type
+ */
 public class InvalidType extends RuntimeException {
     public InvalidType() {
     }

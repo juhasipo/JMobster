@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.ValueConverter;
+
 /**
  * <p>
  *     Base implementation for value converters. The class can be

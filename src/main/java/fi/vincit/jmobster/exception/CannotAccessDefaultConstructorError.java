@@ -14,6 +14,11 @@ package fi.vincit.jmobster.exception;/*
  * limitations under the License.
 */
 
+/**
+ * Thrown when a class has a default constructor but it cannot be accessed
+ * because it is either protected or private when trying to extract default
+ * values from an object.
+ */
 public class CannotAccessDefaultConstructorError extends RuntimeException {
     public CannotAccessDefaultConstructorError() {
     }

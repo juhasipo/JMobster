@@ -14,6 +14,10 @@ package fi.vincit.jmobster.exception;/*
  * limitations under the License.
 */
 
+/**
+ * Thrown when a class doesn't have a default constructor when
+ * trying to extract default values from an object.
+ */
 public class DefaultConstructorMissingError extends RuntimeException {
     public DefaultConstructorMissingError() {
     }

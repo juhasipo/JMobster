@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.languages.javascript;
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.ValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
+package fi.vincit.jmobster.processor;
 /*
  * Copyright 2012 Juha Siponen
  *

@@ -14,6 +14,10 @@ package fi.vincit.jmobster.exception;/*
  * limitations under the License.
 */
 
+/**
+ * Thrown when user tries to initialize {@link fi.vincit.jmobster.ModelGenerator} for
+ * unsupported framework via {@link fi.vincit.jmobster.JMobsterFactory}.
+ */
 public class UnsupportedFramework extends RuntimeException {
     public UnsupportedFramework() {
     }

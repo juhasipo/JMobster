@@ -26,7 +26,7 @@ import java.lang.reflect.Field;
  * <p>
  *     There is also a support for converting given field by
  * the field value type. Usually this type of converting
- * can be used in {@link fi.vincit.jmobster.processor.languages.javascript.valueconverters.ValueConverter}
+ * can be used in {@link ValueConverter}
  * classes when a recursive converting is required.</p>
  */
 public interface FieldValueConverter {
