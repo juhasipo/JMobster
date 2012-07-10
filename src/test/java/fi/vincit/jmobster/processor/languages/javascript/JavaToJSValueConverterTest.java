@@ -15,10 +15,13 @@ package fi.vincit.jmobster.processor.languages.javascript;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import org.junit.Test;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -422,5 +425,33 @@ public class JavaToJSValueConverterTest {
 
         String result = valueConverter.convert( Map.class, map );
         assertEquals( "{}", result );
+    }
+
+    @Test
+    public void testIgnoreDefaultValueAllowNull() {
+        class TestClass {
+            @IgnoreDefaultValue
+            public Integer id;
+        }
+
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        String result = valueConverter.convert(getField( TestClass.class ), new TestClass());
+        assertEquals( "null", result );
+    }
+
+    @Test
+    public void testIgnoreDefaultValueNullAsDefault() {
+        class TestClass {
+            @IgnoreDefaultValue
+            public Integer id;
+        }
+
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        String result = valueConverter.convert(getField( TestClass.class ), new TestClass());
+        assertEquals( "0", result );
+    }
+
+    private Field getField(Class clazz) {
+        return clazz.getDeclaredFields()[0];
     }
 }

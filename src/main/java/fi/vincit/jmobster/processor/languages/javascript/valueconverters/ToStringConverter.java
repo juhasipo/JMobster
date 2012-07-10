@@ -16,10 +16,10 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
 */
 
 /**
- * Converter for null values. Used when the converted object
- * class is null.
+ * Converter that converts the value using toString method.
+ * Used for values that don't have own specialized converter.
  */
-public final class NullConverter extends BaseValueConverter {
+public final class ToStringConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {
         return "null";

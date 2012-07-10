@@ -44,7 +44,7 @@ public class JavaToJSValueConverter implements FieldValueConverter {
 
     private ConverterMode mode;
     private Map<Class, ValueConverter> converters;
-    private NullConverter nullConverter = new NullConverter();
+    private ToStringConverter toStringConverter = new ToStringConverter();
 
     /**
      * Creates new Java to JavaScript value converter with
@@ -86,12 +86,12 @@ public class JavaToJSValueConverter implements FieldValueConverter {
             } else {
                 defaultValue = null;
             }
+
             if( mode == ConverterMode.ALLOW_NULL && defaultValue == null ) {
                 return NULL_VALUE;
             } else {
                 return convertByClass( defaultValue, field.getType() );
             }
-
         } catch( IllegalAccessException e ) {
             return null;
         }
@@ -114,11 +114,7 @@ public class JavaToJSValueConverter implements FieldValueConverter {
      */
     private String convertByClass( Object value, Class clazz ) {
         ValueConverter converter = getConverterByClass( clazz );
-        if( converter != null ) {
-            return converter.convertValue(value);
-        } else {
-            return value != null ? value.toString() : UNDEFINED_VALUE;
-        }
+        return converter.convertValue(value);
     }
 
     /**
@@ -129,7 +125,7 @@ public class JavaToJSValueConverter implements FieldValueConverter {
      */
     private ValueConverter getConverterByClass( Class clazz ) {
         if( clazz == null ) {
-            return nullConverter;
+            return toStringConverter;
         } else if( clazz.isArray() ) {
             return converters.get(Array.class);
         } else {
@@ -140,6 +136,7 @@ public class JavaToJSValueConverter implements FieldValueConverter {
                 if( converter == null ) { converter = getConverterByClass(clazz.getSuperclass()); }
             }
             if( converter == null ) {
+                // This shouldn't happen, but in case it happens, inform about it in the log
                 LOG.error("Converter not found for class {}", clazz.getName());
             }
             return converter;
