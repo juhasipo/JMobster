@@ -3,7 +3,7 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.exception.UnsupportedFramework;
 import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.ModelProvider;
-import fi.vincit.jmobster.processor.frameworks.backbone.DefaultAnnotationProcessorProvider;
+import fi.vincit.jmobster.processor.frameworks.backbone.BackboneAnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
@@ -32,7 +32,7 @@ public class JMobsterFactory {
     public static ModelGenerator getInstance(String framework, ModelWriter writer) {
         if( "backbone.js".equalsIgnoreCase(framework) || "backbone".equalsIgnoreCase(framework) ) {
             ModelProcessor modelProcessor = new BackboneModelProcessor(writer);
-            AnnotationProcessorProvider annotationProcessorProvider = new DefaultAnnotationProcessorProvider();
+            AnnotationProcessorProvider annotationProcessorProvider = new BackboneAnnotationProcessorProvider();
             return new DefaultModelGenerator(
                     modelProcessor,
                     new JavaToJSValueConverter(ConverterMode.NULL_AS_DEFAULT),

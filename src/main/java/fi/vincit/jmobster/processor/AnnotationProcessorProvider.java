@@ -15,7 +15,6 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
 
 import java.lang.annotation.Annotation;
@@ -34,7 +33,17 @@ public interface AnnotationProcessorProvider {
      */
     boolean isAnnotationForValidation(Annotation annotation);
 
-    void process(List<Annotation> annotations, ModelWriter writer);
+    /**
+     * Write the validators for a field
+     * @param annotations Validation annotations
+     * @param writer Model writer
+     */
+    void writeValidatorsForField( List<Annotation> annotations, ModelWriter writer );
 
-    ValidationAnnotationProcessor getValidator(Annotation annotation);
+    /**
+     * Get base validation annotation processor for the given annotation
+     * @param annotation Annotation
+     * @return Base validator. If not found, returns null.
+     */
+    ValidationAnnotationProcessor getBaseValidationProcessor( Annotation annotation );
 }

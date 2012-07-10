@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.backbone;
+package fi.vincit.jmobster.processor.defaults;
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -20,8 +20,6 @@ import fi.vincit.jmobster.processor.AnnotationProcessorProvider;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
-import fi.vincit.jmobster.util.ModelWriter;
-import fi.vincit.jmobster.util.ItemProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +30,7 @@ import java.util.List;
 
 /**
  * Default annotation processor containing the basic structure
- * for converting Backbone.js compatible validation properties.
+ * for converting validation properties.
  */
 public class DefaultAnnotationProcessor implements AnnotationProcessor {
 
@@ -62,7 +60,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
     @Override
     public void writeValidation( final List<Annotation> validationAnnotations, final JavaScriptWriter writer ) {
         List<Annotation> filteredAnnotations = filterByGroupRules(validationAnnotations);
-        annotationProcessorProvider.process(filteredAnnotations, writer);
+        annotationProcessorProvider.writeValidatorsForField( filteredAnnotations, writer );
     }
 
     /**
@@ -75,7 +73,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
         final boolean hasAnnotationsWithGroup = findIfAnnotationsWithGroups(validationAnnotations);
         List<Annotation> annotations = new ArrayList<Annotation>();
         for( Annotation annotation : validationAnnotations ) {
-            ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getValidator( annotation );
+            ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getBaseValidationProcessor( annotation );
             if( annotationProcessor != null ) {
                 if( hasAnnotationsWithGroup ) {
                     addByAnnotationGroup( annotation, annotationProcessor, annotations );
@@ -171,7 +169,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
 
     private boolean findIfAnnotationsWithGroups(List<Annotation> validationAnnotations) {
         for(Annotation a : validationAnnotations) {
-            ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getValidator( a );
+            ValidationAnnotationProcessor annotationProcessor = annotationProcessorProvider.getBaseValidationProcessor( a );
             if( annotationProcessor != null && annotationProcessor.hasGroups(a) ) {
                 return true;
             }

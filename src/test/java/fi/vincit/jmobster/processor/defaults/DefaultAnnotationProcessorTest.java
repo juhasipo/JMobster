@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.backbone;
+package fi.vincit.jmobster.processor.defaults;
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -72,7 +72,7 @@ public class DefaultAnnotationProcessorTest {
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
         dap.writeValidation((List)listFromObjects(), modelWriter);
-        verify(app).process( matchAnnotationList(), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList(), eq( modelWriter ) );
     }
 
     @Test
@@ -82,7 +82,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects( minAnnotation ), modelWriter);
 
-        verify(app).process( matchAnnotationList( minAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation ), eq( modelWriter ) );
     }
 
     @Test
@@ -92,7 +92,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects( minAnnotation, maxAnnotation, sizeAnnotation ), modelWriter);
 
-        verify(app).process( matchAnnotationList( minAnnotation, maxAnnotation, sizeAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation, maxAnnotation, sizeAnnotation ), eq( modelWriter ) );
     }
 
     @Test
@@ -102,7 +102,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects( minAnnotation, sizeAnnotationWithoutProcessor, maxAnnotation ), modelWriter);
 
-        verify(app).process( matchAnnotationList( minAnnotation, maxAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation, maxAnnotation ), eq( modelWriter ) );
     }
 
 
@@ -113,7 +113,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects(minAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
 
-        verify(app).process( matchAnnotationList( patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation ), eq( modelWriter ) );
     }
 
     @Test
@@ -123,7 +123,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
 
-        verify(app).process( matchAnnotationList( patternWithTwoGroupsAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( patternWithTwoGroupsAnnotation ), eq( modelWriter ) );
     }
 
     @Test
@@ -133,7 +133,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
 
-        verify(app).process( matchAnnotationList( patternWithTwoGroupsAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( patternWithTwoGroupsAnnotation ), eq( modelWriter ) );
     }
 
 
@@ -145,7 +145,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation), modelWriter);
 
-        verify(app).process( matchAnnotationList( minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation ), eq( modelWriter ) );
     }
 
     @Test
@@ -156,7 +156,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
 
-        verify(app).process( matchAnnotationList( minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation ), eq( modelWriter ) );
     }
 
     @Test
@@ -166,7 +166,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
 
-        verify(app).process( matchAnnotationList(), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList(), eq( modelWriter ) );
     }
 
     @Test
@@ -176,7 +176,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
 
-        verify(app).process( matchAnnotationList( sizeWithOneGroupAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( sizeWithOneGroupAnnotation ), eq( modelWriter ) );
     }
 
     @Test
@@ -186,7 +186,7 @@ public class DefaultAnnotationProcessorTest {
 
         dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
 
-        verify(app).process( matchAnnotationList( patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation ), eq(modelWriter));
+        verify(app).writeValidatorsForField( matchAnnotationList( patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation ), eq( modelWriter ) );
     }
 
     private List<Annotation> matchAnnotationList( Annotation... annotationsToFind ) {
@@ -210,7 +210,7 @@ public class DefaultAnnotationProcessorTest {
         final AnnotationProcessorProvider annotationProcessorProvider = mock(AnnotationProcessorProvider.class);
 
         sizeAnnotationWithoutProcessor = mock(Size.class);
-        when(annotationProcessorProvider.getValidator(sizeAnnotationWithoutProcessor)).thenReturn( null );
+        when(annotationProcessorProvider.getBaseValidationProcessor( sizeAnnotationWithoutProcessor )).thenReturn( null );
 
         // Mock annotation processors to write mock data to model writer
         minAnnotation = mock(Min.class);
@@ -218,14 +218,14 @@ public class DefaultAnnotationProcessorTest {
         when(minProcessor.getGroups(minAnnotation)).thenReturn(new Class[]{});
         when(minProcessor.hasGroups(minAnnotation)).thenReturn(false);
         when(minProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getValidator(minAnnotation)).thenReturn( minProcessor );
+        when(annotationProcessorProvider.getBaseValidationProcessor( minAnnotation )).thenReturn( minProcessor );
 
         maxAnnotation = mock(Max.class);
         MaxAnnotationProcessor maxProcessor = mock(MaxAnnotationProcessor.class);
         when(maxProcessor.getGroups(maxAnnotation)).thenReturn(new Class[]{});
         when(maxProcessor.hasGroups(maxAnnotation)).thenReturn(false);
         when(maxProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getValidator(maxAnnotation)).thenReturn( maxProcessor );
+        when(annotationProcessorProvider.getBaseValidationProcessor( maxAnnotation )).thenReturn( maxProcessor );
 
 
         sizeAnnotation = mock(Size.class);
@@ -233,7 +233,7 @@ public class DefaultAnnotationProcessorTest {
         when(sizeProcessor.getGroups(sizeAnnotation)).thenReturn(new Class[]{});
         when(sizeProcessor.hasGroups(sizeAnnotation)).thenReturn(false);
         when(sizeProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getValidator(sizeAnnotation)).thenReturn( sizeProcessor );
+        when(annotationProcessorProvider.getBaseValidationProcessor( sizeAnnotation )).thenReturn( sizeProcessor );
 
 
         minWithTypeNumberAnnotation = mock(Min.class);
@@ -242,7 +242,7 @@ public class DefaultAnnotationProcessorTest {
         when(minWithTypeNumberProcessor.hasGroups(minWithTypeNumberAnnotation)).thenReturn(false);
         when(minWithTypeNumberProcessor.requiresType()).thenReturn(true);
         when(minWithTypeNumberProcessor.requiredType()).thenReturn("number");
-        when(annotationProcessorProvider.getValidator(minWithTypeNumberAnnotation)).thenReturn( minWithTypeNumberProcessor );
+        when(annotationProcessorProvider.getBaseValidationProcessor( minWithTypeNumberAnnotation )).thenReturn( minWithTypeNumberProcessor );
 
 
         maxWithTypeDecimalAnnotation = mock(Max.class);
@@ -251,7 +251,7 @@ public class DefaultAnnotationProcessorTest {
         when(maxWithTypeDecimalProcessor.hasGroups(maxWithTypeDecimalAnnotation)).thenReturn(false);
         when(maxWithTypeDecimalProcessor.requiresType()).thenReturn(true);
         when(maxWithTypeDecimalProcessor.requiredType()).thenReturn("decimal");
-        when(annotationProcessorProvider.getValidator(maxWithTypeDecimalAnnotation)).thenReturn( maxWithTypeDecimalProcessor );
+        when(annotationProcessorProvider.getBaseValidationProcessor( maxWithTypeDecimalAnnotation )).thenReturn( maxWithTypeDecimalProcessor );
 
 
         sizeWithOneGroupAnnotation = mock(Size.class);
@@ -259,7 +259,7 @@ public class DefaultAnnotationProcessorTest {
         when(sizeWithOneGroupProcessor.getGroups(sizeWithOneGroupAnnotation)).thenReturn(new Class[]{TestGroup1.class});
         when(sizeWithOneGroupProcessor.hasGroups(sizeWithOneGroupAnnotation)).thenReturn(true);
         when(sizeWithOneGroupProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getValidator(sizeWithOneGroupAnnotation)).thenReturn( sizeWithOneGroupProcessor );
+        when(annotationProcessorProvider.getBaseValidationProcessor( sizeWithOneGroupAnnotation )).thenReturn( sizeWithOneGroupProcessor );
         when(sizeWithOneGroupAnnotation.groups()).thenReturn(new Class[]{TestGroup1.class});
 
 
@@ -268,7 +268,7 @@ public class DefaultAnnotationProcessorTest {
         when(patternWithTwoGroupsProcessor.getGroups(patternWithTwoGroupsAnnotation)).thenReturn(new Class[]{TestGroup1.class, TestGroup2.class});
         when(patternWithTwoGroupsProcessor.hasGroups(patternWithTwoGroupsAnnotation)).thenReturn(true);
         when(patternWithTwoGroupsProcessor.requiresType()).thenReturn(false);
-        when(annotationProcessorProvider.getValidator(patternWithTwoGroupsAnnotation)).thenReturn( patternWithTwoGroupsProcessor );
+        when(annotationProcessorProvider.getBaseValidationProcessor( patternWithTwoGroupsAnnotation )).thenReturn( patternWithTwoGroupsProcessor );
         when(patternWithTwoGroupsAnnotation.groups()).thenReturn(new Class[]{TestGroup1.class, TestGroup2.class});
 
         return annotationProcessorProvider;

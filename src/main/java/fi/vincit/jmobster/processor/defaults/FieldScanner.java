@@ -35,6 +35,7 @@ import java.util.List;
  * included in the client side model.
  */
 public class FieldScanner {
+    // TODO: Support for bean getters/setters
     private static final Logger LOG = LoggerFactory
             .getLogger( FieldScanner.class );
 

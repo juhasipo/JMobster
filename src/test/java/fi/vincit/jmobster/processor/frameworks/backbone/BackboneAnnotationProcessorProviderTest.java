@@ -12,7 +12,7 @@ import java.util.List;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 
-public class DefaultAnnotationProcessorProviderTest {
+public class BackboneAnnotationProcessorProviderTest {
     @Test
     public void testProcessOneAnnotation() {
         ModelWriter writer = mockWriter();
@@ -26,11 +26,11 @@ public class DefaultAnnotationProcessorProviderTest {
             }
         };
         when(processor.canProcess(argThat(argumentMatcher))).thenReturn(true);
-        DefaultAnnotationProcessorProvider dapp = new DefaultAnnotationProcessorProvider(processor);
+        BackboneAnnotationProcessorProvider dapp = new BackboneAnnotationProcessorProvider(processor);
 
         List<Annotation> annotationsToTest = new ArrayList<Annotation>();
         annotationsToTest.add( annotation );
-        dapp.process(annotationsToTest, writer);
+        dapp.writeValidatorsForField( annotationsToTest, writer );
 
         verify(processor, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
     }
@@ -40,12 +40,12 @@ public class DefaultAnnotationProcessorProviderTest {
         ModelWriter writer = mockWriter();
         List<Annotation> annotationsToTest = new ArrayList<Annotation>();
         ValidationAnnotationProcessor processor = mockProcessor("number", annotationsToTest);
-        DefaultAnnotationProcessorProvider dapp = new DefaultAnnotationProcessorProvider(processor);
+        BackboneAnnotationProcessorProvider dapp = new BackboneAnnotationProcessorProvider(processor);
 
-        dapp.process(annotationsToTest, writer);
+        dapp.writeValidatorsForField( annotationsToTest, writer );
 
         verify(processor, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
-        verify(writer).write(eq("number"));
+        verify(writer).write( eq( "number" ) );
     }
 
     @Test
@@ -55,9 +55,9 @@ public class DefaultAnnotationProcessorProviderTest {
         ValidationAnnotationProcessor processor1 = mockProcessor("number", annotationsToTest);
         ValidationAnnotationProcessor processor2 = mockProcessor("number", annotationsToTest);
 
-        DefaultAnnotationProcessorProvider dapp = new DefaultAnnotationProcessorProvider(processor1, processor2);
+        BackboneAnnotationProcessorProvider dapp = new BackboneAnnotationProcessorProvider(processor1, processor2);
 
-        dapp.process(annotationsToTest, writer);
+        dapp.writeValidatorsForField( annotationsToTest, writer );
 
         verify(processor1, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
         verify(processor2, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
@@ -71,9 +71,9 @@ public class DefaultAnnotationProcessorProviderTest {
         ValidationAnnotationProcessor processor1 = mockProcessor("date", annotationsToTest);
         ValidationAnnotationProcessor processor2 = mockProcessor("number", annotationsToTest);
 
-        DefaultAnnotationProcessorProvider dapp = new DefaultAnnotationProcessorProvider(processor1, processor2);
+        BackboneAnnotationProcessorProvider dapp = new BackboneAnnotationProcessorProvider(processor1, processor2);
 
-        dapp.process(annotationsToTest, writer);
+        dapp.writeValidatorsForField( annotationsToTest, writer );
 
         verify(processor1, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
         verify(processor2, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
