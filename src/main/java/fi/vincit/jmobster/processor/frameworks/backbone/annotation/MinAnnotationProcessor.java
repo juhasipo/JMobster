@@ -22,6 +22,9 @@ import fi.vincit.jmobster.util.ModelWriter;
 import javax.validation.constraints.Min;
 import java.lang.annotation.Annotation;
 
+/**
+ * Processor for JSR-303 Min validator
+ */
 public class MinAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public MinAnnotationProcessor() {

@@ -41,15 +41,19 @@ import fi.vincit.jmobster.util.RequiredTypes;
  *     represent an validation annotation for which it provides group and type information. Non-base
  *     validators don't provide this information, it only is used to process a set of annotations.
  * </p>
+ *
  * <p>
  *    The processor needs required annotations to be set via constructors. These
  *    annotations determine whether the processor is used for a set of annotations.
+ *    Current implementation only supports one annotation per type to be stored.
  * </p>
+ *
  * <p>
  *     In addition to required annotations, the processor can use optional annotations.
  *     If these optional annotations are not present for a field. The processor may still
  *     be used.
  * </p>
+ *
  * <p>
  *     When implementing the processing logic, the annotations to process are available via
  *     {@link BaseValidationAnnotationProcessor#findAnnotation(Class)} method. The presence
@@ -57,6 +61,7 @@ import fi.vincit.jmobster.util.RequiredTypes;
  *     method. For required methods this should always return true and the findAnnotation method should
  *     return a non-null value.
  * </p>
+ *
  * <p>
  *     Annotation grouping is managed by implementing the {@link BaseValidationAnnotationProcessor#getGroupsInternal(java.lang.annotation.Annotation)}.
  *     This method extracts the group information of the annotation it represents.
@@ -78,19 +83,41 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
         this.combinationManager = new CombinationManager(requiredAnnotation);
     }
 
+    /**
+     * Constructor for processor with required annotations but no type information.
+     * @param requiredAnnotation Required annotations
+     */
     protected BaseValidationAnnotationProcessor( RequiredTypes requiredAnnotation) {
         this.combinationManager = new CombinationManager(requiredAnnotation);
     }
 
-    protected BaseValidationAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation, OptionalTypes supportedAnnotations) {
+    /**
+     * Constructor for processor with type, required annotations and optional annotations.
+     * @param requiredType Type
+     * @param requiredAnnotation Required annotations
+     * @param optionalAnnotations Optional annotations
+     */
+    protected BaseValidationAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations) {
         this.requiredType = requiredType;
-        this.combinationManager = new CombinationManager(requiredAnnotation, supportedAnnotations);
+        this.combinationManager = new CombinationManager(requiredAnnotation, optionalAnnotations);
     }
 
-    protected BaseValidationAnnotationProcessor(RequiredTypes requiredAnnotation, OptionalTypes supportedAnnotations) {
-        this.combinationManager = new CombinationManager(requiredAnnotation, supportedAnnotations);
+    /**
+     * Constructor for processor required annotations and optional annotations but no type information.
+     * @param requiredAnnotation Required annotations
+     * @param optionalAnnotations Optional annotations
+     */
+    protected BaseValidationAnnotationProcessor(RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations) {
+        this.combinationManager = new CombinationManager(requiredAnnotation, optionalAnnotations);
     }
 
+    /**
+     * Sets the class for which this processor acts as a base validator. Once
+     * this method is called, the class will act as a base validator and the
+     * {@link fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor#isBaseValidator()}
+     * method will return true.
+     * @param baseValidatorForClass Class for which the processor should act as base validator
+     */
     protected void setBaseValidatorForClass( Class baseValidatorForClass ) {
         this.baseValidatorForClass = baseValidatorForClass;
     }
@@ -130,11 +157,18 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
         return groups != null ? groups : new Class[0];
     }
 
+    /**
+     * Internal implementation for extracting group information
+     * from an annotation. Should return groups from the annotation,
+     * but if no groups are not found, it should return an empty Class array.
+     * @param annotation Annotation from which the group information is extracted.
+     * @return Array of groups extracted from the given annotation. If no groups, returns an empty array.
+     */
     protected abstract Class[] getGroupsInternal(Annotation annotation);
 
     @Override
     public boolean hasGroups(Annotation annotation) {
-        Class[] groups = getGroups(annotation);
+        Class[] groups = getGroups( annotation );
         return groups != null && groups.length > 0;
     }
 
@@ -143,30 +177,18 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
         return combinationManager.matches( annotations );
     }
 
-
+    /**
+     * Prepares the processor for writing. Initializes the
+     * annotations the processor uses so that they can be found via
+     * {@link BaseValidationAnnotationProcessor#findAnnotation(Class)}.
+     * @param annotations Annotations for a field.
+     */
     private void prepareForWrite(List<Annotation> annotations) {
         annotationBag = new HashMap<Class, Annotation>();
         for( Annotation a : annotations ) {
             if( combinationManager.containsClass(a.annotationType()) ) {
                 annotationBag.put(a.annotationType(), a);
             }
-        }
-    }
-
-    private void finishWrite() {
-        annotationBag.clear();
-        annotationBag = null;
-    }
-
-    protected <T> boolean containsAnnotation(Class<T> clazz) {
-        return annotationBag.containsKey(clazz);
-    }
-
-    protected <T> T findAnnotation(Class<T> clazz) {
-        if( annotationBag.containsKey(clazz) ) {
-            return (T)annotationBag.get(clazz);
-        } else {
-            throw new RuntimeException("Annotation of type " + clazz.getName() + " not found");
         }
     }
 
@@ -177,7 +199,50 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
         finishWrite();
     }
 
+    /**
+     * Internal implementation of writeValidatorsToStream method. When
+     * this method is called the required and optional annotations are loaded
+     * to internal data structure and they can be fetched by using the
+     * {@link BaseValidationAnnotationProcessor#findAnnotation(Class)} method.
+     * @param writer Writer to use
+     */
     protected abstract void writeValidatorsToStreamInternal(ModelWriter writer);
+
+    /**
+     * Cleans up annotations from internal data structure.
+     */
+    private void finishWrite() {
+        annotationBag.clear();
+        annotationBag = null;
+    }
+
+    /**
+     * Checks if the processor contains annotation of given type
+     * @param clazz Annotation class
+     * @param <T> Annotation type
+     * @return True if processor contains annotation, otherwise false
+     */
+    protected <T> boolean containsAnnotation(Class<T> clazz) {
+        return annotationBag.containsKey(clazz);
+    }
+
+    /**
+     * Returns the annotation of given type. Always returns non-null value
+     * but if the annotation is not found, throws an exception. Therefore
+     * method {@link BaseValidationAnnotationProcessor#containsAnnotation(Class)}
+     * should be called before this method.
+     * @param clazz Annotation class
+     * @param <T> Annotation type
+     * @return Found annotation
+     * @throws RuntimeException if annotation is not found
+     */
+    protected <T> T findAnnotation(Class<T> clazz) {
+        if( annotationBag.containsKey(clazz) ) {
+            return (T)annotationBag.get(clazz);
+        } else {
+            throw new RuntimeException("Annotation of type " + clazz.getName() + " not found");
+        }
+    }
 
 
 }

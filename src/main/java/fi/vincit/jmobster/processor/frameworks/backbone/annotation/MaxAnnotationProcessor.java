@@ -22,6 +22,9 @@ import fi.vincit.jmobster.util.ModelWriter;
 import javax.validation.constraints.Max;
 import java.lang.annotation.Annotation;
 
+/**
+ * Processor for JSR-303 Max validator
+ */
 public class MaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public MaxAnnotationProcessor() {

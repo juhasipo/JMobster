@@ -22,6 +22,9 @@ import fi.vincit.jmobster.util.ModelWriter;
 import javax.validation.constraints.NotNull;
 import java.lang.annotation.Annotation;
 
+/**
+ * Processor for JSR-303 NotNull validator
+ */
 public class NotNullAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public NotNullAnnotationProcessor() {

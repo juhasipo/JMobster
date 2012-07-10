@@ -22,6 +22,9 @@ import fi.vincit.jmobster.util.ModelWriter;
 import javax.validation.constraints.Size;
 import java.lang.annotation.Annotation;
 
+/**
+ * Processor for JSR-303 Size validator
+ */
 public class SizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
 
     public SizeAnnotationProcessor() {

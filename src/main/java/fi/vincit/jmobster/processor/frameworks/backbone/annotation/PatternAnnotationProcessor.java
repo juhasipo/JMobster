@@ -27,6 +27,9 @@ import org.slf4j.LoggerFactory;
 import javax.validation.constraints.Pattern;
 import java.lang.annotation.Annotation;
 
+/**
+ * Processor for JSR-303 Pattern validator. Also supports optional OverridePattern annotation.
+ */
 public class PatternAnnotationProcessor extends BaseValidationAnnotationProcessor {
     private static final Logger LOG = LoggerFactory
             .getLogger( PatternAnnotationProcessor.class );
