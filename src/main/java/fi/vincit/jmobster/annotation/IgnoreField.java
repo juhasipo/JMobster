@@ -23,6 +23,6 @@ import java.lang.annotation.Target;
  * Force processor to ignore the field completely.
  */
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD})
+@Target({ ElementType.FIELD, ElementType.METHOD})
 public @interface IgnoreField {
 }

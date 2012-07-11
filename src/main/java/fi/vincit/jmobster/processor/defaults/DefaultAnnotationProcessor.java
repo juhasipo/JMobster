@@ -61,7 +61,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
     @Override
     public void writeValidation( final ModelField field, final JavaScriptWriter writer ) {
         List<Annotation> filteredAnnotations = filterByGroupRules(field.getAnnotations());
-        ModelField filteredField = new ModelField(field.getField(), filteredAnnotations);
+        ModelField filteredField = new ModelField(field, filteredAnnotations);
         filteredField.setDefaultValue(field.getDefaultValue());
         fieldAnnotationWriter.writeValidatorsForField( filteredField, writer );
     }

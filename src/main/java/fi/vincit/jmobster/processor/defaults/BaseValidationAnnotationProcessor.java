@@ -228,7 +228,7 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
                 this.annotationBag.put( annotation.annotationType(), annotation );
             }
         }
-        this.field = new ModelField(field.getField(), annotationsForField);
+        this.field = new ModelField(field, annotationsForField);
         this.field.setDefaultValue(field.getDefaultValue());
     }
 
@@ -285,11 +285,11 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
     }
 
     /**
-     * Returns the Java reflection field object
-     * @return Java reflection field object
+     * Returns the model field object
+     * @return Model field object
      */
-    protected Field getField() {
-        return field.getField();
+    protected ModelField getField() {
+        return field;
     }
 
     /**
@@ -305,7 +305,7 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
      * @return Field type
      */
     protected Class getFieldType() {
-        return field.getField().getType();
+        return field.getFieldType();
     }
 
 

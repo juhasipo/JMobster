@@ -2,6 +2,7 @@ package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.ModelGenerator;
 import fi.vincit.jmobster.processor.FieldAnnotationWriter;
+import fi.vincit.jmobster.processor.FieldScanner;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.ModelProcessor;
@@ -45,7 +46,7 @@ public class DefaultModelGenerator implements ModelGenerator {
             FieldValueConverter fieldDefaultValueProcessor,
             FieldAnnotationWriter fieldAnnotationWriter ) {
         this.modelProcessor = modelProcessor;
-        this.fieldScanner = new FieldScanner(fieldDefaultValueProcessor, fieldAnnotationWriter );
+        this.fieldScanner = new DefaultFieldScanner(fieldDefaultValueProcessor, fieldAnnotationWriter );
     }
 
     @Override
@@ -90,7 +91,7 @@ public class DefaultModelGenerator implements ModelGenerator {
     private List<Model> getModels( Class[] classes ) {
         List<Model> models = new ArrayList<Model>();
         for( Class clazz : classes ) {
-            createModelAndAddToList( clazz, models );
+            createModelAndAddToList( clazz, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, models );
         }
         return models;
     }
@@ -103,7 +104,7 @@ public class DefaultModelGenerator implements ModelGenerator {
     private List<Model> getModels( List<Class> classes ) {
         List<Model> models = new ArrayList<Model>();
         for( Class clazz : classes ) {
-            createModelAndAddToList( clazz, models );
+            createModelAndAddToList( clazz, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, models );
         }
         return models;
     }
@@ -113,8 +114,8 @@ public class DefaultModelGenerator implements ModelGenerator {
      * @param clazz Class for which model should be created
      * @param models Models list
      */
-    private void createModelAndAddToList( Class clazz, List<Model> models ) {
-        Model model = new Model(clazz, fieldScanner.getFields(clazz));
+    private void createModelAndAddToList( Class clazz, FieldScanner.FieldScanMode fieldScanMode, List<Model> models ) {
+        Model model = new Model(clazz, fieldScanner.getFields(clazz, fieldScanMode));
         checkAndSetValidationState( model );
         models.add( model );
     }

@@ -84,20 +84,12 @@ public class TestMain {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        InputStreamReader in = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(in);
+        //ModelWriter modelWriter = new StreamModelWriter("models.js");
+        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY);
+        ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", provider);
 
-        String str = br.readLine();
-        for(;;) {
-            //ModelWriter modelWriter = new StreamModelWriter("models.js");
-            CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.COMPACT);
-            ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", provider);
+        generator.process( MyModelDto.class );
 
-            generator.process( MyModelDto.class );
-
-            System.out.println(provider.getModel());
-
-            Thread.sleep(1000);
-        }
+        System.out.println(provider.getModel());
     }
 }

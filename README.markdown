@@ -102,6 +102,27 @@ model class name.
         })
     };
 
+### Property Scanning
+
+There are two field scanning mode in JMobster: _DIRECT\_FIELD\_ACCESS_ and _BEAN\_PROPERTY_. The _DIRECT\_FIELD\_ACCESS_
+mode is the default mode and in it the fields are find every member variable and use them as model field.
+The validator annotations must be written for the member variables. The mode doesn't care about the visibility
+of the fields, so all public, protected and private fields are considered equal in that sense.
+
+_BEAN\_PROPERTY_ mode will use standard getter methods to find available model fields (e.g. _getName()_ for field "name").
+This mode will ignore _getClass()_ getter. in this mode the annotations must be written to the getter methods in order
+them to work since it won't be possible to find the corresponding member variable just with the method name (the getter
+can return formatted or combined field data). In this mode, only the public getters are taken into account so any other
+getters won't show up in the model.
+
+In both modes the _IgnoreField_ annotation will ignore the field and it won't be used in the generated model. For
+_BEAN\_PROPERTY_ mode the annotations must be written for the getter method and in _DIRECT\_FIELD\_ACCESS_ for the
+member variable.
+
+In addition to scanning modes, there are extra settings that determine what kind of fields are included. The current
+options are to toggle static and/or final fields. Final field mode affects both scanning modes, but static field mode
+only works with _DIRECT\_FIELD\_ACCESS mode. By default final fields are included but static fields are not.
+
 ### Classes and Default Values
 
 Classes that are processed with JMobster have to have a default constructor. This

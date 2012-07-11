@@ -69,7 +69,7 @@ public class BackboneValueSectionWriter {
         final ItemProcessor<ModelField> modelFieldItemProcessor = new ItemProcessor<ModelField>() {
             @Override
             protected void process( ModelField field, boolean isLastItem ) {
-                writer.writeKeyValue(field.getField().getName(), field.getDefaultValue(), isLastItem);
+                writer.writeKeyValue(field.getName(), field.getDefaultValue(), isLastItem);
             }
         };
         modelFieldItemProcessor.process(fields);

@@ -37,7 +37,7 @@ public class TestUtil {
     public static int assertFieldFound(List<ModelField> modelFields, String fieldName) {
         for( int i = 0; i < modelFields.size(); ++i ) {
             ModelField field = modelFields.get(i);
-            if( field.getField().getName().equals(fieldName) ) {
+            if( field.getName().equals(fieldName) ) {
                 return i;
             }
         }
@@ -53,7 +53,7 @@ public class TestUtil {
      */
     public static void assertFieldNotFound(List<ModelField> modelFields, String fieldName) {
         for( ModelField field : modelFields ) {
-            if( field.getField().getName().equals(fieldName) ) {
+            if( field.getName().equals(fieldName) ) {
                 assertTrue( "Field with name <" + fieldName + "> found when it should be ignored.", false );
             }
         }

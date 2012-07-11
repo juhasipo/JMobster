@@ -18,6 +18,7 @@ import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
 import fi.vincit.jmobster.processor.FieldAnnotationWriter;
+import fi.vincit.jmobster.processor.FieldScanner;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.model.ModelField;
 import org.junit.Test;
@@ -29,16 +30,18 @@ import static fi.vincit.jmobster.util.TestUtil.assertFieldFound;
 import static fi.vincit.jmobster.util.TestUtil.assertFieldNotFound;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
-public class FieldScannerTest {
+public class DefaultFieldScannerTest {
 
-    private FieldScanner getFieldScanner() {
-        FieldValueConverter fvc = mock(FieldValueConverter.class);
+    private FieldValueConverter fvc;
+
+    private DefaultFieldScanner getFieldScanner() {
+        fvc = mock(FieldValueConverter.class);
         FieldAnnotationWriter app = mock(FieldAnnotationWriter.class);
         when(app.isAnnotationForValidation(any(Min.class))).thenReturn( true );
-        return new FieldScanner(fvc, app);
+        return new DefaultFieldScanner(fvc, app);
     }
 
     public static class SimpleTestClass {
@@ -47,10 +50,12 @@ public class FieldScannerTest {
         private String privateStringField;
     }
 
+
+
     @Test
     public void testGetFields() {
-        FieldScanner fs = getFieldScanner();
-        List<ModelField> models = fs.getFields(SimpleTestClass.class);
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( SimpleTestClass.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
 
         assertFieldFound(models, "publicLongField");
         assertFieldFound(models, "protectedIntegerField");
@@ -66,8 +71,8 @@ public class FieldScannerTest {
 
     @Test
     public void testIgnoreField() {
-        FieldScanner fs = getFieldScanner();
-        List<ModelField> models = fs.getFields(SimpleIgnoreTestClass.class);
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( SimpleIgnoreTestClass.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
 
         assertFieldNotFound( models, "publicLongField" );
         assertFieldFound(models, "protectedIntegerField");
@@ -83,8 +88,8 @@ public class FieldScannerTest {
 
     @Test
     public void testFieldWithValidation() {
-        FieldScanner fs = getFieldScanner();
-        List<ModelField> models = fs.getFields(TestClassWithValidation.class);
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( TestClassWithValidation.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
 
         assertFieldFound( models, "publicLongField" );
         int fieldIndexWithAnnotations = assertFieldFound(models, "protectedIntegerField");
@@ -108,8 +113,8 @@ public class FieldScannerTest {
 
     @Test(expected = DefaultConstructorMissingError.class)
     public void testNoDefaultConstructor() {
-        FieldScanner fs = getFieldScanner();
-        fs.getFields(TestClassNoDefaultConstructor.class);
+        DefaultFieldScanner fs = getFieldScanner();
+        fs.getFields( TestClassNoDefaultConstructor.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
     }
 
     public static class TestClassPrivateDefaultConstructor {
@@ -123,8 +128,8 @@ public class FieldScannerTest {
 
     @Test(expected = CannotAccessDefaultConstructorError.class)
     public void testPrivateDefaultConstructor() {
-        FieldScanner fs = getFieldScanner();
-        fs.getFields(TestClassPrivateDefaultConstructor.class);
+        DefaultFieldScanner fs = getFieldScanner();
+        fs.getFields( TestClassPrivateDefaultConstructor.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
     }
 
     public static class TestClassWithStaticMember {
@@ -136,21 +141,21 @@ public class FieldScannerTest {
     }
 
     @Test
-    public void testStaticMember() {
-        FieldScanner fs = getFieldScanner();
-        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+    public void testStaticAndFinalMember() {
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( TestClassWithStaticMember.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS  );
         assertFieldFound( models, "publicLongField" );
         assertFieldFound( models, "protectedIntegerField" );
         assertFieldFound( models, "privateStringField" );
         assertFieldNotFound( models, "staticMember" );
-        assertFieldNotFound( models, "finalInt" );
+        assertFieldFound( models, "finalInt" );
     }
 
     @Test
     public void testAllowFinalMember() {
-        FieldScanner fs = getFieldScanner();
+        DefaultFieldScanner fs = getFieldScanner();
         fs.setAllowFinalFields(true);
-        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        List<ModelField> models = fs.getFields( TestClassWithStaticMember.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS  );
         assertFieldFound( models, "publicLongField" );
         assertFieldFound( models, "protectedIntegerField" );
         assertFieldFound( models, "privateStringField" );
@@ -160,8 +165,9 @@ public class FieldScannerTest {
 
     @Test
     public void testDontAllowFinalMember() {
-        FieldScanner fs = getFieldScanner();
-        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        DefaultFieldScanner fs = getFieldScanner();
+        fs.setAllowFinalFields(false);
+        List<ModelField> models = fs.getFields( TestClassWithStaticMember.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS  );
         assertFieldFound( models, "publicLongField" );
         assertFieldFound( models, "protectedIntegerField" );
         assertFieldFound( models, "privateStringField" );
@@ -171,10 +177,10 @@ public class FieldScannerTest {
 
     @Test
     public void testAllowStaticMember() {
-        FieldScanner fs = getFieldScanner();
+        DefaultFieldScanner fs = getFieldScanner();
         fs.setAllowFinalFields(false);
         fs.setAllowStaticFields(true);
-        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        List<ModelField> models = fs.getFields( TestClassWithStaticMember.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS  );
         assertFieldFound( models, "publicLongField" );
         assertFieldFound( models, "protectedIntegerField" );
         assertFieldFound( models, "privateStringField" );
@@ -190,8 +196,8 @@ public class FieldScannerTest {
 
     @Test
     public void testStaticFinalMember() {
-        FieldScanner fs = getFieldScanner();
-        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( TestClassWithStaticMember.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS  );
         assertFieldFound( models, "publicLongField" );
         assertFieldFound( models, "protectedIntegerField" );
         assertFieldFound( models, "privateStringField" );
@@ -200,10 +206,10 @@ public class FieldScannerTest {
 
     @Test
     public void testAllowStaticFinalMember() {
-        FieldScanner fs = getFieldScanner();
+        DefaultFieldScanner fs = getFieldScanner();
         fs.setAllowFinalFields(true);
         fs.setAllowStaticFields(true);
-        List<ModelField> models = fs.getFields(TestClassWithStaticMember.class);
+        List<ModelField> models = fs.getFields( TestClassWithStaticMember.class, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS  );
         assertFieldFound(models, "publicLongField");
         assertFieldFound( models, "protectedIntegerField" );
         assertFieldFound( models, "privateStringField" );
@@ -211,5 +217,111 @@ public class FieldScannerTest {
     }
 
 
+    public static class SimpleTestGetterClass {
+        private String string1 = "string1";
+        private String string2 = "string2";
 
+        private Long longValue = 42L;
+
+        public String getCombinedString() {
+            return string1 + string2;
+        }
+
+        @Min(1)
+        public Long getLongValue() {
+            return longValue;
+        }
+
+    }
+
+    @Test
+    public void testGetterScanning() {
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( SimpleTestGetterClass.class, FieldScanner.FieldScanMode.BEAN_PROPERTY );
+        assertFieldNotFound(models, "string1");
+        assertFieldNotFound(models, "string2");
+        assertFieldFound(models, "combinedString");
+        assertFieldFound(models, "longValue");
+
+        verify(fvc, times(1)).convert(eq(String.class), eq("string1string2"));
+        verify(fvc, times(1)).convert(eq(Long.class), eq(42L));
+    }
+
+    @Test
+    public void testGetterAnnotation() {
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( SimpleTestGetterClass.class, FieldScanner.FieldScanMode.BEAN_PROPERTY );
+
+        int i = assertFieldFound(models, "longValue");
+        assertEquals(1, models.get(i).getAnnotations().size());
+    }
+
+    public static class IgnoreBeanPropertyClass {
+        public Integer getNotIgnored() {
+            return 1;
+        }
+        @IgnoreField
+        public Integer getIgnored() {
+            return 2;
+        }
+    }
+    @Test
+    public void testIgnoreBeanProperty() {
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( IgnoreBeanPropertyClass.class, FieldScanner.FieldScanMode.BEAN_PROPERTY );
+        assertFieldNotFound(models, "ugnored");
+        assertFieldFound(models, "notIgnored");
+    }
+
+
+    public static class VisibilityTestGetterClass {
+        public Integer getPublic() {
+            return 9;
+        }
+        protected Integer getProtected() {
+            return 10;
+        }
+
+        private Integer getPrivate() {
+            return 11;
+        }
+    }
+
+    @Test
+    public void testBeanVisibility() {
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( VisibilityTestGetterClass.class, FieldScanner.FieldScanMode.BEAN_PROPERTY );
+        assertFieldNotFound(models, "protected");
+        assertFieldNotFound(models, "private");
+        assertFieldFound(models, "public");
+    }
+
+    public static class BeanWithStaticAndFinalProperties {
+        public Integer getNormal() { return -1; }
+        public static final Integer getStaticFinal() { return 0; }
+        public final Integer getFinal() { return 1; }
+        public static Integer getStatic() { return 2; }
+    }
+
+    @Test
+    public void testBeanExtraOptionsDefault() {
+        DefaultFieldScanner fs = getFieldScanner();
+        List<ModelField> models = fs.getFields( BeanWithStaticAndFinalProperties.class, FieldScanner.FieldScanMode.BEAN_PROPERTY );
+        assertFieldFound(models, "normal");
+        assertFieldNotFound(models, "staticFinal");
+        assertFieldFound(models, "final");
+        assertFieldNotFound(models, "static");
+    }
+
+    @Test
+    public void testBeanExtraOptionsAllowAll() {
+        DefaultFieldScanner fs = getFieldScanner();
+        fs.setAllowFinalFields(true);
+        fs.setAllowStaticFields(true);
+        List<ModelField> models = fs.getFields( BeanWithStaticAndFinalProperties.class, FieldScanner.FieldScanMode.BEAN_PROPERTY );
+        assertFieldFound(models, "normal");
+        assertFieldNotFound(models, "staticFinal");
+        assertFieldFound(models, "final");
+        assertFieldNotFound(models, "static");
+    }
 }

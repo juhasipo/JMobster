@@ -15,6 +15,7 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
 */
 
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -24,17 +25,35 @@ import java.util.List;
  * Single model field that is converted to the target platform.
  */
 public class ModelField {
-    private Field field;
+    private Class fieldType;
     private List<Annotation> annotations;
     private String defaultValue;
+    private String name;
 
     public ModelField( Field field, List<Annotation> validationAnnotations ) {
-        this.field = field;
+        this.fieldType = field.getType();
+        this.name = field.getName();
         this.annotations = validationAnnotations;
     }
 
-    public Field getField() {
-        return field;
+    public ModelField( PropertyDescriptor property, List<Annotation> validationAnnotations ) {
+        this.fieldType  = property.getPropertyType();
+        this.annotations = validationAnnotations;
+        this.name = property.getName();
+    }
+
+    public ModelField( ModelField field, List<Annotation> annotationsForField ) {
+        this.fieldType = field.getFieldType();
+        this.annotations = annotationsForField;
+        this.name = field.getName();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Class getFieldType() {
+        return fieldType;
     }
 
     public List<Annotation> getAnnotations() {
