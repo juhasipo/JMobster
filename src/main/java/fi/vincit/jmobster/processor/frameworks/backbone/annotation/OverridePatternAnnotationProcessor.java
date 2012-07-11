@@ -22,6 +22,10 @@ import fi.vincit.jmobster.util.ModelWriter;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * Base validator processor for {@link OverridePattern} annotation. Only extracts
+ * groups and tells other components that OverridePattern is a validation annotation.
+ */
 public class OverridePatternAnnotationProcessor extends BaseValidationAnnotationProcessor {
     public OverridePatternAnnotationProcessor() {
         super( OverridePattern.class );
