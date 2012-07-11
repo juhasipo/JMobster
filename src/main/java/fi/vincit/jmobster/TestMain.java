@@ -25,7 +25,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -81,13 +83,21 @@ public class TestMain {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        //ModelWriter modelWriter = new StreamModelWriter("models.js");
-        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.COMPACT);
-        ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", provider);
+    public static void main(String[] args) throws IOException, InterruptedException {
+        InputStreamReader in = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(in);
 
-        generator.process( MyModelDto.class );
+        String str = br.readLine();
+        for(;;) {
+            //ModelWriter modelWriter = new StreamModelWriter("models.js");
+            CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.COMPACT);
+            ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", provider);
 
-        System.out.println(provider.getModel());
+            generator.process( MyModelDto.class );
+
+            System.out.println(provider.getModel());
+
+            Thread.sleep(1000);
+        }
     }
 }
