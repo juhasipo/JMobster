@@ -16,6 +16,7 @@ package fi.vincit.jmobster.util;/*
 
 import fi.vincit.jmobster.processor.model.ModelField;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +71,13 @@ public class TestUtil {
             arrayList.add(t);
         }
         return arrayList;
+    }
+
+    public static ModelField getField(List<Annotation> annotations) {
+        class T {int field;}
+        ModelField field = new ModelField(T.class.getDeclaredFields()[0], annotations);
+        field.setDefaultValue("Test value");
+        return field;
     }
 
 }

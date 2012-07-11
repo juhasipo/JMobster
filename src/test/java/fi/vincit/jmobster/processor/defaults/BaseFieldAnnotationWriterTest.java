@@ -1,6 +1,7 @@
 package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ModelWriter;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class BaseFieldAnnotationWriterTest {
         }
 
         @Override
-        public void writeValidatorsForField( List<Annotation> annotations, ModelWriter writer ) {}
+        public void writeValidatorsForField( ModelField field, ModelWriter writer ) {}
     }
 
     @Test

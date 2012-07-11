@@ -1,27 +1,32 @@
 package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ModelWriter;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fi.vincit.jmobster.util.TestUtil.getField;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 
 public class BackboneAnnotationProcessorProviderTest {
+
     @Test
     public void testProcessOneAnnotation() {
         ModelWriter writer = mockWriter();
         ValidationAnnotationProcessor processor = mock(ValidationAnnotationProcessor.class);
         final Annotation annotation = mock(Annotation.class);
-        ArgumentMatcher<List<Annotation>> argumentMatcher = new ArgumentMatcher<List<Annotation>>() {
+        ArgumentMatcher<ModelField> argumentMatcher = new ArgumentMatcher<ModelField>() {
             @Override
             public boolean matches( Object argument ) {
-                List<Annotation> la = (List)argument;
+                ModelField field = (ModelField)argument;
+                List<Annotation> la = ((ModelField) argument).getAnnotations();
                 return la.get(0) == annotation;
             }
         };
@@ -30,9 +35,9 @@ public class BackboneAnnotationProcessorProviderTest {
 
         List<Annotation> annotationsToTest = new ArrayList<Annotation>();
         annotationsToTest.add( annotation );
-        dapp.writeValidatorsForField( annotationsToTest, writer );
+        dapp.writeValidatorsForField( getField(annotationsToTest), writer );
 
-        verify(processor, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
+        verify(processor, times(1)).writeValidatorsToStream(any(ModelField.class), eq(writer));
     }
 
     @Test
@@ -42,9 +47,9 @@ public class BackboneAnnotationProcessorProviderTest {
         ValidationAnnotationProcessor processor = mockProcessor("number", annotationsToTest);
         BackboneFieldAnnotationWriter dapp = new BackboneFieldAnnotationWriter(processor);
 
-        dapp.writeValidatorsForField( annotationsToTest, writer );
+        dapp.writeValidatorsForField( getField(annotationsToTest), writer );
 
-        verify(processor, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
+        verify(processor, times(1)).writeValidatorsToStream(any(ModelField.class), eq(writer));
         verify(writer).write( eq( "number" ) );
     }
 
@@ -57,10 +62,10 @@ public class BackboneAnnotationProcessorProviderTest {
 
         BackboneFieldAnnotationWriter dapp = new BackboneFieldAnnotationWriter(processor1, processor2);
 
-        dapp.writeValidatorsForField( annotationsToTest, writer );
+        dapp.writeValidatorsForField( getField(annotationsToTest), writer );
 
-        verify(processor1, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
-        verify(processor2, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
+        verify(processor1, times(1)).writeValidatorsToStream(any(ModelField.class), eq(writer));
+        verify(processor2, times(1)).writeValidatorsToStream(any(ModelField.class), eq(writer));
         verify(writer, times(1)).write(eq("number"));
     }
 
@@ -73,10 +78,10 @@ public class BackboneAnnotationProcessorProviderTest {
 
         BackboneFieldAnnotationWriter dapp = new BackboneFieldAnnotationWriter(processor1, processor2);
 
-        dapp.writeValidatorsForField( annotationsToTest, writer );
+        dapp.writeValidatorsForField( getField(annotationsToTest), writer );
 
-        verify(processor1, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
-        verify(processor2, times(1)).writeValidatorsToStream(any(List.class), eq(writer));
+        verify(processor1, times(1)).writeValidatorsToStream(any(ModelField.class), eq(writer));
+        verify(processor2, times(1)).writeValidatorsToStream(any(ModelField.class), eq(writer));
         verify(writer, times(1)).write(eq("date"));
     }
 
@@ -93,10 +98,11 @@ public class BackboneAnnotationProcessorProviderTest {
         }
         final int annotationInList = annotations.size();
         final Annotation annotation = mock(Annotation.class);
-        ArgumentMatcher<List<Annotation>> argumentMatcher = new ArgumentMatcher<List<Annotation>>() {
+        ArgumentMatcher<ModelField> argumentMatcher = new ArgumentMatcher<ModelField>() {
             @Override
             public boolean matches( Object argument ) {
-                List<Annotation> la = (List)argument;
+                ModelField field = (ModelField)argument;
+                List<Annotation> la = field.getAnnotations();
                 return la.get(annotationInList) == annotation;
             }
         };

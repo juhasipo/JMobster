@@ -20,6 +20,7 @@ import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
+import fi.vincit.jmobster.processor.model.ModelField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,9 +59,11 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
     }
 
     @Override
-    public void writeValidation( final List<Annotation> validationAnnotations, final JavaScriptWriter writer ) {
-        List<Annotation> filteredAnnotations = filterByGroupRules(validationAnnotations);
-        fieldAnnotationWriter.writeValidatorsForField( filteredAnnotations, writer );
+    public void writeValidation( final ModelField field, final JavaScriptWriter writer ) {
+        List<Annotation> filteredAnnotations = filterByGroupRules(field.getAnnotations());
+        ModelField filteredField = new ModelField(field.getField(), filteredAnnotations);
+        filteredField.setDefaultValue(field.getDefaultValue());
+        fieldAnnotationWriter.writeValidatorsForField( filteredField, writer );
     }
 
     /**

@@ -15,6 +15,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ModelWriter;
 
 import java.lang.annotation.Annotation;
@@ -30,7 +31,7 @@ public interface ValidationAnnotationProcessor {
      * Writes the given annotation to model writer
      * @param writer Model writer
      */
-    void writeValidatorsToStream( List<Annotation> annotations, ModelWriter writer );
+    void writeValidatorsToStream( ModelField field, ModelWriter writer );
 
     /**
      * Checks that the existing field type is valid. If no
@@ -69,11 +70,11 @@ public interface ValidationAnnotationProcessor {
 
     /**
      * Checks if the processor can be used to process annotations
-     * in the given list of annotations
-     * @param annotations Annotation set to check against to
+     * in the given field
+     * @param field Field set to check against to
      * @return True if the processor can be used to process the annotations.
      */
-    boolean canProcess( List<Annotation> annotations );
+    boolean canProcess( ModelField field );
 
     /**
      * Returns the class (annotation class) for which this acts as

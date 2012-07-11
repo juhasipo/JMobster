@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
 import fi.vincit.jmobster.processor.defaults.BaseFieldAnnotationWriter;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.*;
+import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
 import org.slf4j.Logger;
@@ -62,17 +63,17 @@ public class BackboneFieldAnnotationWriter extends BaseFieldAnnotationWriter {
     }
 
     @Override
-    public void writeValidatorsForField( final List<Annotation> annotations, final ModelWriter writer ) {
-        writeTypeForField( annotations, writer );
+    public void writeValidatorsForField( final ModelField field, final ModelWriter writer ) {
+        writeTypeForField( field, writer );
 
         // First find processors that actually do somethings so that we can
         // add commas to right places in the item processor
-        List<ValidationAnnotationProcessor> processorsToUse = filterProcessorsToUse( annotations );
+        List<ValidationAnnotationProcessor> processorsToUse = filterProcessorsToUse( field );
 
         ItemProcessor<ValidationAnnotationProcessor> processor = new ItemProcessor<ValidationAnnotationProcessor>() {
             @Override
             protected void process( ValidationAnnotationProcessor processor, boolean isLast ) {
-                processor.writeValidatorsToStream( annotations, writer );
+                processor.writeValidatorsToStream( field, writer );
                 writer.writeLine("", ANNOTATION_SEPARATOR, !isLast);
             }
         };
@@ -81,12 +82,12 @@ public class BackboneFieldAnnotationWriter extends BaseFieldAnnotationWriter {
 
     /**
      * Write type information for field
-     * @param annotations Annotations for the field
+     * @param field Field to write
      * @param writer Model writer
      */
-    private void writeTypeForField( List<Annotation> annotations, ModelWriter writer ) {
+    private void writeTypeForField( ModelField field, ModelWriter writer ) {
         for( ValidationAnnotationProcessor processor : annotationProcessors ) {
-            if( processor.canProcess(annotations) ) {
+            if( processor.canProcess(field) ) {
                 writeTypeForAnnotation( processor, writer );
             }
         }

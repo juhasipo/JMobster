@@ -71,7 +71,7 @@ public class BackboneValidationSectionWriter {
             @Override
             protected void process( ModelField field, boolean isLastItem ) {
                 writer.writeKey(field.getField().getName()).startBlock();
-                annotationProcessor.writeValidation(field.getAnnotations(), writer);
+                annotationProcessor.writeValidation(field, writer);
                 writer.endBlock(isLastItem);
             }
         };

@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.model.ModelField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,14 +79,14 @@ public abstract class BaseFieldAnnotationWriter implements FieldAnnotationWriter
 
     /**
      * Filter the annotations for which a suitable processor is found.
-     * @param annotations All annotations
+     * @param field Field with all annotations
      * @return List of annotations that are used for generating validators
      */
-    protected List<ValidationAnnotationProcessor> filterProcessorsToUse( List<Annotation> annotations ) {
+    protected List<ValidationAnnotationProcessor> filterProcessorsToUse( ModelField field ) {
         List<ValidationAnnotationProcessor> processorsToUse =
-                new ArrayList<ValidationAnnotationProcessor>(annotations.size());
+                new ArrayList<ValidationAnnotationProcessor>(field.getAnnotations().size());
         for( ValidationAnnotationProcessor processor : annotationProcessors ) {
-            if( processor.canProcess(annotations) ) {
+            if( processor.canProcess(field) ) {
                 processorsToUse.add( processor );
             }
         }

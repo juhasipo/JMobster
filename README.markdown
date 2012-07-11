@@ -174,25 +174,25 @@ field annotation writing locic.
 As an example, here is the _writeValidatorsForField_ method from Backbone implementation:
 
     @Override
-    public void writeValidatorsForField( final List<Annotation> annotations, final ModelWriter writer ) {
-        writeTypeForField( annotations, writer );
+    public void writeValidatorsForField( final ModelField field, final ModelWriter writer ) {
+        writeTypeForField( field, writer );
 
         // First find processors that actually do somethings so that we can
         // add commas to right places in the item processor
-        List<ValidationAnnotationProcessor> processorsToUse = filterProcessorsToUse( annotations );
+        List<ValidationAnnotationProcessor> processorsToUse = filterProcessorsToUse( field );
 
         ItemProcessor<ValidationAnnotationProcessor> processor = new ItemProcessor<ValidationAnnotationProcessor>() {
             @Override
             protected void process( ValidationAnnotationProcessor processor, boolean isLast ) {
-                processor.writeValidatorsToStream( annotations, writer );
+                processor.writeValidatorsToStream( field, writer );
                 writer.writeLine("", ANNOTATION_SEPARATOR, !isLast);
             }
         };
         processor.process( processorsToUse );
     }
 
-Basically it takes the annotations to write for a field and model writer. Then it first writes type information
-that some of the Backbone.Validation validator require and then it writes the validators themselves using
+Basically it takes the model field to write and model writer. Then it first writes type information
+that some of the Backbone.Validation validators require and then it writes the validators themselves using
 validation annotation processors.
 
 ### Field Value Converters

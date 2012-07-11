@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor;
 */
 
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
+import fi.vincit.jmobster.processor.model.ModelField;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -26,8 +27,8 @@ import java.util.List;
 public interface AnnotationProcessor {
     /**
      * Writes validation annotations to the given writer
-     * @param validationAnnotations List of annotations
+     * @param field Field containing the annotations
      * @param writer Model writer
      */
-    void writeValidation( List<Annotation> validationAnnotations, JavaScriptWriter writer );
+    void writeValidation( ModelField field, JavaScriptWriter writer );
 }

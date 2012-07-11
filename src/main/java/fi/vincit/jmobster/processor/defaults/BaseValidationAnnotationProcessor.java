@@ -16,11 +16,14 @@ package fi.vincit.jmobster.processor.defaults;
 */
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import fi.vincit.jmobster.exception.InvalidType;
 import fi.vincit.jmobster.processor.ValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.CombinationManager;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.OptionalTypes;
@@ -79,6 +82,7 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
     private CombinationManager combinationManager;
     private HashMap<Class, Annotation> annotationBag;
     private Class baseValidatorForClass;
+    private ModelField field;
 
     /**
      * Constructs base validator processor which isn't used for writing
@@ -205,28 +209,32 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
     }
 
     @Override
-    public boolean canProcess( List<Annotation> annotations ) {
-        return combinationManager.matches( annotations );
+    public boolean canProcess( ModelField field ) {
+        return combinationManager.matches( field.getAnnotations() );
     }
 
     /**
      * Prepares the processor for writing. Initializes the
      * annotations the processor uses so that they can be found via
      * {@link BaseValidationAnnotationProcessor#findAnnotation(Class)}.
-     * @param annotations Annotations for a field.
+     * @param field Field with filtered annotations(only annotations that are validators)
      */
-    private void prepareForWrite(List<Annotation> annotations) {
-        annotationBag = new HashMap<Class, Annotation>();
-        for( Annotation annotation : annotations ) {
-            if( combinationManager.containsClass( annotation.annotationType() ) ) {
-                annotationBag.put( annotation.annotationType(), annotation );
+    private void prepareForWrite(ModelField field) {
+        this.annotationBag = new HashMap<Class, Annotation>();
+        List<Annotation> annotationsForField = new ArrayList<Annotation>(field.getAnnotations().size());
+        for( Annotation annotation : field.getAnnotations() ) {
+            if( this.combinationManager.containsClass( annotation.annotationType() ) ) {
+                annotationsForField.add(annotation);
+                this.annotationBag.put( annotation.annotationType(), annotation );
             }
         }
+        this.field = new ModelField(field.getField(), annotationsForField);
+        this.field.setDefaultValue(field.getDefaultValue());
     }
 
     @Override
-    public void writeValidatorsToStream( List<Annotation> annotations, ModelWriter writer ) {
-        prepareForWrite(annotations);
+    public void writeValidatorsToStream( ModelField field, ModelWriter writer ) {
+        prepareForWrite(field);
         writeValidatorsToStreamInternal(writer);
         finishWrite();
     }
@@ -274,6 +282,30 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
         } else {
             throw new RuntimeException("Annotation of type " + clazz.getName() + " not found");
         }
+    }
+
+    /**
+     * Returns the Java reflection field object
+     * @return Java reflection field object
+     */
+    protected Field getField() {
+        return field.getField();
+    }
+
+    /**
+     * Returns the field default value as String
+     * @return Field default value as String
+     */
+    protected String getFieldDefaultValue() {
+        return field.getDefaultValue();
+    }
+
+    /**
+     * Returns the field type
+     * @return Field type
+     */
+    protected Class getFieldType() {
+        return field.getField().getType();
     }
 
 

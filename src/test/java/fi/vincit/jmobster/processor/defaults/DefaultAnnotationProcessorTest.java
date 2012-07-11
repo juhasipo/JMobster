@@ -22,6 +22,7 @@ import fi.vincit.jmobster.processor.frameworks.backbone.annotation.MinAnnotation
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.PatternAnnotationProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.annotation.SizeAnnotationProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
+import fi.vincit.jmobster.processor.model.ModelField;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
@@ -33,11 +34,15 @@ import javax.validation.constraints.Size;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.*;
 
+import static fi.vincit.jmobster.util.TestUtil.getField;
 import static fi.vincit.jmobster.util.TestUtil.listFromObjects;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
+
 
 public class DefaultAnnotationProcessorTest {
 
@@ -64,7 +69,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
-        dap.writeValidation((List)listFromObjects(), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects()), modelWriter);
         verify(app).writeValidatorsForField( matchAnnotationList(), eq( modelWriter ) );
     }
 
@@ -73,7 +78,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
-        dap.writeValidation((List)listFromObjects( minAnnotation ), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects( minAnnotation )), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation ), eq( modelWriter ) );
     }
@@ -83,7 +88,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
-        dap.writeValidation((List)listFromObjects( minAnnotation, maxAnnotation, sizeAnnotation ), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects( minAnnotation, maxAnnotation, sizeAnnotation )), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation, maxAnnotation, sizeAnnotation ), eq( modelWriter ) );
     }
@@ -93,7 +98,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app);
 
-        dap.writeValidation((List)listFromObjects( minAnnotation, sizeAnnotationWithoutProcessor, maxAnnotation ), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects( minAnnotation, sizeAnnotationWithoutProcessor, maxAnnotation )), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation, maxAnnotation ), eq( modelWriter ) );
     }
@@ -104,7 +109,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.ANY_OF_REQUIRED, TestGroup1.class, TestGroup2.class);
 
-        dap.writeValidation((List)listFromObjects(minAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects(minAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation)), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation ), eq( modelWriter ) );
     }
@@ -114,7 +119,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class, TestGroup2.class);
 
-        dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation)), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( patternWithTwoGroupsAnnotation ), eq( modelWriter ) );
     }
@@ -124,7 +129,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class, TestGroup2.class);
 
-        dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation)), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( patternWithTwoGroupsAnnotation ), eq( modelWriter ) );
     }
@@ -136,7 +141,7 @@ public class DefaultAnnotationProcessorTest {
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.ANY_OF_REQUIRED, TestGroup1.class, TestGroup2.class);
         dap.setIncludeValidationsWithoutGroup(true);
 
-        dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation)), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation ), eq( modelWriter ) );
     }
@@ -147,7 +152,7 @@ public class DefaultAnnotationProcessorTest {
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class, TestGroup2.class);
         dap.setIncludeValidationsWithoutGroup(true);
 
-        dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation)), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation ), eq( modelWriter ) );
     }
@@ -157,7 +162,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class, TestGroup2.class, TestGroup3.class);
 
-        dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation)), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList(), eq( modelWriter ) );
     }
@@ -167,7 +172,7 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.EXACTLY_REQUIRED, TestGroup1.class);
 
-        dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation)), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( sizeWithOneGroupAnnotation ), eq( modelWriter ) );
     }
@@ -177,23 +182,28 @@ public class DefaultAnnotationProcessorTest {
         FieldAnnotationWriter app = mockAnnotationProcessorProvider();
         DefaultAnnotationProcessor dap = new DefaultAnnotationProcessor(app, GroupMode.AT_LEAST_REQUIRED, TestGroup1.class);
 
-        dap.writeValidation((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation), modelWriter);
+        dap.writeValidation(getField((List)listFromObjects(minAnnotation, sizeAnnotation, patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation)), modelWriter);
 
         verify(app).writeValidatorsForField( matchAnnotationList( patternWithTwoGroupsAnnotation, sizeWithOneGroupAnnotation ), eq( modelWriter ) );
     }
 
-    private List<Annotation> matchAnnotationList( Annotation... annotationsToFind ) {
+    private ModelField matchAnnotationList( Annotation... annotationsToFind ) {
         final Set<Annotation> annotationsToFindSet = new HashSet<Annotation>();
         for( Annotation a : annotationsToFind ) {
             annotationsToFindSet.add( a );
         }
 
-        ArgumentMatcher<List<Annotation>> argumentMatcher = new ArgumentMatcher<List<Annotation>>() {
+        ArgumentMatcher<ModelField> argumentMatcher = new ArgumentMatcher<ModelField>() {
             @Override
             public boolean matches( Object argument ) {
-                List<Annotation> annotationsArg = (List)argument;
-                return annotationsToFindSet.containsAll(annotationsArg)
-                        && annotationsArg.size() == annotationsToFindSet.size();
+                ModelField field = (ModelField)argument;
+                List<Annotation> annotationsArg = field.getAnnotations();
+
+                assertEquals("Test value", field.getDefaultValue());
+                assertEquals(annotationsToFindSet.size(), annotationsArg.size());
+                assertTrue("", annotationsToFindSet.containsAll(annotationsArg));
+
+                return true;
             }
         };
         return argThat(argumentMatcher);
