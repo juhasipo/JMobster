@@ -121,7 +121,7 @@ member variable.
 
 In addition to scanning modes, there are extra settings that determine what kind of fields are included. The current
 options are to toggle static and/or final fields. Final field mode affects both scanning modes, but static field mode
-only works with _DIRECT\_FIELD\_ACCESS mode. By default final fields are included but static fields are not.
+only works with _DIRECT\_FIELD\_ACCESS_ mode. By default final fields are included but static fields are not.
 
 ### Classes and Default Values
 
