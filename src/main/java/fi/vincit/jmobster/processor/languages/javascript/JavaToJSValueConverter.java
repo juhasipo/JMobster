@@ -30,12 +30,16 @@ import java.util.Map;
  */
 public class JavaToJSValueConverter extends BaseValueConverterManager {
 
+    public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
+
     /**
      * Creates new Java to JavaScript value converter with
      * the given converter mode.
      * @param converterMode Converter mode to use
+     * @param enumMode Enum mode to use
+     * @param dateTimePattern Date time pattern to use
      */
-    public JavaToJSValueConverter(ConverterMode converterMode) {
+    public JavaToJSValueConverter(ConverterMode converterMode, EnumConverter.EnumMode enumMode, String dateTimePattern) {
         super(converterMode, "null");
 
         addConverter( new BooleanConverter(), Boolean.class, boolean.class );
@@ -46,9 +50,9 @@ public class JavaToJSValueConverter extends BaseValueConverterManager {
         addConverter( new FloatConverter(), Float.class, float.class );
         addConverter( new CollectionConverter( this ), Collection.class );
         addConverter( new MapConverter( this ), Map.class );
-        addConverter( new EnumConverter(), Enum.class );
+        addConverter( new EnumConverter( enumMode ), Enum.class );
         addConverter( new ArrayConverter( this ), Array.class );
-        addConverter( new DateTimeConverter("yyyy-MM-dd'T'HH:mm:ssZ"), Date.class);
+        addConverter( new DateTimeConverter(dateTimePattern), Date.class);
     }
 
     /**
@@ -56,7 +60,7 @@ public class JavaToJSValueConverter extends BaseValueConverterManager {
      * ALLOW_NULL converter mode
      */
     public JavaToJSValueConverter() {
-        this(ConverterMode.ALLOW_NULL);
+        this(ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, DEFAULT_DATE_TIME_PATTERN );
     }
 
 }

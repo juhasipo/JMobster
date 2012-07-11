@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.languages.javascript;
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
@@ -37,9 +38,11 @@ public class JavaToJSValueConverterTest {
     Standard Java data types
      */
 
+    // Boolean
+
     @Test
     public void testBooleanValue() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         boolean value = true;
         String result = valueConverter.convert( boolean.class, value );
         assertEquals( "true", result );
@@ -47,7 +50,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testBooleanObject() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Boolean value = true;
         String result = valueConverter.convert( Boolean.class, value );
         assertEquals( "true", result );
@@ -55,7 +58,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullBooleanObject() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Boolean value = null;
         String result = valueConverter.convert( Boolean.class, value );
         assertEquals( "null", result );
@@ -63,15 +66,17 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullBooleanObjectAsDefault() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Boolean value = null;
         String result = valueConverter.convert( Boolean.class, value );
         assertEquals( "false", result );
     }
 
+    // Integer
+
     @Test
     public void testIntegerValue() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         int value = 10;
         String result = valueConverter.convert( int.class, value );
         assertEquals( "10", result );
@@ -79,7 +84,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testIntegerObject() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Integer value = 10;
         String result = valueConverter.convert( value.getClass(), value );
         assertEquals( "10", result );
@@ -87,7 +92,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullIntegerObject() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Integer value = null;
         String result = valueConverter.convert( Integer.class, value );
         assertEquals( NULL_STRING, result );
@@ -95,15 +100,17 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullIntegerObjectAsDefault() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Integer value = null;
         String result = valueConverter.convert( Integer.class, value );
         assertEquals( "0", result );
     }
 
+    // Long
+
     @Test
     public void testLongObject() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Long value = 50000000000L;
         String result = valueConverter.convert( value.getClass(), value );
         assertEquals( "50000000000", result );
@@ -111,7 +118,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullLongObject() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Long value = null;
         String result = valueConverter.convert( Long.class, value );
         assertEquals( NULL_STRING, result );
@@ -119,15 +126,17 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullLongObjectAsDefault() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         Long value = null;
         String result = valueConverter.convert( Long.class, value );
         assertEquals( "0", result );
     }
 
+    // String
+
     @Test
     public void testString() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         String value = "test string value";
         String result = valueConverter.convert( String.class, value );
         assertEquals( "\"test string value\"", result );
@@ -135,7 +144,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullString() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         String value = null;
         String result = valueConverter.convert( String.class, value );
         assertEquals( "null", result );
@@ -143,11 +152,13 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullStringAsDefault() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         String value = null;
         String result = valueConverter.convert( String.class, value );
         assertEquals( "\"\"", result );
     }
+
+    // Enum
 
     public enum TestEnum {
         ENUM_1,
@@ -155,12 +166,22 @@ public class JavaToJSValueConverterTest {
     }
 
     @Test
-    public void testEnum() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+    public void testEnumString() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         String result = valueConverter.convert( TestEnum.class, TestEnum.ENUM_2 );
         assertEquals( "\"ENUM_2\"", result );
     }
+
+    @Test
+    public void testEnumOrdinal() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.ORDINAL, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
+
+        String result = valueConverter.convert( TestEnum.class, TestEnum.ENUM_2 );
+        assertEquals( "1", result );
+    }
+
+    // ToString
 
     public static class TestClassWithToString {
         private String value;
@@ -171,26 +192,28 @@ public class JavaToJSValueConverterTest {
 
         @Override
         public String toString() {
-            return value;
+            return value + ".toString";
         }
     }
 
     @Test
     public void testObjectToString() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         TestClassWithToString value = new TestClassWithToString( "Test value" );
         String result = valueConverter.convert( value.getClass(), value );
-        assertEquals( "Test value", result );
+        assertEquals( "Test value.toString", result );
     }
 
     /*
     Other standard Java data types
      */
 
+    // BigInteger
+
     @Test
     public void testBigInteger() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         BigInteger value = new BigInteger( "1024" );
         String result = valueConverter.convert( value.getClass(), value );
@@ -199,17 +222,18 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testBigDecimal() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         BigDecimal value = new BigDecimal( "123456789.123456789" );
         String result = valueConverter.convert( value.getClass(), value );
         assertEquals( "123456789.123456789", result );
     }
 
+    // Date
 
     @Test
     public void testDate() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         Date now = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -222,9 +246,80 @@ public class JavaToJSValueConverterTest {
     Sets, lists and arrays
      */
 
+    // Array
+
+    @Test
+    public void testIntValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
+
+        int[] array = { 1, 19, 100 };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[1, 19, 100]", result );
+    }
+
+    @Test
+    public void testLongValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
+
+        long[] array = { 1L, 19L, 100L };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[1, 19, 100]", result );
+    }
+
+    @Test
+    public void testFloatValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
+
+        float[] array = { 1f, 19.0f, 0.1f };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[1.0, 19.0, 0.1]", result );
+    }
+
+    @Test
+    public void testDoubleValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
+
+        double[] array = { 1d, 20.0d, 0.2d };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[1.0, 20.0, 0.2]", result );
+    }
+
+    @Test
+    public void testBooleanValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
+
+        boolean[] array = { true, false, false, true };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[true, false, false, true]", result );
+    }
+
+    @Test
+    public void testNullIntArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
+        String result = valueConverter.convert( int[].class, null );
+        assertEquals( "[]", result );
+    }
+
+    @Test
+    public void test2dIntValueArray() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
+
+        int[][] array = { {1, 19, 100}, {2, 29, 200} };
+
+        String result = valueConverter.convert( array.getClass(), array );
+        assertEquals( "[[1, 19, 100], [2, 29, 200]]", result );
+    }
+
+    // List
+
     @Test
     public void testIntegerList() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         List<Integer> list = new ArrayList<Integer>();
         list.add( 1 );
@@ -235,78 +330,9 @@ public class JavaToJSValueConverterTest {
         assertEquals( "[1, 19, 100]", result );
     }
 
-
-    @Test
-    public void testIntValueArray() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
-
-        int[] array = { 1, 19, 100 };
-
-        String result = valueConverter.convert( array.getClass(), array );
-        assertEquals( "[1, 19, 100]", result );
-    }
-
-    @Test
-    public void testLongValueArray() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
-
-        long[] array = { 1L, 19L, 100L };
-
-        String result = valueConverter.convert( array.getClass(), array );
-        assertEquals( "[1, 19, 100]", result );
-    }
-
-    @Test
-    public void testFloatValueArray() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
-
-        float[] array = { 1f, 19.0f, 0.1f };
-
-        String result = valueConverter.convert( array.getClass(), array );
-        assertEquals( "[1.0, 19.0, 0.1]", result );
-    }
-
-    @Test
-    public void testDoubleValueArray() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
-
-        double[] array = { 1d, 20.0d, 0.2d };
-
-        String result = valueConverter.convert( array.getClass(), array );
-        assertEquals( "[1.0, 20.0, 0.2]", result );
-    }
-
-    @Test
-    public void testBooleanValueArray() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
-
-        boolean[] array = { true, false, false, true };
-
-        String result = valueConverter.convert( array.getClass(), array );
-        assertEquals( "[true, false, false, true]", result );
-    }
-
-    @Test
-    public void testNullIntArray() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
-        String result = valueConverter.convert( int[].class, null );
-        assertEquals( "[]", result );
-    }
-
-    @Test
-    public void test2dIntValueArray() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
-
-        int[][] array = { {1, 19, 100}, {2, 29, 200} };
-
-        String result = valueConverter.convert( array.getClass(), array );
-        assertEquals( "[[1, 19, 100], [2, 29, 200]]", result );
-    }
-
-
     @Test
     public void testStringList() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         List<String> list = new ArrayList<String>();
         list.add( "Foo" );
@@ -319,7 +345,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testEmptyList() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         List<String> list = new ArrayList<String>();
 
@@ -329,7 +355,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullList() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         List<String> list = null;
 
@@ -337,9 +363,11 @@ public class JavaToJSValueConverterTest {
         assertEquals( "[]", result );
     }
 
+    // Set
+
     @Test
     public void testStringSet() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         Set<String> set = new TreeSet<String>();
         set.add( "DEF" );
@@ -350,9 +378,11 @@ public class JavaToJSValueConverterTest {
         assertEquals( "[\"ABC\", \"DEF\", \"QWERTY\"]", result );
     }
 
+    // Multi-dimension collections
+
     @Test
     public void test2dStringCollectionOfLists() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         Collection<List<String>> collection = new ArrayList<List<String>>();
         List<String> list1 = new Vector<String>();
@@ -372,7 +402,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void test2dStringCollectionObjects() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         Collection<Object> collection = new ArrayList<Object>();
         List<String> list1 = new Vector<String>();
@@ -387,13 +417,11 @@ public class JavaToJSValueConverterTest {
         assertEquals( "[[\"A1\", \"B1\", \"C1\"], \"Foo\", 42]", result );
     }
 
-    /*
-    Maps
-     */
+    // Map
 
     @Test
     public void testStringStringMap() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         Map<String, String> map = new TreeMap<String, String>();
         map.put("A", "A entry");
@@ -406,7 +434,7 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testStringStringMapWithNullEntry() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         Map<String, String> map = new TreeMap<String, String>();
         map.put("A", "A entry");
@@ -419,13 +447,17 @@ public class JavaToJSValueConverterTest {
 
     @Test
     public void testNullMap() {
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
 
         Map<String, String> map = null;
 
         String result = valueConverter.convert( Map.class, map );
         assertEquals( "{}", result );
     }
+
+    /*
+    Other
+     */
 
     @Test
     public void testIgnoreDefaultValueAllowNull() {
@@ -434,7 +466,7 @@ public class JavaToJSValueConverterTest {
             public Integer id;
         }
 
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         String result = valueConverter.convert(getField( TestClass.class ), new TestClass());
         assertEquals( "null", result );
     }
@@ -446,11 +478,20 @@ public class JavaToJSValueConverterTest {
             public Integer id;
         }
 
-        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT );
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN );
         String result = valueConverter.convert(getField( TestClass.class ), new TestClass());
         assertEquals( "0", result );
     }
 
+    /*
+    Utilities
+     */
+
+    /**
+     * Get first field of the given class
+     * @param clazz Class
+     * @return First field
+     */
     private Field getField(Class clazz) {
         return clazz.getDeclaredFields()[0];
     }

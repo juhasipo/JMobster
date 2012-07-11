@@ -21,4 +21,29 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
  * converter. Enums are considered as Strings in JavaScript.
  */
 public final class EnumConverter extends StringConverter {
+    public static enum EnumMode {
+        STRING,
+        ORDINAL
+    }
+
+    private final EnumMode enumMode;
+
+    public EnumConverter(EnumMode enumMode) {
+        this.enumMode = enumMode;
+    }
+
+    @Override
+    protected String getValueAsString( Object value ) {
+        switch( enumMode ) {
+            case STRING: return super.getValueAsString(value);
+            case ORDINAL: return getEnumOrdinal(value);
+            default:
+                throw new RuntimeException("Invalid enum mode: " + enumMode);
+        }
+    }
+
+    private String getEnumOrdinal( Object value ) {
+        Enum enumValue = (Enum)value;
+        return "" + enumValue.ordinal();
+    }
 }

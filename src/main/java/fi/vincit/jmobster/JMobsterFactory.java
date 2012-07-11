@@ -9,6 +9,7 @@ import fi.vincit.jmobster.processor.languages.javascript.valueconverters.Convert
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
 import fi.vincit.jmobster.util.ModelWriter;
 
 /**
@@ -35,7 +36,10 @@ public class JMobsterFactory {
             ModelProcessor modelProcessor = new BackboneModelProcessor(writer, fieldAnnotationWriter);
             return new DefaultModelGenerator(
                     modelProcessor,
-                    new JavaToJSValueConverter(ConverterMode.NULL_AS_DEFAULT),
+                    new JavaToJSValueConverter(
+                            ConverterMode.NULL_AS_DEFAULT,
+                            EnumConverter.EnumMode.STRING,
+                            JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN),
                     fieldAnnotationWriter );
         } else {
             throw new UnsupportedFramework("Framework " + framework + " not supported");

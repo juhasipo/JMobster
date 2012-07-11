@@ -21,6 +21,7 @@ import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
 import fi.vincit.jmobster.util.ModelWriter;
 import fi.vincit.jmobster.util.RequiredTypes;
 import fi.vincit.jmobster.util.StreamModelWriter;
@@ -111,7 +112,7 @@ public class BackboneConverterTest {
         app.addAnnotationProcessor(new NonBaseAnnotationProcessor());
         DefaultModelGenerator mg = new DefaultModelGenerator(
                 new BackboneModelProcessor(modelWriter, app),
-                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ),
+                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN ),
                 app);
 
         mg.process(TestModel.class);
@@ -184,7 +185,7 @@ public class BackboneConverterTest {
     public void testNoValidationsClass() {
         FieldAnnotationWriter app = new BackboneFieldAnnotationWriter();
         DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter, app),
-                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL ), app);
+                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN ), app);
 
         mg.process(NoValidationsClass.class);
 
