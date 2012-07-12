@@ -18,16 +18,29 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
 /**
  * Converter for Java Enums. Primitive enum types are
  * boxed to Enum objects and converted using this
- * converter. Enums are considered as Strings in JavaScript.
+ * converter.
  */
 public final class EnumConverter extends StringConverter {
+    /**
+     * How enums are converted
+     */
     public static enum EnumMode {
+        /**
+         * Enums are converted to strings. E.g. ENUM1 will be converted to "ENUM1"
+         */
         STRING,
+        /**
+         * Enums are converted to ordinals (starting from zero)
+         */
         ORDINAL
     }
 
     private final EnumMode enumMode;
 
+    /**
+     * Constructs an enum converter.
+     * @param enumMode Enum conversion mode
+     */
     public EnumConverter(EnumMode enumMode) {
         this.enumMode = enumMode;
     }
@@ -42,6 +55,11 @@ public final class EnumConverter extends StringConverter {
         }
     }
 
+    /**
+     * Returns the enum ordinal (first being zero) as string
+     * @param value Value to convert (must be instance of Enum)
+     * @return Enum ordinal as string
+     */
     private String getEnumOrdinal( Object value ) {
         Enum enumValue = (Enum)value;
         return "" + enumValue.ordinal();
