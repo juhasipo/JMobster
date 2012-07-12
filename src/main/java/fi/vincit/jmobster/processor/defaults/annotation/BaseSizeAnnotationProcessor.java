@@ -1,4 +1,5 @@
-package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
+package fi.vincit.jmobster.processor.defaults.annotation;
+
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -13,27 +14,24 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 
-import fi.vincit.jmobster.processor.defaults.annotation.BaseNotNullAnnotationProcessor;
+import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
 import fi.vincit.jmobster.util.RequiredTypes;
-import fi.vincit.jmobster.util.ModelWriter;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.lang.annotation.Annotation;
 
 /**
- * Processor for JSR-303 NotNull validator
+ * Base class for JSR-303 Size annotation. Handles group extraction for the annotation.
  */
-public class NotNullAnnotationProcessor extends BaseNotNullAnnotationProcessor {
-
-    public NotNullAnnotationProcessor() {
-        super( RequiredTypes.get( NotNull.class ) );
-        setBaseValidatorForClass(NotNull.class);
+public abstract class BaseSizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
+    public BaseSizeAnnotationProcessor( RequiredTypes requiredAnnotation ) {
+        super( requiredAnnotation );
     }
 
     @Override
-    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
-        writer.write( "required: true" );
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((Size)annotation).groups();
     }
-
 }

@@ -1,4 +1,5 @@
-package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
+package fi.vincit.jmobster.processor.defaults.annotation;
+
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -13,30 +14,24 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 
-import fi.vincit.jmobster.processor.defaults.annotation.BaseMaxAnnotationProcessor;
+import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
 import fi.vincit.jmobster.util.RequiredTypes;
-import fi.vincit.jmobster.util.ModelWriter;
 
 import javax.validation.constraints.Max;
+import java.lang.annotation.Annotation;
 
 /**
- * Processor for JSR-303 Max validator
+ * Base class for JSR-303 Max annotation. Handles group extraction for the annotation.
  */
-public class MaxAnnotationProcessor extends BaseMaxAnnotationProcessor {
-
-    public MaxAnnotationProcessor() {
-        super( "number", RequiredTypes.get(Max.class) );
-        setBaseValidatorForClass(Max.class);
+public abstract class BaseMaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
+    public BaseMaxAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation ) {
+        super( requiredType, requiredAnnotation );
     }
 
     @Override
-    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
-        if( containsAnnotation(Max.class) ) {
-            Max annotation = findAnnotation(Max.class);
-            writer.write( "max: " ).write( "" + annotation.value() );
-        }
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((Max)annotation).groups();
     }
-
 }

@@ -1,4 +1,5 @@
-package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
+package fi.vincit.jmobster.processor.defaults.annotation;
+
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -13,30 +14,24 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 
-import fi.vincit.jmobster.processor.defaults.annotation.BaseMinAnnotationProcessor;
+import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
 import fi.vincit.jmobster.util.RequiredTypes;
-import fi.vincit.jmobster.util.ModelWriter;
 
 import javax.validation.constraints.Min;
+import java.lang.annotation.Annotation;
 
 /**
- * Processor for JSR-303 Min validator
+ * Base class for JSR-303 Min annotation. Handles group extraction for the annotation.
  */
-public class MinAnnotationProcessor extends BaseMinAnnotationProcessor {
-
-    public MinAnnotationProcessor() {
-        super("number", RequiredTypes.get( Min.class ) );
-        setBaseValidatorForClass(Min.class);
+public abstract class BaseMinAnnotationProcessor extends BaseValidationAnnotationProcessor {
+    public BaseMinAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation ) {
+        super( requiredType, requiredAnnotation );
     }
 
     @Override
-    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
-        if( containsAnnotation(Min.class) ) {
-            Min annotation = findAnnotation(Min.class);
-            writer.write( "min: " ).write( "" + annotation.value() );
-        }
+    public Class[] getGroupsInternal(Annotation annotation) {
+        return ((Min)annotation).groups();
     }
-
 }

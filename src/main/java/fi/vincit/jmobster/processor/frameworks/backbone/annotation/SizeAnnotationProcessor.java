@@ -15,17 +15,16 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.defaults.annotation.BaseSizeAnnotationProcessor;
 import fi.vincit.jmobster.util.RequiredTypes;
 import fi.vincit.jmobster.util.ModelWriter;
 
 import javax.validation.constraints.Size;
-import java.lang.annotation.Annotation;
 
 /**
  * Processor for JSR-303 Size validator
  */
-public class SizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
+public class SizeAnnotationProcessor extends BaseSizeAnnotationProcessor {
 
     public SizeAnnotationProcessor() {
         super( RequiredTypes.get( Size.class ) );
@@ -48,11 +47,6 @@ public class SizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
                 writer.write( "maxlength: " ).write( "" + size.max() );
             }
         }
-    }
-
-    @Override
-    public Class[] getGroupsInternal(Annotation annotation) {
-        return ((Size)annotation).groups();
     }
 
 }

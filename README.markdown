@@ -60,8 +60,6 @@ And give the model class to the generator:
 
     generator.process(UserDto.class);
 
-Note: You can also give multiple classes or an array of classes.
-
 This will write a Backbone.js model file `models.js` to your working
 directory. The default naming strategy will remove Dto suffix from the
 model class name.
@@ -101,6 +99,15 @@ model class name.
             }
         })
     };
+
+You can also give the method more than classes. This can be done just by giving more than one class as parameter (vararg),
+an array of classes or a List of classes.
+
+    generator.process(Model1.class, Model2.class, Model3.class);
+    generator.process(new Class[] {Model1.class, Model2.class, Model3.class});
+    generator.process(classList);
+
+
 
 ### Property Scanning
 
@@ -183,8 +190,8 @@ constructor is used for field default values. If a field shouldn't have a defaul
 value, annotation IgnoreDefaultValue can be used. This can be handy e.g. for
 id values that should not have default value in client side model.
 
-The class fields' visibility doesn't matter and no getters nor setters are required
-in order to JMobster to work.
+**Note:** Nested classes have to be static classes in order to work. This limitation is due to class
+instantion via reflection.
 
 Extending
 ---------

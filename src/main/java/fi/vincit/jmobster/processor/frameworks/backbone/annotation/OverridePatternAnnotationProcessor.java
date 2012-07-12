@@ -17,23 +17,16 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
  */
 
 import fi.vincit.jmobster.annotation.OverridePattern;
-import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.defaults.annotation.BaseOverridePatternAnnotationProcessor;
 import fi.vincit.jmobster.util.ModelWriter;
-
-import java.lang.annotation.Annotation;
 
 /**
  * Base validator processor for {@link OverridePattern} annotation. Only extracts
  * groups and tells other components that OverridePattern is a validation annotation.
  */
-public class OverridePatternAnnotationProcessor extends BaseValidationAnnotationProcessor {
+public class OverridePatternAnnotationProcessor extends BaseOverridePatternAnnotationProcessor {
     public OverridePatternAnnotationProcessor() {
         super( OverridePattern.class );
-    }
-
-    @Override
-    protected Class[] getGroupsInternal( Annotation annotation ) {
-        return ((OverridePattern)annotation).groups();
     }
 
     @Override
