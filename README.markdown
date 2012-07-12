@@ -108,6 +108,38 @@ an array of classes or a List of classes.
     generator.process(classList);
 
 
+### Using Custom Model Generator
+
+To build more customized generator, the generator can be constructed by hand. For this you need:
+ - ModelWriter
+ - FieldAnnotationWriter
+ - ModelProcessor
+ - FieldValueConverter
+ - FieldScanner
+
+Next example shows how to construct a custom model generator for Backbone.js which will write to file "models.js".
+
+    ModelWriter modelWriter = new StreamModelWriter("models.js");
+    FieldAnnotationWriter fieldAnnotationWriter = new BackboneFieldAnnotationWriter();
+    ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, fieldAnnotationWriter);
+
+    FieldValueConverter valueConverter =
+            new JavaToJSValueConverter(
+                    ConverterMode.NULL_AS_DEFAULT,
+                    EnumConverter.EnumMode.STRING,
+                    JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN
+            );
+
+    FieldScanner fieldScanner =
+            new DefaultFieldScanner(
+                    FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS,
+                    valueConverter,
+                    fieldAnnotationWriter
+            );
+
+    // This is the working model generator which takes the classes
+    ModelGenerator generator = DefaultModelGenerator( modelProcessor, fieldScanner );
+
 
 ### Property Scanning
 

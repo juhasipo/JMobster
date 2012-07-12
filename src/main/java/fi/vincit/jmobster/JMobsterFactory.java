@@ -57,7 +57,13 @@ public class JMobsterFactory {
         }
     }
 
-    public static ModelGenerator getInstance(String framework, ModelProvider provider) {
+    /**
+     * Creates a model generator instance for the given framework.
+     * @param framework Framework ID
+     * @param provider Model provider to use
+     * @return Configured model generator
+     * @throws UnsupportedFramework If the framework is not supported
+     */    public static ModelGenerator getInstance(String framework, ModelProvider provider) {
         return getInstance(framework, provider.getModelWriter());
     }
 }

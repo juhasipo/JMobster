@@ -43,8 +43,8 @@ public class CachedModelProvider implements ModelProvider {
     }
 
     private String cachedModel;
-    private ModelWriter modelWriter;
-    private ByteArrayOutputStream bos;
+    private final ModelWriter modelWriter;
+    private final ByteArrayOutputStream bos;
 
     /**
      * Creates new model provider that caches the model output.
