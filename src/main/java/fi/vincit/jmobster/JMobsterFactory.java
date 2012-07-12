@@ -22,6 +22,9 @@ import fi.vincit.jmobster.util.ModelWriter;
  * </p>
  */
 public class JMobsterFactory {
+    private JMobsterFactory() {
+    }
+
     /**
      * Creates a model generator instance for the given framework.
      * @param framework Framework ID

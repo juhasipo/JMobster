@@ -57,7 +57,7 @@ public class BackboneValidationSectionWriter {
      * Sets writer to use
      * @param writer Model writer
      */
-    public void setWriter( ModelWriter writer ) {
+    public final void setWriter( ModelWriter writer ) {
         this.writer = new JavaScriptWriter(writer);
     }
 

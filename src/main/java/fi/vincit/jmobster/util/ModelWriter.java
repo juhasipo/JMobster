@@ -58,7 +58,7 @@ public interface ModelWriter {
      * @param modelStringLine String to write
      * @param separator Optional separator to write
      * @param writeSeparator Should separator be written. Set true if should, set false if not.
-     * @return
+     * @return Writer for chaining calls.
      */
     ModelWriter writeLine( String modelStringLine, String separator, boolean writeSeparator );
 

@@ -23,8 +23,6 @@ import java.util.*;
  * Class manages required and optional class combinations.
  */
 public class CombinationManager {
-    private RequiredTypes requiredTypes;
-    private OptionalTypes optionalTypes;
 
     private Map<Class, Class> requiredClasses;
     private Map<Class, Class> optionalClasses;
@@ -47,15 +45,13 @@ public class CombinationManager {
      * @param optionalTypes Optional types
      */
     public CombinationManager( RequiredTypes requiredTypes, OptionalTypes optionalTypes ) {
-        this.requiredTypes = requiredTypes;
-        this.optionalTypes = optionalTypes;
 
         this.requiredClasses = new HashMap<Class, Class>();
-        for( Class c : this.requiredTypes.getTypes() ) {
+        for( Class c : requiredTypes.getTypes() ) {
             requiredClasses.put( c, c );
         }
         this.optionalClasses = new HashMap<Class, Class>();
-        for( Class c : this.optionalTypes.getTypes() ) {
+        for( Class c : optionalTypes.getTypes() ) {
             optionalClasses.put( c, c );
         }
     }

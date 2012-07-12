@@ -38,6 +38,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
     private static final Logger LOG = LoggerFactory
             .getLogger( DefaultAnnotationProcessor.class );
 
+    private static final Class[] EMPTY_GROUPS = new Class[0];
 
     private FieldAnnotationWriter fieldAnnotationWriter;
     private Class[] groups;
@@ -46,7 +47,7 @@ public class DefaultAnnotationProcessor implements AnnotationProcessor {
 
     public DefaultAnnotationProcessor( FieldAnnotationWriter fieldAnnotationWriter ) {
         this.fieldAnnotationWriter = fieldAnnotationWriter;
-        this.groups = new Class[0];
+        this.groups = EMPTY_GROUPS;
         this.groupMode = GroupMode.ANY_OF_REQUIRED;
         this.includeValidationsWithoutGroup = false;
     }

@@ -78,6 +78,9 @@ import fi.vincit.jmobster.util.RequiredTypes;
  * </p>
  */
 public abstract class BaseValidationAnnotationProcessor implements ValidationAnnotationProcessor {
+
+    private static final Class[] EMPTY_GROUPS = new Class[0];
+
     final private String requiredType;
     private CombinationManager combinationManager;
     private HashMap<Class, Annotation> annotationBag;
@@ -154,7 +157,7 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
      * method will return true.
      * @param baseValidatorForClass Class for which the processor should act as base validator
      */
-    protected void setBaseValidatorForClass( Class baseValidatorForClass ) {
+    protected final void setBaseValidatorForClass( Class baseValidatorForClass ) {
         this.baseValidatorForClass = baseValidatorForClass;
     }
 
@@ -190,7 +193,7 @@ public abstract class BaseValidationAnnotationProcessor implements ValidationAnn
     @Override
     public Class[] getGroups(Annotation annotation) {
         Class[] groups = getGroupsInternal(annotation);
-        return groups != null ? groups : new Class[0];
+        return groups != null ? groups : EMPTY_GROUPS;
     }
 
     /**
