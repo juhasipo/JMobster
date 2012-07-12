@@ -21,10 +21,7 @@ import fi.vincit.jmobster.processor.defaults.CachedModelProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -83,12 +80,30 @@ public class TestMain {
 
     }
 
+    public static class DirectFieldAccessDemo {
+        @Min(1)
+        @Max(10)
+        private int value = 4;
+    }
+
+    public static class BeanPropertyDemo {
+        @Pattern(regexp = "[\\w]*")
+        private String firstName = "John";
+        @Pattern(regexp = "[\\w]*")
+        private String lastName = "Doe";
+
+        @Size(min = 0, max = 255)
+        public String getFullName() {
+            return firstName + " " + lastName;
+        }
+    }
+
     public static void main(String[] args) throws IOException, InterruptedException {
         //ModelWriter modelWriter = new StreamModelWriter("models.js");
         CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY);
         ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", provider);
 
-        generator.process( MyModelDto.class );
+        generator.process( BeanPropertyDemo.class );
 
         System.out.println(provider.getModel());
     }
