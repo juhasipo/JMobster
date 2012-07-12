@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults.annotation;
  */
 
 import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.util.OptionalTypes;
 import fi.vincit.jmobster.util.RequiredTypes;
 
 import javax.validation.constraints.Max;
@@ -26,8 +27,28 @@ import java.lang.annotation.Annotation;
  * Base class for JSR-303 Max annotation. Handles group extraction for the annotation.
  */
 public abstract class BaseMaxAnnotationProcessor extends BaseValidationAnnotationProcessor {
-    public BaseMaxAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation ) {
+    protected BaseMaxAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation ) {
         super( requiredType, requiredAnnotation );
+    }
+
+    protected BaseMaxAnnotationProcessor( RequiredTypes requiredAnnotation ) {
+        super( requiredAnnotation );
+    }
+
+    protected BaseMaxAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredType, requiredAnnotation, optionalAnnotations );
+    }
+
+    protected BaseMaxAnnotationProcessor( RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredAnnotation, optionalAnnotations );
+    }
+
+    protected BaseMaxAnnotationProcessor( Class baseValidatorForClass ) {
+        super( baseValidatorForClass );
+    }
+
+    protected BaseMaxAnnotationProcessor( String requiredType, Class baseValidatorForClass ) {
+        super( requiredType, baseValidatorForClass );
     }
 
     @Override

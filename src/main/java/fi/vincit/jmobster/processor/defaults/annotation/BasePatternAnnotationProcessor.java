@@ -27,8 +27,28 @@ import java.lang.annotation.Annotation;
  * Base class for JSR-303 Pattern annotation. Handles group extraction for the annotation.
  */
 public abstract class BasePatternAnnotationProcessor extends BaseValidationAnnotationProcessor {
-    public BasePatternAnnotationProcessor( RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+    protected BasePatternAnnotationProcessor( RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
         super( requiredAnnotation, optionalAnnotations );
+    }
+
+    protected BasePatternAnnotationProcessor( Class baseValidatorForClass ) {
+        super( baseValidatorForClass );
+    }
+
+    protected BasePatternAnnotationProcessor( String requiredType, Class baseValidatorForClass ) {
+        super( requiredType, baseValidatorForClass );
+    }
+
+    protected BasePatternAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation ) {
+        super( requiredType, requiredAnnotation );
+    }
+
+    protected BasePatternAnnotationProcessor( RequiredTypes requiredAnnotation ) {
+        super( requiredAnnotation );
+    }
+
+    protected BasePatternAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredType, requiredAnnotation, optionalAnnotations );
     }
 
     @Override

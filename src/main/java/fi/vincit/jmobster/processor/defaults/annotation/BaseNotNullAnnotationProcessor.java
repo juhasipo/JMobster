@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults.annotation;
  */
 
 import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.util.OptionalTypes;
 import fi.vincit.jmobster.util.RequiredTypes;
 
 import javax.validation.constraints.NotNull;
@@ -26,8 +27,28 @@ import java.lang.annotation.Annotation;
  * Base class for JSR-303 NotNull annotation. Handles group extraction for the annotation.
  */
 public abstract class BaseNotNullAnnotationProcessor extends BaseValidationAnnotationProcessor {
-    public BaseNotNullAnnotationProcessor( RequiredTypes requiredAnnotation ) {
+    protected BaseNotNullAnnotationProcessor( RequiredTypes requiredAnnotation ) {
         super( requiredAnnotation );
+    }
+
+    protected BaseNotNullAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredType, requiredAnnotation, optionalAnnotations );
+    }
+
+    protected BaseNotNullAnnotationProcessor( RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredAnnotation, optionalAnnotations );
+    }
+
+    protected BaseNotNullAnnotationProcessor( Class baseValidatorForClass ) {
+        super( baseValidatorForClass );
+    }
+
+    protected BaseNotNullAnnotationProcessor( String requiredType, Class baseValidatorForClass ) {
+        super( requiredType, baseValidatorForClass );
+    }
+
+    protected BaseNotNullAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation ) {
+        super( requiredType, requiredAnnotation );
     }
 
     @Override

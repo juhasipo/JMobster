@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults.annotation;
  */
 
 import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.util.OptionalTypes;
 import fi.vincit.jmobster.util.RequiredTypes;
 
 import javax.validation.constraints.Size;
@@ -26,8 +27,28 @@ import java.lang.annotation.Annotation;
  * Base class for JSR-303 Size annotation. Handles group extraction for the annotation.
  */
 public abstract class BaseSizeAnnotationProcessor extends BaseValidationAnnotationProcessor {
-    public BaseSizeAnnotationProcessor( RequiredTypes requiredAnnotation ) {
+    protected BaseSizeAnnotationProcessor( RequiredTypes requiredAnnotation ) {
         super( requiredAnnotation );
+    }
+
+    protected BaseSizeAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredType, requiredAnnotation, optionalAnnotations );
+    }
+
+    protected BaseSizeAnnotationProcessor( RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredAnnotation, optionalAnnotations );
+    }
+
+    protected BaseSizeAnnotationProcessor( Class baseValidatorForClass ) {
+        super( baseValidatorForClass );
+    }
+
+    protected BaseSizeAnnotationProcessor( String requiredType, Class baseValidatorForClass ) {
+        super( requiredType, baseValidatorForClass );
+    }
+
+    protected BaseSizeAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation ) {
+        super( requiredType, requiredAnnotation );
     }
 
     @Override

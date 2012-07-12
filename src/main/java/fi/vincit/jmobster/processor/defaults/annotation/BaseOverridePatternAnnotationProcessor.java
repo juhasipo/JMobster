@@ -18,6 +18,8 @@ package fi.vincit.jmobster.processor.defaults.annotation;
 
 import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.util.OptionalTypes;
+import fi.vincit.jmobster.util.RequiredTypes;
 
 import java.lang.annotation.Annotation;
 
@@ -25,8 +27,28 @@ import java.lang.annotation.Annotation;
  * Base class for OverridePattern annotation. Handles group extraction for the annotation.
  */
 public abstract class BaseOverridePatternAnnotationProcessor extends BaseValidationAnnotationProcessor {
-    public BaseOverridePatternAnnotationProcessor( Class baseValidatorForClass ) {
+    protected BaseOverridePatternAnnotationProcessor( Class baseValidatorForClass ) {
         super( baseValidatorForClass );
+    }
+
+    protected BaseOverridePatternAnnotationProcessor( String requiredType, Class baseValidatorForClass ) {
+        super( requiredType, baseValidatorForClass );
+    }
+
+    protected BaseOverridePatternAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation ) {
+        super( requiredType, requiredAnnotation );
+    }
+
+    protected BaseOverridePatternAnnotationProcessor( RequiredTypes requiredAnnotation ) {
+        super( requiredAnnotation );
+    }
+
+    protected BaseOverridePatternAnnotationProcessor( String requiredType, RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredType, requiredAnnotation, optionalAnnotations );
+    }
+
+    protected BaseOverridePatternAnnotationProcessor( RequiredTypes requiredAnnotation, OptionalTypes optionalAnnotations ) {
+        super( requiredAnnotation, optionalAnnotations );
     }
 
     @Override
