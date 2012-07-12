@@ -20,13 +20,35 @@ import fi.vincit.jmobster.processor.model.ModelField;
 
 import java.util.List;
 
+/**
+ * Interface for field scanners. Field scanners searches for
+ * model fields from classes.
+ */
 public interface FieldScanner {
+    /**
+     * Scan the given class for fields.
+     * @param clazz Class to scan
+     * @param fieldScanMode Field scanning mode
+     * @return List of found model fields. Empty list if nothing found.
+     */
     List<ModelField> getFields( Class clazz, FieldScanMode fieldScanMode );
 
+    /**
+     * Sets whether static member variables should be included as model fields.
+     * Note: This doesn't work for getters in {@link FieldScanMode#BEAN_PROPERTY} mode.
+     * @param allowStaticFields True if should, false if not
+     */
     void setAllowStaticFields( boolean allowStaticFields );
 
+    /**
+     * Sets whether final fields/getters should be included as model fields.
+     * @param allowFinalFields True if should, false if not.
+     */
     void setAllowFinalFields( boolean allowFinalFields );
 
+    /**
+     * How the fields are scanned from a class
+     */
     public static enum FieldScanMode {
         /**
          * Use getters. In this mode static fields cannot be used.
