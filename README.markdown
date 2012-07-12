@@ -238,7 +238,9 @@ method is implemented. In this method, the processed annotation can be aquired w
     }
 
 In order to work well with JSR-303 validations, annotation processors have to implement group extracting.
-This will basically take the groups parameter data and returns it the caller.
+This will basically take the groups parameter data and returns it the caller. For standard validation annotations
+these group extration methods are already implemented in _fi.vincit.jmobster.processor.defaults.annotation_ package
+base classes.
 
     @Override
     public Class[] getGroupsInternal(Annotation annotation) {
