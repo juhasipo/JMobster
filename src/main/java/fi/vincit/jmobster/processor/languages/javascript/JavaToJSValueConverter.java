@@ -30,7 +30,10 @@ import java.util.Map;
  */
 public class JavaToJSValueConverter extends BaseValueConverterManager {
 
-    public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
+    /**
+     * ISO-8601 Date time pattern with time zone
+     */
+    public static final String ISO_8601_DATE_TIME_TZ_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     /**
      * Creates new Java to JavaScript value converter with
@@ -60,7 +63,7 @@ public class JavaToJSValueConverter extends BaseValueConverterManager {
      * ALLOW_NULL converter mode
      */
     public JavaToJSValueConverter() {
-        this(ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, DEFAULT_DATE_TIME_PATTERN );
+        this(ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, ISO_8601_DATE_TIME_TZ_PATTERN );
     }
 
 }

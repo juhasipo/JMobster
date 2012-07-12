@@ -117,7 +117,7 @@ public class BackboneConverterTest {
         FieldValueConverter valueConverter =
                 new JavaToJSValueConverter( ConverterMode.ALLOW_NULL,
                         EnumConverter.EnumMode.STRING,
-                        JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN
+                        JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
                 );
 
         ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, app);
@@ -193,7 +193,7 @@ public class BackboneConverterTest {
     public void testNoValidationsClass() {
         FieldAnnotationWriter annotationWriter = new BackboneFieldAnnotationWriter();
         ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, annotationWriter);
-        FieldValueConverter valueConverter = new JavaToJSValueConverter(ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN);
+        FieldValueConverter valueConverter = new JavaToJSValueConverter(ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
         FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, annotationWriter);
         DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner);
 

@@ -41,7 +41,7 @@ public class JMobsterFactory {
                     new JavaToJSValueConverter(
                             ConverterMode.NULL_AS_DEFAULT,
                             EnumConverter.EnumMode.STRING,
-                            JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN
+                            JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
                     );
 
             FieldScanner fieldScanner =
