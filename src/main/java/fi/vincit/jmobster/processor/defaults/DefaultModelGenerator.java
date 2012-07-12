@@ -38,15 +38,13 @@ public class DefaultModelGenerator implements ModelGenerator {
     /**
      * Creates new DefaultModelGenerator
      * @param modelProcessor Model processor to use
-     * @param fieldDefaultValueProcessor Field default value processor to use
-     * @param fieldAnnotationWriter Annotation processor provider to use
+     * @param fieldScanner Field scanner to use
      */
     public DefaultModelGenerator(
             ModelProcessor modelProcessor,
-            FieldValueConverter fieldDefaultValueProcessor,
-            FieldAnnotationWriter fieldAnnotationWriter ) {
+            FieldScanner fieldScanner ) {
         this.modelProcessor = modelProcessor;
-        this.fieldScanner = new DefaultFieldScanner(fieldDefaultValueProcessor, fieldAnnotationWriter );
+        this.fieldScanner = fieldScanner;
     }
 
     @Override
@@ -91,7 +89,7 @@ public class DefaultModelGenerator implements ModelGenerator {
     private List<Model> getModels( Class[] classes ) {
         List<Model> models = new ArrayList<Model>();
         for( Class clazz : classes ) {
-            createModelAndAddToList( clazz, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, models );
+            createModelAndAddToList( clazz, models );
         }
         return models;
     }
@@ -104,7 +102,7 @@ public class DefaultModelGenerator implements ModelGenerator {
     private List<Model> getModels( List<Class> classes ) {
         List<Model> models = new ArrayList<Model>();
         for( Class clazz : classes ) {
-            createModelAndAddToList( clazz, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, models );
+            createModelAndAddToList( clazz, models );
         }
         return models;
     }
@@ -114,8 +112,8 @@ public class DefaultModelGenerator implements ModelGenerator {
      * @param clazz Class for which model should be created
      * @param models Models list
      */
-    private void createModelAndAddToList( Class clazz, FieldScanner.FieldScanMode fieldScanMode, List<Model> models ) {
-        Model model = new Model(clazz, fieldScanner.getFields(clazz, fieldScanMode));
+    private void createModelAndAddToList( Class clazz, List<Model> models ) {
+        Model model = new Model(clazz, fieldScanner.getFields(clazz));
         checkAndSetValidationState( model );
         models.add( model );
     }

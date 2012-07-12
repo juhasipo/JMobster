@@ -41,29 +41,31 @@ import java.util.List;
 public class DefaultFieldScanner implements FieldScanner {
     private static final Logger LOG = LoggerFactory.getLogger( DefaultFieldScanner.class );
 
-    private FieldValueConverter fieldDefaultValueProcessor;
-    private FieldAnnotationWriter fieldAnnotationWriter;
+    private final FieldValueConverter fieldDefaultValueProcessor;
+    private final FieldAnnotationWriter fieldAnnotationWriter;
     private boolean allowStaticFields;
     private boolean allowFinalFields;
+    private final FieldScanMode scanMode;
 
     /**
      * Creates new field scanner
      * @param fieldDefaultValueProcessor Field default value processor
      * @param fieldAnnotationWriter Annotation processor provider
      */
-    public DefaultFieldScanner( FieldValueConverter fieldDefaultValueProcessor, FieldAnnotationWriter fieldAnnotationWriter ) {
+    public DefaultFieldScanner( FieldScanMode scanMode, FieldValueConverter fieldDefaultValueProcessor, FieldAnnotationWriter fieldAnnotationWriter ) {
         this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
         this.fieldAnnotationWriter = fieldAnnotationWriter;
-        allowStaticFields = false;
-        allowFinalFields = true;
+        this.allowStaticFields = false;
+        this.allowFinalFields = true;
+        this.scanMode = scanMode;
     }
 
     @Override
-    public List<ModelField> getFields( Class clazz, FieldScanMode fieldScanMode ) {
-        switch( fieldScanMode ) {
+    public List<ModelField> getFields( Class clazz ) {
+        switch( scanMode ) {
             case BEAN_PROPERTY: return getFieldsByGetters(clazz);
             case DIRECT_FIELD_ACCESS: return getFieldsByDirectFieldAccess( clazz );
-            default: throw new RuntimeException("Invalid field scan mode: " + fieldScanMode);
+            default: throw new RuntimeException("Invalid field scan mode: " + scanMode);
         }
     }
 

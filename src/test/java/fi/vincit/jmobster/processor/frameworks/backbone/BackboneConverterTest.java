@@ -17,7 +17,11 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.FieldAnnotationWriter;
+import fi.vincit.jmobster.processor.FieldScanner;
+import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.BaseValidationAnnotationProcessor;
+import fi.vincit.jmobster.processor.defaults.DefaultFieldScanner;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
@@ -110,11 +114,15 @@ public class BackboneConverterTest {
     public void testSimpleClass() {
         FieldAnnotationWriter app = new BackboneFieldAnnotationWriter();
         app.addAnnotationProcessor(new NonBaseAnnotationProcessor());
-        DefaultModelGenerator mg = new DefaultModelGenerator(
-                new BackboneModelProcessor(modelWriter, app),
-                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN ),
-                app);
+        FieldValueConverter valueConverter =
+                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL,
+                        EnumConverter.EnumMode.STRING,
+                        JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN
+                );
 
+        ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, app);
+        FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, app);
+        DefaultModelGenerator mg = new DefaultModelGenerator( modelProcessor, fieldScanner );
         mg.process(TestModel.class);
 
         String referenceModel = "/*\n" +
@@ -183,11 +191,13 @@ public class BackboneConverterTest {
 
     @Test
     public void testNoValidationsClass() {
-        FieldAnnotationWriter app = new BackboneFieldAnnotationWriter();
-        DefaultModelGenerator mg = new DefaultModelGenerator(new BackboneModelProcessor(modelWriter, app),
-                new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN ), app);
+        FieldAnnotationWriter annotationWriter = new BackboneFieldAnnotationWriter();
+        ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, annotationWriter);
+        FieldValueConverter valueConverter = new JavaToJSValueConverter(ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.DEFAULT_DATE_TIME_PATTERN);
+        FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, annotationWriter);
+        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner);
 
-        mg.process(NoValidationsClass.class);
+        modelGenerator.process( NoValidationsClass.class );
 
         String referenceModel = "/*\n" +
                 " * Auto-generated file\n" +

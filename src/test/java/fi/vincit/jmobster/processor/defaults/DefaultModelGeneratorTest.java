@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults;
 */
 
 import fi.vincit.jmobster.processor.FieldAnnotationWriter;
+import fi.vincit.jmobster.processor.FieldScanner;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.FieldValueConverter;
@@ -40,37 +41,39 @@ public class DefaultModelGeneratorTest {
 
     @Test
     public void testProcessWithoutClasses() throws Exception {
-        ModelProcessor mp = mock(ModelProcessor.class);
-        FieldValueConverter fvc = mock(FieldValueConverter.class);
-        FieldAnnotationWriter app = mock(FieldAnnotationWriter.class);
-        DefaultModelGenerator dmg = new DefaultModelGenerator(mp, fvc, app);
+        ModelProcessor modelProcessor = mock(ModelProcessor.class);
+        FieldValueConverter valueConverter = mock(FieldValueConverter.class);
+        FieldAnnotationWriter annotationWriter = mock(FieldAnnotationWriter.class);
+        FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, annotationWriter);
+        DefaultModelGenerator dmg = new DefaultModelGenerator(modelProcessor, fieldScanner);
 
         dmg.process();
 
-        InOrder mpInOrder = inOrder(mp);
-        mpInOrder.verify(mp, times(1)).startProcessing();
-        mpInOrder.verify(mp, times(1)).endProcessing();
-        verify(mp, never()).processModel(any(Model.class), anyBoolean());
+        InOrder mpInOrder = inOrder(modelProcessor);
+        mpInOrder.verify(modelProcessor, times(1)).startProcessing();
+        mpInOrder.verify(modelProcessor, times(1)).endProcessing();
+        verify(modelProcessor, never()).processModel(any(Model.class), anyBoolean());
     }
 
     @Test
     public void testProcessVarArgs() throws Exception {
-        ModelProcessor mp = mock(ModelProcessor.class);
-        FieldValueConverter fvc = mock(FieldValueConverter.class);
-        FieldAnnotationWriter app = mock(FieldAnnotationWriter.class);
-        DefaultModelGenerator dmg = new DefaultModelGenerator(mp, fvc, app);
+        ModelProcessor modelProcessor = mock(ModelProcessor.class);
+        FieldValueConverter valueConverter = mock(FieldValueConverter.class);
+        FieldAnnotationWriter annotationWriter = mock(FieldAnnotationWriter.class);
+        FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, annotationWriter);
+        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner);
 
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;
-        dmg.process(testClass, testClass2);
+        modelGenerator.process( testClass, testClass2 );
 
-        InOrder mpInOrder = inOrder(mp);
+        InOrder mpInOrder = inOrder(modelProcessor);
         ArgumentCaptor<Model> firstModelCaptor = ArgumentCaptor.forClass(Model.class);
         ArgumentCaptor<Model> secondModelCaptor = ArgumentCaptor.forClass(Model.class);
-        mpInOrder.verify(mp, times(1)).startProcessing();
-        mpInOrder.verify(mp, times(1)).processModel(firstModelCaptor.capture(), eq(false));
-        mpInOrder.verify(mp, times(1)).processModel(secondModelCaptor.capture(), eq(true));
-        mpInOrder.verify(mp, times(1)).endProcessing();
+        mpInOrder.verify(modelProcessor, times(1)).startProcessing();
+        mpInOrder.verify(modelProcessor, times(1)).processModel(firstModelCaptor.capture(), eq(false));
+        mpInOrder.verify(modelProcessor, times(1)).processModel(secondModelCaptor.capture(), eq(true));
+        mpInOrder.verify(modelProcessor, times(1)).endProcessing();
 
         assertEquals(TestClass1.class.getName(), firstModelCaptor.getValue().getModelClass().getName());
         assertEquals(TestClass2.class.getName(), secondModelCaptor.getValue().getModelClass().getName());
@@ -78,23 +81,24 @@ public class DefaultModelGeneratorTest {
 
     @Test
     public void testProcessWithList() throws Exception {
-        ModelProcessor mp = mock(ModelProcessor.class);
-        FieldValueConverter fvc = mock(FieldValueConverter.class);
-        FieldAnnotationWriter app = mock(FieldAnnotationWriter.class);
-        DefaultModelGenerator dmg = new DefaultModelGenerator(mp, fvc, app);
+        ModelProcessor modelProcessor = mock(ModelProcessor.class);
+        FieldValueConverter valueConverter = mock(FieldValueConverter.class);
+        FieldAnnotationWriter annotationWriter = mock(FieldAnnotationWriter.class);
+        FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, annotationWriter);
+        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner);
 
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;
         List<Class> testClasses = TestUtil.listFromObjects(testClass, testClass2);
-        dmg.process(testClasses);
+        modelGenerator.process( testClasses );
 
-        InOrder mpInOrder = inOrder(mp);
+        InOrder mpInOrder = inOrder(modelProcessor);
         ArgumentCaptor<Model> firstModelCaptor = ArgumentCaptor.forClass(Model.class);
         ArgumentCaptor<Model> secondModelCaptor = ArgumentCaptor.forClass(Model.class);
-        mpInOrder.verify(mp, times(1)).startProcessing();
-        mpInOrder.verify(mp, times(1)).processModel(firstModelCaptor.capture(), eq(false));
-        mpInOrder.verify(mp, times(1)).processModel(secondModelCaptor.capture(), eq(true));
-        mpInOrder.verify(mp, times(1)).endProcessing();
+        mpInOrder.verify(modelProcessor, times(1)).startProcessing();
+        mpInOrder.verify(modelProcessor, times(1)).processModel(firstModelCaptor.capture(), eq(false));
+        mpInOrder.verify(modelProcessor, times(1)).processModel(secondModelCaptor.capture(), eq(true));
+        mpInOrder.verify(modelProcessor, times(1)).endProcessing();
 
         assertEquals(TestClass1.class.getName(), firstModelCaptor.getValue().getModelClass().getName());
         assertEquals(TestClass2.class.getName(), secondModelCaptor.getValue().getModelClass().getName());

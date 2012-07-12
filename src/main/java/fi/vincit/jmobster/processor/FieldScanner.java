@@ -28,10 +28,9 @@ public interface FieldScanner {
     /**
      * Scan the given class for fields.
      * @param clazz Class to scan
-     * @param fieldScanMode Field scanning mode
      * @return List of found model fields. Empty list if nothing found.
      */
-    List<ModelField> getFields( Class clazz, FieldScanMode fieldScanMode );
+    List<ModelField> getFields( Class clazz );
 
     /**
      * Sets whether static member variables should be included as model fields.
