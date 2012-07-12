@@ -14,16 +14,52 @@ package fi.vincit.jmobster.util;/*
  * limitations under the License.
 */
 
+/**
+ * Interface for writing model to a stream, file or other
+ * output. Contains simple write and indentation methods. Write methods contain
+ * simple write string and write line methods, but also methods that can be used
+ * to write e.g. comma separated lists. When used with {@link ItemProcessor} the
+ * final comma can be easily left out after the last item in the list.
+ */
 public interface ModelWriter {
-    @SuppressWarnings( "EmptyMethod" )
+    /**
+     * Open the writer
+     */
     void open();
 
+    /**
+     * Write the given string
+     * @param modelString String to write
+     * @return Writer for chaining calls.
+     */
     ModelWriter write( String modelString );
 
+    /**
+     * Write the given string. If writeSeparator is set to true, also writes the separator
+     * right after the modelString.
+     * @param modelString String to write
+     * @param separator Optional separator to write
+     * @param writeSeparator Should separator be written. Set true if should, set false if not.
+     * @return Writer for chaining calls.
+     */
     ModelWriter write( String modelString, String separator, boolean writeSeparator );
 
+    /**
+     * Write the given string and start new line
+     * @param modelStringLine String to write
+     * @return Writer for chaining calls.
+     */
     ModelWriter writeLine( String modelStringLine );
 
+    /**
+     * Write the given string and start new line. If writeSeparator is set to true, also writes the
+     * separator right after the modelString. Line change will be performed after modelString and if
+     * separator is written, it will be performed after separator.
+     * @param modelStringLine String to write
+     * @param separator Optional separator to write
+     * @param writeSeparator Should separator be written. Set true if should, set false if not.
+     * @return
+     */
     ModelWriter writeLine( String modelStringLine, String separator, boolean writeSeparator );
 
     /**

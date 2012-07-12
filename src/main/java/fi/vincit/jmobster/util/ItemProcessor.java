@@ -18,9 +18,18 @@ package fi.vincit.jmobster.util;
 import java.util.List;
 
 /**
- * Utility class for iterating over list. The reason this class
+ * <p>
+ *     Utility class for iterating over list. The reason this class
  * exists is that the process method tells which processed item
  * is the last item in the list.
+ * </p>
+ *
+ * <p>
+ *     Combine with {@link ModelWriter}'s {@link ModelWriter#write(String, String, boolean)} and
+ * {@link ModelWriter#writeLine(String, String, boolean)} to write lists with last separator
+ * char left out.
+ * </p>
+ *
  * @param <T> Type of objects in the item list
  */
 public abstract class ItemProcessor<T> {
@@ -53,7 +62,8 @@ public abstract class ItemProcessor<T> {
     }
 
     /**
-     * Method that processes the items.
+     * Method that processes the items. Implement item processing
+     * logic here.
      * @param item Item to process
      * @param isLast Is the given item last item in the list
      */
