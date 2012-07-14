@@ -122,6 +122,7 @@ To build more customized generator, the generator can be constructed by hand. Fo
  - ModelProcessor
  - FieldValueConverter
  - FieldScanner
+
 Most of the time for the last one, the default implementation can be used. This will simplify the initialization
 because the _JMobsterFactory_'s _getInstance()_ method can be used.
 
