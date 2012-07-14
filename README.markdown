@@ -239,7 +239,7 @@ id values that should not have default value in client side model.
 
 If a class doesn't have a special converter class, it should have a toString() method. This
 method is used when converting values that don't have a converter. ToString() method implementation
-should return the value as it should be in the target model file. I.e. if it's reprsented in string form, the
+should return the value as it should be in the target model file. I.e. if it's represented in string form, the
 return value should be quoted appropriately.
 
 **Note:** Nested classes have to be static classes in order to work. This limitation is due to class
@@ -267,12 +267,12 @@ Extending
 ### Model Processors
 
 Model processors are the basis for creating support for new framework. Model processors takes
-models one by one and writes them to a stream (or any other output). Processor implemetations are
+models one by one and writes them to a stream (or any other output). Processor implementations are
 given to Model generator which calls appropriate methods of the processor.
 
 Model processor only acts as the basis for the model generation and it depends on other classes. For example
 the default Backbone.js implementation uses classes its own ValidationSectionWriter and DefaultValueSectionWriter
-for producing corrsponding sections to the output stream. In addition these classes rely heavily on annotation
+for producing corresponding sections to the output stream. In addition these classes rely heavily on annotation
 processors and field annotation writer as well as the value converters.
 
 ### Annotation Processors
@@ -311,7 +311,7 @@ method is implemented. In this method, the processed annotation can be aquired w
 
 In order to work well with JSR-303 validations, annotation processors have to implement group extracting.
 This will basically take the groups parameter data and returns it the caller. For standard validation annotations
-these group extration methods are already implemented in _fi.vincit.jmobster.processor.defaults.annotation_ package
+these group extraction methods are already implemented in _fi.vincit.jmobster.processor.defaults.annotation_ package
 base classes.
 
 ```java
@@ -323,10 +323,10 @@ base classes.
 
 ### Field Annotation Writer
 
-Field annotation writers are a storage for annotarion processors. This annotation write is configured to contain all
+Field annotation writers are a storage for annotation processors. This annotation write is configured to contain all
 required annotation processors and it contains the logic for generating the validation for the target
-framework. The base implementation contains the processor mangament, but the extended class has to implement the
-field annotation writing locic.
+framework. The base implementation contains the processor management, but the extended class has to implement the
+field annotation writing logic.
 
 As an example, here is the _writeValidatorsForField_ method from Backbone implementation:
 
