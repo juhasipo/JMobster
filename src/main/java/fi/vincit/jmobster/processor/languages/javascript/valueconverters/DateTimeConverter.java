@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
  * limitations under the License.
  */
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -25,28 +26,28 @@ import java.util.Locale;
  */
 public class DateTimeConverter extends StringConverter {
 
-    private SimpleDateFormat simpleDateFormat;
+    private DateFormat dateFormat;
 
     public DateTimeConverter(String pattern) {
-        simpleDateFormat = new SimpleDateFormat(pattern);
+        dateFormat = new SimpleDateFormat(pattern);
     }
 
     public DateTimeConverter(String pattern, Locale locale) {
-        simpleDateFormat = new SimpleDateFormat(pattern, locale);
+        dateFormat = new SimpleDateFormat(pattern, locale);
     }
 
-    public DateTimeConverter( SimpleDateFormat simpleDateFormat ) {
-        this.simpleDateFormat = simpleDateFormat;
+    public DateTimeConverter( DateFormat dateFormat ) {
+        this.dateFormat = dateFormat;
     }
 
     @Override
     protected String getTypeDefaultValue() {
         Date defaultDate = new Date(0);
-        return super.getValueAsString(simpleDateFormat.format(defaultDate));
+        return super.getValueAsString( dateFormat.format( defaultDate ) );
     }
 
     @Override
     protected String getValueAsString( Object value ) {
-        return super.getValueAsString(simpleDateFormat.format((Date)value));
+        return super.getValueAsString( dateFormat.format( (Date)value ) );
     }
 }
