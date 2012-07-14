@@ -73,6 +73,13 @@ public class TestUtil {
         return arrayList;
     }
 
+    /**
+     * Generates a Model field with the given annotations. Model field
+     * default value will be "Test value" and the type of the model field
+     * will be int.class.
+     * @param annotations Annotations
+     * @return Model field with given annotations
+     */
     public static ModelField getField(List<Annotation> annotations) {
         class T {int field;}
         ModelField field = new ModelField(T.class.getDeclaredFields()[0], annotations);
@@ -80,4 +87,12 @@ public class TestUtil {
         return field;
     }
 
+    /**
+     * Adds quotation marks around the given string
+     * @param stringToQuote String to quote
+     * @return Given string with quotation marks around it
+     */
+    public static String quoteString(String stringToQuote) {
+        return "\"" + stringToQuote + "\"";
+    }
 }

@@ -26,6 +26,7 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static fi.vincit.jmobster.util.TestUtil.quoteString;
 import static org.junit.Assert.assertEquals;
 
 public class JavaToJSValueConverterTest {
@@ -137,7 +138,7 @@ public class JavaToJSValueConverterTest {
         JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
         String value = "test string value";
         String result = valueConverter.convert( String.class, value );
-        assertEquals( "\"test string value\"", result );
+        assertEquals( quoteString("test string value"), result );
     }
 
     @Test
@@ -168,7 +169,7 @@ public class JavaToJSValueConverterTest {
         JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
 
         String result = valueConverter.convert( TestEnum.class, TestEnum.ENUM_2 );
-        assertEquals( "\"ENUM_2\"", result );
+        assertEquals( quoteString("ENUM_2"), result );
     }
 
     @Test
@@ -236,7 +237,7 @@ public class JavaToJSValueConverterTest {
         Date now = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         String result = valueConverter.convert( now.getClass(), now );
-        assertEquals( formatter.format(now), result );
+        assertEquals( quoteString( formatter.format( now ) ), result );
     }
 
 

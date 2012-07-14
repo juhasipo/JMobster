@@ -20,7 +20,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class DateTimeConverter extends BaseValueConverter {
+/**
+ * Converter for Java Date objects. Converts values to quoted strings.
+ */
+public class DateTimeConverter extends StringConverter {
 
     private SimpleDateFormat simpleDateFormat;
 
@@ -39,11 +42,11 @@ public class DateTimeConverter extends BaseValueConverter {
     @Override
     protected String getTypeDefaultValue() {
         Date defaultDate = new Date(0);
-        return simpleDateFormat.format(defaultDate);
+        return super.getValueAsString(simpleDateFormat.format(defaultDate));
     }
 
     @Override
     protected String getValueAsString( Object value ) {
-        return simpleDateFormat.format((Date)value);
+        return super.getValueAsString(simpleDateFormat.format((Date)value));
     }
 }

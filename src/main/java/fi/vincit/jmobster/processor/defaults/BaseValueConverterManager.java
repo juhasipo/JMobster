@@ -50,11 +50,11 @@ public abstract class BaseValueConverterManager implements FieldValueConverter {
     }
 
     /**
-     * Add new converter to manager.
+     * Adds new converter to manager.
      * @param valueConverter Value converter
      * @param classesToConvert Classes for which the converter is used
      */
-    protected void addConverter( ValueConverter valueConverter, Class... classesToConvert ) {
+    public void addConverter( ValueConverter valueConverter, Class... classesToConvert ) {
         for( Class clazz: classesToConvert ) {
             converters.put( clazz, valueConverter );
         }
