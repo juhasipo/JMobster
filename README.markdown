@@ -30,36 +30,36 @@ Usage
 
 Basic usage is simple. Create Java classes, use JSR-303 annotations and give the classes to the generator.
 ```java
-    public class UserDto {
-        @NotNull
-        @Size(max = 255)
-        private String fullname;
+public class UserDto {
+    @NotNull
+    @Size(max = 255)
+    private String fullname;
 
-        @NotNull
-        @Size(max = 255)
-        private String username;
+    @NotNull
+    @Size(max = 255)
+    private String username;
 
-        @NotNull
-        @Min(1900)
-        private Integer birthYear = 1900;
+    @NotNull
+    @Min(1900)
+    private Integer birthYear = 1900;
 
-        @Size(min = 1)
-        private String[] roles = { "VIEW_PAGES", "EDIT_OWN_PAGES" };
+    @Size(min = 1)
+    private String[] roles = { "VIEW_PAGES", "EDIT_OWN_PAGES" };
 
-        // Getters and setters omitted
-    }
+    // Getters and setters omitted
+}
 ```
 And now you can create a model generator instance:
 
 ```java
-    ModelWriter modelWriter = new StreamModelWriter("models.js");
-    ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", modelWriter);
+ModelWriter modelWriter = new StreamModelWriter("models.js");
+ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", modelWriter);
 ```
 
 And give the model class to the generator:
 
 ```java
-    generator.process(UserDto.class);
+generator.process(UserDto.class);
 ```
 
 This will write a Backbone.js model file `models.js` to your working
@@ -68,50 +68,50 @@ model class name.
 
 
 ```javascript
-    /*
-     * Auto-generated file
-     */
-    var Models = {
-        User: Backbone.Model.extend({
-            defaults: function() {
-                return {
-                    fullName: "",
-                    username: "",
-                    birthYear: 1900,
-                    roles: ["VIEW_PAGES", "EDIT_OWN_PAGES"]
-                }
-            },
-            validate: {
-                fullname: {
-                    required: true,
-                    minlength: 0,
-                    maxlength: 255
-                },
-                username: {
-                    required: true,
-                    minlength: 0,
-                    maxlength: 255
-                },
-                birthYear: {
-                    required: true,
-                    type: "number",
-                    min: 1900
-                },
-                roles: {
-                    minlength: 1
-                }
+/*
+ * Auto-generated file
+ */
+var Models = {
+    User: Backbone.Model.extend({
+        defaults: function() {
+            return {
+                fullName: "",
+                username: "",
+                birthYear: 1900,
+                roles: ["VIEW_PAGES", "EDIT_OWN_PAGES"]
             }
-        })
-    };
+        },
+        validate: {
+            fullname: {
+                required: true,
+                minlength: 0,
+                maxlength: 255
+            },
+            username: {
+                required: true,
+                minlength: 0,
+                maxlength: 255
+            },
+            birthYear: {
+                required: true,
+                type: "number",
+                min: 1900
+            },
+            roles: {
+                minlength: 1
+            }
+        }
+    })
+};
 ```
 
 You can also give the method more than classes. This can be done just by giving more than one class as parameter (vararg),
 an array of classes or a List of classes.
 
 ```java
-    generator.process(Model1.class, Model2.class, Model3.class);
-    generator.process(new Class[] {Model1.class, Model2.class, Model3.class});
-    generator.process(classList);
+generator.process(Model1.class, Model2.class, Model3.class);
+generator.process(new Class[] {Model1.class, Model2.class, Model3.class});
+generator.process(classList);
 ```
 
 ### Using Custom Model Generator
@@ -126,26 +126,26 @@ To build more customized generator, the generator can be constructed by hand. Fo
 Next example shows how to construct a custom model generator for Backbone.js which will write to file "models.js".
 
 ```java
-    ModelWriter modelWriter = new StreamModelWriter("models.js");
-    FieldAnnotationWriter fieldAnnotationWriter = new BackboneFieldAnnotationWriter();
-    ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, fieldAnnotationWriter);
+ModelWriter modelWriter = new StreamModelWriter("models.js");
+FieldAnnotationWriter fieldAnnotationWriter = new BackboneFieldAnnotationWriter();
+ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, fieldAnnotationWriter);
 
-    FieldValueConverter valueConverter =
-            new JavaToJSValueConverter(
-                    ConverterMode.NULL_AS_DEFAULT,
-                    EnumConverter.EnumMode.STRING,
-                    JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
-            );
+FieldValueConverter valueConverter =
+        new JavaToJSValueConverter(
+                ConverterMode.NULL_AS_DEFAULT,
+                EnumConverter.EnumMode.STRING,
+                JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
+        );
 
-    FieldScanner fieldScanner =
-            new DefaultFieldScanner(
-                    FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS,
-                    valueConverter,
-                    fieldAnnotationWriter
-            );
+FieldScanner fieldScanner =
+        new DefaultFieldScanner(
+                FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS,
+                valueConverter,
+                fieldAnnotationWriter
+        );
 
-    // This is the working model generator which takes the classes
-    ModelGenerator generator = DefaultModelGenerator( modelProcessor, fieldScanner );
+// This is the working model generator which takes the classes
+ModelGenerator generator = DefaultModelGenerator( modelProcessor, fieldScanner );
 ```
 
 ### Property Scanning
@@ -164,59 +164,59 @@ getters won't show up in the model.
 In the next example a simple class is generated by using the different field scanning modes.
 
 ```java
-    public class ScanningModeDemo {
-        @Pattern(regexp = "[\\w]*")
-        private String firstName = "John";
-        @Pattern(regexp = "[\\w]*")
-        private String lastName = "Doe";
+public class ScanningModeDemo {
+    @Pattern(regexp = "[\\w]*")
+    private String firstName = "John";
+    @Pattern(regexp = "[\\w]*")
+    private String lastName = "Doe";
 
-        @Size(min = 0, max = 255)
-        public String getFullName() {
-            return firstName + " " + lastName;
-        }
+    @Size(min = 0, max = 255)
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
+}
 ```
 
 In _DIRECT\_FIELD\_ACCESS_ this will result:
 
 ```javascript
-    var Models = {
-        ScanningModeDemo: Backbone.Model.extend({
-            defaults: function() {
-                return {
-                    firstName: "John",
-                    lastName: "Doe"
-                }
-            },
-            validate: {
-                firstName: {
-                    pattern: /[\w]*/
-                },
-                lastName: {
-                    pattern: /[\w]*/
-                }
+var Models = {
+    ScanningModeDemo: Backbone.Model.extend({
+        defaults: function() {
+            return {
+                firstName: "John",
+                lastName: "Doe"
             }
-        })
-    };
+        },
+        validate: {
+            firstName: {
+                pattern: /[\w]*/
+            },
+            lastName: {
+                pattern: /[\w]*/
+            }
+        }
+    })
+};
 ```
 
 In _BEAN\_PROPERTY_ mode this will result:
 
 ```javascript
-    var Models = {
-        ScanningModeDemo: Backbone.Model.extend({
-            defaults: function() {
-                return {
-                    fullName: "John Doe"
-                }
-            },
-            validate: {
-                fullName: {
-                    maxlength: 255
-                }
+var Models = {
+    ScanningModeDemo: Backbone.Model.extend({
+        defaults: function() {
+            return {
+                fullName: "John Doe"
             }
-        })
-    };
+        },
+        validate: {
+            fullName: {
+                maxlength: 255
+            }
+        }
+    })
+};
 ```
 
 In both modes the _IgnoreField_ annotation will ignore the field and it won't be used in the generated model. For
@@ -290,23 +290,23 @@ extended class has to define required annotations for the processor. This can be
 the appropriate super class constructor. In addition a required type and optional annotations can be given.
 
 ```java
-    public MaxAnnotationProcessor() {
-        super( "number", RequiredTypes.get(Max.class) );
-        setBaseValidatorForClass(Max.class);
-    }
+public MaxAnnotationProcessor() {
+    super( "number", RequiredTypes.get(Max.class) );
+    setBaseValidatorForClass(Max.class);
+}
 ```
 
 Secondly the processor has to able to write itself to model writer. For this, the _writeValidatorsToStreamInternal_
 method is implemented. In this method, the processed annotation can be aquired with _findAnnotation_ method. For example:
 
 ```java
-    @Override
-    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
-        if( containsAnnotation(Max.class) ) {
-            Max annotation = findAnnotation(Max.class);
-            writer.write( "max: " ).write( "" + annotation.value() );
-        }
+@Override
+public void writeValidatorsToStreamInternal( ModelWriter writer ) {
+    if( containsAnnotation(Max.class) ) {
+        Max annotation = findAnnotation(Max.class);
+        writer.write( "max: " ).write( "" + annotation.value() );
     }
+}
 ```
 
 In order to work well with JSR-303 validations, annotation processors have to implement group extracting.
@@ -315,10 +315,10 @@ these group extraction methods are already implemented in _fi.vincit.jmobster.pr
 base classes.
 
 ```java
-    @Override
-    public Class[] getGroupsInternal(Annotation annotation) {
-        return ((Max)annotation).groups();
-    }
+@Override
+public Class[] getGroupsInternal(Annotation annotation) {
+    return ((Max)annotation).groups();
+}
 ```
 
 ### Field Annotation Writer
@@ -331,23 +331,23 @@ field annotation writing logic.
 As an example, here is the _writeValidatorsForField_ method from Backbone implementation:
 
 ```java
-    @Override
-    public void writeValidatorsForField( final ModelField field, final ModelWriter writer ) {
-        writeTypeForField( field, writer );
+@Override
+public void writeValidatorsForField( final ModelField field, final ModelWriter writer ) {
+    writeTypeForField( field, writer );
 
-        // First find processors that actually do somethings so that we can
-        // add commas to right places in the item processor
-        List<ValidationAnnotationProcessor> processorsToUse = filterProcessorsToUse( field );
+    // First find processors that actually do somethings so that we can
+    // add commas to right places in the item processor
+    List<ValidationAnnotationProcessor> processorsToUse = filterProcessorsToUse( field );
 
-        ItemProcessor<ValidationAnnotationProcessor> processor = new ItemProcessor<ValidationAnnotationProcessor>() {
-            @Override
-            protected void process( ValidationAnnotationProcessor processor, boolean isLast ) {
-                processor.writeValidatorsToStream( field, writer );
-                writer.writeLine("", ANNOTATION_SEPARATOR, !isLast);
-            }
-        };
-        processor.process( processorsToUse );
-    }
+    ItemProcessor<ValidationAnnotationProcessor> processor = new ItemProcessor<ValidationAnnotationProcessor>() {
+        @Override
+        protected void process( ValidationAnnotationProcessor processor, boolean isLast ) {
+            processor.writeValidatorsToStream( field, writer );
+            writer.writeLine("", ANNOTATION_SEPARATOR, !isLast);
+        }
+    };
+    processor.process( processorsToUse );
+}
 ```
 
 Basically it takes the model field to write and model writer. Then it first writes type information
@@ -371,19 +371,19 @@ For example the default StringConverter for JavaScript returns empty JavaScript 
 conversion just adds quotations marks around string:
 
 ```java
-    public class StringConverter extends BaseValueConverter {
-        private static final String JAVASCRIPT_STRING_QUOTE_MARK = "\"";
+public class StringConverter extends BaseValueConverter {
+    private static final String JAVASCRIPT_STRING_QUOTE_MARK = "\"";
 
-        @Override
-        protected String getTypeDefaultValue() {
-            return JAVASCRIPT_STRING_QUOTE_MARK + JAVASCRIPT_STRING_QUOTE_MARK;
-        }
-
-        @Override
-        protected String getValueAsString( Object value ) {
-            return JAVASCRIPT_STRING_QUOTE_MARK + value + JAVASCRIPT_STRING_QUOTE_MARK;
-        }
+    @Override
+    protected String getTypeDefaultValue() {
+        return JAVASCRIPT_STRING_QUOTE_MARK + JAVASCRIPT_STRING_QUOTE_MARK;
     }
+
+    @Override
+    protected String getValueAsString( Object value ) {
+        return JAVASCRIPT_STRING_QUOTE_MARK + value + JAVASCRIPT_STRING_QUOTE_MARK;
+    }
+}
 ```
 
 ### Model Naming Strategies
