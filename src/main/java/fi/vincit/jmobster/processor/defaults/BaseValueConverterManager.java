@@ -31,7 +31,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * <p>
+ *     The implementation first tries to match the convertable object by class' exact equality
+ * (i.e. class hash code). If it can't find the match, then it tries to find match for
+ * the super class and if no match is found, then for the interfaces. The search is
+ * recursive so the whole hierarchy is used in the search. The search is conducted in
+ * top-to-bottom manner where the first match wins.
+ * </p>
+ * <p>
+ *     If no class is found in the search, the object is converted using the to string converter.
+ * Currently there is no way to figure out how the classes that should be converted with default
+ * toString method and the classes that shouldn't be converted at all other than manually specifying
+ * the classes with {@link BaseValueConverterManager#addConverter(fi.vincit.jmobster.processor.ValueConverter, Class[])}
+ * method. The library default implementations will rely on the to string converter for all non-matching
+ * classes in order to widely support the Java's toString() methods on various classes (e.g. BigDecimal and BigInteger).
+ * </p>
  */
 public abstract class BaseValueConverterManager implements FieldValueConverter {
     private static final Logger LOG = LoggerFactory.getLogger( JavaToJSValueConverter.class );

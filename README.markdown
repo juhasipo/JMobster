@@ -217,13 +217,36 @@ only works with _DIRECT\_FIELD\_ACCESS_ mode. By default final fields are includ
 
 ### Classes and Default Values
 
+#### Requirements for Classes
+
 Classes that are processed with JMobster have to have a default constructor. This
 constructor is used for field default values. If a field shouldn't have a default
 value, annotation IgnoreDefaultValue can be used. This can be handy e.g. for
 id values that should not have default value in client side model.
 
+If a class doesn't have a special converter class, it should have a toString() method. This
+method is used when converting values that don't have a converter. ToString() method implementation
+should return the value as it should be in the target model file. I.e. if it's reprsented in string form, the
+return value should be quoted appropriately.
+
 **Note:** Nested classes have to be static classes in order to work. This limitation is due to class
 instantion via reflection.
+
+#### Default Conversion Process
+
+The default base value converter implementation first tries to match the convertable object by
+class' exact equality (i.e. class hash code). If it can't find the match, then it tries to find match for
+the super class and if no match is found, then for the interfaces. The search is recursive so the whole hierarchy
+is used in the search. The search is conducted in top-to-bottom manner where the first match wins.
+
+If no class is found in the search, the object is converted using the to string converter.
+Currently there is no way to figure out how the classes that should be converted with default
+toString method and the classes that shouldn't be converted at all other than manually specifying
+the classes with _BaseValueConverterManager.addConverter(ValueConverter, Class[])_ method. The library's default
+implementations will rely on the to string converter for all non-matching classes in order to widely support the
+Java's toString() methods on various classes (e.g. BigDecimal and BigInteger).
+
+
 
 Extending
 ---------

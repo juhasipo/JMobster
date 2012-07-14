@@ -31,9 +31,22 @@ import java.util.Map;
 public class JavaToJSValueConverter extends BaseValueConverterManager {
 
     /**
+     * ISO-8601 Date pattern
+     */
+    public static final String ISO_8601_DATE_PATTERN = "yyyy-MM-dd";
+    /**
+     * ISO-88601 Time patter with time zone
+     */
+    public static final String ISO_8601_TIME_TZ_PATTERN = "HH:mm:ssZ";
+    /**
      * ISO-8601 Date time pattern with time zone
      */
-    public static final String ISO_8601_DATE_TIME_TZ_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
+    public static final String ISO_8601_DATE_TIME_TZ_PATTERN = ISO_8601_DATE_PATTERN + "'T'" + ISO_8601_TIME_TZ_PATTERN;
+
+    /**
+     * JavaScript null value
+     */
+    private static final String NULL_VALUE = "null";
 
     /**
      * Creates new Java to JavaScript value converter with
@@ -43,7 +56,7 @@ public class JavaToJSValueConverter extends BaseValueConverterManager {
      * @param dateTimePattern Date time pattern to use
      */
     public JavaToJSValueConverter(ConverterMode converterMode, EnumConverter.EnumMode enumMode, String dateTimePattern) {
-        super(converterMode, "null");
+        super(converterMode, NULL_VALUE );
 
         addConverter( new BooleanConverter(), Boolean.class, boolean.class );
         addConverter( new LongConverter(), Long.class, long.class );
