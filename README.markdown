@@ -122,14 +122,17 @@ To build more customized generator, the generator can be constructed by hand. Fo
  - ModelProcessor
  - FieldValueConverter
  - FieldScanner
+Most of the time for the last one, the default implementation can be used. This will simplify the initialization
+because the _JMobsterFactory_'s _getInstance()_ method can be used.
 
-Next example shows how to construct a custom model generator for Backbone.js which will write to file "models.js".
+Next example shows how to construct a custom model generator for Backbone.js which will write to file "models.js". The
+example will use _JMobsterFactory_.
 
 ```java
+// Initialize configured processors etc.
 ModelWriter modelWriter = new StreamModelWriter("models.js");
 FieldAnnotationWriter fieldAnnotationWriter = new BackboneFieldAnnotationWriter();
 ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, fieldAnnotationWriter);
-
 FieldValueConverter valueConverter =
         new JavaToJSValueConverter(
                 ConverterMode.NULL_AS_DEFAULT,
@@ -137,15 +140,14 @@ FieldValueConverter valueConverter =
                 JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
         );
 
-FieldScanner fieldScanner =
-        new DefaultFieldScanner(
-                FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS,
-                valueConverter,
-                fieldAnnotationWriter
+// Initialize the model generator
+ModelGenerator generator =
+        JMobsterFactory.getInstance(
+            fieldAnnotationWriter,
+            modelProcessor,
+            valueConverter,
+            FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS
         );
-
-// This is the working model generator which takes the classes
-ModelGenerator generator = DefaultModelGenerator( modelProcessor, fieldScanner );
 ```
 
 ### Property Scanning

@@ -44,17 +44,28 @@ public class JMobsterFactory {
                             JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
                     );
 
-            FieldScanner fieldScanner =
-                    new DefaultFieldScanner(
-                            FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS,
-                            valueConverter,
-                            fieldAnnotationWriter
-                    );
-
-            return new DefaultModelGenerator( modelProcessor, fieldScanner );
+            return getInstance(fieldAnnotationWriter, modelProcessor, valueConverter, FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS);
         } else {
             throw new UnsupportedFramework("Framework " + framework + " not supported");
         }
+    }
+
+    /**
+     * Get instance of customized model generator. Uses {@DefaultFieldScanner} and
+     * {@DefaultModelGenerator}.
+     * @param annotationWriter Field annotation writer
+     * @param modelProcessor Model processor
+     * @param valueConverter Field value converter
+     * @param scanMode Field scanning mode
+     * @return Configured model generator
+     */
+    public static ModelGenerator getInstance(
+            FieldAnnotationWriter annotationWriter,
+            ModelProcessor modelProcessor,
+            FieldValueConverter valueConverter,
+            FieldScanner.FieldScanMode scanMode) {
+        FieldScanner fieldScanner = new DefaultFieldScanner(scanMode, valueConverter, annotationWriter);
+        return new DefaultModelGenerator( modelProcessor, fieldScanner );
     }
 
     /**
@@ -63,7 +74,8 @@ public class JMobsterFactory {
      * @param provider Model provider to use
      * @return Configured model generator
      * @throws UnsupportedFramework If the framework is not supported
-     */    public static ModelGenerator getInstance(String framework, ModelProvider provider) {
+     */
+    public static ModelGenerator getInstance(String framework, ModelProvider provider) {
         return getInstance(framework, provider.getModelWriter());
     }
 }
