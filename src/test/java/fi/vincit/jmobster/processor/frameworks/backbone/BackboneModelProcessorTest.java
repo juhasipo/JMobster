@@ -23,7 +23,7 @@ public class BackboneModelProcessorTest {
         BackboneValueSectionWriter backboneValueSectionWriter = mock(BackboneValueSectionWriter.class);
         BackboneValidationSectionWriter backboneValidationSectionWriter = mock(BackboneValidationSectionWriter.class);
         BackboneModelProcessor bmp = new BackboneModelProcessor(
-                writer, "", annotationProcessor, modelNamingStrategy, "/**/", "ns", backboneValueSectionWriter, backboneValidationSectionWriter
+                writer, annotationProcessor, modelNamingStrategy, "/**/", "ns", backboneValueSectionWriter, backboneValidationSectionWriter
         );
 
         final List<ModelField> fields = new ArrayList<ModelField>();
@@ -48,7 +48,7 @@ public class BackboneModelProcessorTest {
         BackboneValueSectionWriter backboneValueSectionWriter = mock(BackboneValueSectionWriter.class);
         BackboneValidationSectionWriter backboneValidationSectionWriter = mock(BackboneValidationSectionWriter.class);
         BackboneModelProcessor bmp = new BackboneModelProcessor(
-                writer, "", annotationProcessor, modelNamingStrategy, "/**/", "ns", backboneValueSectionWriter, backboneValidationSectionWriter
+                writer, annotationProcessor, modelNamingStrategy, "/**/", "ns", backboneValueSectionWriter, backboneValidationSectionWriter
         );
 
         final List<ModelField> fields = new ArrayList<ModelField>();

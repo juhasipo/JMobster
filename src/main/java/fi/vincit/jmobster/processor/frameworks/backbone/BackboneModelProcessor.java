@@ -40,6 +40,8 @@ public class BackboneModelProcessor implements ModelProcessor {
     private static final String MODEL_EXTEND_END = "})";
     private static final String VARIABLE = "var";
     private static final String NAMESPACE_END = "};";
+    private static final String DEFAULT_START_COMMENT = "/*\n * Auto-generated file\n */";
+    private static final String DEFAULT_NAMESPACE = "Models";
 
     private ModelWriter writer;
     private String modelFilePath;
@@ -52,19 +54,46 @@ public class BackboneModelProcessor implements ModelProcessor {
     private BackboneValueSectionWriter backboneValueSectionWriter;
     private BackboneValidationSectionWriter backboneValidationSectionWriter;
 
+    /**
+     * Constructs backbone model processor with a model writer that writes to the given file.
+     * @param modelFilePath File path
+     * @param groupMode Group mode
+     * @param fieldAnnotationWriter Field annotation writer
+     */
     public BackboneModelProcessor( String modelFilePath, GroupMode groupMode, FieldAnnotationWriter fieldAnnotationWriter ) {
         this.modelFilePath = modelFilePath;
         this.annotationProcessor = new DefaultAnnotationProcessor(fieldAnnotationWriter, groupMode);
         this.modelNamingStrategy = new DefaultNamingStrategy();
-        this.startComment = "/*\n * Auto-generated file\n */";
-        this.namespaceName = "Models";
+        this.startComment = DEFAULT_START_COMMENT;
+        this.namespaceName = DEFAULT_NAMESPACE;
         this.backboneValueSectionWriter = new BackboneValueSectionWriter();
         this.backboneValidationSectionWriter = new BackboneValidationSectionWriter(this.annotationProcessor);
     }
 
+
+    public BackboneModelProcessor(ModelWriter writer, ModelNamingStrategy namingStrategy, GroupMode groupMode, FieldAnnotationWriter fieldAnnotationWriter) {
+        this.writer = writer;
+        this.modelNamingStrategy = namingStrategy;
+        this.annotationProcessor = new DefaultAnnotationProcessor(fieldAnnotationWriter, groupMode);
+        this.startComment = DEFAULT_START_COMMENT;
+        this.namespaceName = DEFAULT_NAMESPACE;
+        this.backboneValueSectionWriter = new BackboneValueSectionWriter();
+        this.backboneValidationSectionWriter = new BackboneValidationSectionWriter(this.annotationProcessor);
+
+    }
+
+    /**
+     * Constructs fully customized model processor.
+     * @param writer Model writer to use
+     * @param annotationProcessor Annotation processor
+     * @param modelNamingStrategy Model naming strategy
+     * @param startComment Start command
+     * @param namespaceName Namespace name
+     * @param backboneValueSectionWriter Backbone value section writer
+     * @param backboneValidationSectionWriter Backbone validation section writer
+     */
     public BackboneModelProcessor(
             ModelWriter writer,
-            String modelFilePath,
             AnnotationProcessor annotationProcessor,
             ModelNamingStrategy modelNamingStrategy,
             String startComment,
@@ -72,7 +101,6 @@ public class BackboneModelProcessor implements ModelProcessor {
             BackboneValueSectionWriter backboneValueSectionWriter,
             BackboneValidationSectionWriter backboneValidationSectionWriter ) {
         this.writer = writer;
-        this.modelFilePath = modelFilePath;
         this.annotationProcessor = annotationProcessor;
         this.modelNamingStrategy = modelNamingStrategy;
         this.startComment = startComment;

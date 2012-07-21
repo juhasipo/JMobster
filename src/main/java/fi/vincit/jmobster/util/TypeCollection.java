@@ -35,15 +35,12 @@ import java.lang.reflect.Array;
  */
 public class TypeCollection<T> {
     private T[] types;
+
     public TypeCollection( T... types ) {
         this.types = types;
     }
 
     public T[] getTypes() {
-        if( types != null ) {
-            return types;
-        } else {
-            return (T[])Array.newInstance(types.getClass(), 0);
-        }
+        return types;
     }
 }
