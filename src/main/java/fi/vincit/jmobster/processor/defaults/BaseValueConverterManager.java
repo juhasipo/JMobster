@@ -42,7 +42,7 @@ import java.util.Map;
  *     If no class is found in the search, the object is converted using the to string converter.
  * Currently there is no way to figure out how the classes that should be converted with default
  * toString method and the classes that shouldn't be converted at all other than manually specifying
- * the classes with {@link BaseValueConverterManager#addConverter(fi.vincit.jmobster.processor.ValueConverter, Class[])}
+ * the classes with {@link BaseValueConverterManager#setConverter}
  * method. The library default implementations will rely on the to string converter for all non-matching
  * classes in order to widely support the Java's toString() methods on various classes (e.g. BigDecimal and BigInteger).
  * </p>
@@ -64,11 +64,11 @@ public abstract class BaseValueConverterManager implements FieldValueConverter {
     }
 
     /**
-     * Adds new converter to manager.
+     * Sets converter for given classes.
      * @param valueConverter Value converter
      * @param classesToConvert Classes for which the converter is used
      */
-    public void addConverter( ValueConverter valueConverter, Class... classesToConvert ) {
+    public void setConverter( ValueConverter valueConverter, Class... classesToConvert ) {
         for( Class clazz: classesToConvert ) {
             converters.put( clazz, valueConverter );
         }

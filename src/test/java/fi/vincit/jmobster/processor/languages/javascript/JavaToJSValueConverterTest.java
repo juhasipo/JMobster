@@ -16,7 +16,9 @@ package fi.vincit.jmobster.processor.languages.javascript;
 */
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.CalendarConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.DateTimeConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
 import org.junit.Test;
 
@@ -32,6 +34,7 @@ import static org.junit.Assert.assertEquals;
 public class JavaToJSValueConverterTest {
 
     public static final String NULL_STRING = "null";
+    private static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     /*
     Standard Java data types
@@ -228,17 +231,83 @@ public class JavaToJSValueConverterTest {
         assertEquals( "123456789.123456789", result );
     }
 
-    // Date
+    // Date & Calendar
 
     @Test
     public void testDate() {
         JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
 
         Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        SimpleDateFormat formatter = new SimpleDateFormat( DEFAULT_DATE_TIME_FORMAT );
         String result = valueConverter.convert( now.getClass(), now );
         assertEquals( quoteString( formatter.format( now ) ), result );
     }
+
+    @Test
+    public void testDefaultDateEpoch0() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        DateTimeConverter cv = new DateTimeConverter( DEFAULT_DATE_TIME_FORMAT );
+        cv.setDefaultTime( DateTimeConverter.DefaultTime.EPOCH_0 );
+        valueConverter.setConverter(cv, Date.class);
+
+        Date now = new Date(0);
+        SimpleDateFormat formatter = new SimpleDateFormat( DEFAULT_DATE_TIME_FORMAT );
+        String result = valueConverter.convert( now.getClass(), null );
+        assertEquals( quoteString( formatter.format( now ) ), result );
+    }
+
+    @Test
+    public void testDefaultDateNow() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        DateTimeConverter cv = new DateTimeConverter( DEFAULT_DATE_TIME_FORMAT );
+        cv.setDefaultTime( DateTimeConverter.DefaultTime.NOW );
+        valueConverter.setConverter(cv, Date.class);
+
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat( DEFAULT_DATE_TIME_FORMAT );
+        String result = valueConverter.convert( now.getClass(), null );
+        assertEquals( quoteString( formatter.format( now ) ), result );
+    }
+
+    @Test
+    public void testCalendar() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+
+        Calendar now = new GregorianCalendar();
+        now.setTime(new Date());
+        SimpleDateFormat formatter = new SimpleDateFormat( DEFAULT_DATE_TIME_FORMAT );
+        String result = valueConverter.convert( now.getClass(), now );
+        assertEquals( quoteString( formatter.format( now.getTime() ) ), result );
+    }
+
+    @Test
+    public void testDefaultCalendarEpoch0() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        CalendarConverter cv = new CalendarConverter( DEFAULT_DATE_TIME_FORMAT );
+        cv.setDefaultTime( DateTimeConverter.DefaultTime.EPOCH_0 );
+        valueConverter.setConverter(cv, Calendar.class);
+
+        Calendar now = new GregorianCalendar();
+        now.setTime(new Date(0));
+        SimpleDateFormat formatter = new SimpleDateFormat( DEFAULT_DATE_TIME_FORMAT );
+        String result = valueConverter.convert( now.getClass(), null );
+        assertEquals( quoteString( formatter.format( now.getTime() ) ), result );
+    }
+
+    @Test
+    public void testDefaultCalendarNow() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        CalendarConverter cv = new CalendarConverter( DEFAULT_DATE_TIME_FORMAT );
+        cv.setDefaultTime( DateTimeConverter.DefaultTime.NOW );
+        valueConverter.setConverter(cv, Calendar.class);
+
+        Calendar now = new GregorianCalendar();
+        now.setTime(new Date());
+        SimpleDateFormat formatter = new SimpleDateFormat( DEFAULT_DATE_TIME_FORMAT );
+        String result = valueConverter.convert( now.getClass(), null );
+        assertEquals( quoteString( formatter.format( now.getTime() ) ), result );
+    }
+
 
 
     /*

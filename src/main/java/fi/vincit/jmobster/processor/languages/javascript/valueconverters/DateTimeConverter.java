@@ -26,7 +26,22 @@ import java.util.Locale;
  */
 public class DateTimeConverter extends StringConverter {
 
+    /**
+     * What time should be used as default time
+     */
+    public static enum DefaultTime {
+        /**
+         * Time the default value was generated
+         */
+        NOW,
+        /**
+         * Unix time 0 (January 1, 1970). Default
+         */
+        EPOCH_0
+    }
+
     private DateFormat dateFormat;
+    private DefaultTime defaultTime;// = DefaultTime.EPOCH_0;
 
     public DateTimeConverter(String pattern) {
         dateFormat = new SimpleDateFormat(pattern);
@@ -40,9 +55,25 @@ public class DateTimeConverter extends StringConverter {
         this.dateFormat = dateFormat;
     }
 
+    public DefaultTime getDefaultTime() {
+        return defaultTime;
+    }
+
+    public void setDefaultTime( DefaultTime defaultTime ) {
+        this.defaultTime = defaultTime;
+    }
+
     @Override
     protected String getTypeDefaultValue() {
-        Date defaultDate = new Date(0);
+        Date defaultDate = null;
+        if( defaultTime == null ) {
+            throw new RuntimeException("DefaultTime for DateTimeConverter is not set");
+        }
+        switch( defaultTime ) {
+            case NOW: defaultDate = new Date(); break;
+            case EPOCH_0: defaultDate = new Date(0); break;
+            default: throw new RuntimeException("DefaultTime for DateTimeConverter is not set");
+        }
         return super.getValueAsString( dateFormat.format( defaultDate ) );
     }
 

@@ -19,6 +19,7 @@ import fi.vincit.jmobster.processor.defaults.BaseValueConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.*;
 
 import java.lang.reflect.Array;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -58,17 +59,18 @@ public class JavaToJSValueConverter extends BaseValueConverterManager {
     public JavaToJSValueConverter(ConverterMode converterMode, EnumConverter.EnumMode enumMode, String dateTimePattern) {
         super(converterMode, NULL_VALUE );
 
-        addConverter( new BooleanConverter(), Boolean.class, boolean.class );
-        addConverter( new LongConverter(), Long.class, long.class );
-        addConverter( new IntegerConverter(), Integer.class, int.class );
-        addConverter( new StringConverter(), String.class, Enum.class );
-        addConverter( new DoubleConverter(), Double.class, double.class );
-        addConverter( new FloatConverter(), Float.class, float.class );
-        addConverter( new CollectionConverter( this ), Collection.class );
-        addConverter( new MapConverter( this ), Map.class );
-        addConverter( new EnumConverter( enumMode ), Enum.class );
-        addConverter( new ArrayConverter( this ), Array.class );
-        addConverter( new DateTimeConverter(dateTimePattern), Date.class);
+        setConverter( new BooleanConverter(), Boolean.class, boolean.class );
+        setConverter( new LongConverter(), Long.class, long.class );
+        setConverter( new IntegerConverter(), Integer.class, int.class );
+        setConverter( new StringConverter(), String.class, Enum.class );
+        setConverter( new DoubleConverter(), Double.class, double.class );
+        setConverter( new FloatConverter(), Float.class, float.class );
+        setConverter( new CollectionConverter( this ), Collection.class );
+        setConverter( new MapConverter( this ), Map.class );
+        setConverter( new EnumConverter( enumMode ), Enum.class );
+        setConverter( new ArrayConverter( this ), Array.class );
+        setConverter( new DateTimeConverter( dateTimePattern ), Date.class );
+        setConverter( new CalendarConverter( dateTimePattern ), Calendar.class );
     }
 
     /**
