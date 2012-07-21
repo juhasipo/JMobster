@@ -296,6 +296,39 @@ public class JavaToJSValueConverterTest {
     }
 
     @Test
+    public void testGetDefaultTime() {
+        DateTimeConverter cv = new DateTimeConverter( DEFAULT_DATE_TIME_FORMAT );
+        cv.setDefaultTime( DateTimeConverter.DefaultTime.NOW );
+
+        assertEquals( DateTimeConverter.DefaultTime.NOW, cv.getDefaultTime() );
+    }
+
+    @Test
+    public void testDefaultDateDefaultTime() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        DateTimeConverter cv = new DateTimeConverter( DEFAULT_DATE_TIME_FORMAT );
+        valueConverter.setConverter(cv, Date.class);
+
+        Date now = new Date(0);
+        SimpleDateFormat formatter = new SimpleDateFormat( DEFAULT_DATE_TIME_FORMAT );
+        String result = valueConverter.convert( now.getClass(), null );
+        assertEquals( quoteString( formatter.format( now ) ), result );
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testDefaultDateNoDefaultTime() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        DateTimeConverter cv = new DateTimeConverter( DEFAULT_DATE_TIME_FORMAT );
+        cv.setDefaultTime(null);
+        valueConverter.setConverter(cv, Date.class);
+
+        Date now = new Date(0);
+        SimpleDateFormat formatter = new SimpleDateFormat( DEFAULT_DATE_TIME_FORMAT );
+        String result = valueConverter.convert( now.getClass(), null );
+        assertEquals( quoteString( formatter.format( now ) ), result );
+    }
+
+    @Test
     public void testDefaultDateEpoch0() {
         JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
         DateTimeConverter cv = new DateTimeConverter( DEFAULT_DATE_TIME_FORMAT );

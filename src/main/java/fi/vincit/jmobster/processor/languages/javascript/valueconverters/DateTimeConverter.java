@@ -41,7 +41,7 @@ public class DateTimeConverter extends StringConverter {
     }
 
     private DateFormat dateFormat;
-    private DefaultTime defaultTime;// = DefaultTime.EPOCH_0;
+    private DefaultTime defaultTime = DefaultTime.EPOCH_0;
 
     public DateTimeConverter(String pattern) {
         dateFormat = new SimpleDateFormat(pattern);
