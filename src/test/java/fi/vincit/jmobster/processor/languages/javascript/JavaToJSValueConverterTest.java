@@ -134,6 +134,58 @@ public class JavaToJSValueConverterTest {
         assertEquals( "0", result );
     }
 
+    // Float
+
+    @Test
+    public void testFloatValue() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        float value = 1.0f;
+        String result = valueConverter.convert( float.class, value );
+        assertEquals( "1.0", result );
+    }
+
+    @Test
+    public void testFloatObjectValue() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        Float value = 1.0f;
+        String result = valueConverter.convert( Float.class, value );
+        assertEquals( "1.0", result );
+    }
+
+    @Test
+    public void testFloatDefaultValue() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        Float value = null;
+        String result = valueConverter.convert( Float.class, value );
+        assertEquals( "0.0", result );
+    }
+
+    // Double
+
+    @Test
+    public void testDoubleValue() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        double value = 1.0d;
+        String result = valueConverter.convert( double.class, value );
+        assertEquals( "1.0", result );
+    }
+
+    @Test
+    public void testDoubleObjectValue() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        Double value = 1.0d;
+        String result = valueConverter.convert( Double.class, value );
+        assertEquals( "1.0", result );
+    }
+
+    @Test
+    public void testDoubleDefaultValue() {
+        JavaToJSValueConverter valueConverter = new JavaToJSValueConverter( ConverterMode.NULL_AS_DEFAULT, EnumConverter.EnumMode.STRING, JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN );
+        Double value = null;
+        String result = valueConverter.convert( Double.class, value );
+        assertEquals( "0.0", result );
+    }
+
     // String
 
     @Test
