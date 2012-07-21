@@ -70,7 +70,13 @@ public class BackboneModelProcessor implements ModelProcessor {
         this.backboneValidationSectionWriter = new BackboneValidationSectionWriter(this.annotationProcessor);
     }
 
-
+    /**
+     * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
+     * @param writer Writer
+     * @param namingStrategy Naming strategy
+     * @param groupMode Group mode
+     * @param fieldAnnotationWriter Field annotation writer
+     */
     public BackboneModelProcessor(ModelWriter writer, ModelNamingStrategy namingStrategy, GroupMode groupMode, FieldAnnotationWriter fieldAnnotationWriter) {
         this.writer = writer;
         this.modelNamingStrategy = namingStrategy;
@@ -79,7 +85,6 @@ public class BackboneModelProcessor implements ModelProcessor {
         this.namespaceName = DEFAULT_NAMESPACE;
         this.backboneValueSectionWriter = new BackboneValueSectionWriter();
         this.backboneValidationSectionWriter = new BackboneValidationSectionWriter(this.annotationProcessor);
-
     }
 
     /**
@@ -109,6 +114,11 @@ public class BackboneModelProcessor implements ModelProcessor {
         this.backboneValidationSectionWriter = backboneValidationSectionWriter;
     }
 
+    /**
+     * Construct model processor with custom writer and annotation writer. Group mode will be ANY_OF_REQUIRED.
+     * @param writer
+     * @param fieldAnnotationWriter
+     */
     public BackboneModelProcessor( ModelWriter writer, FieldAnnotationWriter fieldAnnotationWriter ) {
         this((String)null, GroupMode.ANY_OF_REQUIRED, fieldAnnotationWriter );
         this.writer = writer;

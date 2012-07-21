@@ -21,7 +21,7 @@ import fi.vincit.jmobster.util.ModelWriter;
  * Higher level abstraction for ModelWriter that can write
  * JavaScript to ModelWriter. By default the writer checks that
  * all functions and blocks are closed when the writer is closed.
- * This feature can be turned of with {@link JavaScriptWriter#useSanityChecks}.
+ * This feature can be turned of with {@link JavaScriptWriter#lenientModeOn}.
  */
 public class JavaScriptWriter implements ModelWriter {
 
@@ -34,7 +34,7 @@ public class JavaScriptWriter implements ModelWriter {
     private static final String FUNCTION_DEF = "function";
     private String space = " ";
 
-    private boolean useSanityChecks = true;
+    private boolean lenientModeOn = false;
 
     // Sanity checks.
     private int functionsOpen = 0;
@@ -198,7 +198,7 @@ public class JavaScriptWriter implements ModelWriter {
     @Override
     public void close() {
         writer.close();
-        if( useSanityChecks ) {
+        if( !lenientModeOn ) {
             if( functionsOpen > 0 ) {
                 throw new RuntimeException("There are still " + functionsOpen + "unclosed functions");
             }
@@ -226,13 +226,14 @@ public class JavaScriptWriter implements ModelWriter {
     // Setters and getters
 
     /**
-     * If set to true (default) {@link JavaScriptWriter#close()} will
-     * check that functions and blocks have been closed properly. If
-     * set to false, no checks are made.
-     * @param useSanityChecks Should sanity checks be made on close.
+     * If set to false (default) {@link JavaScriptWriter#close()} will
+     * check that functions and blocks have been closed properly. If errors are found,
+     * exception will be thrown. If set to true, no checks are made and no exceptions
+     * are thrown.
+     * @param lenientModeOn Should the writer ignore obvious errors.
      */
-    public void setUseSanityChecks(boolean useSanityChecks) {
-        this.useSanityChecks = useSanityChecks;
+    public void setLenientMode( boolean lenientModeOn ) {
+        this.lenientModeOn = lenientModeOn;
     }
 
     /**

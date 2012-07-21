@@ -88,21 +88,21 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testNoSanityChecksAnonFunctions() {
-        writer.setUseSanityChecks(false);
+        writer.setLenientMode( true );
         writer.startAnonFunction();
         writer.close();
     }
 
     @Test
     public void testNoSanityChecksNameFunctions() {
-        writer.setUseSanityChecks(false);
+        writer.setLenientMode( true );
         writer.startNamedFunction("func");
         writer.close();
     }
 
     @Test
     public void testNoSanityChecksBlocks() {
-        writer.setUseSanityChecks(false);
+        writer.setLenientMode( true );
         writer.startBlock();
         writer.close();
     }
