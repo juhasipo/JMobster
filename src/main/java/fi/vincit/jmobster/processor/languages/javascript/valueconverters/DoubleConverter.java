@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.defaults.base.BaseValueConverter;
+
 /**
  * Converter for Java Double objects. Primitive doubles
  * are boxed to Double objects and converted with this

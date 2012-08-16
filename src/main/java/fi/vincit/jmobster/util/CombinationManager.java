@@ -16,13 +16,14 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
  */
 
-import java.lang.annotation.Annotation;
+import fi.vincit.jmobster.processor.model.HasType;
+
 import java.util.*;
 
 /**
  * Class manages required and optional class combinations.
  */
-public class CombinationManager {
+public class CombinationManager<T extends HasType> {
 
     private Map<Class, Class> requiredClasses;
     private Map<Class, Class> optionalClasses;
@@ -61,17 +62,17 @@ public class CombinationManager {
      * the given classes combination. The combination matches
      * if and only if the all of the given classes are same set
      * (same classes and count is same).
-     * @param classes Classes to check
+     * @param classesWithType Classes to check
      * @return True if given classes match required classes, otherwise false.
      */
-    public boolean matches( List<Annotation> classes ) {
+    public boolean matches( Collection<? extends T> classesWithType ) {
         if( requiredClasses.isEmpty() && optionalClasses.isEmpty() ) {
             return false;
         }
 
         int matchesFound = 0;
-        for( Annotation c : classes ) {
-            if( requiredClasses.containsKey(c.annotationType()) ) {
+        for( HasType hasTypeClass : classesWithType ) {
+            if( requiredClasses.containsKey( hasTypeClass.getType() ) ) {
                 ++matchesFound;
             }
         }
@@ -85,6 +86,7 @@ public class CombinationManager {
      * @return True if the manager contains the given class either as required or as an optional class. Otherwise false.
      */
     public <T> boolean containsClass(Class<T> type) {
+        // TODO: Refactor to take of type HasType? Or is it good param?
         return requiredClasses.containsKey(type) || optionalClasses.containsKey(type);
     }
 

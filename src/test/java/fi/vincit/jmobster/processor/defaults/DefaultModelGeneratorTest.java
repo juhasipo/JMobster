@@ -16,11 +16,8 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.FieldAnnotationWriter;
-import fi.vincit.jmobster.processor.FieldScanner;
+import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -43,9 +40,10 @@ public class DefaultModelGeneratorTest {
     public void testProcessWithoutClasses() throws Exception {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
-        FieldAnnotationWriter annotationWriter = mock(FieldAnnotationWriter.class);
-        FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, annotationWriter);
-        DefaultModelGenerator dmg = new DefaultModelGenerator(modelProcessor, fieldScanner);
+        ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
+        FieldScanner fieldScanner = new DefaultBeanFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
+        DefaultModelGenerator dmg = new DefaultModelGenerator(modelProcessor, fieldScanner, modelNamingStrategy);
 
         dmg.process();
 
@@ -59,9 +57,10 @@ public class DefaultModelGeneratorTest {
     public void testProcessVarArgs() throws Exception {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
-        FieldAnnotationWriter annotationWriter = mock(FieldAnnotationWriter.class);
-        FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, annotationWriter);
-        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner);
+        ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
+        FieldScanner fieldScanner = new DefaultBeanFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
+        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner, modelNamingStrategy);
 
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;
@@ -83,9 +82,10 @@ public class DefaultModelGeneratorTest {
     public void testProcessWithList() throws Exception {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
-        FieldAnnotationWriter annotationWriter = mock(FieldAnnotationWriter.class);
-        FieldScanner fieldScanner = new DefaultFieldScanner( FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, annotationWriter);
-        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner);
+        ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
+        FieldScanner fieldScanner = new DefaultBeanFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
+        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner, modelNamingStrategy);
 
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;

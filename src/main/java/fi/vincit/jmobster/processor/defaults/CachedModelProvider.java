@@ -15,8 +15,8 @@ package fi.vincit.jmobster.processor.defaults;/*
 */
 
 import fi.vincit.jmobster.processor.ModelProvider;
-import fi.vincit.jmobster.util.ModelWriter;
-import fi.vincit.jmobster.util.StreamModelWriter;
+import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.StreamDataWriter;
 
 import java.io.ByteArrayOutputStream;
 
@@ -43,7 +43,7 @@ public class CachedModelProvider implements ModelProvider {
     }
 
     private String cachedModel;
-    private final ModelWriter modelWriter;
+    private final DataWriter dataWriter;
     private final ByteArrayOutputStream bos;
 
     /**
@@ -52,29 +52,29 @@ public class CachedModelProvider implements ModelProvider {
      */
     public CachedModelProvider( WriteMode writeMode ) {
         this.bos = new ByteArrayOutputStream();
-        this.modelWriter = new StreamModelWriter(bos);
+        this.dataWriter = new StreamDataWriter(bos);
         switch ( writeMode ) {
-            case COMPACT: configureCompactMode(modelWriter); break;
-            case PRETTY: configurePrettyMode(modelWriter); break;
+            case COMPACT: configureCompactMode( dataWriter ); break;
+            case PRETTY: configurePrettyMode( dataWriter ); break;
         }
     }
 
     /**
      * Make necessary configurations for pretty write mode
-     * @param modelWriter Model writer to configure
+     * @param dataWriter Model writer to configure
      */
-    private void configurePrettyMode(ModelWriter modelWriter) {
-        modelWriter.setIndentationChar(' ', 4);
-        modelWriter.setLineSeparator("\n");
+    private void configurePrettyMode(DataWriter dataWriter ) {
+        dataWriter.setIndentationChar(' ', 4);
+        dataWriter.setLineSeparator("\n");
     }
 
     /**
      * Make necessary configurations for compact write mode
-     * @param modelWriter Model writer to configure
+     * @param dataWriter Model writer to configure
      */
-    private void configureCompactMode(ModelWriter modelWriter) {
-        modelWriter.setIndentation(0);
-        modelWriter.setLineSeparator("");
+    private void configureCompactMode(DataWriter dataWriter ) {
+        dataWriter.setIndentation(0);
+        dataWriter.setLineSeparator("");
     }
 
     @Override
@@ -86,7 +86,7 @@ public class CachedModelProvider implements ModelProvider {
     }
 
     @Override
-    public ModelWriter getModelWriter() {
-        return modelWriter;
+    public DataWriter getDataWriter() {
+        return dataWriter;
     }
 }

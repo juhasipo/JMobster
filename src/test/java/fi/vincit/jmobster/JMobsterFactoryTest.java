@@ -15,8 +15,8 @@ package fi.vincit.jmobster;/*
 */
 
 import fi.vincit.jmobster.exception.UnsupportedFramework;
-import fi.vincit.jmobster.util.ModelWriter;
-import fi.vincit.jmobster.util.StreamModelWriter;
+import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.StreamDataWriter;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -26,8 +26,8 @@ import static org.junit.Assert.assertNotNull;
 
 public class JMobsterFactoryTest {
 
-    private ModelWriter getModelWriter() {
-        return new StreamModelWriter(new ByteArrayOutputStream());
+    private DataWriter getModelWriter() {
+        return new StreamDataWriter(new ByteArrayOutputStream());
     }
 
     @Test

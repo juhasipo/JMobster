@@ -28,13 +28,14 @@ public interface FieldScanner {
     /**
      * Scan the given class for fields.
      * @param clazz Class to scan
+     * @param groups Groups to filter annotations
      * @return List of found model fields. Empty list if nothing found.
      */
-    List<ModelField> getFields( Class clazz );
+    List<ModelField> getFields( Class clazz, Class... groups );
 
     /**
      * Sets whether static member variables should be included as model fields.
-     * Note: This doesn't work for getters in {@link FieldScanMode#BEAN_PROPERTY} mode.
+     * Note: This doesn't work for getters in {@link fi.vincit.jmobster.processor.defaults.DefaultBeanFieldScanner.FieldScanMode#BEAN_PROPERTY} mode.
      * @param allowStaticFields True if should, false if not
      */
     void setAllowStaticFields( boolean allowStaticFields );
@@ -45,17 +46,4 @@ public interface FieldScanner {
      */
     void setAllowFinalFields( boolean allowFinalFields );
 
-    /**
-     * How the fields are scanned from a class
-     */
-    public static enum FieldScanMode {
-        /**
-         * Use getters. In this mode static fields cannot be used.
-         */
-        BEAN_PROPERTY,
-        /**
-         * Get public/protected/fields directly
-         */
-        DIRECT_FIELD_ACCESS
-    }
 }

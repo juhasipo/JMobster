@@ -1,12 +1,11 @@
 package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.ModelGenerator;
-import fi.vincit.jmobster.processor.FieldAnnotationWriter;
 import fi.vincit.jmobster.processor.FieldScanner;
+import fi.vincit.jmobster.processor.ModelNamingStrategy;
+import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.util.ItemProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +31,9 @@ public class DefaultModelGenerator implements ModelGenerator {
     private static final Logger LOG = LoggerFactory
             .getLogger( DefaultModelGenerator.class );
 
-    public ModelProcessor modelProcessor;
+    private ModelProcessor modelProcessor;
     private FieldScanner fieldScanner;
+    private ModelNamingStrategy modelNamingStrategy;
 
     /**
      * Creates new DefaultModelGenerator
@@ -42,9 +42,11 @@ public class DefaultModelGenerator implements ModelGenerator {
      */
     public DefaultModelGenerator(
             ModelProcessor modelProcessor,
-            FieldScanner fieldScanner ) {
+            FieldScanner fieldScanner,
+            ModelNamingStrategy modelNamingStrategy) {
         this.modelProcessor = modelProcessor;
         this.fieldScanner = fieldScanner;
+        this.modelNamingStrategy = modelNamingStrategy;
     }
 
     @Override
@@ -113,27 +115,8 @@ public class DefaultModelGenerator implements ModelGenerator {
      * @param models Models list
      */
     private void createModelAndAddToList( Class clazz, List<Model> models ) {
-        Model model = new Model(clazz, fieldScanner.getFields(clazz));
-        checkAndSetValidationState( model );
+        Model model = new Model(clazz, modelNamingStrategy.getName(clazz), fieldScanner.getFields(clazz));
         models.add( model );
-    }
-
-    /**
-     * Checks and sets the validation state for the given model.
-     * If the given model has at least one field that requires
-     * validation the model property validations will be set
-     * to true. If the model doesn't have any validation
-     * requirements the property will be set to false.
-     * @param model Model to check
-     */
-    private void checkAndSetValidationState( Model model ) {
-        for( ModelField modelField : model.getFields() ) {
-            if( modelField.hasValidations() ) {
-                model.setValidations(true);
-                return;
-            }
-        }
-        model.setValidations(false);
     }
 
     @Override

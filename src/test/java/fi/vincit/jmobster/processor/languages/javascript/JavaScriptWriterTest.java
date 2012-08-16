@@ -14,8 +14,8 @@ package fi.vincit.jmobster.processor.languages.javascript;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.util.ModelWriter;
-import fi.vincit.jmobster.util.StreamModelWriter;
+import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.StreamDataWriter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,13 +25,13 @@ import static org.junit.Assert.assertEquals;
 
 public class JavaScriptWriterTest {
     private ByteArrayOutputStream os;
-    private ModelWriter mw;
+    private DataWriter mw;
     private JavaScriptWriter writer;
 
     @Before
     public void initTest() {
         os = new ByteArrayOutputStream();
-        mw = new StreamModelWriter(os);
+        mw = new StreamDataWriter(os);
         writer = new JavaScriptWriter(mw);
     }
 

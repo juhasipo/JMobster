@@ -15,12 +15,9 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.*;
-import fi.vincit.jmobster.processor.defaults.DefaultAnnotationProcessor;
-import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
+import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.util.StreamModelWriter;
-import fi.vincit.jmobster.util.ModelWriter;
+import fi.vincit.jmobster.util.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +29,7 @@ import java.io.IOException;
  *     all the given models inside a single namespace called "Models".
  * </p>
  */
-public class BackboneModelProcessor implements ModelProcessor {
+public class BackboneModelProcessor extends BaseModelProcessor {
     private static final Logger LOG = LoggerFactory
             .getLogger( BackboneModelProcessor.class );
     private static final String NAMESPACE_START = "{";
@@ -43,136 +40,81 @@ public class BackboneModelProcessor implements ModelProcessor {
     private static final String DEFAULT_START_COMMENT = "/*\n * Auto-generated file\n */";
     private static final String DEFAULT_NAMESPACE = "Models";
 
-    private ModelWriter writer;
-    private String modelFilePath;
-    private AnnotationProcessor annotationProcessor;
-    private ModelNamingStrategy modelNamingStrategy;
-
     private String startComment;
     private String namespaceName;
 
-    private BackboneValueSectionWriter backboneValueSectionWriter;
-    private BackboneValidationSectionWriter backboneValidationSectionWriter;
+    private BackboneModelWriter backboneModelWriter;
 
     /**
      * Constructs backbone model processor with a model writer that writes to the given file.
      * @param modelFilePath File path
-     * @param groupMode Group mode
-     * @param fieldAnnotationWriter Field annotation writer
      */
-    public BackboneModelProcessor( String modelFilePath, GroupMode groupMode, FieldAnnotationWriter fieldAnnotationWriter ) {
-        this.modelFilePath = modelFilePath;
-        this.annotationProcessor = new DefaultAnnotationProcessor(fieldAnnotationWriter, groupMode);
-        this.modelNamingStrategy = new DefaultNamingStrategy();
+    public BackboneModelProcessor( String modelFilePath ) {
+        super(modelFilePath);
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.backboneValueSectionWriter = new BackboneValueSectionWriter();
-        this.backboneValidationSectionWriter = new BackboneValidationSectionWriter(this.annotationProcessor);
+        this.backboneModelWriter = new BackboneModelWriter(getWriter());
     }
 
     /**
      * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
      * @param writer Writer
-     * @param namingStrategy Naming strategy
-     * @param groupMode Group mode
-     * @param fieldAnnotationWriter Field annotation writer
      */
-    public BackboneModelProcessor(ModelWriter writer, ModelNamingStrategy namingStrategy, GroupMode groupMode, FieldAnnotationWriter fieldAnnotationWriter) {
-        this.writer = writer;
-        this.modelNamingStrategy = namingStrategy;
-        this.annotationProcessor = new DefaultAnnotationProcessor(fieldAnnotationWriter, groupMode);
+    public BackboneModelProcessor(DataWriter writer) {
+        super(writer);
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.backboneValueSectionWriter = new BackboneValueSectionWriter();
-        this.backboneValidationSectionWriter = new BackboneValidationSectionWriter(this.annotationProcessor);
+        this.backboneModelWriter = new BackboneModelWriter(writer);
     }
 
     /**
      * Constructs fully customized model processor.
      * @param writer Model writer to use
-     * @param annotationProcessor Annotation processor
-     * @param modelNamingStrategy Model naming strategy
      * @param startComment Start command
      * @param namespaceName Namespace name
-     * @param backboneValueSectionWriter Backbone value section writer
-     * @param backboneValidationSectionWriter Backbone validation section writer
+     * @param backboneModelWriter Backbone model writer
      */
     public BackboneModelProcessor(
-            ModelWriter writer,
-            AnnotationProcessor annotationProcessor,
-            ModelNamingStrategy modelNamingStrategy,
+            DataWriter writer,
             String startComment,
             String namespaceName,
-            BackboneValueSectionWriter backboneValueSectionWriter,
-            BackboneValidationSectionWriter backboneValidationSectionWriter ) {
-        this.writer = writer;
-        this.annotationProcessor = annotationProcessor;
-        this.modelNamingStrategy = modelNamingStrategy;
+            BackboneModelWriter backboneModelWriter ) {
+        super(writer);
         this.startComment = startComment;
         this.namespaceName = namespaceName;
-        this.backboneValueSectionWriter = backboneValueSectionWriter;
-        this.backboneValidationSectionWriter = backboneValidationSectionWriter;
-    }
-
-    /**
-     * Construct model processor with custom writer and annotation writer. Group mode will be ANY_OF_REQUIRED.
-     * @param writer
-     * @param fieldAnnotationWriter
-     */
-    public BackboneModelProcessor( ModelWriter writer, FieldAnnotationWriter fieldAnnotationWriter ) {
-        this((String)null, GroupMode.ANY_OF_REQUIRED, fieldAnnotationWriter );
-        this.writer = writer;
+        this.backboneModelWriter = backboneModelWriter;
     }
 
     @Override
     public void startProcessing() throws IOException {
-        if( writer == null ) {
-            writer = new StreamModelWriter(modelFilePath);
-        }
-        writer.open();
+        getWriter().open();
 
-        writer.writeLine( startComment );
-        writer.writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
-        writer.indent();
+        getWriter().writeLine( startComment );
+        getWriter().writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
+        getWriter().indent();
     }
+
+
+
 
     @Override
     public void processModel( Model model, boolean isLastModel ) {
-        String modelName = modelNamingStrategy.getName(model);
+        String modelName = model.getName();
 
-        writer.write(modelName).writeLine( MODEL_EXTEND_START ).indent();
+        getWriter().write(modelName).writeLine( MODEL_EXTEND_START ).indent();
 
-        backboneValueSectionWriter.setWriter(writer);
-        backboneValueSectionWriter.writeDefaultValues( model.getFields(), model.hasValidations() );
+        backboneModelWriter.write(model);
 
-        if( model.hasValidations() ) {
-            backboneValidationSectionWriter.setWriter(writer);
-            backboneValidationSectionWriter.writeValidators( model.getFields() );
-        }
-        writer.indentBack();
-        writer.writeLine( MODEL_EXTEND_END, ",", !isLastModel);
+        getWriter().indentBack();
+        getWriter().writeLine( MODEL_EXTEND_END, ",", !isLastModel);
     }
 
     @Override
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing() throws IOException {
-        writer.indentBack();
-        writer.writeLine( NAMESPACE_END );
-        writer.close();
-    }
-
-    @Override
-    public AnnotationProcessor getAnnotationProcessor() {
-        return annotationProcessor;
-    }
-
-    public String getModelFilePath() {
-        return modelFilePath;
-    }
-
-    @Override
-    public void setModelNamingStrategy( ModelNamingStrategy modelNamingStrategy ) {
-        this.modelNamingStrategy = modelNamingStrategy;
+        getWriter().indentBack();
+        getWriter().writeLine( NAMESPACE_END );
+        getWriter().close();
     }
 
     /**

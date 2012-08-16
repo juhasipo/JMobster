@@ -23,8 +23,7 @@ public class DefaultNamingStrategyTest {
     @Test
     public void testSimple() {
         DefaultNamingStrategy dns = new DefaultNamingStrategy();
-        Model model = new Model(String.class, null);
-        String modelName = dns.getName(model);
+        String modelName = dns.getName(String.class);
         assertEquals("String", modelName);
     }
 
@@ -33,8 +32,7 @@ public class DefaultNamingStrategyTest {
     @Test
     public void testSimpleWithDtoSuffix() {
         DefaultNamingStrategy dns = new DefaultNamingStrategy();
-        Model model = new Model(TestClass1Dto.class, null);
-        String modelName = dns.getName(model);
+        String modelName = dns.getName(TestClass1Dto.class);
         assertEquals("TestClass1", modelName);
     }
 
@@ -43,8 +41,7 @@ public class DefaultNamingStrategyTest {
     @Test
     public void testSimpleWithDTOSuffix() {
         DefaultNamingStrategy dns = new DefaultNamingStrategy();
-        Model model = new Model(TestClass2DTO.class, null);
-        String modelName = dns.getName(model);
+        String modelName = dns.getName(TestClass2DTO.class);
         assertEquals("TestClass2", modelName);
     }
 
@@ -53,8 +50,7 @@ public class DefaultNamingStrategyTest {
     @Test
     public void testSimpleWithDTOModelSuffix() {
         DefaultNamingStrategy dns = new DefaultNamingStrategy();
-        Model model = new Model(TestClass2DtoModel.class, null);
-        String modelName = dns.getName(model);
+        String modelName = dns.getName(TestClass2DtoModel.class);
         assertEquals("TestClass2DtoModel", modelName);
     }
 
@@ -64,8 +60,7 @@ public class DefaultNamingStrategyTest {
     @Test
     public void testOverriddenTestClass() {
         DefaultNamingStrategy dns = new DefaultNamingStrategy();
-        Model model = new Model(OverriddenTestClass.class, null);
-        String modelName = dns.getName(model);
+        String modelName = dns.getName(OverriddenTestClass.class);
         assertEquals("NewClassname", modelName);
     }
 }

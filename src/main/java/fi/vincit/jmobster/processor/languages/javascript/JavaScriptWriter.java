@@ -14,16 +14,16 @@ package fi.vincit.jmobster.processor.languages.javascript;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.util.DataWriter;
 import fi.vincit.jmobster.util.ItemProcessor;
-import fi.vincit.jmobster.util.ModelWriter;
 
 /**
- * Higher level abstraction for ModelWriter that can write
- * JavaScript to ModelWriter. By default the writer checks that
+ * Higher level abstraction for DataWriter that can write
+ * JavaScript to DataWriter. By default the writer checks that
  * all functions and blocks are closed when the writer is closed.
  * This feature can be turned of with {@link JavaScriptWriter#lenientModeOn}.
  */
-public class JavaScriptWriter implements ModelWriter {
+public class JavaScriptWriter implements DataWriter {
 
     public static final String BLOCK_START = "{";
     public static final String BLOCK_END = "}";
@@ -40,9 +40,9 @@ public class JavaScriptWriter implements ModelWriter {
     private int functionsOpen = 0;
     private int blocksOpen = 0;
 
-    private ModelWriter writer;
+    private DataWriter writer;
 
-    public JavaScriptWriter(ModelWriter writer) {
+    public JavaScriptWriter(DataWriter writer) {
         this.writer = writer;
     }
 

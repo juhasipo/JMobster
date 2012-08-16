@@ -15,8 +15,8 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;
+import fi.vincit.jmobster.processor.model.Model;
 
 /**
  * Default naming strategy for model names. Uses the model name (simple name)
@@ -24,14 +24,13 @@ import fi.vincit.jmobster.processor.ModelNamingStrategy;
  */
 public class DefaultNamingStrategy implements ModelNamingStrategy {
     @Override
-    public String getName( Model model ) {
-        Class modelClass = model.getModelClass();
-        if( modelClass.isAnnotationPresent(fi.vincit.jmobster.annotation.Model.class) ) {
+    public String getName( Class clazz ) {
+        if( clazz.isAnnotationPresent(fi.vincit.jmobster.annotation.Model.class) ) {
             fi.vincit.jmobster.annotation.Model modelAnnotation =
-                    (fi.vincit.jmobster.annotation.Model)modelClass.getAnnotation(fi.vincit.jmobster.annotation.Model.class);
+                    (fi.vincit.jmobster.annotation.Model)clazz.getAnnotation(fi.vincit.jmobster.annotation.Model.class);
             return modelAnnotation.name();
         } else {
-           return stripDtoFromName(modelClass.getSimpleName());
+           return stripDtoFromName(clazz.getSimpleName());
         }
     }
 

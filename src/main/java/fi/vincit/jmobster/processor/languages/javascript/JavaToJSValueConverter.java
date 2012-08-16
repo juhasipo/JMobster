@@ -15,7 +15,7 @@ package fi.vincit.jmobster.processor.languages.javascript;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.defaults.BaseValueConverterManager;
+import fi.vincit.jmobster.processor.defaults.base.BaseValueConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.*;
 
 import java.lang.reflect.Array;

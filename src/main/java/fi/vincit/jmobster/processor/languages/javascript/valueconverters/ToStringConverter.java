@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.defaults.base.BaseValueConverter;
+
 /**
  * Converter that converts the value using toString method.
  * Used for values that don't have own specialized converter.

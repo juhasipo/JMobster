@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
 */
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.defaults.base.BaseValueConverter;
 
 import java.util.Map;
 

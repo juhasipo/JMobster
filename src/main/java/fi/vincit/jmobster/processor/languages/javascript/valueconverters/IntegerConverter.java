@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.defaults.base.BaseValueConverter;
+
 /**
  * Converter for Java Integer objects. Primitive integers
  * are boxed to Integer objects and converted with this

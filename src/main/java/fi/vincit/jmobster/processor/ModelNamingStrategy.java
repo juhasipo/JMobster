@@ -22,8 +22,8 @@ import fi.vincit.jmobster.processor.model.Model;
 public interface ModelNamingStrategy {
     /**
      * Returns the model name in correct format
-     * @param model Model which name should be converted
+     * @param clazz Class which name should be converted
      * @return Model name.
      */
-    String getName( Model model );
+    String getName( Class clazz );
 }

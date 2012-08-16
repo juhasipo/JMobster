@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.defaults.base.BaseValueConverter;
+
 /**
  * Converter for Java Float objects. Primitive floats
  * are boxed to Float objects and converted with this

@@ -15,21 +15,11 @@ package fi.vincit.jmobster.processor.frameworks.backbone.annotation;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.annotation.OverridePattern;
-import fi.vincit.jmobster.processor.defaults.annotation.BasePatternAnnotationProcessor;
-import fi.vincit.jmobster.util.OptionalTypes;
-import fi.vincit.jmobster.util.RequiredTypes;
-import fi.vincit.jmobster.util.ModelWriter;
-import fi.vincit.jmobster.util.JavaToJSPatternConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.validation.constraints.Pattern;
-
 /**
  * Processor for JSR-303 Pattern validator. Also supports optional OverridePattern annotation.
  */
-public class PatternAnnotationProcessor extends BasePatternAnnotationProcessor {
+public class PatternAnnotationProcessor  {
+    /*
     private static final Logger LOG = LoggerFactory
             .getLogger( PatternAnnotationProcessor.class );
 
@@ -39,7 +29,7 @@ public class PatternAnnotationProcessor extends BasePatternAnnotationProcessor {
     }
 
     @Override
-    public void writeValidatorsToStreamInternal( ModelWriter writer ) {
+    public void writeValidatorsToStreamInternal( DataWriter writer ) {
         if( containsAnnotation(Pattern.class) ) {
             String javaScriptRegExp;
             if( containsAnnotation(OverridePattern.class) ) {
@@ -52,5 +42,5 @@ public class PatternAnnotationProcessor extends BasePatternAnnotationProcessor {
             writer.write( "pattern: " ).write( javaScriptRegExp );
         }
     }
-
+*/
 }

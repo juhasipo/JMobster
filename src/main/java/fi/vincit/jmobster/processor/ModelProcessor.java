@@ -44,15 +44,4 @@ public interface ModelProcessor {
      */
     void endProcessing() throws IOException;
 
-    /**
-     * Returns the used annotation processor.
-     * @return Used annotation processor.
-     */
-    AnnotationProcessor getAnnotationProcessor();
-
-    /**
-     * Set naming strategy for the processor
-     * @param modelNamingStrategy Naming strategy
-     */
-    void setModelNamingStrategy( ModelNamingStrategy modelNamingStrategy );
 }

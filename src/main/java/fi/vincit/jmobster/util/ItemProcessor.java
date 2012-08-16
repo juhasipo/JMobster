@@ -15,7 +15,7 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
 */
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * <p>
@@ -25,8 +25,8 @@ import java.util.List;
  * </p>
  *
  * <p>
- *     Combine with {@link ModelWriter}'s {@link ModelWriter#write(String, String, boolean)} and
- * {@link ModelWriter#writeLine(String, String, boolean)} to write lists with last separator
+ *     Combine with {@link DataWriter}'s {@link DataWriter#write(String, String, boolean)} and
+ * {@link DataWriter#writeLine(String, String, boolean)} to write lists with last separator
  * char left out.
  * </p>
  *
@@ -37,13 +37,17 @@ public abstract class ItemProcessor<T> {
      * Process the given list of items.
      * @param items Items to process. If null nothing is done.
      */
-    public void process(List<? extends T> items) {
+    public void process(Collection<? extends T> items) {
         if( items == null ) {
             return;
         }
-        for( int i = 0; i < items.size(); ++i ) {
-            boolean isLastItem = i == items.size() - 1;
-            this.process( items.get( i ), isLastItem );
+
+        int i = 0;
+        final int size = items.size();
+        for( T item : items ) {
+            boolean isLastItem = i == size - 1;
+            this.process( item, isLastItem );
+            ++i;
         }
     }
 

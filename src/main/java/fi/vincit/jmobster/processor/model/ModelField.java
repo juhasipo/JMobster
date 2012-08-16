@@ -16,36 +16,40 @@ package fi.vincit.jmobster.processor.model;
 */
 
 import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Single model field that is converted to the target platform.
  */
 public class ModelField {
-    private Class fieldType;
-    private List<Annotation> annotations;
-    private String defaultValue;
-    private String name;
+    final private Class fieldType;
+    final private List<Validator> validators;
+    private String defaultValue; // TODO: This away from here and generate when writing. It enables better HTML compatibility
+    final private String name;
 
-    public ModelField( Field field, List<Annotation> validationAnnotations ) {
+    public ModelField( Field field, Collection<Validator> validators ) {
         this.fieldType = field.getType();
         this.name = field.getName();
-        this.annotations = validationAnnotations;
+        this.validators = new ArrayList<Validator>();
+        addValidators(validators);
     }
 
-    public ModelField( PropertyDescriptor property, List<Annotation> validationAnnotations ) {
+    public ModelField( PropertyDescriptor property, Collection<Validator> validators ) {
         this.fieldType  = property.getPropertyType();
-        this.annotations = validationAnnotations;
         this.name = property.getName();
+        this.validators = new ArrayList<Validator>();
+        addValidators(validators);
     }
 
-    public ModelField( ModelField field, List<Annotation> annotationsForField ) {
+    public ModelField( ModelField field ) {
         this.fieldType = field.getFieldType();
-        this.annotations = annotationsForField;
         this.name = field.getName();
+        this.validators = new ArrayList<Validator>();
+        addValidators(field.getValidators());
     }
 
     public String getName() {
@@ -56,10 +60,6 @@ public class ModelField {
         return fieldType;
     }
 
-    public List<Annotation> getAnnotations() {
-        return annotations;
-    }
-
     public String getDefaultValue() {
         return defaultValue;
     }
@@ -68,10 +68,18 @@ public class ModelField {
         this.defaultValue = defaultValue;
     }
 
+    public void addValidators(Collection<? extends Validator> validators) {
+        this.validators.addAll(validators);
+    }
+
+    public Collection<Validator> getValidators() {
+        return this.validators;
+    }
+
     /**
      * @return True if the model field contains one or more validation annotations.
      */
     public boolean hasValidations() {
-        return !annotations.isEmpty();
+        return !validators.isEmpty();
     }
 }

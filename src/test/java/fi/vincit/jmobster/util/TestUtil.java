@@ -14,10 +14,11 @@ package fi.vincit.jmobster.util;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.processor.model.ModelField;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -74,15 +75,29 @@ public class TestUtil {
     }
 
     /**
+     * Generates a List from the given objects
+     * @param objects Object to include in the list
+     * @param <T> Type of list
+     * @return List containing the given objects. Empty list if no objects given.
+     */
+    public static <T>Collection<T> collectionFromObjects(T... objects) {
+        Collection<T> arrayList = new ArrayList<T>(objects.length);
+        for( T t : objects ) {
+            arrayList.add(t);
+        }
+        return arrayList;
+    }
+
+    /**
      * Generates a Model field with the given annotations. Model field
      * default value will be "Test value" and the type of the model field
      * will be int.class.
-     * @param annotations Annotations
+     * @param validators Annotations
      * @return Model field with given annotations
      */
-    public static ModelField getField(List<Annotation> annotations) {
+    public static ModelField getField(List<Validator> validators) {
         class T {int field;}
-        ModelField field = new ModelField(T.class.getDeclaredFields()[0], annotations);
+        ModelField field = new ModelField(T.class.getDeclaredFields()[0], validators);
         field.setDefaultValue("Test value");
         return field;
     }

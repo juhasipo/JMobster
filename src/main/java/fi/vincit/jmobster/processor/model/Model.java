@@ -24,10 +24,16 @@ public class Model {
     private Class modelClass;
     private List<ModelField> fields;
     private boolean validations;
+    private String name;
 
-    public Model( Class modelClass, List<ModelField> fields ) {
+    public Model( Class modelClass, String name, List<ModelField> fields ) {
+        this.name = name;
         this.modelClass = modelClass;
         this.fields = fields;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public Class getModelClass() {

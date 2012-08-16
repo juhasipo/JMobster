@@ -22,9 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -87,23 +85,26 @@ public class TestMain {
     }
 
     public static class BeanPropertyDemo {
-        @Pattern(regexp = "[\\w]*")
-        private String firstName = "John";
+        //@Pattern(regexp = "[\\w]*")
+        //private String firstName = "John";
+        @Size(min = 0, max = 255)
         @Pattern(regexp = "[\\w]*")
         private String lastName = "Doe";
 
+
         @Size(min = 0, max = 255)
         public String getFullName() {
-            return firstName + " " + lastName;
+            return /*firstName + " " +*/ lastName;
         }
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //ModelWriter modelWriter = new StreamModelWriter("models.js");
+        //DataWriter modelWriter = new StreamDataWriter("models.js");
         CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY);
-        ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", provider);
+        ModelGenerator generator = JMobsterFactory.getInstance("html5", provider);
 
         generator.process( BeanPropertyDemo.class );
+        //generator.process( MyModelDto.class );
 
         System.out.println(provider.getModel());
     }
