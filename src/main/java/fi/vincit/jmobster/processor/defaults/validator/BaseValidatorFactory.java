@@ -16,33 +16,36 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.processor.ValidatorConstructor;
 import fi.vincit.jmobster.processor.ValidatorFactory;
+import fi.vincit.jmobster.processor.model.Validator;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Base implementation of validator factory. Additional
+ * validators can be added using {@link fi.vincit.jmobster.processor.ValidatorFactory#setValidator(Class, fi.vincit.jmobster.processor.ValidatorConstructor)}
+ * method.
+ */
 public abstract class BaseValidatorFactory implements ValidatorFactory {
 
-    protected static interface ValidatorCreator {
-        Validator create(Annotation annotation);
-    }
-
-    final private Map<Class, ValidatorCreator> validators;
+    final private Map<Class, ValidatorConstructor> validatorConstructors;
 
     protected BaseValidatorFactory() {
-        validators = new HashMap<Class, ValidatorCreator>();
+        validatorConstructors = new HashMap<Class, ValidatorConstructor>();
     }
 
-    protected void setValidator(Class type, ValidatorCreator validatorCreator) {
-        validators.put(type, validatorCreator);
+    @Override
+    public void setValidator(Class type, ValidatorConstructor validatorConstructor) {
+        validatorConstructors.put( type, validatorConstructor );
     }
 
     @Override
     public Validator getValidator( Annotation annotation ) {
         if( isValidationAnnotation(annotation) ) {
-            return validators.get(annotation.annotationType()).create(annotation);
+            return validatorConstructors.get(annotation.annotationType()).construct( annotation );
         } else {
             return null;
         }
@@ -51,6 +54,6 @@ public abstract class BaseValidatorFactory implements ValidatorFactory {
     @Override
     public boolean isValidationAnnotation( Annotation annotation ) {
         Class type = annotation.annotationType();
-        return validators.containsKey( type );
+        return validatorConstructors.containsKey( type );
     }
 }

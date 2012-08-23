@@ -16,18 +16,21 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorFactory;
-import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
+import fi.vincit.jmobster.processor.ValidatorConstructor;
 import fi.vincit.jmobster.processor.model.Validator;
 
 import javax.validation.constraints.Size;
 import java.lang.annotation.Annotation;
 
+/**
+ * Default implementation of validator factory. Contains
+ * validator constructors for basic JSR-303 validation annotations.
+ */
 public class DefaultValidatorFactory extends BaseValidatorFactory {
     public DefaultValidatorFactory() {
-        setValidator(Size.class, new ValidatorCreator() {
+        setValidator(Size.class, new ValidatorConstructor() {
             @Override
-            public Validator create( Annotation annotation ) {
+            public Validator construct( Annotation annotation ) {
                 return new SizeValidator((Size)annotation);
             }
         } );

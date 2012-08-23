@@ -20,7 +20,32 @@ import fi.vincit.jmobster.processor.model.Validator;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * Creates new validator instances from annotation instances.
+ */
 public interface ValidatorFactory {
+
+    /**
+     * Returns a new validator instance for the given annotation.
+     * To prevent null pointer exceptions, check if the validator
+     * can be constructed with {@link ValidatorFactory#isValidationAnnotation(java.lang.annotation.Annotation)}
+     * method.
+     * @param annotation Annotation instance
+     * @return New validator instance if exists, otherwise null.
+     */
     Validator getValidator(Annotation annotation);
+
+    /**
+     *
+     * @param annotation Annotation
+     * @return True if the given annotation has a validator set
+     */
     boolean isValidationAnnotation(Annotation annotation);
+
+    /**
+     * Configures validator constructor for the given type
+     * @param type Type (Annotation class)
+     * @param validatorConstructor Constructor that will create the validator
+     */
+    void setValidator(Class type, ValidatorConstructor validatorConstructor);
 }

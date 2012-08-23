@@ -25,7 +25,9 @@ public enum GroupMode {
     ANY_OF_REQUIRED,
     /**
      * Annotation has to have exactly the same groups
-     * as required
+     * as required. Note: If you set includeValidatorsWithoutGroup
+     * in DefaultGroupManager to false and no groups are configured for
+     * the group manager, no validators are accepted.
      */
     EXACTLY_REQUIRED,
     /**

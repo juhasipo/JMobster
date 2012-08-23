@@ -15,7 +15,5 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
 */
 
-public interface Validator extends HasType {
-    Class[] getGroups();
-    boolean hasGroups();
+public interface Validator extends HasType, HasGroups {
 }

@@ -16,17 +16,19 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.HasGroups;
+import fi.vincit.jmobster.processor.model.Validator;
+
+import java.lang.annotation.Annotation;
 
 /**
- * GroupManager handles checking whether a given validator
- * contains the required groups to be included in a model field.
+ * Interface for constructing a validator from an annotation.
  */
-public interface GroupManager {
+public interface ValidatorConstructor {
     /**
-     * Checks if the validator has the required groups
-     * @param groupObject Object with groups
-     * @return True if groups match, otherwise false
+     * Constructs a new validator instance for the
+     * given validation annotation.
+     * @param annotation Annotation
+     * @return New validator instance
      */
-    boolean shouldAddValidator( HasGroups groupObject );
+    Validator construct( Annotation annotation );
 }
