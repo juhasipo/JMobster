@@ -23,30 +23,54 @@ import java.util.Collection;
  * exists is that the process method tells which processed item
  * is the last item in the list.
  * </p>
+ * <p>
+ *     Recommended syntax: ItemProcessor.process(items).with(handler);
+ *
+ *     This will create a new ItemProcessor instance for each {@link ItemProcessor#process(java.util.Collection)}
+ *     call.
+ * </p>
+ * <p>
+ *     Sometimes it may be more efficient not to create new object instances.
+ *     For this methods {@link ItemProcessor#process(ItemHandler, Object[])} and
+ *     {@link ItemProcessor#process(ItemHandler, java.util.Collection)} can be used.
+ *     These static methods don't create unnecessary ItemProcessor objects.
+ * </p>
  *
  * <p>
  *     Combine with {@link DataWriter}'s {@link DataWriter#write(String, String, boolean)} and
  * {@link DataWriter#writeLine(String, String, boolean)} to write lists with last separator
  * char left out.
  * </p>
- *
- * @param <T> Type of objects in the item list
  */
-public abstract class ItemProcessor<T> {
+public class ItemProcessor<T> {
+
+    private Collection<? extends T> items;
+
+    protected ItemProcessor( Collection<? extends T> items)  {
+        this.items = items;
+    }
+
+    public static <T> ItemProcessor<T> process(Collection<? extends T> items) {
+        return new ItemProcessor<T>(items);
+    }
+    public void with(ItemHandler<? super T> itemHandler) {
+        ItemProcessor.process(itemHandler, this.items);
+    }
+
     /**
      * Process the given list of items.
      * @param items Items to process. If null nothing is done.
      */
-    public void process(Collection<? extends T> items) {
+    public static <T> void process(ItemHandler<? super T> itemHandler, Collection<? extends T> items) {
         if( items == null ) {
             return;
         }
 
         int i = 0;
-        final int size = items.size();
+        final int itemCount = items.size();
         for( T item : items ) {
-            boolean isLastItem = i == size - 1;
-            this.process( item, isLastItem );
+            final boolean isLastItem = i == itemCount - 1;
+            itemHandler.process( item, isLastItem );
             ++i;
         }
     }
@@ -55,21 +79,13 @@ public abstract class ItemProcessor<T> {
      * Process the given array of items.
      * @param items Items to process. If null nothing is done.
      */
-    public void process(T... items) {
+    public static <T> void process(ItemHandler<? super T> itemHandler, T... items) {
         if( items == null ) {
             return;
         }
         for( int i = 0; i < items.length; ++i ) {
             boolean isLastItem = i == items.length - 1;
-            this.process( items[i], isLastItem );
+            itemHandler.process( items[i], isLastItem );
         }
     }
-
-    /**
-     * Method that processes the items. Implement item processing
-     * logic here.
-     * @param item Item to process
-     * @param isLast Is the given item last item in the list
-     */
-    protected abstract void process(T item, boolean isLast);
 }

@@ -22,6 +22,7 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.DataWriter;
 
@@ -58,29 +59,29 @@ public class BackboneModelWriter extends BaseModelWriter {
     }
 
     private void writeFields( Model model ) {
-        new ItemProcessor<ModelField>() {
+        ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
             @Override
-            protected void process( ModelField field, boolean isLast ) {
+            public void process( ModelField field, boolean isLast ) {
                 writer.writeKeyValue(field.getName(), field.getDefaultValue(), isLast);
             }
-        }.process( model.getFields() );
+        });
     }
 
     private void writeValidators( Model model ) {
-        final ItemProcessor<Validator> validatorWriter = new ItemProcessor<Validator>() {
+        final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
             @Override
-            protected void process( Validator validator, boolean isLast ) {
+            public void process( Validator validator, boolean isLast ) {
                 validatorWriterManager.writeValidator(validator);
             }
         };
 
-        new ItemProcessor<ModelField>() {
+        ItemProcessor.process(model.getFields()).with(new ItemHandler<ModelField>() {
             @Override
-            protected void process( ModelField field, boolean isLast ) {
+            public void process( ModelField field, boolean isLast ) {
                 writer.writeKey(field.getName()).startBlock();
-                validatorWriter.process(field.getValidators());
+                ItemProcessor.process(validatorWriter, field.getValidators());
                 writer.endBlock(isLast);
             }
-        }.process( model.getFields() );
+        });
     }
 }

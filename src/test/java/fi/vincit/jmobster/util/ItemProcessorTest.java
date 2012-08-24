@@ -40,10 +40,10 @@ public class ItemProcessorTest {
         }
     }
 
-    public ItemProcessor<String> getItemProcessor(final StringBuilder sb, final LastItemCaller lic) {
-        ItemProcessor<String> itemProcessor = new ItemProcessor<String>() {
+    public ItemHandler<String> getItemProcessor(final StringBuilder sb, final LastItemCaller lic) {
+        ItemHandler<String> itemProcessor = new ItemHandler<String>() {
             @Override
-            protected void process(String item, boolean isLast) {
+            public void process(String item, boolean isLast) {
                 sb.append(item);
                 lic.call(isLast);
             }
@@ -55,9 +55,9 @@ public class ItemProcessorTest {
     public void testOneItem() {
         StringBuilder sb = new StringBuilder();
         LastItemCaller lic = new LastItemCaller();
-        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+        ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        itemProcessor.process((List)TestUtil.listFromObjects("item1"));
+        ItemProcessor.process((List)TestUtil.listFromObjects("item1")).with(itemProcessor);
 
         assertEquals("item1", sb.toString());
         assertEquals(1, lic.calledWithLastTrue);
@@ -68,9 +68,9 @@ public class ItemProcessorTest {
     public void testNoItems() {
         StringBuilder sb = new StringBuilder();
         LastItemCaller lic = new LastItemCaller();
-        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+        ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        itemProcessor.process((List)TestUtil.listFromObjects());
+        ItemProcessor.process((List)TestUtil.listFromObjects()).with(itemProcessor);
 
         assertEquals("", sb.toString());
         assertEquals(0, lic.calledWithLastTrue);
@@ -81,22 +81,23 @@ public class ItemProcessorTest {
     public void testMultipleItems() {
         StringBuilder sb = new StringBuilder();
         LastItemCaller lic = new LastItemCaller();
-        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+        ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        itemProcessor.process((List)TestUtil.listFromObjects("item1", "item2", "item3", "item4"));
+        ItemProcessor.process((List)TestUtil.listFromObjects("item1", "item2", "item3", "item4")).with(itemProcessor);
 
         assertEquals("item1item2item3item4", sb.toString());
         assertEquals(1, lic.calledWithLastTrue);
         assertEquals(3, lic.calledWithLastFalse);
     }
 
+
     @Test
     public void testOneItemInArray() {
         StringBuilder sb = new StringBuilder();
         LastItemCaller lic = new LastItemCaller();
-        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+        ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        itemProcessor.process(new String[] {"item1"});
+        ItemProcessor.process(itemProcessor, new String[] {"item1"});
 
         assertEquals("item1", sb.toString());
         assertEquals(1, lic.calledWithLastTrue);
@@ -107,9 +108,9 @@ public class ItemProcessorTest {
     public void testNoItemsInArray() {
         StringBuilder sb = new StringBuilder();
         LastItemCaller lic = new LastItemCaller();
-        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+        ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        itemProcessor.process();
+        ItemProcessor.process(itemProcessor);
 
         assertEquals("", sb.toString());
         assertEquals(0, lic.calledWithLastTrue);
@@ -120,9 +121,9 @@ public class ItemProcessorTest {
     public void testMultipleItemsInArray() {
         StringBuilder sb = new StringBuilder();
         LastItemCaller lic = new LastItemCaller();
-        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+        ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        itemProcessor.process(new String[] {"item1", "item2", "item3", "item4"});
+        ItemProcessor.process(itemProcessor, new String[] {"item1", "item2", "item3", "item4"});
 
         assertEquals("item1item2item3item4", sb.toString());
         assertEquals(1, lic.calledWithLastTrue);
@@ -133,9 +134,9 @@ public class ItemProcessorTest {
     public void testNullItems() {
         StringBuilder sb = new StringBuilder();
         LastItemCaller lic = new LastItemCaller();
-        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+        ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        itemProcessor.process((List)null);
+        ItemProcessor.process(itemProcessor, (List)null);
 
         assertEquals("", sb.toString());
         assertEquals(0, lic.calledWithLastTrue);
@@ -146,10 +147,10 @@ public class ItemProcessorTest {
     public void testNullArrayItems() {
         StringBuilder sb = new StringBuilder();
         LastItemCaller lic = new LastItemCaller();
-        ItemProcessor<String> itemProcessor = getItemProcessor(sb,  lic);
+        ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
         String[] strings = null;
-        itemProcessor.process(strings);
+        ItemProcessor.process(itemProcessor, strings);
 
         assertEquals("", sb.toString());
         assertEquals(0, lic.calledWithLastTrue);

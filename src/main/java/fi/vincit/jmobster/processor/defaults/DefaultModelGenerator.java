@@ -6,6 +6,7 @@ import fi.vincit.jmobster.processor.ModelNamingStrategy;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
+import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,14 +70,12 @@ public class DefaultModelGenerator implements ModelGenerator {
     private void processModelsInternal( List<Model> models ) {
         try {
             modelProcessor.startProcessing();
-            ItemProcessor<Model> modelItemProcessor = new ItemProcessor<Model>() {
+            ItemProcessor.process(models).with(new ItemHandler<Model>() {
                 @Override
-                protected void process( Model model, boolean isLastModel ) {
+                public void process( Model model, boolean isLastModel ) {
                     modelProcessor.processModel( model, isLastModel );
                 }
-            };
-            modelItemProcessor.process(models);
-
+            });
             modelProcessor.endProcessing();
         } catch (IOException e) {
             LOG.error("Error", e);

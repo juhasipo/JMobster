@@ -15,6 +15,7 @@ package fi.vincit.jmobster.processor.languages.javascript;/*
 */
 
 import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
 
 /**
@@ -74,13 +75,13 @@ public class JavaScriptWriter implements DataWriter {
      */
     private JavaScriptWriter writeFunctionArgsAndStartBlock(String... arguments) {
         write(FUNCTION_ARG_START);
-        ItemProcessor<String> argumentProcessor = new ItemProcessor<String>() {
+        ItemHandler<String> argumentProcessor = new ItemHandler<String>() {
             @Override
-            protected void process(String argument, boolean isLast) {
+            public void process(String argument, boolean isLast) {
                 write(argument, "," + space, !isLast);
             }
         };
-        argumentProcessor.process(arguments);
+        ItemProcessor.process(argumentProcessor, arguments);
         write(FUNCTION_ARG_END).writeSpace();
         return startBlock();
     }

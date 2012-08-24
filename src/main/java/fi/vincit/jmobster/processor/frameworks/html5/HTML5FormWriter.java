@@ -23,6 +23,7 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
 
 public class HTML5FormWriter extends BaseModelWriter {
@@ -39,22 +40,22 @@ public class HTML5FormWriter extends BaseModelWriter {
     public void write( Model model ) {
         writer.startTag("form");
 
-        final ItemProcessor<Validator> validatorWriter = new ItemProcessor<Validator>() {
+        final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
             @Override
-            protected void process( Validator validator, boolean isLast ) {
+            public void process( Validator validator, boolean isLast ) {
                 validatorWriterManager.writeValidator( validator );
             }
         };
 
-        new ItemProcessor<ModelField>() {
+        ItemProcessor.process(model.getFields()).with(new ItemHandler<ModelField>() {
             @Override
-            protected void process( ModelField field, boolean isLast ) {
+            public void process( ModelField field, boolean isLast ) {
                 writer.startTagWithAttr("input").writeAttr("type", "text");
-                validatorWriter.process(field.getValidators());
+                ItemProcessor.process(field.getValidators()).with(validatorWriter);
                 writer.writeAttr("value", field.getDefaultValue());
                 writer.endStartTagWithAttr(true);
             }
-        }.process( model.getFields() );
+        });
 
         writer.endTag();
     }
