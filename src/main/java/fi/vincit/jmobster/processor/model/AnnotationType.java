@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.model;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,23 +16,5 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import javax.validation.constraints.Size;
-
-public class SizeValidator extends BaseValidator {
-    private int min;
-    private int max;
-
-    public SizeValidator( AnnotationBag annotationBag ) {
-        super( annotationBag.getGroups() );
-        Size size = annotationBag.getAnnotation(Size.class);
-        this.min = size.min();
-        this.max = size.max();
-    }
-
-    public int getMin() {
-        return min;
-    }
-    public int getMax() {
-        return max;
-    }
+public interface AnnotationType {
 }

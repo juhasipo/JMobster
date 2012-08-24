@@ -18,12 +18,14 @@ package fi.vincit.jmobster.util;
 
 import fi.vincit.jmobster.processor.model.HasType;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 
 /**
  * Class manages required and optional class combinations.
+ * TODO: Make more generic
  */
-public class CombinationManager<T extends HasType> {
+public class CombinationManager<T extends Annotation> {
 
     private Map<Class, Class> requiredClasses;
     private Map<Class, Class> optionalClasses;
@@ -71,8 +73,8 @@ public class CombinationManager<T extends HasType> {
         }
 
         int matchesFound = 0;
-        for( HasType hasTypeClass : classesWithType ) {
-            if( requiredClasses.containsKey( hasTypeClass.getType() ) ) {
+        for( T hasTypeClass : classesWithType ) {
+            if( requiredClasses.containsKey( hasTypeClass.annotationType() ) ) {
                 ++matchesFound;
             }
         }
@@ -86,7 +88,6 @@ public class CombinationManager<T extends HasType> {
      * @return True if the manager contains the given class either as required or as an optional class. Otherwise false.
      */
     public <T> boolean containsClass(Class<T> type) {
-        // TODO: Refactor to take of type HasType? Or is it good param?
         return requiredClasses.containsKey(type) || optionalClasses.containsKey(type);
     }
 

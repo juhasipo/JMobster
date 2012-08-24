@@ -24,6 +24,8 @@ import javax.validation.constraints.Size;
 public class HTML5ValidatorWriterManager extends BaseValidatorWriterManager<HTML5Writer> {
     public HTML5ValidatorWriterManager( HTML5Writer modelWriter ) {
         super( modelWriter );
-        setValidator(Size.class, new SizeValidatorWriter());
+        setValidator(
+                new SizeValidatorWriter()
+        );
     }
 }

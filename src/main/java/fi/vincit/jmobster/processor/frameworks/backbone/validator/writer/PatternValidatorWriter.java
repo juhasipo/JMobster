@@ -16,20 +16,19 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
+import fi.vincit.jmobster.processor.defaults.validator.PatternValidator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
+import fi.vincit.jmobster.util.JavaToJSPatternConverter;
 
-import javax.validation.constraints.Size;
+public class PatternValidatorWriter extends BaseValidatorWriter<PatternValidator, JavaScriptWriter> {
+    public PatternValidatorWriter() {
+        super( PatternValidator.class );
+    }
 
-/**
- * Validator writer manager for Backbone
- */
-public class BackboneValidatorWriterManager extends BaseValidatorWriterManager<JavaScriptWriter> {
-    public BackboneValidatorWriterManager( JavaScriptWriter modelWriter ) {
-        super( modelWriter );
-        setValidator(
-                new SizeValidatorWriter(),
-                new PatternValidatorWriter()
-        );
+    @Override
+    protected void write( JavaScriptWriter writer, PatternValidator validator ) {
+        String pattern = JavaToJSPatternConverter.convertFromJava(validator.getRegexp(), validator.getFlags());
+        writer.writeKeyValue("pattern", pattern, false);
     }
 }

@@ -19,6 +19,8 @@ package fi.vincit.jmobster.processor;
 import fi.vincit.jmobster.processor.model.Validator;
 
 import java.lang.annotation.Annotation;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Creates new validator instances from annotation instances.
@@ -33,19 +35,11 @@ public interface ValidatorFactory {
      * @param annotation Annotation instance
      * @return New validator instance if exists, otherwise null.
      */
-    Validator getValidator(Annotation annotation);
-
-    /**
-     *
-     * @param annotation Annotation
-     * @return True if the given annotation has a validator set
-     */
-    boolean isValidationAnnotation(Annotation annotation);
+    List<Validator> createValidators(Annotation[] annotations);
 
     /**
      * Configures validator constructor for the given type
-     * @param type Type (Annotation class)
      * @param validatorConstructor Constructor that will create the validator
      */
-    void setValidator(Class type, ValidatorConstructor validatorConstructor);
+    void setValidator(ValidatorConstructor validatorConstructor);
 }

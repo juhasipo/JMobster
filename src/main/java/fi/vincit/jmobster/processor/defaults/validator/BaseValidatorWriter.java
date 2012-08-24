@@ -21,11 +21,25 @@ import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.DataWriter;
 
 /**
+ * Base class for validator writers. This should be extended when creating own
+ * validator writers. The class handles type casting internally so the validator
+ * writer gets the correct parameters.
  *
- * @param <T>
- * @param <W>
+ * @param <V> Validator type the writer uses
+ * @param <W> Writer used to write the validator
  */
-public abstract class BaseValidatorWriter<T extends Validator, W extends DataWriter> implements ValidatorWriter<T,W> {
+public abstract class BaseValidatorWriter<V extends Validator, W extends DataWriter> implements ValidatorWriter<V,W> {
+    final private Class supportedType;
+
+    /**
+     * Configures the validator writer to support the given validator
+     * class.
+     * @param supportedType Validator type (Class of the validator)
+     */
+    protected BaseValidatorWriter( Class supportedType ) {
+        this.supportedType = supportedType;
+    }
+
     /**
      * Internal implementation of write. This casts the given validator
      * to the type of generic T. If the validator happens to be wrong type
@@ -44,8 +58,18 @@ public abstract class BaseValidatorWriter<T extends Validator, W extends DataWri
         like this. When this fails, there may be some strange errors
         or exceptions thrown.
          */
-        write( writer, (T)validator );
+        write( writer, (V)validator );
     }
 
-    protected abstract void write(W writer, T validator);
+    /**
+     * Writes validator to given writer
+     * @param writer Writer
+     * @param validator Validator to write
+     */
+    protected abstract void write(W writer, V validator);
+
+    @Override
+    public Class getSupportedType() {
+        return supportedType;
+    }
 }

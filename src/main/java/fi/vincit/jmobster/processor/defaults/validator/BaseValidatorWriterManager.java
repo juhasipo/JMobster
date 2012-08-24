@@ -24,11 +24,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstract implementation for a manager that provides validator
- * writers.
+ * <p>
+ *     Abstract implementation for a manager that provides validator
+ * writers. The subclasses should configure the used validator writers
+ * in the constructor or other suitable method before using.
+ * </p>
  *
- * The constructor has to implemented. The used validator writers can be initialized in the
- * constructor.
+ * <p>
+ *     The concrete type of data writer can be configured via generic parameter.
+ * This will allow the user to use higher level data writers to write validators
+ * instead of using just a low level {@link DataWriter}. This writer will be given
+ * to the validator writers as the correct type as long as the validator writer
+ * has the correct generic type set.
+ * </p>
+ *
  * @param <W> DataWriter to use. This has be compatible with the ValidatorWriters that are given to this manager.
  */
 public abstract class BaseValidatorWriterManager<W extends DataWriter> {
@@ -37,21 +46,26 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
 
     final private W modelWriter;
 
+    /**
+     * Constructs validator writer manager with the given data writer
+     * @param modelWriter Data writer to use
+     */
     public BaseValidatorWriterManager( W modelWriter ) {
         this.modelWriter = modelWriter;
     }
 
     /**
      * Configure new validator writer.
-     * @param validatorType Validation annotation type (class).
-     * @param validatorWriter Validation writer to use for this type.
+     * @param validatorWriters One or more validation writers to add.
      */
-    public void setValidator(Class validatorType, BaseValidatorWriter<? extends Validator, W> validatorWriter) {
-        writers.put(validatorType, validatorWriter);
+    public void setValidator(ValidatorWriter<? extends Validator, W>... validatorWriters) {
+        for( ValidatorWriter validatorWriter : validatorWriters ) {
+            writers.put( validatorWriter.getSupportedType(), validatorWriter );
+        }
     }
 
     public void writeValidator(Validator validator) {
-        Class validatorType = validator.getType();
+        Class validatorType = validator.getClass();
         if( writers.containsKey(validatorType) ) {
             ValidatorWriter writer = writers.get(validatorType);
             writer.write( modelWriter, (Object)validator );

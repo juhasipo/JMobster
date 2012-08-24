@@ -19,6 +19,28 @@ package fi.vincit.jmobster.processor;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.DataWriter;
 
-public interface ValidatorWriter<T extends Validator, W extends DataWriter> {
+/**
+ * <p>
+ *     Interface for validator writers that write validator with given
+ * writer. You should not implement this interface. Instead use {@link fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter}
+ * which handles necessary type casts internally so that the validator writer will get the parameters
+ * correctly.
+ * </p>
+ *
+ * @param <V> Validator type the writer uses
+ * @param <W> Data writer type. Should be compatible with corresponding {@link fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager}
+ */
+public interface ValidatorWriter<V extends Validator, W extends DataWriter> {
+    /**
+     * Writes the given validator with the given writer
+     * @param writer Writer
+     * @param validator Validator
+     */
     void write(W writer, Object validator);
+
+    /**
+     * Returns the type this validator writer supports
+     * @return Type of validator (Class of the {@link Validator})
+     */
+    Class getSupportedType();
 }

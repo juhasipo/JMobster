@@ -17,6 +17,5 @@ package fi.vincit.jmobster.processor.model;
  */
 
 public interface HasType {
-    // TODO: Make type abstract
-    Class getType();
+    AnnotationType getType();
 }

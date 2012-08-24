@@ -1,8 +1,11 @@
 JMobster - Java Model to Backbone.js generator
 ==============================================
-Version Preview-Alpha 0.1
+Version preview-alpha 0.2
 
 ### Purpose and Current Status
+
+**The architecture is being redesigned at the moment. A lot of things are broken in this branch.**
+
 The purpose of this project is to enable automatic model generation from Java POJOs to Backbone.js models. It also
 supports client side validation generation from standard JSR-303 validation annotations. At the moment it's still
 more of an proof of concept type of project, but in future as I found some use for it may become more mature.

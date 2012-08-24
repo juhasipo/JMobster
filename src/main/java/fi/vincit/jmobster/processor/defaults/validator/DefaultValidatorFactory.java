@@ -16,11 +16,15 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.ValidatorConstructor;
 import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.CombinationManager;
+import fi.vincit.jmobster.util.OptionalTypes;
+import fi.vincit.jmobster.util.RequiredTypes;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.lang.annotation.Annotation;
 
 /**
  * Default implementation of validator factory. Contains
@@ -28,11 +32,13 @@ import java.lang.annotation.Annotation;
  */
 public class DefaultValidatorFactory extends BaseValidatorFactory {
     public DefaultValidatorFactory() {
-        setValidator(Size.class, new ValidatorConstructor() {
-            @Override
-            public Validator construct( Annotation annotation ) {
-                return new SizeValidator((Size)annotation);
-            }
-        } );
+        setValidator(new ValidatorConstructor(
+                SizeValidator.class,
+                RequiredTypes.get(Size.class),
+                OptionalTypes.get()));
+        setValidator(new ValidatorConstructor(
+                PatternValidator.class,
+                RequiredTypes.get(Pattern.class),
+                OptionalTypes.get(OverridePattern.class)));
     }
 }

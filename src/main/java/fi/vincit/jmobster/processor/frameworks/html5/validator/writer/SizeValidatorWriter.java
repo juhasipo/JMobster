@@ -23,6 +23,11 @@ import fi.vincit.jmobster.processor.languages.html.HTML5Writer;
 import fi.vincit.jmobster.util.DataWriter;
 
 public class SizeValidatorWriter extends BaseValidatorWriter<SizeValidator, HTML5Writer> {
+
+    public SizeValidatorWriter() {
+        super( SizeValidator.class );
+    }
+
     @Override
     protected void write( HTML5Writer writer, SizeValidator validator ) {
         writer.writeAttr("maxlength", ""+validator.getMax());

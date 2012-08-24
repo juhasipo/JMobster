@@ -21,39 +21,38 @@ import fi.vincit.jmobster.processor.ValidatorFactory;
 import fi.vincit.jmobster.processor.model.Validator;
 
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Base implementation of validator factory. Additional
- * validators can be added using {@link fi.vincit.jmobster.processor.ValidatorFactory#setValidator(Class, fi.vincit.jmobster.processor.ValidatorConstructor)}
- * method.
+ *
  */
 public abstract class BaseValidatorFactory implements ValidatorFactory {
 
-    final private Map<Class, ValidatorConstructor> validatorConstructors;
+    final private Set<ValidatorConstructor> validatorConstructors;
 
     protected BaseValidatorFactory() {
-        validatorConstructors = new HashMap<Class, ValidatorConstructor>();
+        validatorConstructors = new HashSet<ValidatorConstructor>();
     }
 
     @Override
-    public void setValidator(Class type, ValidatorConstructor validatorConstructor) {
-        validatorConstructors.put( type, validatorConstructor );
+    public void setValidator(ValidatorConstructor validatorConstructor) {
+        validatorConstructors.add( validatorConstructor );
     }
 
     @Override
-    public Validator getValidator( Annotation annotation ) {
-        if( isValidationAnnotation(annotation) ) {
-            return validatorConstructors.get(annotation.annotationType()).construct( annotation );
-        } else {
-            return null;
+    public List<Validator> createValidators( Annotation[] annotations ) {
+        List<Validator> validators = new ArrayList<Validator>(annotations.length);
+        Set<Annotation> annotationSet = new HashSet<Annotation>();
+        for( Annotation annotation : annotations ) {
+            annotationSet.add(annotation);
         }
-    }
 
-    @Override
-    public boolean isValidationAnnotation( Annotation annotation ) {
-        Class type = annotation.annotationType();
-        return validatorConstructors.containsKey( type );
+        for( ValidatorConstructor validatorConstructor : validatorConstructors ) {
+            Validator validator = validatorConstructor.construct(annotationSet);
+            if( validator != null ) {
+                validators.add(validator);
+            }
+        }
+        return validators;
     }
 }

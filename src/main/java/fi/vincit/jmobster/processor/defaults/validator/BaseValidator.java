@@ -16,15 +16,13 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.model.AnnotationType;
 import fi.vincit.jmobster.processor.model.Validator;
 
 public abstract class BaseValidator implements Validator {
-    // TODO: Required and optional types
-    private final Class type;
     private final Class[] groups;
 
-    protected BaseValidator(Class type, Class[] groups) {
-        this.type = type;
+    protected BaseValidator(Class[] groups) {
         if( groups != null ) {
             this.groups = groups.clone();
         } else {
@@ -43,7 +41,7 @@ public abstract class BaseValidator implements Validator {
     }
 
     @Override
-    public Class getType() {
-        return type;
+    public AnnotationType getType() {
+        return null;
     }
 }

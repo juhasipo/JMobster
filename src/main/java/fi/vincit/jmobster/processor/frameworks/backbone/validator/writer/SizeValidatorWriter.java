@@ -21,16 +21,21 @@ import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
 public class SizeValidatorWriter extends BaseValidatorWriter<SizeValidator, JavaScriptWriter> {
+
+    public SizeValidatorWriter() {
+        super( SizeValidator.class );
+    }
+
     @Override
     public void write( JavaScriptWriter writer, SizeValidator validator ) {
+        // TODO: Comma after last if still more validators to write
         final boolean isMin = validator.getMin() >= 0;
         final boolean isMax = validator.getMax() < Integer.MAX_VALUE;
         if( isMin ) {
-            writer.writeKeyValue("min", "" + validator.getMax(), !isMax);
+            writer.writeKeyValue("min", "" + validator.getMin(), !isMax);
         }
         if( isMax ) {
             writer.writeKeyValue("max", "" + validator.getMax(), true);
         }
-
     }
 }

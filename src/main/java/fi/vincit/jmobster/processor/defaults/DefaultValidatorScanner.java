@@ -58,15 +58,11 @@ public class DefaultValidatorScanner implements ValidatorScanner {
     }
 
     private List<Validator> getValidators( Annotation[] annotations, Class... groups ) {
-        List<Validator> validators = new ArrayList<Validator>(annotations.length);
-        for( Annotation annotation : annotations ) {
-            if( validatorFactory.isValidationAnnotation( annotation ) ) {
-                Validator validator = validatorFactory.getValidator(annotation);
-                if( groupManager.shouldAddValidator(validator) ) {
-                    validators.add( validator );
-                }
-            }
-        }
+        List<Validator> validators = validatorFactory.createValidators(annotations);
+        // TODO: Grouping
+        //if( groupManager.shouldAddValidator(validator) ) {
+        //    validators.add( validator );
+        //}
         return validators;
     }
 }

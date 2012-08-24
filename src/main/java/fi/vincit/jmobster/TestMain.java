@@ -17,6 +17,7 @@ package fi.vincit.jmobster;
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.annotation.Model;
+import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.defaults.CachedModelProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,8 +86,9 @@ public class TestMain {
     }
 
     public static class BeanPropertyDemo {
-        //@Pattern(regexp = "[\\w]*")
-        //private String firstName = "John";
+        @OverridePattern(regexp = "foo")
+        @Pattern(regexp = "[\\w]*")
+        private String firstName = "John";
         @Size(min = 0, max = 255)
         @Pattern(regexp = "[\\w]*")
         private String lastName = "Doe";
@@ -101,9 +103,11 @@ public class TestMain {
     public static void main(String[] args) throws IOException, InterruptedException {
         //DataWriter modelWriter = new StreamDataWriter("models.js");
         CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY);
-        ModelGenerator generator = JMobsterFactory.getInstance("html5", provider);
+        final String HTML5 = "html5";
+        final String BB = "backbone.js";
+        ModelGenerator generator = JMobsterFactory.getInstance(BB, provider);
 
-        generator.process( BeanPropertyDemo.class );
+        generator.process( BeanPropertyDemo.class, MyModelDto.class );
         //generator.process( MyModelDto.class );
 
         System.out.println(provider.getModel());
