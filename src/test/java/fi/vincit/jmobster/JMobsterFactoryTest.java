@@ -15,12 +15,10 @@ package fi.vincit.jmobster;/*
 */
 
 import fi.vincit.jmobster.exception.UnsupportedFramework;
-import fi.vincit.jmobster.util.DataWriter;
-import fi.vincit.jmobster.util.StreamDataWriter;
-import fi.vincit.jmobster.util.StringBufferWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
+import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;

@@ -17,7 +17,7 @@ package fi.vincit.jmobster.processor;
  */
 
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
  * <p>

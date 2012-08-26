@@ -19,7 +19,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
 import fi.vincit.jmobster.processor.defaults.validator.PatternValidator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
-import fi.vincit.jmobster.util.JavaToJSPatternConverter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaToJSPatternConverter;
 
 public class PatternValidatorWriter extends BaseValidatorWriter<PatternValidator, JavaScriptWriter> {
     public PatternValidatorWriter() {

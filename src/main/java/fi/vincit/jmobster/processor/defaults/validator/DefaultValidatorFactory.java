@@ -18,10 +18,8 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.ValidatorConstructor;
-import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.CombinationManager;
-import fi.vincit.jmobster.util.OptionalTypes;
-import fi.vincit.jmobster.util.RequiredTypes;
+import fi.vincit.jmobster.util.combination.OptionalTypes;
+import fi.vincit.jmobster.util.combination.RequiredTypes;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

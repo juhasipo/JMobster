@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.html5;
 
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
 

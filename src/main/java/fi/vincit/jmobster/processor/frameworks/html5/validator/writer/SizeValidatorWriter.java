@@ -16,11 +16,9 @@ package fi.vincit.jmobster.processor.frameworks.html5.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.ModelWriter;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
 import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
 import fi.vincit.jmobster.processor.languages.html.HTML5Writer;
-import fi.vincit.jmobster.util.DataWriter;
 
 public class SizeValidatorWriter extends BaseValidatorWriter<SizeValidator, HTML5Writer> {
 

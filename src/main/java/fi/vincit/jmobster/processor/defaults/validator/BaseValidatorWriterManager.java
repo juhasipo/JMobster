@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.HashMap;
 import java.util.Map;

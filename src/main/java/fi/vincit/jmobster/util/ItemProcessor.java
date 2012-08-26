@@ -37,8 +37,8 @@ import java.util.Collection;
  * </p>
  *
  * <p>
- *     Combine with {@link DataWriter}'s {@link DataWriter#write(String, String, boolean)} and
- * {@link DataWriter#writeLine(String, String, boolean)} to write lists with last separator
+ *     Combine with {@link fi.vincit.jmobster.util.writer.DataWriter}'s {@link fi.vincit.jmobster.util.writer.DataWriter#write(String, String, boolean)} and
+ * {@link fi.vincit.jmobster.util.writer.DataWriter#writeLine(String, String, boolean)} to write lists with last separator
  * char left out.
  * </p>
  */

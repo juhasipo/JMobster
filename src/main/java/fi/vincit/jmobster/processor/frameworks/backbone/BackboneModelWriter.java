@@ -24,7 +24,7 @@ import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 public class BackboneModelWriter extends BaseModelWriter {
 

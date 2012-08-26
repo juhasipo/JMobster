@@ -2,7 +2,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
 import org.junit.Test;
 
 import java.util.ArrayList;

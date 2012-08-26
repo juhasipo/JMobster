@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor.languages.html;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.Stack;
 

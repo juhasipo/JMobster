@@ -18,9 +18,9 @@ package fi.vincit.jmobster.processor;
 
 import fi.vincit.jmobster.processor.defaults.validator.AnnotationBag;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.CombinationManager;
-import fi.vincit.jmobster.util.OptionalTypes;
-import fi.vincit.jmobster.util.RequiredTypes;
+import fi.vincit.jmobster.util.combination.CombinationManager;
+import fi.vincit.jmobster.util.combination.OptionalTypes;
+import fi.vincit.jmobster.util.combination.RequiredTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

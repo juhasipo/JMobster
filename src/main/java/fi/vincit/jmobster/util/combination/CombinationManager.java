@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.combination;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,8 +16,6 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.HasType;
-
 import java.lang.annotation.Annotation;
 import java.util.*;
 
@@ -31,7 +29,7 @@ public class CombinationManager<T extends Annotation> {
     private Map<Class, Class> optionalClasses;
 
     public CombinationManager() {
-        this(RequiredTypes.get(), OptionalTypes.get());
+        this( RequiredTypes.get(), OptionalTypes.get());
     }
 
     /**

@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.processor.languages.javascript;
 /*
  * Copyright 2012 Juha Siponen
  *

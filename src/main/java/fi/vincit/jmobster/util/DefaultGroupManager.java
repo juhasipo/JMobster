@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults;
+package fi.vincit.jmobster.util;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,11 +16,10 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.GroupManager;
+import fi.vincit.jmobster.util.GroupManager;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.model.HasGroups;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 

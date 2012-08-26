@@ -9,7 +9,9 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.DefaultGroupManager;
+import fi.vincit.jmobster.util.GroupManager;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
  * <p>

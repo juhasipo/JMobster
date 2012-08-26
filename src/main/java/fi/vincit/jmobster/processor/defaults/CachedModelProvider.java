@@ -15,11 +15,8 @@ package fi.vincit.jmobster.processor.defaults;/*
 */
 
 import fi.vincit.jmobster.processor.ModelProvider;
-import fi.vincit.jmobster.util.DataWriter;
-import fi.vincit.jmobster.util.StreamDataWriter;
-import fi.vincit.jmobster.util.StringBufferWriter;
-
-import java.io.ByteArrayOutputStream;
+import fi.vincit.jmobster.util.writer.DataWriter;
+import fi.vincit.jmobster.util.writer.StringBufferWriter;
 
 /**
  * Cached model provider caches processed models so that the models

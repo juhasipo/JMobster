@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.combination;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,21 +16,22 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
  */
 
-/**
- * Class to mark a set of classes as required types.
- */
-public class RequiredTypes extends TypeCollection<Class> {
+import fi.vincit.jmobster.util.TypeCollection;
 
+/**
+ * Class to mark a set of classes as optional types.
+ */
+public class OptionalTypes extends TypeCollection<Class> {
     /**
-     * Creates an RequiredTypes object with the given annotations
-     * @param annotations Annotations to use as required types
-     * @return RequiredTypes object with given annotations
+     * Creates an OptionalTypes object with the given annotations
+     * @param annotations Annotations to use as optional types
+     * @return OptionalTypes object with given annotations
      */
-    public static RequiredTypes get(Class... annotations) {
-        return new RequiredTypes(annotations);
+    public static OptionalTypes get(Class... annotations) {
+        return new OptionalTypes(annotations);
     }
 
-    protected RequiredTypes(Class... annotations) {
+    protected OptionalTypes(Class... annotations) {
         super(annotations);
     }
 }

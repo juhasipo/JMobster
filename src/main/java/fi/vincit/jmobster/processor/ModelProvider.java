@@ -14,7 +14,7 @@ package fi.vincit.jmobster.processor;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 public interface ModelProvider {
     String getModel();

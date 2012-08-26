@@ -17,7 +17,7 @@ package fi.vincit.jmobster.processor.defaults.base;
  */
 
 import fi.vincit.jmobster.processor.ModelWriter;
-import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
  * Base class for model writers. Now it is more like an

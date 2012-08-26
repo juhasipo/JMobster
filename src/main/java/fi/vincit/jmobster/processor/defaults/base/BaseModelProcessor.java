@@ -17,9 +17,8 @@ package fi.vincit.jmobster.processor.defaults.base;
  */
 
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.util.DataWriter;
-import fi.vincit.jmobster.util.FileDataWriter;
-import fi.vincit.jmobster.util.StreamDataWriter;
+import fi.vincit.jmobster.util.writer.DataWriter;
+import fi.vincit.jmobster.util.writer.FileDataWriter;
 
 import java.io.IOException;
 
