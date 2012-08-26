@@ -15,8 +15,6 @@ package fi.vincit.jmobster.util.writer;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.util.writer.DataWriter;
-import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -35,7 +33,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "{\nFoo\n}\n";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -48,7 +46,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "Foo,\n";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -61,7 +59,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "Foo\n";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -74,7 +72,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "Foo,";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -87,7 +85,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "Foo";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -99,7 +97,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "{Foo}";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -116,7 +114,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "{\n  Foo\n}\n";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -131,7 +129,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "{Foo\n  Bar\n  FooBar\n}\n";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -146,7 +144,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "{Foo\n  Bar\n  FooBar\n}\n";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -156,7 +154,7 @@ public class StreamDataWriterTest {
         mw.writeLine("Stuff");
         mw.close();
 
-        Assert.assertEquals( "    Stuff\n", mw.toString() );
+        assertEquals( "    Stuff\n", mw.toString() );
     }
 
     @Test
@@ -166,7 +164,7 @@ public class StreamDataWriterTest {
         mw.writeLine("Stuff");
         mw.close();
 
-        Assert.assertEquals( "    Stuff\n", mw.toString() );
+        assertEquals( "    Stuff\n", mw.toString() );
     }
 
     @Test
@@ -181,7 +179,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "{Foo\n\tBar\n\tFooBar\n}\n";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
     @Test
@@ -197,7 +195,7 @@ public class StreamDataWriterTest {
 
         String actual = mw.toString();
         String expected = "{Foo\r\n    Bar\r\n    FooBar\r\n}\r\n";
-        Assert.assertEquals( expected, actual );
+        assertEquals( expected, actual );
     }
 
 }

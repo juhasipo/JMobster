@@ -2,14 +2,16 @@ package fi.vincit.jmobster.util.combination;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class CombinationManagerTest {
 
     @Test
     public void testOneRequired() {
         CombinationManager cm = new CombinationManager( RequiredTypes.get( String.class ));
         //assertTrue(cm.matches( listFromObjects( String.class ) ) );
-        Assert.assertTrue( cm.containsClass( String.class ) );
-        Assert.assertEquals( String.class, cm.findClass( String.class ) );
+        assertTrue( cm.containsClass( String.class ) );
+        assertEquals( String.class, cm.findClass( String.class ) );
     }
 
     @Test
@@ -18,9 +20,9 @@ public class CombinationManagerTest {
         //assertFalse( cm.test( String.class ) );
 
         //assertTrue( cm.test( String.class, Integer.class ) );
-        Assert.assertTrue( cm.containsClass( String.class ) );
-        Assert.assertEquals( String.class, cm.findClass( String.class ) );
-        Assert.assertEquals( Integer.class, cm.findClass( Integer.class ) );
+        assertTrue( cm.containsClass( String.class ) );
+        assertEquals( String.class, cm.findClass( String.class ) );
+        assertEquals( Integer.class, cm.findClass( Integer.class ) );
     }
 
     @Test
@@ -33,24 +35,24 @@ public class CombinationManagerTest {
 
         //assertTrue( cm.matches( String.class, Integer.class ) );
         //assertTrue( cm.matches( String.class, Integer.class, Float.class ) );
-        Assert.assertTrue( cm.containsClass( String.class ) );
-        Assert.assertTrue( cm.containsClass( Float.class ) );
-        Assert.assertEquals( String.class, cm.findClass( String.class ) );
-        Assert.assertEquals( Integer.class, cm.findClass( Integer.class ) );
-        Assert.assertEquals( Float.class, cm.findClass( Float.class ) );
+        assertTrue( cm.containsClass( String.class ) );
+        assertTrue( cm.containsClass( Float.class ) );
+        assertEquals( String.class, cm.findClass( String.class ) );
+        assertEquals( Integer.class, cm.findClass( Integer.class ) );
+        assertEquals( Float.class, cm.findClass( Float.class ) );
     }
 
     @Test
     public void testNoClassFound() {
         CombinationManager cm = new CombinationManager( RequiredTypes.get(String.class), OptionalTypes.get(Float.class));
-        Assert.assertNull( cm.findClass( Integer.class ) );
-        Assert.assertFalse( cm.containsClass( Integer.class ) );
+        assertNull( cm.findClass( Integer.class ) );
+        assertFalse( cm.containsClass( Integer.class ) );
     }
 
     @Test
     public void testEmptyCollections() {
         CombinationManager cm = new CombinationManager( RequiredTypes.get(), OptionalTypes.get() );
-        Assert.assertFalse( cm.containsClass( Integer.class ) );
-        Assert.assertNull( cm.findClass( Integer.class ) );
+        assertFalse( cm.containsClass( Integer.class ) );
+        assertNull( cm.findClass( Integer.class ) );
     }
 }

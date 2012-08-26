@@ -25,19 +25,19 @@ public class JavaToJSPatternConverterTest {
     @Test
     public void testPatternAnnotationProcessorSimple() {
         String result = JavaToJSPatternConverter.convertFromJava("[\\dA-Z]");
-        Assert.assertEquals( "/[\\dA-Z]/", result );
+        assertEquals( "/[\\dA-Z]/", result );
     }
 
     @Test
     public void testPatternAnnotationProcessorEmpty() {
         String result = JavaToJSPatternConverter.convertFromJava("");
-        Assert.assertEquals( "//", result );
+        assertEquals( "//", result );
     }
 
     @Test
     public void testPatternAnnotationProcessorWhitespaceOnly() {
         String result = JavaToJSPatternConverter.convertFromJava("   \t   ");
-        Assert.assertEquals( "//", result );
+        assertEquals( "//", result );
     }
 
     @Test(expected = AssertionError.class)
@@ -54,19 +54,19 @@ public class JavaToJSPatternConverterTest {
     @Test
     public void testPatternAnnotationProcessorWithOneFlag() {
         String result = JavaToJSPatternConverter.convertFromJava("[\\dA-Z]", Pattern.Flag.CASE_INSENSITIVE);
-        Assert.assertEquals( "/[\\dA-Z]/i", result );
+        assertEquals( "/[\\dA-Z]/i", result );
     }
 
     @Test
     public void testPatternAnnotationProcessorWithTwoFlags() {
         String result = JavaToJSPatternConverter.convertFromJava("[\\dA-Z]", Pattern.Flag.CASE_INSENSITIVE, Pattern.Flag.MULTILINE);
-        Assert.assertEquals( "/[\\dA-Z]/im", result );
+        assertEquals( "/[\\dA-Z]/im", result );
     }
 
     @Test
     public void testPatternAnnotationProcessorWithOneUnsupportedFlag() {
         String result = JavaToJSPatternConverter.convertFromJava("[\\dA-Z]", Pattern.Flag.COMMENTS);
-        Assert.assertEquals( "/[\\dA-Z]/", result );
+        assertEquals( "/[\\dA-Z]/", result );
     }
 
     @Test
@@ -77,6 +77,6 @@ public class JavaToJSPatternConverterTest {
                 Pattern.Flag.CASE_INSENSITIVE,
                 Pattern.Flag.DOTALL,
                 Pattern.Flag.MULTILINE);
-        Assert.assertEquals( "/[\\dA-Z]/im", result );
+        assertEquals( "/[\\dA-Z]/im", result );
     }
 }

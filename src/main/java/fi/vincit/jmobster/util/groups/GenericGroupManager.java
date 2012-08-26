@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.groups;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,7 +16,6 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.GroupManager;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.model.HasGroups;
 
@@ -26,9 +25,9 @@ import java.util.Set;
 /**
  * Default implementation of group manager
  */
-public class DefaultGroupManager implements GroupManager {
+public class GenericGroupManager<T> implements GroupManager<T> {
 
-    final private Class[] groups;
+    final private T[] groups;
     final private GroupMode groupMode;
     private boolean includeValidatorsWithoutGroup = true;
 
@@ -37,7 +36,7 @@ public class DefaultGroupManager implements GroupManager {
      * @param groupMode Group mode
      * @param requiredGroups Required groups
      */
-    public DefaultGroupManager( GroupMode groupMode, Class... requiredGroups ) {
+    public GenericGroupManager( GroupMode groupMode, T... requiredGroups ) {
         this.groupMode = groupMode;
         this.groups = requiredGroups;
     }
@@ -52,7 +51,7 @@ public class DefaultGroupManager implements GroupManager {
     }
 
     @Override
-    public boolean shouldAddValidator( HasGroups groupObject ) {
+    public boolean shouldAddValidator( HasGroups<T> groupObject ) {
         if( groupObject.hasGroups() && checkGroups( groupObject ) ) {
             return true;
         } else if( !groupObject.hasGroups() && includeValidatorsWithoutGroup ) {
@@ -66,8 +65,8 @@ public class DefaultGroupManager implements GroupManager {
      * @param groupObject Validator
      * @return True if groups match according to groupMode, otherwise false.
      */
-    private boolean checkGroups(HasGroups groupObject) {
-        Class[] groupsGiven = groupObject.getGroups();
+    private boolean checkGroups(HasGroups<T> groupObject) {
+        T[] groupsGiven = groupObject.getGroups();
 
         if( groupMode == GroupMode.ANY_OF_REQUIRED) {
             return checkAnyRequiredGroups( groupsGiven );
@@ -79,14 +78,14 @@ public class DefaultGroupManager implements GroupManager {
         return false;
     }
 
-    private boolean checkAnyRequiredGroups( Class[] groupsGiven ) {
+    private boolean checkAnyRequiredGroups( T[] groupsGiven ) {
         // If no groups configured, this always passes
         if( groups.length == 0 ) {
             return true;
         }
 
-        for( Class group : groupsGiven ) {
-            for( Class myGroup : this.groups ) {
+        for( T group : groupsGiven ) {
+            for( T myGroup : this.groups ) {
                 if( group.equals(myGroup) ) {
                     return true;
                 }
@@ -95,15 +94,15 @@ public class DefaultGroupManager implements GroupManager {
         return false;
     }
 
-    private boolean checkAtLeastRequiredGroups( Class[] groupsGiven ) {
-        final Set<Class> configuredGroups = new HashSet<Class>(groups.length);
-        for( Class group : groups ) {
+    private boolean checkAtLeastRequiredGroups( T[] groupsGiven ) {
+        final Set<T> configuredGroups = new HashSet<T>(groups.length);
+        for( T group : groups ) {
             configuredGroups.add( group );
         }
         final int groupsNeededCount = configuredGroups.size();
 
-        final Set<Class> givenGroups = new HashSet<Class>(groupsGiven.length);
-        for( Class group : groupsGiven ) {
+        final Set<T> givenGroups = new HashSet<T>(groupsGiven.length);
+        for( T group : groupsGiven ) {
             givenGroups.add( group );
         }
         final int groupsGivenCount = givenGroups.size();
@@ -113,7 +112,7 @@ public class DefaultGroupManager implements GroupManager {
         }
 
         int groupsFoundCount = 0;
-        for( Class givenGroup : givenGroups ) {
+        for( T givenGroup : givenGroups ) {
             if( configuredGroups.contains(givenGroup) ) {
                 ++groupsFoundCount;
             }
@@ -121,7 +120,7 @@ public class DefaultGroupManager implements GroupManager {
         return groupsFoundCount == groupsNeededCount;
     }
 
-    private boolean checkExactlyRequiredGroups( Class[] groupsGiven ) {
+    private boolean checkExactlyRequiredGroups( T[] groupsGiven ) {
         // If no groups configured, this always passes
         if( groups.length == 0 && groupsGiven.length == 0 ) {
             return true;
@@ -132,8 +131,8 @@ public class DefaultGroupManager implements GroupManager {
             return false;
         }
         int groupsFoundCount = 0;
-        for( Class aGroup : groupsGiven ) {
-            for( Class vGroup : this.groups ) {
+        for( T aGroup : groupsGiven ) {
+            for( T vGroup : this.groups ) {
                 if( aGroup.equals(vGroup) ) {
                     ++groupsFoundCount;
                 }

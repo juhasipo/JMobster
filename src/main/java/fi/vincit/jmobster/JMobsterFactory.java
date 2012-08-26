@@ -9,8 +9,8 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
-import fi.vincit.jmobster.util.DefaultGroupManager;
-import fi.vincit.jmobster.util.GroupManager;
+import fi.vincit.jmobster.util.groups.ClassGroupManager;
+import fi.vincit.jmobster.util.groups.GroupManager;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
@@ -39,7 +39,7 @@ public class JMobsterFactory {
             ModelProcessor modelProcessor = new BackboneModelProcessor(writer);
             // TODO: Where to get validator scanner?
             ValidatorFactory factory = new DefaultValidatorFactory();
-            GroupManager groupManager = new DefaultGroupManager(GroupMode.ANY_OF_REQUIRED);
+            GroupManager<Class> groupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
             ValidatorScanner validatorScanner = new DefaultValidatorScanner(factory, groupManager);
             FieldValueConverter valueConverter =
                     new JavaToJSValueConverter(
@@ -53,7 +53,7 @@ public class JMobsterFactory {
             ModelProcessor modelProcessor = new HTML5ModelProcessor(writer);
             // TODO: Where to get validator scanner?
             ValidatorFactory factory = new DefaultValidatorFactory();
-            GroupManager groupManager = new DefaultGroupManager(GroupMode.ANY_OF_REQUIRED);
+            GroupManager<Class> groupManager = new ClassGroupManager((GroupMode.ANY_OF_REQUIRED));
             ValidatorScanner validatorScanner = new DefaultValidatorScanner(factory, groupManager);
             FieldValueConverter valueConverter =
                     new JavaToJSValueConverter(

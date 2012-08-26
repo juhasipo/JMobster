@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.groups;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,17 +16,10 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.HasGroups;
+import fi.vincit.jmobster.processor.GroupMode;
 
-/**
- * GroupManager handles checking whether a given validator
- * contains the required groups to be included in a model field.
- */
-public interface GroupManager {
-    /**
-     * Checks if the validator has the required groups
-     * @param groupObject Object with groups
-     * @return True if groups match, otherwise false
-     */
-    boolean shouldAddValidator( HasGroups groupObject );
+public class ClassGroupManager extends GenericGroupManager<Class> {
+    public ClassGroupManager( GroupMode groupMode, Class... requiredGroups ) {
+        super( groupMode, requiredGroups );
+    }
 }
