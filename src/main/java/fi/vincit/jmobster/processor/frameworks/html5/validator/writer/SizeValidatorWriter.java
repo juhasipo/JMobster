@@ -29,7 +29,7 @@ public class SizeValidatorWriter extends BaseValidatorWriter<SizeValidator, HTML
     }
 
     @Override
-    protected void write( HTML5Writer writer, SizeValidator validator ) {
+    protected void write( HTML5Writer writer, SizeValidator validator, boolean isLast ) {
         writer.writeAttr("maxlength", ""+validator.getMax());
     }
 }

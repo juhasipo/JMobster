@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.util;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,23 +16,25 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import javax.validation.constraints.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class SizeValidator extends BaseValidator {
-    private int min;
-    private int max;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
-    public SizeValidator( AnnotationBag annotationBag ) {
-        super( SizeValidator.class, annotationBag.getGroups() );
-        Size size = annotationBag.getAnnotation(Size.class);
-        this.min = size.min();
-        this.max = size.max();
+public class StringBufferWriter extends StreamDataWriter {
+
+    private static final Logger LOG = LoggerFactory.getLogger( StringBufferWriter.class );
+
+    private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+    public StringBufferWriter() {
+        super();
+        initializeStream( outputStream );
     }
 
-    public int getMin() {
-        return min;
-    }
-    public int getMax() {
-        return max;
+    @Override
+    public String toString() {
+        return outputStream.toString();
     }
 }

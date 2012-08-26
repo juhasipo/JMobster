@@ -25,7 +25,7 @@ public class PatternValidator extends BaseValidator {
     private Pattern.Flag[] flags;
 
     public PatternValidator( AnnotationBag annotationBag ) {
-        super( annotationBag.getGroups() );
+        super( PatternValidator.class, annotationBag.getGroups() );
         Pattern pattern = annotationBag.getAnnotation(Pattern.class);
         this.flags = pattern.flags();
 

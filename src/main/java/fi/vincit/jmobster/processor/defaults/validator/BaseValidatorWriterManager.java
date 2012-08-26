@@ -44,14 +44,14 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
     final private Map<Class, ValidatorWriter<? extends Validator, W>> writers =
             new HashMap<Class, ValidatorWriter<? extends Validator, W>>();
 
-    final private W modelWriter;
+    final private W dataWriter;
 
     /**
      * Constructs validator writer manager with the given data writer
-     * @param modelWriter Data writer to use
+     * @param dataWriter Data writer to use
      */
-    public BaseValidatorWriterManager( W modelWriter ) {
-        this.modelWriter = modelWriter;
+    public BaseValidatorWriterManager( W dataWriter ) {
+        this.dataWriter = dataWriter;
     }
 
     /**
@@ -64,11 +64,16 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
         }
     }
 
-    public void writeValidator(Validator validator) {
-        Class validatorType = validator.getClass();
+    /**
+     * Writes the given validator with tie configured data writer
+     * @param validator Validator to write
+     * @param isLast Set to true if the validator is the last validator that is going to be written for the field
+     */
+    public void write( Validator validator, boolean isLast ) {
+        Class validatorType = validator.getType();
         if( writers.containsKey(validatorType) ) {
             ValidatorWriter writer = writers.get(validatorType);
-            writer.write( modelWriter, (Object)validator );
+            writer.write( dataWriter, (Object)validator, isLast );
         }
     }
 }

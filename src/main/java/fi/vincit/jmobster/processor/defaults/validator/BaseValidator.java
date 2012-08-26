@@ -21,8 +21,10 @@ import fi.vincit.jmobster.processor.model.Validator;
 
 public abstract class BaseValidator implements Validator {
     private final Class[] groups;
+    private final Class type;
 
-    protected BaseValidator(Class[] groups) {
+    protected BaseValidator(Class type, Class[] groups) {
+        this.type = type;
         if( groups != null ) {
             this.groups = groups.clone();
         } else {
@@ -41,7 +43,7 @@ public abstract class BaseValidator implements Validator {
     }
 
     @Override
-    public AnnotationType getType() {
+    public Class getType() {
         return null;
     }
 }

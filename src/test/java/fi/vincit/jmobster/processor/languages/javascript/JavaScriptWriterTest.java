@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.languages.javascript;/*
 
 import fi.vincit.jmobster.util.DataWriter;
 import fi.vincit.jmobster.util.StreamDataWriter;
+import fi.vincit.jmobster.util.StringBufferWriter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,14 +25,12 @@ import java.io.ByteArrayOutputStream;
 import static org.junit.Assert.assertEquals;
 
 public class JavaScriptWriterTest {
-    private ByteArrayOutputStream os;
     private DataWriter mw;
     private JavaScriptWriter writer;
 
     @Before
     public void initTest() {
-        os = new ByteArrayOutputStream();
-        mw = new StreamDataWriter(os);
+        mw = new StringBufferWriter();
         writer = new JavaScriptWriter(mw);
     }
 
@@ -40,7 +39,7 @@ public class JavaScriptWriterTest {
         writer.startAnonFunction("arg1", "arg2", "arg3").endFunction();
         mw.close();
 
-        assertEquals("function(arg1, arg2, arg3) {\n}\n", os.toString());
+        assertEquals("function(arg1, arg2, arg3) {\n}\n", mw.toString());
     }
 
     @Test
@@ -48,7 +47,7 @@ public class JavaScriptWriterTest {
         writer.startNamedFunction("func", "arg1", "arg2", "arg3").endFunction();
         mw.close();
 
-        assertEquals("function func(arg1, arg2, arg3) {\n}\n", os.toString());
+        assertEquals("function func(arg1, arg2, arg3) {\n}\n", mw.toString());
     }
 
     @Test
@@ -57,7 +56,7 @@ public class JavaScriptWriterTest {
         writer.writeLine("return this;").endFunction();
         mw.close();
 
-        assertEquals("function(arg1, arg2, arg3) {\n    return this;\n}\n", os.toString());
+        assertEquals("function(arg1, arg2, arg3) {\n    return this;\n}\n", mw.toString());
     }
 
     @Test
@@ -67,7 +66,7 @@ public class JavaScriptWriterTest {
         writer.writeKeyValue("key3", "3", true);
         mw.close();
 
-        assertEquals("key1: 1,\nkey2: 2,\nkey3: 3\n", os.toString());
+        assertEquals("key1: 1,\nkey2: 2,\nkey3: 3\n", mw.toString());
     }
 
     @Test(expected = RuntimeException.class)
@@ -120,7 +119,7 @@ public class JavaScriptWriterTest {
         writer.endBlock();
         mw.close();
 
-        assertEquals("{\n}\n", os.toString());
+        assertEquals("{\n}\n", mw.toString());
     }
 
     @Test
@@ -131,7 +130,7 @@ public class JavaScriptWriterTest {
         writer.endBlock();
         mw.close();
 
-        assertEquals("{\n\t\ttest\n}\n", os.toString());
+        assertEquals("{\n\t\ttest\n}\n", mw.toString());
     }
 
     @Test
@@ -141,7 +140,7 @@ public class JavaScriptWriterTest {
         writer.endBlock();
         mw.close();
 
-        assertEquals("{l}l", os.toString());
+        assertEquals("{l}l", mw.toString());
     }
 
     @Test
@@ -151,6 +150,6 @@ public class JavaScriptWriterTest {
         writer.endFunction();
         mw.close();
 
-        assertEquals("function_SPACE_func(arg1)_SPACE_{\n}\n", os.toString());
+        assertEquals("function_SPACE_func(arg1)_SPACE_{\n}\n", mw.toString());
     }
 }

@@ -244,4 +244,9 @@ public class JavaScriptWriter implements DataWriter {
     public void setSpace(String space) {
         this.space = space;
     }
+
+    @Override
+    public String toString() {
+        return writer.toString();
+    }
 }

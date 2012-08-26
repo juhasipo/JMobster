@@ -27,8 +27,8 @@ public class PatternValidatorWriter extends BaseValidatorWriter<PatternValidator
     }
 
     @Override
-    protected void write( JavaScriptWriter writer, PatternValidator validator ) {
+    protected void write( JavaScriptWriter writer, PatternValidator validator, boolean isLast ) {
         String pattern = JavaToJSPatternConverter.convertFromJava(validator.getRegexp(), validator.getFlags());
-        writer.writeKeyValue("pattern", pattern, false);
+        writer.writeKeyValue("pattern", pattern, isLast);
     }
 }

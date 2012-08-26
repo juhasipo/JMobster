@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.base;
 
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.util.DataWriter;
+import fi.vincit.jmobster.util.FileDataWriter;
 import fi.vincit.jmobster.util.StreamDataWriter;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public abstract class BaseModelProcessor implements ModelProcessor {
     protected DataWriter getWriter() {
         try {
             if( !hasWriter() ) {
-                setWriter(new StreamDataWriter(getModelFilePath()));
+                setWriter(new FileDataWriter(getModelFilePath()));
             }
             return writer;
         } catch( IOException e ) {

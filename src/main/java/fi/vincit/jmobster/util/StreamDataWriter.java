@@ -26,12 +26,10 @@ import java.io.*;
  * indentation character and length can be configured with {@link DataWriter#setIndentationChar(char, int)}
  * method. Also line change characters can be changed with {@link DataWriter#setLineSeparator(String)}.
  */
-public class StreamDataWriter implements DataWriter {
+public abstract class StreamDataWriter implements DataWriter {
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger( StreamDataWriter.class );
+    private static final Logger LOG = LoggerFactory.getLogger( StreamDataWriter.class );
 
-    private FileWriter file;
     private BufferedWriter writer;
     private int indentationInChars;
     private int indentationInUnits;
@@ -39,26 +37,21 @@ public class StreamDataWriter implements DataWriter {
     private char indentationChar = ' ';
     private String lineSeparator = "\n";
 
-    public StreamDataWriter( String path ) throws IOException {
-        this();
-        file = new FileWriter(path);
-        writer = new BufferedWriter(file);
-    }
-
-    public StreamDataWriter( OutputStream outputStream ) {
-        this();
+    protected void initializeStream(OutputStream outputStream) {
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
         writer = new BufferedWriter(outputStreamWriter);
     }
-
-    public StreamDataWriter( BufferedWriter writer ) {
-        this();
-        this.writer = writer;
+    protected void initializeBuffer( BufferedWriter bufferedWriter ) {
+        this.writer = bufferedWriter;
     }
 
-    private StreamDataWriter() {
+    protected StreamDataWriter() {
         indentationInChars = 4;
         indentationInUnits = 0;
+    }
+
+    protected BufferedWriter getBuffer() {
+        return this.writer;
     }
 
     @Override
@@ -136,13 +129,7 @@ public class StreamDataWriter implements DataWriter {
         } catch( IOException e ) {
             LOG.error("Error", e);
         }
-        if( file != null ) {
-            try {
-                file.close();
-            } catch( IOException e ) {
-                LOG.error("Error", e);
-            }
-        }
+
     }
 
     @Override
@@ -175,5 +162,15 @@ public class StreamDataWriter implements DataWriter {
     @Override
     public void setLineSeparator( String lineSeparator ) {
         this.lineSeparator = lineSeparator;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            this.writer.flush();
+            return this.writer.toString();
+        } catch( IOException e ) {
+        }
+        return "";
     }
 }

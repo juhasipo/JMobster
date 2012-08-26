@@ -33,10 +33,11 @@ import fi.vincit.jmobster.util.DataWriter;
 public interface ValidatorWriter<V extends Validator, W extends DataWriter> {
     /**
      * Writes the given validator with the given writer
-     * @param writer Writer
-     * @param validator Validator
+     * @param writer Writer to use
+     * @param validator Validator to write
+     * @param isLast True if the validator is the last validator to be written for the field
      */
-    void write(W writer, Object validator);
+    void write( W writer, Object validator, boolean isLast );
 
     /**
      * Returns the type this validator writer supports

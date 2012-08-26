@@ -27,8 +27,7 @@ public class StreamDataWriterTest {
 
     @Test
     public void testWriteLines() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.writeLine("{");
@@ -36,84 +35,78 @@ public class StreamDataWriterTest {
         mw.writeLine("}");
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "{\nFoo\n}\n";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteLinesWithSeparator() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.writeLine("Foo", ",", true);
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "Foo,\n";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteLinesWithoutSeparator() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.writeLine("Foo", ",", false);
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "Foo\n";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteWithSeparator() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.write( "Foo", ",", true );
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "Foo,";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteWithoutSeparator() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.write( "Foo", ",", false );
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "Foo";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteChained() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.write("{").write("Foo").write("}").close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "{Foo}";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testIndentationLines() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.writeLine( "{" );
@@ -123,15 +116,14 @@ public class StreamDataWriterTest {
         mw.writeLine("}");
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "{\n  Foo\n}\n";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testIndentationChained() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.write( "{" ).indent();
@@ -139,15 +131,14 @@ public class StreamDataWriterTest {
         mw.writeLine("}");
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "{Foo\n  Bar\n  FooBar\n}\n";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testIndentationChained2() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentation(2);
 
         mw.write( "{" ).indent();
@@ -155,38 +146,34 @@ public class StreamDataWriterTest {
         mw.writeLine("}");
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "{Foo\n  Bar\n  FooBar\n}\n";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testDefaultIndentationForOutputStream() {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.indent();
         mw.writeLine("Stuff");
         mw.close();
 
-        assertEquals("    Stuff\n", os.toString());
+        assertEquals("    Stuff\n", mw.toString());
     }
 
     @Test
     public void testDefaultIndentationForBufferedStream() {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(os);
-        DataWriter mw = new StreamDataWriter(new BufferedWriter(outputStreamWriter));
+        DataWriter mw = new StringBufferWriter();
         mw.indent();
         mw.writeLine("Stuff");
         mw.close();
 
-        assertEquals("    Stuff\n", os.toString());
+        assertEquals("    Stuff\n", mw.toString());
     }
 
     @Test
     public void testIndentationWithTabs() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setIndentationChar('\t', 1);
 
         mw.write( "{" ).indent();
@@ -194,15 +181,14 @@ public class StreamDataWriterTest {
         mw.writeLine("}");
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "{Foo\n\tBar\n\tFooBar\n}\n";
         assertEquals(expected, actual);
     }
 
     @Test
     public void testLineSeparatorChange() throws Exception {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        DataWriter mw = new StreamDataWriter(os);
+        DataWriter mw = new StringBufferWriter();
         mw.setLineSeparator("\r\n");
         mw.setIndentation(4);
 
@@ -211,7 +197,7 @@ public class StreamDataWriterTest {
         mw.writeLine("}");
         mw.close();
 
-        String actual = os.toString();
+        String actual = mw.toString();
         String expected = "{Foo\r\n    Bar\r\n    FooBar\r\n}\r\n";
         assertEquals(expected, actual);
     }

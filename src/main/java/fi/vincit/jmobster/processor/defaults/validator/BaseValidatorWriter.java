@@ -50,23 +50,25 @@ public abstract class BaseValidatorWriter<V extends Validator, W extends DataWri
      * be to cast the validator to correct type.
      * @param writer Model writer
      * @param validator Validator to write
+     * @param isLast
      */
     @SuppressWarnings("unchecked")
-    public void write(W writer, Object validator) {
+    public void write( W writer, Object validator, boolean isLast ) {
         /*
         To get this work this in a meta programming way this has to be done
         like this. When this fails, there may be some strange errors
         or exceptions thrown.
          */
-        write( writer, (V)validator );
+        write( writer, (V)validator, isLast );
     }
 
     /**
      * Writes validator to given writer
      * @param writer Writer
      * @param validator Validator to write
+     * @param isLast True if the validator is the last validator to be written for the field
      */
-    protected abstract void write(W writer, V validator);
+    protected abstract void write(W writer, V validator, boolean isLast);
 
     @Override
     public Class getSupportedType() {

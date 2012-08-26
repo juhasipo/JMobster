@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults;/*
 import fi.vincit.jmobster.processor.ModelProvider;
 import fi.vincit.jmobster.util.DataWriter;
 import fi.vincit.jmobster.util.StreamDataWriter;
+import fi.vincit.jmobster.util.StringBufferWriter;
 
 import java.io.ByteArrayOutputStream;
 
@@ -44,15 +45,13 @@ public class CachedModelProvider implements ModelProvider {
 
     private String cachedModel;
     private final DataWriter dataWriter;
-    private final ByteArrayOutputStream bos;
 
     /**
      * Creates new model provider that caches the model output.
      * @param writeMode Write mode
      */
     public CachedModelProvider( WriteMode writeMode ) {
-        this.bos = new ByteArrayOutputStream();
-        this.dataWriter = new StreamDataWriter(bos);
+        this.dataWriter = new StringBufferWriter();
         switch ( writeMode ) {
             case COMPACT: configureCompactMode( dataWriter ); break;
             case PRETTY: configurePrettyMode( dataWriter ); break;
@@ -80,7 +79,7 @@ public class CachedModelProvider implements ModelProvider {
     @Override
     public String getModel() {
         if( cachedModel == null ) {
-            cachedModel = bos.toString();
+            cachedModel = dataWriter.toString();
         }
         return cachedModel;
     }

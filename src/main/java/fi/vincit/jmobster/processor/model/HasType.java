@@ -17,5 +17,5 @@ package fi.vincit.jmobster.processor.model;
  */
 
 public interface HasType {
-    AnnotationType getType();
+    Class getType();
 }

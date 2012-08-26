@@ -43,7 +43,7 @@ public class HTML5FormWriter extends BaseModelWriter {
         final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
             @Override
             public void process( Validator validator, boolean isLast ) {
-                validatorWriterManager.writeValidator( validator );
+                validatorWriterManager.write( validator, isLast );
             }
         };
 

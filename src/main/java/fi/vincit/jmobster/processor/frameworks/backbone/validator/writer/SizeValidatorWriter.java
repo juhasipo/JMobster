@@ -27,15 +27,14 @@ public class SizeValidatorWriter extends BaseValidatorWriter<SizeValidator, Java
     }
 
     @Override
-    public void write( JavaScriptWriter writer, SizeValidator validator ) {
-        // TODO: Comma after last if still more validators to write
+    public void write( JavaScriptWriter writer, SizeValidator validator, boolean isLast ) {
         final boolean isMin = validator.getMin() >= 0;
         final boolean isMax = validator.getMax() < Integer.MAX_VALUE;
         if( isMin ) {
-            writer.writeKeyValue("min", "" + validator.getMin(), !isMax);
+            writer.writeKeyValue("min", "" + validator.getMin(), !isMax && isLast);
         }
         if( isMax ) {
-            writer.writeKeyValue("max", "" + validator.getMax(), true);
+            writer.writeKeyValue("max", "" + validator.getMax(), isLast);
         }
     }
 }
