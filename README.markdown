@@ -117,42 +117,7 @@ generator.process(new Class[] {Model1.class, Model2.class, Model3.class});
 generator.process(classList);
 ```
 
-### Using Custom Model Generator
 
-To build more customized generator, the generator can be constructed by hand. For this you need:
- - ModelWriter
- - FieldAnnotationWriter
- - ModelProcessor
- - FieldValueConverter
- - FieldScanner
-
-Most of the time for the last one, the default implementation can be used. This will simplify the initialization
-because the _JMobsterFactory_'s _getInstance()_ method can be used.
-
-Next example shows how to construct a custom model generator for Backbone.js which will write to file "models.js". The
-example will use _JMobsterFactory_.
-
-```java
-// Initialize configured processors etc.
-ModelWriter modelWriter = new StreamModelWriter("models.js");
-FieldAnnotationWriter fieldAnnotationWriter = new BackboneFieldAnnotationWriter();
-ModelProcessor modelProcessor = new BackboneModelProcessor(modelWriter, fieldAnnotationWriter);
-FieldValueConverter valueConverter =
-        new JavaToJSValueConverter(
-                ConverterMode.NULL_AS_DEFAULT,
-                EnumConverter.EnumMode.STRING,
-                JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
-        );
-
-// Initialize the model generator
-ModelGenerator generator =
-        JMobsterFactory.getInstance(
-            fieldAnnotationWriter,
-            modelProcessor,
-            valueConverter,
-            FieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS
-        );
-```
 
 ### Property Scanning
 
@@ -266,133 +231,11 @@ implementations will rely on the to string converter for all non-matching classe
 Java's toString() methods on various classes (e.g. BigDecimal and BigInteger).
 
 
-
-Extending
----------
-
-### Model Processors
-
-Model processors are the basis for creating support for new framework. Model processors takes
-models one by one and writes them to a stream (or any other output). Processor implementations are
-given to Model generator which calls appropriate methods of the processor.
-
-Model processor only acts as the basis for the model generation and it depends on other classes. For example
-the default Backbone.js implementation uses classes its own ValidationSectionWriter and DefaultValueSectionWriter
-for producing corresponding sections to the output stream. In addition these classes rely heavily on annotation
-processors and field annotation writer as well as the value converters.
-
-### Annotation Processors
-
-Annotation processors are an important part of the model generation process. For each new framework
-user has to create suitable processors for each supported validation annotation. One processor can
-process one or more validation annotations at the same time. There are two types of annotations in
-the processors - required and optional.
-
-Required annotations have to present for a filed in order to be processed by an annotation processor.
-Optional annotations may be present, but processor can work without them.
-
-Each annotation processor must implement few basic features and may implement some extra features. Firstly the
-extended class has to define required annotations for the processor. This can be done in the constructor by calling
-the appropriate super class constructor. In addition a required type and optional annotations can be given.
-
-```java
-public MaxAnnotationProcessor() {
-    super( "number", RequiredTypes.get(Max.class) );
-    setBaseValidatorForClass(Max.class);
-}
-```
-
-Secondly the processor has to able to write itself to model writer. For this, the _writeValidatorsToStreamInternal_
-method is implemented. In this method, the processed annotation can be aquired with _findAnnotation_ method. For example:
-
-```java
-@Override
-public void writeValidatorsToStreamInternal( ModelWriter writer ) {
-    if( containsAnnotation(Max.class) ) {
-        Max annotation = findAnnotation(Max.class);
-        writer.write( "max: " ).write( "" + annotation.value() );
-    }
-}
-```
-
-In order to work well with JSR-303 validations, annotation processors have to implement group extracting.
-This will basically take the groups parameter data and returns it the caller. For standard validation annotations
-these group extraction methods are already implemented in _fi.vincit.jmobster.processor.defaults.annotation_ package
-base classes.
-
-```java
-@Override
-public Class[] getGroupsInternal(Annotation annotation) {
-    return ((Max)annotation).groups();
-}
-```
-
-### Field Annotation Writer
-
-Field annotation writers are a storage for annotation processors. This annotation write is configured to contain all
-required annotation processors and it contains the logic for generating the validation for the target
-framework. The base implementation contains the processor management, but the extended class has to implement the
-field annotation writing logic.
-
-As an example, here is the _writeValidatorsForField_ method from Backbone implementation:
-
-```java
-@Override
-public void writeValidatorsForField( final ModelField field, final ModelWriter writer ) {
-    writeTypeForField( field, writer );
-
-    // First find processors that actually do somethings so that we can
-    // add commas to right places in the item processor
-    List<ValidationAnnotationProcessor> processorsToUse = filterProcessorsToUse( field );
-
-    ItemProcessor<ValidationAnnotationProcessor> processor = new ItemProcessor<ValidationAnnotationProcessor>() {
-        @Override
-        protected void process( ValidationAnnotationProcessor processor, boolean isLast ) {
-            processor.writeValidatorsToStream( field, writer );
-            writer.writeLine("", ANNOTATION_SEPARATOR, !isLast);
-        }
-    };
-    processor.process( processorsToUse );
-}
-```
-
-Basically it takes the model field to write and model writer. Then it first writes type information
-that some of the Backbone.Validation validators require and then it writes the validators themselves using
-validation annotation processors.
-
-### Field Value Converters
-
-Field value converters are used for converting field default values to the target framework and language. They
-take an object and produce a string value the object represents in the target framework and language.
-
-To add support for new language, a new implementation for interface FieldValueConverter has to be created.
-FieldValueConverter takes a Field or a Class, and a _defaultValueObject_. With these it produces default value
-for the given field. The default value is taken from the given _defaultValueObjects_ corresponding field.
-
-Often the conversion can be done by Java _toString()_ method and in these cases the implementing classes don't have
-to do anything but provide a default value in case there is no default value in _defaultValueObject_. BaseValueConverter
-class is able do that for you.
-
-For example the default StringConverter for JavaScript returns empty JavaScript string as default value and in
-conversion just adds quotations marks around string:
-
-```java
-public class StringConverter extends BaseValueConverter {
-    private static final String JAVASCRIPT_STRING_QUOTE_MARK = "\"";
-
-    @Override
-    protected String getTypeDefaultValue() {
-        return JAVASCRIPT_STRING_QUOTE_MARK + JAVASCRIPT_STRING_QUOTE_MARK;
-    }
-
-    @Override
-    protected String getValueAsString( Object value ) {
-        return JAVASCRIPT_STRING_QUOTE_MARK + value + JAVASCRIPT_STRING_QUOTE_MARK;
-    }
-}
-```
+Configuring
+-----------
 
 ### Model Naming Strategies
 
 In order to customize the produced model's name, a model naming strategy can be implemented. It basically
 takes a Model object and returns the name for the model.
+

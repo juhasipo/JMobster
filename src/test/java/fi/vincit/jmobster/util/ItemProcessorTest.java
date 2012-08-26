@@ -18,12 +18,10 @@ package fi.vincit.jmobster.util;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 public class ItemProcessorTest {
@@ -31,7 +29,7 @@ public class ItemProcessorTest {
     public static class LastItemCaller {
         public int calledWithLastTrue;
         public int calledWithLastFalse;
-        void call(boolean last) {
+        void callLast( boolean last ) {
             if( last ) {
                 ++calledWithLastTrue;
             } else {
@@ -43,9 +41,9 @@ public class ItemProcessorTest {
     public ItemHandler<String> getItemProcessor(final StringBuilder sb, final LastItemCaller lic) {
         ItemHandler<String> itemProcessor = new ItemHandler<String>() {
             @Override
-            public void process(String item, boolean isLast) {
+            public void process(String item, ItemStatus status) {
                 sb.append(item);
-                lic.call(isLast);
+                lic.callLast( status.isLastItem() );
             }
         };
         return itemProcessor;

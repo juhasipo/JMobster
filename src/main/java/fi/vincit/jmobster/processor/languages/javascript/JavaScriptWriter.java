@@ -14,6 +14,7 @@ package fi.vincit.jmobster.processor.languages.javascript;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
@@ -77,8 +78,8 @@ public class JavaScriptWriter implements DataWriter {
         write(FUNCTION_ARG_START);
         ItemHandler<String> argumentProcessor = new ItemHandler<String>() {
             @Override
-            public void process(String argument, boolean isLast) {
-                write(argument, "," + space, !isLast);
+            public void process(String argument, ItemStatus status) {
+                write(argument, "," + space, status.isNotLastItem());
             }
         };
         ItemProcessor.process(argumentProcessor, arguments);

@@ -8,6 +8,7 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
+import fi.vincit.jmobster.util.ItemStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,8 +73,8 @@ public class DefaultModelGenerator implements ModelGenerator {
             modelProcessor.startProcessing();
             ItemProcessor.process(models).with(new ItemHandler<Model>() {
                 @Override
-                public void process( Model model, boolean isLastModel ) {
-                    modelProcessor.processModel( model, isLastModel );
+                public void process( Model model, ItemStatus status ) {
+                    modelProcessor.processModel( model, status.isLastItem() );
                 }
             });
             modelProcessor.endProcessing();

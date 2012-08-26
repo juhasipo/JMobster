@@ -24,6 +24,7 @@ import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 public class BackboneModelWriter extends BaseModelWriter {
@@ -61,8 +62,8 @@ public class BackboneModelWriter extends BaseModelWriter {
     private void writeFields( Model model ) {
         ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
             @Override
-            public void process( ModelField field, boolean isLast ) {
-                writer.writeKeyValue(field.getName(), field.getDefaultValue(), isLast);
+            public void process( ModelField field, ItemStatus status ) {
+                writer.writeKeyValue(field.getName(), field.getDefaultValue(), status.isLastItem());
             }
         });
     }
@@ -70,17 +71,17 @@ public class BackboneModelWriter extends BaseModelWriter {
     private void writeValidators( Model model ) {
         final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
             @Override
-            public void process( Validator validator, boolean isLast ) {
-                validatorWriterManager.write( validator, isLast );
+            public void process( Validator validator, ItemStatus status ) {
+                validatorWriterManager.write( validator, status.isLastItem() );
             }
         };
 
         ItemProcessor.process(model.getFields()).with(new ItemHandler<ModelField>() {
             @Override
-            public void process( ModelField field, boolean isLast ) {
+            public void process( ModelField field, ItemStatus status ) {
                 writer.writeKey(field.getName()).startBlock();
                 ItemProcessor.process(validatorWriter, field.getValidators());
-                writer.endBlock(isLast);
+                writer.endBlock(status.isLastItem());
             }
         });
     }

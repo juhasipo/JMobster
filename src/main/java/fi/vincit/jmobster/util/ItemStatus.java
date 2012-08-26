@@ -16,16 +16,32 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
  */
 
-/**
- * Interface for processing a single item with {@link ItemProcessor}
- * @param <T> Type of items to process
- */
-public interface ItemHandler<T> {
-    /**
-     * Method that processes the items. Implement item processing
-     * logic here.
-     * @param item Item to process
-     * @param status Item processing status
-     */
-    void process(T item, ItemStatus status);
+public class ItemStatus {
+    final private int numberOfItems;
+    boolean firstItem;
+    boolean lastItem;
+
+    public ItemStatus(int numberOfItems) {
+        this.numberOfItems = numberOfItems;
+    }
+
+    public void update(int itemIndex) {
+        firstItem = itemIndex == 0;
+        lastItem = itemIndex == (numberOfItems-1);
+    }
+
+    public boolean isFirstItem() {
+        return firstItem;
+    }
+
+    public boolean isLastItem() {
+        return lastItem;
+    }
+
+    public boolean isNotLastItem() {
+        return !lastItem;
+    }
+    public boolean isNotFirstItem() {
+        return !firstItem;
+    }
 }

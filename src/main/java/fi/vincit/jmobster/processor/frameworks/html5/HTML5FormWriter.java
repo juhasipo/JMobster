@@ -22,6 +22,7 @@ import fi.vincit.jmobster.processor.languages.html.HTML5Writer;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
@@ -42,14 +43,14 @@ public class HTML5FormWriter extends BaseModelWriter {
 
         final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
             @Override
-            public void process( Validator validator, boolean isLast ) {
-                validatorWriterManager.write( validator, isLast );
+            public void process( Validator validator, ItemStatus status ) {
+                validatorWriterManager.write( validator, status.isLastItem() );
             }
         };
 
         ItemProcessor.process(model.getFields()).with(new ItemHandler<ModelField>() {
             @Override
-            public void process( ModelField field, boolean isLast ) {
+            public void process( ModelField field, ItemStatus status ) {
                 writer.startTagWithAttr("input").writeAttr("type", "text");
                 ItemProcessor.process(field.getValidators()).with(validatorWriter);
                 writer.writeAttr("value", field.getDefaultValue());

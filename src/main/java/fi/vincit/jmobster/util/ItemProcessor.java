@@ -67,10 +67,10 @@ public class ItemProcessor<T> {
         }
 
         int i = 0;
-        final int itemCount = items.size();
+        final ItemStatus status = new ItemStatus(items.size());
         for( T item : items ) {
-            final boolean isLastItem = i == itemCount - 1;
-            itemHandler.process( item, isLastItem );
+            status.update(i);
+            itemHandler.process( item, status );
             ++i;
         }
     }
@@ -83,9 +83,11 @@ public class ItemProcessor<T> {
         if( items == null ) {
             return;
         }
+
+        final ItemStatus status = new ItemStatus(items.length);
         for( int i = 0; i < items.length; ++i ) {
-            boolean isLastItem = i == items.length - 1;
-            itemHandler.process( items[i], isLastItem );
+            status.update(i);
+            itemHandler.process( items[i], status );
         }
     }
 }
