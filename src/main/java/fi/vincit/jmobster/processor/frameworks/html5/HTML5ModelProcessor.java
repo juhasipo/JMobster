@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.html5;
 
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class HTML5ModelProcessor extends BaseModelProcessor {
     }
 
     @Override
-    public void processModel( Model model, boolean isLastModel ) {
+    public void processModel( Model model, ItemStatus status ) {
         html5FormWriter.write(model);
     }
 

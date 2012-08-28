@@ -46,7 +46,7 @@ public class ItemProcessor<T> {
 
     private Collection<? extends T> items;
 
-    protected ItemProcessor( Collection<? extends T> items)  {
+    protected ItemProcessor( Collection<? extends T> items )  {
         this.items = items;
     }
 

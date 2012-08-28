@@ -74,7 +74,7 @@ public class DefaultModelGenerator implements ModelGenerator {
             ItemProcessor.process(models).with(new ItemHandler<Model>() {
                 @Override
                 public void process( Model model, ItemStatus status ) {
-                    modelProcessor.processModel( model, status.isLastItem() );
+                    modelProcessor.processModel( model, status );
                 }
             });
             modelProcessor.endProcessing();

@@ -18,9 +18,11 @@ package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
 
 import java.util.List;
@@ -50,7 +52,7 @@ public class DefaultModelGeneratorTest {
         InOrder mpInOrder = inOrder(modelProcessor);
         mpInOrder.verify(modelProcessor, times(1)).startProcessing();
         mpInOrder.verify(modelProcessor, times(1)).endProcessing();
-        verify(modelProcessor, never()).processModel(any(Model.class), anyBoolean());
+        verify(modelProcessor, never()).processModel(any(Model.class), any( ItemStatus.class ));
     }
 
     @Test
@@ -67,15 +69,9 @@ public class DefaultModelGeneratorTest {
         modelGenerator.process( testClass, testClass2 );
 
         InOrder mpInOrder = inOrder(modelProcessor);
-        ArgumentCaptor<Model> firstModelCaptor = ArgumentCaptor.forClass(Model.class);
-        ArgumentCaptor<Model> secondModelCaptor = ArgumentCaptor.forClass(Model.class);
         mpInOrder.verify(modelProcessor, times(1)).startProcessing();
-        mpInOrder.verify(modelProcessor, times(1)).processModel(firstModelCaptor.capture(), eq(false));
-        mpInOrder.verify(modelProcessor, times(1)).processModel(secondModelCaptor.capture(), eq(true));
+        mpInOrder.verify(modelProcessor, times(2)).processModel(any(Model.class), any(ItemStatus.class));
         mpInOrder.verify(modelProcessor, times(1)).endProcessing();
-
-        assertEquals(TestClass1.class.getName(), firstModelCaptor.getValue().getModelClass().getName());
-        assertEquals(TestClass2.class.getName(), secondModelCaptor.getValue().getModelClass().getName());
     }
 
     @Test
@@ -93,14 +89,8 @@ public class DefaultModelGeneratorTest {
         modelGenerator.process( testClasses );
 
         InOrder mpInOrder = inOrder(modelProcessor);
-        ArgumentCaptor<Model> firstModelCaptor = ArgumentCaptor.forClass(Model.class);
-        ArgumentCaptor<Model> secondModelCaptor = ArgumentCaptor.forClass(Model.class);
         mpInOrder.verify(modelProcessor, times(1)).startProcessing();
-        mpInOrder.verify(modelProcessor, times(1)).processModel(firstModelCaptor.capture(), eq(false));
-        mpInOrder.verify(modelProcessor, times(1)).processModel(secondModelCaptor.capture(), eq(true));
+        mpInOrder.verify(modelProcessor, times(2)).processModel(any(Model.class), any(ItemStatus.class));
         mpInOrder.verify(modelProcessor, times(1)).endProcessing();
-
-        assertEquals(TestClass1.class.getName(), firstModelCaptor.getValue().getModelClass().getName());
-        assertEquals(TestClass2.class.getName(), secondModelCaptor.getValue().getModelClass().getName());
     }
 }

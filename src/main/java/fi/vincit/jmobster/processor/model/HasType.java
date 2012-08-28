@@ -16,6 +16,9 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
  */
 
+/**
+ * Interface for classes that have type (as Class)
+ */
 public interface HasType {
     Class getType();
 }

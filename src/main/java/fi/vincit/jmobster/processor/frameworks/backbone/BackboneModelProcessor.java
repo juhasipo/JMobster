@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,11 +95,8 @@ public class BackboneModelProcessor extends BaseModelProcessor {
         getWriter().indent();
     }
 
-
-
-
     @Override
-    public void processModel( Model model, boolean isLastModel ) {
+    public void processModel( Model model, ItemStatus status ) {
         String modelName = model.getName();
 
         getWriter().write(modelName).writeLine( MODEL_EXTEND_START ).indent();
@@ -106,7 +104,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
         backboneModelWriter.write(model);
 
         getWriter().indentBack();
-        getWriter().writeLine( MODEL_EXTEND_END, ",", !isLastModel);
+        getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
     }
 
     @Override

@@ -16,11 +16,12 @@ package fi.vincit.jmobster.processor;
 */
 
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.ItemStatus;
 
 import java.io.IOException;
 
 /**
- * BackboneModelProcessor controls how the models given from {@link fi.vincit.jmobster.ModelGenerator}
+ * ModelProcessor controls how the models given from {@link fi.vincit.jmobster.ModelGenerator}
  * are processed.
  */
 public interface ModelProcessor {
@@ -34,9 +35,9 @@ public interface ModelProcessor {
      * Called for each model once in the order the models
      * were given to the {@link fi.vincit.jmobster.ModelGenerator}.
      * @param model Model to process
-     * @param isLastModel True if the given model is the last model to process. Otherwise false.
+     * @param status
      */
-    void processModel( Model model, boolean isLastModel );
+    void processModel( Model model, ItemStatus status );
 
     /**
      * Called when the last model has been processed.

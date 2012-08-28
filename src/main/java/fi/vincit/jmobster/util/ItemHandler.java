@@ -25,7 +25,9 @@ public interface ItemHandler<T> {
      * Method that processes the items. Implement item processing
      * logic here.
      * @param item Item to process
-     * @param status Item processing status
+     * @param status Item processing status. Item status will change its state between calls in order to avoid
+     *               unnecessary allocations so don't store the reference. Instead store the values from the methods
+     *               if you really need to store them.
      */
     void process(T item, ItemStatus status);
 }
