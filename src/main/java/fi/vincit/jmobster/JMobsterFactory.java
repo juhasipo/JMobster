@@ -39,7 +39,7 @@ public class JMobsterFactory {
             ModelProcessor modelProcessor = new BackboneModelProcessor(writer);
             // TODO: Where to get validator scanner?
             ValidatorFactory factory = new DefaultValidatorFactory();
-            GroupManager<Class> groupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
+            ClassGroupManager groupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
             ValidatorScanner validatorScanner = new DefaultValidatorScanner(factory, groupManager);
             FieldValueConverter valueConverter =
                     new JavaToJSValueConverter(

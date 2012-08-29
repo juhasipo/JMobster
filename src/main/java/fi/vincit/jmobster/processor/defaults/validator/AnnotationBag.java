@@ -16,19 +16,20 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.HasGroups;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
+import fi.vincit.jmobster.util.groups.HasGroups;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AnnotationBag implements HasGroups {
-    final private Map<Class, Annotation> annotations = new HashMap<Class, Annotation>();
+    final private Map<Class, FieldAnnotation> annotations = new HashMap<Class, FieldAnnotation>();
 
     public <T extends Annotation> T getAnnotation(Class<T> clazz) {
         if( annotations.containsKey(clazz) ) {
-            Annotation annotation = annotations.get(clazz);
-            return (T)annotation;
+            FieldAnnotation annotation = annotations.get(clazz);
+            return (T)annotation.getAnnotation();
         } else {
             return null;
         }
@@ -38,12 +39,13 @@ public class AnnotationBag implements HasGroups {
         return annotations.containsKey(clazz);
     }
 
-    public void addAnnotation(Annotation annotation) {
-        annotations.put(annotation.annotationType(), annotation);
+    public void addAnnotation(FieldAnnotation annotation) {
+        annotations.put(annotation.getType(), annotation);
     }
 
     @Override
     public Class[] getGroups() {
+        // TODO: This really should go like this: First filter groups when scanning fields, then the groups here are either the union or the intersection of the groups
         return new Class[0];
     }
 

@@ -44,6 +44,6 @@ public abstract class BaseValidator implements Validator {
 
     @Override
     public Class getType() {
-        return null;
+        return type;
     }
 }

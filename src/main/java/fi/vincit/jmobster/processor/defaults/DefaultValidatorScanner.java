@@ -16,14 +16,23 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.groups.GroupManager;
-import fi.vincit.jmobster.processor.ValidatorScanner;
-import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ValidatorFactory;
+import fi.vincit.jmobster.processor.ValidatorScanner;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
+import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.groups.GroupFilter;
+import fi.vincit.jmobster.util.groups.GroupManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,36 +41,36 @@ import java.util.List;
  */
 public class DefaultValidatorScanner implements ValidatorScanner {
 
+    private static final Logger LOG = LoggerFactory.getLogger( DefaultValidatorScanner.class );
+
     private ValidatorFactory validatorFactory;
-    private GroupManager groupManager;
+    private GroupFilter<FieldAnnotation, Class> filter;
 
-    public DefaultValidatorScanner( ValidatorFactory validatorFactory, GroupManager groupManager ) {
+    public DefaultValidatorScanner( ValidatorFactory validatorFactory, GroupManager<Class> groupManager ) {
         this.validatorFactory = validatorFactory;
-        this.groupManager = groupManager;
+        this.filter = new GroupFilter<FieldAnnotation, Class>(groupManager);
     }
 
     @Override
-    public Collection<Validator> getValidators( Field field, Class... groups ) {
-        return getValidators( field.getAnnotations(), groups );
+    public Collection<Validator> getValidators( Field field ) {
+        return getValidators( convertToFieldAnnotations( field.getAnnotations() ) );
     }
 
-    /**
-     * Gets the validation annotations for the given bean property
-     * @param property Bean property
-     * @param groups Groups to filter validators
-     * @return Validation annotations. If nothing found returns an empty list.
-     */
     @Override
-    public List<Validator> getValidators( PropertyDescriptor property, Class... groups ) {
-        return getValidators( property.getReadMethod().getAnnotations(), groups );
+    public List<Validator> getValidators( PropertyDescriptor property ) {
+        return getValidators( convertToFieldAnnotations( property.getReadMethod().getAnnotations() ) );
     }
 
-    private List<Validator> getValidators( Annotation[] annotations, Class... groups ) {
-        List<Validator> validators = validatorFactory.createValidators(annotations);
-        // TODO: Grouping
-        //if( groupManager.shouldAddValidator(validator) ) {
-        //    validators.add( validator );
-        //}
-        return validators;
+    private Collection<FieldAnnotation> convertToFieldAnnotations(Annotation[] annotations) {
+        Collection<FieldAnnotation> fieldAnnotations = new ArrayList<FieldAnnotation>(annotations.length);
+        for( Annotation annotation : annotations ) {
+            FieldAnnotation fieldAnnotation = new FieldAnnotation(annotation);
+            fieldAnnotations.add(fieldAnnotation);
+        }
+        return fieldAnnotations;
+    }
+
+    private List<Validator> getValidators( Collection<FieldAnnotation> annotations ) {
+        return validatorFactory.createValidators(filter.filterByGroups(annotations));
     }
 }

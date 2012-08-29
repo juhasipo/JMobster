@@ -86,7 +86,7 @@ public class TestMain {
     }
 
     public static class BeanPropertyDemo {
-        @OverridePattern(regexp = "foo")
+        @OverridePattern(regexp = "foo", groups={String.class, Integer.class})
         @Pattern(regexp = "[\\w]*")
         private String firstName = "John";
         @Size(min = 0, max = 255)
@@ -102,13 +102,12 @@ public class TestMain {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         //DataWriter modelWriter = new StreamDataWriter("models.js");
-        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY);
+        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY );
         final String HTML5 = "html5";
         final String BB = "backbone.js";
         ModelGenerator generator = JMobsterFactory.getInstance(BB, provider);
 
-        generator.process( BeanPropertyDemo.class, MyModelDto.class );
-        //generator.process( MyModelDto.class );
+        generator.process( BeanPropertyDemo.class );
 
         System.out.println(provider.getModel());
     }

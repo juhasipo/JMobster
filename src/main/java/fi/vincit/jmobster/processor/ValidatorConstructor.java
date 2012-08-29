@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor;
  */
 
 import fi.vincit.jmobster.processor.defaults.validator.AnnotationBag;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.combination.CombinationManager;
 import fi.vincit.jmobster.util.combination.OptionalTypes;
@@ -33,7 +34,7 @@ import java.util.Collection;
 public class ValidatorConstructor {
     private static final Logger LOG = LoggerFactory.getLogger( ValidatorConstructor.class );
 
-    private CombinationManager<Annotation> combinationManager;
+    private CombinationManager<FieldAnnotation> combinationManager;
     private Class validatorClass;
 
     public ValidatorConstructor(Class validatorClass, RequiredTypes requiredTypes, OptionalTypes optionalTypes) {
@@ -41,7 +42,7 @@ public class ValidatorConstructor {
         this.validatorClass = validatorClass;
     }
 
-    public Validator construct( Collection<Annotation> annotations ) {
+    public Validator construct( Collection<FieldAnnotation> annotations ) {
         // Construct via reflection
         try {
             if( combinationManager.matches(annotations) ) {
@@ -61,11 +62,11 @@ public class ValidatorConstructor {
         return null;
     }
 
-    private Validator constructFromAnnotations( Collection<Annotation> annotations )
+    private Validator constructFromAnnotations( Collection<FieldAnnotation> annotations )
             throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         AnnotationBag annotationBag = new AnnotationBag();
-        for( Annotation annotation : annotations ) {
-            if( combinationManager.containsClass(annotation.annotationType()) ) {
+        for( FieldAnnotation annotation : annotations ) {
+            if( combinationManager.containsClass(annotation.getType()) ) {
                 annotationBag.addAnnotation(annotation);
             }
         }

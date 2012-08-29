@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.util.groups.HasGroups;
+
 /**
  * Interface for validators
  */

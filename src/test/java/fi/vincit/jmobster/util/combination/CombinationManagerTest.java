@@ -1,17 +1,23 @@
 package fi.vincit.jmobster.util.combination;
 
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 
 import static fi.vincit.jmobster.util.TestUtil.collectionFromObjects;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class CombinationManagerTest {
 
-    public static class ConcreteTestAnnotation implements Annotation {
+    public static class ConcreteTestAnnotation extends FieldAnnotation {
+        public ConcreteTestAnnotation() {
+            super( mock(Annotation.class) );
+        }
+
         @Override
-        public Class<? extends Annotation> annotationType() { return getClass(); }
+        public Class getType() { return getClass(); }
     }
     
     public static class Type1 extends ConcreteTestAnnotation {}
@@ -21,7 +27,7 @@ public class CombinationManagerTest {
     @Test
     public void testNoRequired() {
         CombinationManager cm = new CombinationManager( RequiredTypes.get());
-        assertFalse(cm.matches( collectionFromObjects( new Type1() ) ) );
+        assertFalse( cm.matches( collectionFromObjects( new Type1() ) ) );
         assertFalse( cm.containsClass( Type1.class ) );
         assertEquals( null, cm.findClass( Type1.class ) );
     }

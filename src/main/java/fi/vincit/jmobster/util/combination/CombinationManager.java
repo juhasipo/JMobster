@@ -16,14 +16,15 @@ package fi.vincit.jmobster.util.combination;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.model.HasType;
+
 import java.lang.annotation.Annotation;
 import java.util.*;
 
 /**
  * Class manages required and optional class combinations.
- * TODO: Make more generic
  */
-public class CombinationManager<T extends Annotation> {
+public class CombinationManager<T extends HasType> {
 
     private Map<Class, Class> requiredClasses;
     private Map<Class, Class> optionalClasses;
@@ -72,7 +73,7 @@ public class CombinationManager<T extends Annotation> {
 
         int matchesFound = 0;
         for( T hasTypeClass : classesWithType ) {
-            if( requiredClasses.containsKey( hasTypeClass.annotationType() ) ) {
+            if( requiredClasses.containsKey( hasTypeClass.getType() ) ) {
                 ++matchesFound;
             }
         }

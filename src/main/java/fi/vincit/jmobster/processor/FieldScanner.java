@@ -28,10 +28,9 @@ public interface FieldScanner {
     /**
      * Scan the given class for fields.
      * @param clazz Class to scan
-     * @param groups Groups to filter annotations
      * @return List of found model fields. Empty list if nothing found.
      */
-    List<ModelField> getFields( Class clazz, Class... groups );
+    List<ModelField> getFields( Class clazz );
 
     /**
      * Sets whether static member variables should be included as model fields.

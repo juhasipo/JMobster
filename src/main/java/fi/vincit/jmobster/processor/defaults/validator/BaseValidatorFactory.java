@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.ValidatorConstructor;
 import fi.vincit.jmobster.processor.ValidatorFactory;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 
 import java.lang.annotation.Annotation;
@@ -40,15 +41,11 @@ public abstract class BaseValidatorFactory implements ValidatorFactory {
     }
 
     @Override
-    public List<Validator> createValidators( Annotation[] annotations ) {
-        List<Validator> validators = new ArrayList<Validator>(annotations.length);
-        Set<Annotation> annotationSet = new HashSet<Annotation>();
-        for( Annotation annotation : annotations ) {
-            annotationSet.add(annotation);
-        }
+    public List<Validator> createValidators( Collection<FieldAnnotation> annotations ) {
+        List<Validator> validators = new ArrayList<Validator>(annotations.size());
 
         for( ValidatorConstructor validatorConstructor : validatorConstructors ) {
-            Validator validator = validatorConstructor.construct(annotationSet);
+            Validator validator = validatorConstructor.construct(annotations);
             if( validator != null ) {
                 validators.add(validator);
             }

@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.model;
+package fi.vincit.jmobster.util.groups;
 
 /*
  * Copyright 2012 Juha Siponen

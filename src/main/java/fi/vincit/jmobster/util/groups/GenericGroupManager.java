@@ -17,8 +17,8 @@ package fi.vincit.jmobster.util.groups;
  */
 
 import fi.vincit.jmobster.processor.GroupMode;
-import fi.vincit.jmobster.processor.model.HasGroups;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +27,7 @@ import java.util.Set;
  */
 public class GenericGroupManager<T> implements GroupManager<T> {
 
-    final private T[] groups;
+    final private Collection<T> groups;
     final private GroupMode groupMode;
     private boolean includeValidatorsWithoutGroup = true;
 
@@ -38,7 +38,23 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      */
     public GenericGroupManager( GroupMode groupMode, T... requiredGroups ) {
         this.groupMode = groupMode;
-        this.groups = requiredGroups;
+        this.groups = new HashSet<T>(requiredGroups.length);
+        for( T group : requiredGroups ) {
+            this.groups.add(group);
+        }
+    }
+
+    /**
+     * Constructs a group manager
+     * @param groupMode Group mode
+     * @param requiredGroups Required groups
+     */
+    public GenericGroupManager( GroupMode groupMode, Collection<T> requiredGroups ) {
+        this.groupMode = groupMode;
+        this.groups = new HashSet<T>(requiredGroups.size());
+        for( T group : requiredGroups ) {
+            this.groups.add(group);
+        }
     }
 
     /**
@@ -51,7 +67,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     }
 
     @Override
-    public boolean shouldAddValidator( HasGroups<T> groupObject ) {
+    public boolean match( HasGroups<T> groupObject ) {
         if( groupObject.hasGroups() && checkGroups( groupObject ) ) {
             return true;
         } else if( !groupObject.hasGroups() && includeValidatorsWithoutGroup ) {
@@ -80,7 +96,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
 
     private boolean checkAnyRequiredGroups( T[] groupsGiven ) {
         // If no groups configured, this always passes
-        if( groups.length == 0 ) {
+        if( groups.size() == 0 ) {
             return true;
         }
 
@@ -95,7 +111,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     }
 
     private boolean checkAtLeastRequiredGroups( T[] groupsGiven ) {
-        final Set<T> configuredGroups = new HashSet<T>(groups.length);
+        final Set<T> configuredGroups = new HashSet<T>(groups.size());
         for( T group : groups ) {
             configuredGroups.add( group );
         }
@@ -122,11 +138,11 @@ public class GenericGroupManager<T> implements GroupManager<T> {
 
     private boolean checkExactlyRequiredGroups( T[] groupsGiven ) {
         // If no groups configured, this always passes
-        if( groups.length == 0 && groupsGiven.length == 0 ) {
+        if( groups.size() == 0 && groupsGiven.length == 0 ) {
             return true;
         }
 
-        final int groupsNeededCount = this.groups.length;
+        final int groupsNeededCount = this.groups.size();
         if( groupsGiven.length != groupsNeededCount ) {
             return false;
         }

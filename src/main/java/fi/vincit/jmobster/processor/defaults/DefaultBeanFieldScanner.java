@@ -76,10 +76,10 @@ public class DefaultBeanFieldScanner implements FieldScanner {
     }
 
     @Override
-    public List<ModelField> getFields( Class clazz, Class... groups ) {
+    public List<ModelField> getFields( Class clazz ) {
         switch( scanMode ) {
-            case BEAN_PROPERTY: return getFieldsByGetters( clazz, groups );
-            case DIRECT_FIELD_ACCESS: return getFieldsByDirectFieldAccess( clazz, groups );
+            case BEAN_PROPERTY: return getFieldsByGetters( clazz );
+            case DIRECT_FIELD_ACCESS: return getFieldsByDirectFieldAccess( clazz );
             default: throw new RuntimeException("Invalid field scan mode: " + scanMode);
         }
     }
@@ -87,12 +87,11 @@ public class DefaultBeanFieldScanner implements FieldScanner {
     /**
      * Scans the given class for model fields. Accesses bean properties (getter methods).
      * @param clazz Class to scan
-     * @param groups Groups to filter validators
      * @return List of model fields. Empty list if nothing found.
      * @throws CannotAccessDefaultConstructorError If the default constructor exists but cannot be accessed
      * @throws DefaultConstructorMissingError If the given model does not have a default constructor
      */
-    private List<ModelField> getFieldsByGetters(Class clazz, Class... groups) {
+    private List<ModelField> getFieldsByGetters(Class clazz) {
         List<ModelField> fields = new ArrayList<ModelField>();
         try {
             final Object defaultObject = getDefaultObject( clazz );
@@ -102,7 +101,7 @@ public class DefaultBeanFieldScanner implements FieldScanner {
                 if( shouldAddField(property) ) {
                     final String name = property.getName();
                     if( name.equals("class") ) { continue; }
-                    final ModelField field = new ModelField(property, validatorScanner.getValidators( property, groups ));
+                    final ModelField field = new ModelField(property, validatorScanner.getValidators( property ));
 
                     final Class fieldType = property.getPropertyType();
                     final Object fieldValue = property.getReadMethod().invoke( defaultObject );
@@ -137,12 +136,11 @@ public class DefaultBeanFieldScanner implements FieldScanner {
     /**
      * Scans the given class for model fields. Accesses field directly via member variables.
      * @param clazz Class to scan
-     * @param groups Groups to filter validators
      * @return List of model fields. Empty list if nothing found.
      * @throws CannotAccessDefaultConstructorError If the default constructor exists but cannot be accessed
      * @throws DefaultConstructorMissingError If the given model does not have a default constructor
      */
-    private List<ModelField> getFieldsByDirectFieldAccess( Class clazz, Class... groups ) {
+    private List<ModelField> getFieldsByDirectFieldAccess( Class clazz ) {
         List<ModelField> fields = new ArrayList<ModelField>();
 
         try {
@@ -151,7 +149,7 @@ public class DefaultBeanFieldScanner implements FieldScanner {
                 final boolean wasAccessible = field.isAccessible();
                 field.setAccessible(true);
                 if( shouldAddField(field) ) {
-                    ModelField modelField = new ModelField(field, validatorScanner.getValidators( field, groups ));
+                    ModelField modelField = new ModelField(field, validatorScanner.getValidators( field ));
                     modelField.setDefaultValue(fieldDefaultValueProcessor.convert( field, defaultObject ));
                     fields.add( modelField );
                 } else {

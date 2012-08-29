@@ -1,9 +1,6 @@
 package fi.vincit.jmobster.util.groups;
 
 import fi.vincit.jmobster.processor.GroupMode;
-import fi.vincit.jmobster.processor.model.HasGroups;
-import fi.vincit.jmobster.util.groups.GenericGroupManager;
-import fi.vincit.jmobster.util.groups.GroupManager;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -32,9 +29,9 @@ public class GenericGroupManagerTest {
         HasGroups hg2 = create(Group2.class);
         HasGroups hg3 = create(Group1.class, Group2.class);
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
-        assertTrue( groupManager.shouldAddValidator( hg2 ) );
-        assertTrue( groupManager.shouldAddValidator( hg3 ) );
+        assertTrue( groupManager.match( hg1 ) );
+        assertTrue( groupManager.match( hg2 ) );
+        assertTrue( groupManager.match( hg3 ) );
     }
 
     @Test
@@ -46,11 +43,11 @@ public class GenericGroupManagerTest {
         HasGroups hg4 = create(Group1.class, Group2.class);
         HasGroups hg5 = create(Group1.class, Group3.class);
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
-        assertTrue( groupManager.shouldAddValidator( hg2 ) );
-        assertTrue( groupManager.shouldAddValidator( hg3 ) );
-        assertTrue( groupManager.shouldAddValidator( hg4 ) );
-        assertTrue( groupManager.shouldAddValidator( hg5 ) );
+        assertTrue( groupManager.match( hg1 ) );
+        assertTrue( groupManager.match( hg2 ) );
+        assertTrue( groupManager.match( hg3 ) );
+        assertTrue( groupManager.match( hg4 ) );
+        assertTrue( groupManager.match( hg5 ) );
     }
 
     @Test
@@ -59,7 +56,7 @@ public class GenericGroupManagerTest {
         groupManager.setIncludeValidatorsWithoutGroup(false);
         HasGroups hg1 = create();
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -67,7 +64,7 @@ public class GenericGroupManagerTest {
         GenericGroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create();
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -75,7 +72,7 @@ public class GenericGroupManagerTest {
         GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create(Group3.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
 
@@ -90,7 +87,7 @@ public class GenericGroupManagerTest {
         GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create(Group1.class, Group2.class);
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -98,7 +95,7 @@ public class GenericGroupManagerTest {
         GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create(Group1.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -106,7 +103,7 @@ public class GenericGroupManagerTest {
         GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create(Group1.class, Group3.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -114,7 +111,7 @@ public class GenericGroupManagerTest {
         GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create(Group3.class, String.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -123,7 +120,7 @@ public class GenericGroupManagerTest {
         groupManager.setIncludeValidatorsWithoutGroup(false);
         HasGroups hg1 = create();
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -131,7 +128,7 @@ public class GenericGroupManagerTest {
         GenericGroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create();
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -139,7 +136,7 @@ public class GenericGroupManagerTest {
         GenericGroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED );
         HasGroups hg1 = create();
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -147,7 +144,7 @@ public class GenericGroupManagerTest {
         GenericGroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED );
         HasGroups hg1 = create(Group1.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -159,7 +156,7 @@ public class GenericGroupManagerTest {
         groupManager.setIncludeValidatorsWithoutGroup(false);
         HasGroups hg1 = create();
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -167,7 +164,7 @@ public class GenericGroupManagerTest {
         GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create(Group3.class, Group3.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
 
@@ -183,7 +180,7 @@ public class GenericGroupManagerTest {
 
         HasGroups hg1 = create(Group1.class, Group2.class);
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -192,7 +189,7 @@ public class GenericGroupManagerTest {
 
         HasGroups hg1 = create(Group1.class, Group2.class, Group3.class);
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -201,7 +198,7 @@ public class GenericGroupManagerTest {
 
         HasGroups hg1 = create(Group1.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -210,7 +207,7 @@ public class GenericGroupManagerTest {
 
         HasGroups hg1 = create(Group1.class, Group3.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -219,7 +216,7 @@ public class GenericGroupManagerTest {
 
         HasGroups hg1 = create(Group1.class, Group1.class);
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -228,7 +225,7 @@ public class GenericGroupManagerTest {
 
         HasGroups hg1 = create();
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -237,7 +234,7 @@ public class GenericGroupManagerTest {
 
         HasGroups hg1 = create(Group1.class);
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -246,7 +243,7 @@ public class GenericGroupManagerTest {
 
         HasGroups hg1 = create(Group1.class, Group2.class);
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -255,7 +252,7 @@ public class GenericGroupManagerTest {
         groupManager.setIncludeValidatorsWithoutGroup(false);
         HasGroups hg1 = create();
 
-        assertFalse( groupManager.shouldAddValidator( hg1 ) );
+        assertFalse( groupManager.match( hg1 ) );
     }
 
     @Test
@@ -263,6 +260,6 @@ public class GenericGroupManagerTest {
         GenericGroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1.class, Group2.class );
         HasGroups hg1 = create();
 
-        assertTrue( groupManager.shouldAddValidator( hg1 ) );
+        assertTrue( groupManager.match( hg1 ) );
     }
 }

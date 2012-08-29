@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 
 import java.lang.annotation.Annotation;
@@ -32,10 +33,10 @@ public interface ValidatorFactory {
      * To prevent null pointer exceptions, check if the validator
      * can be constructed with {@link ValidatorFactory#isValidationAnnotation(java.lang.annotation.Annotation)}
      * method.
-     * @param annotation Annotation instance
+     * @param annotations List of all annotations
      * @return New validator instance if exists, otherwise null.
      */
-    List<Validator> createValidators(Annotation[] annotations);
+    List<Validator> createValidators(Collection<FieldAnnotation> annotations);
 
     /**
      * Configures validator constructor for the given type
