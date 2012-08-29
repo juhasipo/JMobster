@@ -24,7 +24,7 @@ import java.util.List;
  * Interface for field scanners. Field scanners searches for
  * model fields from classes.
  */
-public interface FieldScanner {
+public interface ModelFieldFactory {
     /**
      * Scan the given class for fields.
      * @param clazz Class to scan
@@ -34,7 +34,7 @@ public interface FieldScanner {
 
     /**
      * Sets whether static member variables should be included as model fields.
-     * Note: This doesn't work for getters in {@link fi.vincit.jmobster.processor.defaults.DefaultBeanFieldScanner.FieldScanMode#BEAN_PROPERTY} mode.
+     * Note: This doesn't work for getters in {@link fi.vincit.jmobster.processor.defaults.DefaultModelFieldFactory.FieldScanMode#BEAN_PROPERTY} mode.
      * @param allowStaticFields True if should, false if not
      */
     void setAllowStaticFields( boolean allowStaticFields );

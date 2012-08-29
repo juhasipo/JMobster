@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.defaults;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
-import fi.vincit.jmobster.processor.FieldScanner;
+import fi.vincit.jmobster.processor.ModelFieldFactory;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.ModelField;
@@ -35,10 +35,9 @@ import java.util.List;
 
 /**
  * Scans the given bean for fields that should be included in the client side model.
- * TODO: Rename to DefaultModelFieldFactory that implements ModelFieldFactory
  */
-public class DefaultBeanFieldScanner implements FieldScanner {
-    private static final Logger LOG = LoggerFactory.getLogger( DefaultBeanFieldScanner.class );
+public class DefaultModelFieldFactory implements ModelFieldFactory {
+    private static final Logger LOG = LoggerFactory.getLogger( DefaultModelFieldFactory.class );
 
     /**
      * How the fields are scanned from a class
@@ -65,9 +64,9 @@ public class DefaultBeanFieldScanner implements FieldScanner {
      * @param fieldDefaultValueProcessor Field default value processor
      * TODO: Document
      */
-    public DefaultBeanFieldScanner( FieldScanMode scanMode,
-                                    FieldValueConverter fieldDefaultValueProcessor,
-                                    ValidatorScanner validatorScanner ) {
+    public DefaultModelFieldFactory( FieldScanMode scanMode,
+                                     FieldValueConverter fieldDefaultValueProcessor,
+                                     ValidatorScanner validatorScanner ) {
         this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
         this.allowStaticFields = false;
         this.allowFinalFields = true;

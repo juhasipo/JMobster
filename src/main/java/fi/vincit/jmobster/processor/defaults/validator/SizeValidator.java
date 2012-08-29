@@ -23,7 +23,7 @@ public class SizeValidator extends BaseValidator {
     private int max;
 
     public SizeValidator( AnnotationBag annotationBag ) {
-        super( SizeValidator.class, annotationBag.getGroups() );
+        super( SizeValidator.class );
         Size size = annotationBag.getAnnotation(Size.class);
         this.min = size.min();
         this.max = size.max();

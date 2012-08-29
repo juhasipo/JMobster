@@ -1,11 +1,10 @@
 package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.ModelGenerator;
-import fi.vincit.jmobster.processor.FieldScanner;
+import fi.vincit.jmobster.processor.ModelFieldFactory;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ItemStatus;
@@ -34,20 +33,20 @@ public class DefaultModelGenerator implements ModelGenerator {
             .getLogger( DefaultModelGenerator.class );
 
     private ModelProcessor modelProcessor;
-    private FieldScanner fieldScanner;
+    private ModelFieldFactory modelFieldFactory;
     private ModelNamingStrategy modelNamingStrategy;
 
     /**
      * Creates new DefaultModelGenerator
      * @param modelProcessor Model processor to use
-     * @param fieldScanner Field scanner to use
+     * @param modelFieldFactory Model field factory to use
      */
     public DefaultModelGenerator(
             ModelProcessor modelProcessor,
-            FieldScanner fieldScanner,
+            ModelFieldFactory modelFieldFactory,
             ModelNamingStrategy modelNamingStrategy) {
         this.modelProcessor = modelProcessor;
-        this.fieldScanner = fieldScanner;
+        this.modelFieldFactory = modelFieldFactory;
         this.modelNamingStrategy = modelNamingStrategy;
     }
 
@@ -115,7 +114,7 @@ public class DefaultModelGenerator implements ModelGenerator {
      * @param models Models list
      */
     private void createModelAndAddToList( Class clazz, List<Model> models ) {
-        Model model = new Model(clazz, modelNamingStrategy.getName(clazz), fieldScanner.getFields(clazz));
+        Model model = new Model(clazz, modelNamingStrategy.getName(clazz), modelFieldFactory.getFields(clazz));
         models.add( model );
     }
 

@@ -20,5 +20,5 @@ import fi.vincit.jmobster.util.groups.HasGroups;
 /**
  * Interface for validators
  */
-public interface Validator extends HasType, HasGroups<Class> {
+public interface Validator extends HasType {
 }

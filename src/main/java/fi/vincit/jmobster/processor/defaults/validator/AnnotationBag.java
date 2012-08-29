@@ -23,7 +23,11 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AnnotationBag implements HasGroups {
+/**
+ * A bag of annotations. You can ask the object if it contains a certain
+ * type of annotation and ask it to return an instance of that annotation.
+ */
+public class AnnotationBag {
     final private Map<Class, FieldAnnotation> annotations = new HashMap<Class, FieldAnnotation>();
 
     public <T extends Annotation> T getAnnotation(Class<T> clazz) {
@@ -35,22 +39,22 @@ public class AnnotationBag implements HasGroups {
         }
     }
 
-    public <T extends Annotation> boolean hasAnnotation(Class<T> clazz) {
-        return annotations.containsKey(clazz);
+    /**
+     * Checks if the bag contains an annotation of given type
+     * @param annotationType Annotation type (Class of annotation)
+     * @param <T> Annotation type
+     * @return True if the bag contains the annotation, otherwise false.
+     */
+    public <T extends Annotation> boolean hasAnnotation(Class<T> annotationType) {
+        return annotations.containsKey(annotationType);
     }
 
+    /**
+     * Add a new annotation to bag
+     * @param annotation Annotation to add
+     */
     public void addAnnotation(FieldAnnotation annotation) {
         annotations.put(annotation.getType(), annotation);
     }
 
-    @Override
-    public Class[] getGroups() {
-        // TODO: This really should go like this: First filter groups when scanning fields, then the groups here are either the union or the intersection of the groups
-        return new Class[0];
-    }
-
-    @Override
-    public boolean hasGroups() {
-        return false;
-    }
 }

@@ -48,7 +48,7 @@ public class JMobsterFactory {
                             JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
                     );
 
-            return getInstance(validatorScanner, modelProcessor, valueConverter, DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS);
+            return getInstance(validatorScanner, modelProcessor, valueConverter, DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS);
         } else if( "html5".equalsIgnoreCase(framework) ) {
             ModelProcessor modelProcessor = new HTML5ModelProcessor(writer);
             // TODO: Where to get validator scanner?
@@ -62,7 +62,7 @@ public class JMobsterFactory {
                             JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
                     );
 
-            return getInstance(validatorScanner, modelProcessor, valueConverter, DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS);
+            return getInstance(validatorScanner, modelProcessor, valueConverter, DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS);
         } else {
             throw new UnsupportedFramework("Framework " + framework + " not supported");
         }
@@ -81,10 +81,10 @@ public class JMobsterFactory {
             ValidatorScanner validatorScanner,
             ModelProcessor modelProcessor,
             FieldValueConverter valueConverter,
-            DefaultBeanFieldScanner.FieldScanMode scanMode) {
-        FieldScanner fieldScanner = new DefaultBeanFieldScanner(scanMode, valueConverter, validatorScanner);
+            DefaultModelFieldFactory.FieldScanMode scanMode) {
+        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory(scanMode, valueConverter, validatorScanner);
         ModelNamingStrategy modelNamingStrategy = new DefaultNamingStrategy();
-        return new DefaultModelGenerator( modelProcessor, fieldScanner, modelNamingStrategy );
+        return new DefaultModelGenerator( modelProcessor, modelFieldFactory, modelNamingStrategy );
     }
 
     /**

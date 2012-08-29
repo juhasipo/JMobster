@@ -21,8 +21,6 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
 
 import java.util.List;
@@ -43,9 +41,9 @@ public class DefaultModelGeneratorTest {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        FieldScanner fieldScanner = new DefaultBeanFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
         ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator dmg = new DefaultModelGenerator(modelProcessor, fieldScanner, modelNamingStrategy);
+        DefaultModelGenerator dmg = new DefaultModelGenerator(modelProcessor, modelFieldFactory, modelNamingStrategy);
 
         dmg.process();
 
@@ -60,9 +58,9 @@ public class DefaultModelGeneratorTest {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        FieldScanner fieldScanner = new DefaultBeanFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
         ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner, modelNamingStrategy);
+        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, modelFieldFactory, modelNamingStrategy);
 
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;
@@ -79,18 +77,18 @@ public class DefaultModelGeneratorTest {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        FieldScanner fieldScanner = new DefaultBeanFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
         ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, fieldScanner, modelNamingStrategy);
+        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, modelFieldFactory, modelNamingStrategy);
 
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;
         List<Class> testClasses = TestUtil.listFromObjects(testClass, testClass2);
         modelGenerator.process( testClasses );
 
-        InOrder mpInOrder = inOrder(modelProcessor);
+        InOrder mpInOrder = inOrder( modelProcessor );
         mpInOrder.verify(modelProcessor, times(1)).startProcessing();
-        mpInOrder.verify(modelProcessor, times(2)).processModel(any(Model.class), any(ItemStatus.class));
+        mpInOrder.verify(modelProcessor, times(2)).processModel( any( Model.class ), any( ItemStatus.class ) );
         mpInOrder.verify(modelProcessor, times(1)).endProcessing();
     }
 }

@@ -36,18 +36,18 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-public class DefaultBeanFieldScannerTest {
+public class DefaultModelFieldFactoryTest {
 
     private FieldValueConverter valueConverter;
 
-    private DefaultBeanFieldScanner getFieldScanner(DefaultBeanFieldScanner.FieldScanMode scanMode) {
+    private DefaultModelFieldFactory getFieldScanner(DefaultModelFieldFactory.FieldScanMode scanMode) {
         valueConverter = mock(FieldValueConverter.class);
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
         when(validatorScanner.getValidators(any(Field.class)))
                 .thenReturn( TestUtil.collectionFromObjects( mock( Validator.class ) ) );
         when(validatorScanner.getValidators(any(PropertyDescriptor.class)))
                 .thenReturn(TestUtil.collectionFromObjects(mock(Validator.class)));
-        return new DefaultBeanFieldScanner(scanMode, valueConverter, validatorScanner);
+        return new DefaultModelFieldFactory(scanMode, valueConverter, validatorScanner);
     }
 
     public static class SimpleTestClass {
@@ -60,7 +60,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testGetFields() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS);
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS);
         List<ModelField> models = fs.getFields( SimpleTestClass.class );
 
         assertFieldFound(models, "publicLongField");
@@ -77,7 +77,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testIgnoreField() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         List<ModelField> models = fs.getFields( SimpleIgnoreTestClass.class );
 
         assertFieldNotFound( models, "publicLongField" );
@@ -94,7 +94,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testFieldWithValidation() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         List<ModelField> models = fs.getFields( TestClassWithValidation.class );
 
         assertFieldFound( models, "publicLongField" );
@@ -119,7 +119,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test(expected = DefaultConstructorMissingError.class)
     public void testNoDefaultConstructor() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         fs.getFields( TestClassNoDefaultConstructor.class );
     }
 
@@ -134,7 +134,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test(expected = CannotAccessDefaultConstructorError.class)
     public void testPrivateDefaultConstructor() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         fs.getFields( TestClassPrivateDefaultConstructor.class );
     }
 
@@ -148,7 +148,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testStaticAndFinalMember() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         List<ModelField> models = fs.getFields( TestClassWithStaticMember.class );
         assertFieldFound( models, "publicLongField" );
         assertFieldFound( models, "protectedIntegerField" );
@@ -159,7 +159,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testAllowFinalMember() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         fs.setAllowFinalFields(true);
         List<ModelField> models = fs.getFields( TestClassWithStaticMember.class );
         assertFieldFound( models, "publicLongField" );
@@ -171,7 +171,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testDontAllowFinalMember() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         fs.setAllowFinalFields(false);
         List<ModelField> models = fs.getFields( TestClassWithStaticMember.class );
         assertFieldFound( models, "publicLongField" );
@@ -183,7 +183,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testAllowStaticMember() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         fs.setAllowFinalFields(false);
         fs.setAllowStaticFields(true);
         List<ModelField> models = fs.getFields( TestClassWithStaticMember.class );
@@ -202,7 +202,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testStaticFinalMember() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         List<ModelField> models = fs.getFields( TestClassWithStaticMember.class );
         assertFieldFound( models, "publicLongField" );
         assertFieldFound( models, "protectedIntegerField" );
@@ -212,7 +212,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testAllowStaticFinalMember() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.DIRECT_FIELD_ACCESS );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS );
         fs.setAllowFinalFields(true);
         fs.setAllowStaticFields(true);
         List<ModelField> models = fs.getFields( TestClassWithStaticMember.class );
@@ -242,7 +242,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testGetterScanning() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.BEAN_PROPERTY );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.BEAN_PROPERTY );
         List<ModelField> models = fs.getFields( SimpleTestGetterClass.class );
         assertFieldNotFound(models, "string1");
         assertFieldNotFound(models, "string2");
@@ -255,7 +255,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testGetterAnnotation() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.BEAN_PROPERTY );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.BEAN_PROPERTY );
         List<ModelField> models = fs.getFields( SimpleTestGetterClass.class );
 
         int i = assertFieldFound(models, "longValue");
@@ -273,7 +273,7 @@ public class DefaultBeanFieldScannerTest {
     }
     @Test
     public void testIgnoreBeanProperty() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.BEAN_PROPERTY );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.BEAN_PROPERTY );
         List<ModelField> models = fs.getFields( IgnoreBeanPropertyClass.class );
         assertFieldNotFound(models, "ugnored");
         assertFieldFound(models, "notIgnored");
@@ -295,7 +295,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testBeanVisibility() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.BEAN_PROPERTY );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.BEAN_PROPERTY );
         List<ModelField> models = fs.getFields( VisibilityTestGetterClass.class );
         assertFieldNotFound(models, "protected");
         assertFieldNotFound(models, "private");
@@ -311,7 +311,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testBeanExtraOptionsDefault() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.BEAN_PROPERTY );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.BEAN_PROPERTY );
         List<ModelField> models = fs.getFields( BeanWithStaticAndFinalProperties.class );
         assertFieldFound(models, "normal");
         assertFieldNotFound( models, "staticFinal" );
@@ -321,7 +321,7 @@ public class DefaultBeanFieldScannerTest {
 
     @Test
     public void testBeanExtraOptionsAllowAll() {
-        DefaultBeanFieldScanner fs = getFieldScanner( DefaultBeanFieldScanner.FieldScanMode.BEAN_PROPERTY );
+        DefaultModelFieldFactory fs = getFieldScanner( DefaultModelFieldFactory.FieldScanMode.BEAN_PROPERTY );
         fs.setAllowFinalFields(true);
         fs.setAllowStaticFields(true);
         List<ModelField> models = fs.getFields( BeanWithStaticAndFinalProperties.class );
