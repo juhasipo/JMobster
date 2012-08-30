@@ -33,7 +33,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- *
+ * Default implementation of validator scanner. Uses {@link ValidatorFactory} and {@link GroupManager}
+ * to generate and filter validators.
  */
 public class DefaultValidatorScanner implements ValidatorScanner {
 

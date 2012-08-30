@@ -27,10 +27,11 @@ import java.lang.reflect.Method;
 public class FieldAnnotation implements HasGroups<Class>, HasType {
 
     private static final Logger LOG = LoggerFactory.getLogger( FieldAnnotation.class );
+    private static final String GROUPS_METHOD_NAME = "groups";
 
-    private Class[] groups;
-    private Class type;
-    private Annotation annotation;
+    final private Class[] groups;
+    final private Class type;
+    final private Annotation annotation;
 
     public FieldAnnotation(Annotation annotation) {
         this.groups = extractGroupsFromAnnotation(annotation);
@@ -40,12 +41,12 @@ public class FieldAnnotation implements HasGroups<Class>, HasType {
 
     private Class[] extractGroupsFromAnnotation( Annotation annotation ) {
         try {
-            Method groupsMethod = annotation.getClass().getMethod( "groups" );
-            Object result = groupsMethod.invoke(annotation);
-            Class[] annotationGroups = (Class[])result;
+            final Method groupsMethod = annotation.getClass().getMethod( GROUPS_METHOD_NAME );
+            final Object result = groupsMethod.invoke(annotation);
+            final Class[] annotationGroups = (Class[])result;
             return annotationGroups;
         } catch( NoSuchMethodException e ) {
-            LOG.warn( "Validator {} doesn't have groups. Ignoring grouping for that annotation", annotation.getClass().getCanonicalName() );
+            LOG.warn( "Validator {} doesn't have groups. Ignoring grouping for that annotation", annotation.getClass().getName() );
         } catch( InvocationTargetException e ) {
             LOG.error( "Error e", e );
         } catch( IllegalAccessException e ) {

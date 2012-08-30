@@ -27,7 +27,7 @@ import java.util.List;
 public class ModelField {
     final private Class fieldType;
     final private List<Validator> validators;
-    private String defaultValue; // TODO: This away from here and generate when writing. It enables better HTML compatibility
+    private String defaultValue;
     final private String name;
 
     public ModelField( Field field, Collection<Validator> validators ) {

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -52,14 +53,12 @@ public class DefaultModelGenerator implements ModelGenerator {
 
     @Override
     public void process( Class... classes ) {
-        List<Model> models = getModels( classes );
-        processModelsInternal( models );
+        processModelsInternal( getModels( classes ) );
     }
 
     @Override
-    public void process( List<Class> classes ) {
-        List<Model> models = getModels(classes);
-        processModelsInternal(models);
+    public void process( Collection<Class> classes ) {
+        processModelsInternal( getModels(classes) );
     }
 
     /**
@@ -67,7 +66,7 @@ public class DefaultModelGenerator implements ModelGenerator {
      * the processing will be terminated as described in the class documentation.
      * @param models Models to process
      */
-    private void processModelsInternal( List<Model> models ) {
+    private void processModelsInternal( Collection<Model> models ) {
         try {
             modelProcessor.startProcessing();
             ItemProcessor.process(models).with(new ItemHandler<Model>() {
@@ -88,7 +87,7 @@ public class DefaultModelGenerator implements ModelGenerator {
      * @return List of models. If no models are suitable returns an empty list.
      */
     private List<Model> getModels( Class[] classes ) {
-        List<Model> models = new ArrayList<Model>();
+        List<Model> models = new ArrayList<Model>(classes.length);
         for( Class clazz : classes ) {
             createModelAndAddToList( clazz, models );
         }
@@ -100,8 +99,8 @@ public class DefaultModelGenerator implements ModelGenerator {
      * @param classes Found model classes as a List.
      * @return List of models. If no models are suitable returns an empty list.
      */
-    private List<Model> getModels( List<Class> classes ) {
-        List<Model> models = new ArrayList<Model>();
+    private List<Model> getModels( Collection<Class> classes ) {
+        List<Model> models = new ArrayList<Model>(classes.size());
         for( Class clazz : classes ) {
             createModelAndAddToList( clazz, models );
         }
@@ -113,7 +112,7 @@ public class DefaultModelGenerator implements ModelGenerator {
      * @param clazz Class for which model should be created
      * @param models Models list
      */
-    private void createModelAndAddToList( Class clazz, List<Model> models ) {
+    private void createModelAndAddToList( Class clazz, Collection<Model> models ) {
         Model model = new Model(clazz, modelNamingStrategy.getName(clazz), modelFieldFactory.getFields(clazz));
         models.add( model );
     }

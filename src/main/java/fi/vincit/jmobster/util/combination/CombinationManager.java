@@ -17,6 +17,8 @@ package fi.vincit.jmobster.util.combination;
  */
 
 import fi.vincit.jmobster.processor.model.HasType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -26,12 +28,10 @@ import java.util.*;
  */
 public class CombinationManager<T extends HasType> {
 
+    private static final Logger LOG = LoggerFactory.getLogger( CombinationManager.class );
+
     private Map<Class, Class> requiredClasses;
     private Map<Class, Class> optionalClasses;
-
-    public CombinationManager() {
-        this( RequiredTypes.get(), OptionalTypes.get());
-    }
 
     /**
      * Constructs manager with only required types.

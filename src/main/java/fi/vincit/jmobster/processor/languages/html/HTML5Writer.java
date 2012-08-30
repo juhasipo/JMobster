@@ -29,19 +29,36 @@ public class HTML5Writer implements DataWriter {
         this.writer = writer;
     }
 
-    public HTML5Writer startTag(String name) {
-        return startTagWithAttr(name).endStartTagWithAttr(false);
+    /**
+     * Starts tag without attributes. The tag will be closed right away.
+     * @param name Name of the tag
+     * @param endMode Tag end mode
+     * @return Writer for chaining
+     */
+    public HTML5Writer startTag(String name, TagEndMode endMode) {
+        return startTagWithAttr(name).endStartTagWithAttr(endMode);
     }
 
+    /**
+     * Starts tag with attributes. Doesn't close tag.
+     * @param name Name of the tag
+     * @return Writer for chaining
+     */
     public HTML5Writer startTagWithAttr(String name) {
         writer.write("<" + name);
         tagStack.push(name);
         return this;
     }
 
-    // TODO: Use enum, better name
-    public HTML5Writer endStartTagWithAttr(boolean alsoEnd) {
-        if( alsoEnd ) {
+    /**
+     * End start tag either as an empty tag or a tag with other content.
+     * If the tag has other content, you will have to end the tag later
+     * manually.
+     * @param endMode Tag end mode.
+     * @return Writer for chaining
+     */
+    public HTML5Writer endStartTagWithAttr(TagEndMode endMode) {
+        if( endMode == TagEndMode.EMPTY_TAG ) {
             tagStack.pop();
             writer.writeLine("/>");
         } else {
@@ -50,12 +67,22 @@ public class HTML5Writer implements DataWriter {
         return this;
     }
 
+    /**
+     * Writes end tag
+     * @return Writer for chaining
+     */
     public HTML5Writer endTag() {
         String lastTag = tagStack.pop();
         writer.indentBack().write("</").write(lastTag).writeLine(">");
         return this;
     }
 
+    /**
+     * Writes an attribute to a tag.
+     * @param name Name of the attribute
+     * @param value Value of the attribute
+     * @return Writer for chaining
+     */
     public HTML5Writer writeAttr(String name, String value) {
         writer.write(" ").write(name).write("=\"").write(value).write("\"");
         return this;

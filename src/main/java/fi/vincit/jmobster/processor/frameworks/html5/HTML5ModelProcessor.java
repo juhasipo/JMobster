@@ -26,11 +26,6 @@ import java.io.IOException;
 public class HTML5ModelProcessor extends BaseModelProcessor {
     private HTML5FormWriter html5FormWriter;
 
-    public HTML5ModelProcessor( String modelFilePath ) {
-        super( modelFilePath );
-        this.html5FormWriter = new HTML5FormWriter(getWriter());
-    }
-
     public HTML5ModelProcessor( DataWriter writer ) {
         super( writer );
         this.html5FormWriter = new HTML5FormWriter(writer);

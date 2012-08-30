@@ -37,7 +37,6 @@ public class JMobsterFactory {
     public static ModelGenerator getInstance(String framework, DataWriter writer) {
         if( "backbone.js".equalsIgnoreCase(framework) || "backbone".equalsIgnoreCase(framework) ) {
             ModelProcessor modelProcessor = new BackboneModelProcessor(writer);
-            // TODO: Where to get validator scanner?
             ValidatorFactory factory = new DefaultValidatorFactory();
             ClassGroupManager groupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
             ValidatorScanner validatorScanner = new DefaultValidatorScanner(factory, groupManager);
@@ -51,7 +50,6 @@ public class JMobsterFactory {
             return getInstance(validatorScanner, modelProcessor, valueConverter, DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS);
         } else if( "html5".equalsIgnoreCase(framework) ) {
             ModelProcessor modelProcessor = new HTML5ModelProcessor(writer);
-            // TODO: Where to get validator scanner?
             ValidatorFactory factory = new DefaultValidatorFactory();
             GroupManager<Class> groupManager = new ClassGroupManager((GroupMode.ANY_OF_REQUIRED));
             ValidatorScanner validatorScanner = new DefaultValidatorScanner(factory, groupManager);

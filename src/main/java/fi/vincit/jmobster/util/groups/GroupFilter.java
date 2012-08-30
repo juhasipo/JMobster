@@ -28,12 +28,12 @@ public class GroupFilter<T extends HasGroups<G>, G> {
         this.groupManager = groupManager;
     }
 
-    public Collection<T> filterByGroups(Collection<T> list) {
-        List<T> filtered = new ArrayList<T>();
+    public Collection<T> filterByGroups(Collection<T> objectsToFilter) {
+        List<T> filtered = new ArrayList<T>(objectsToFilter.size());
 
-        for( T t : list ) {
-            if( groupManager.match( t ) ) {
-                filtered.add(t);
+        for( T objectToFilter : objectsToFilter ) {
+            if( groupManager.match( objectToFilter ) ) {
+                filtered.add(objectToFilter);
             }
         }
 

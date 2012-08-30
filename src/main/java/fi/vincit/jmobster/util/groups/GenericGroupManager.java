@@ -17,7 +17,10 @@ package fi.vincit.jmobster.util.groups;
  */
 
 import fi.vincit.jmobster.processor.GroupMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +29,8 @@ import java.util.Set;
  * Default implementation of group manager
  */
 public class GenericGroupManager<T> implements GroupManager<T> {
+
+    private static final Logger LOG = LoggerFactory.getLogger( GenericGroupManager.class );
 
     final private Collection<T> groups;
     final private GroupMode groupMode;
@@ -37,11 +42,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      * @param requiredGroups Required groups
      */
     public GenericGroupManager( GroupMode groupMode, T... requiredGroups ) {
-        this.groupMode = groupMode;
-        this.groups = new HashSet<T>(requiredGroups.length);
-        for( T group : requiredGroups ) {
-            this.groups.add(group);
-        }
+        this(groupMode, Arrays.asList(requiredGroups));
     }
 
     /**
@@ -84,14 +85,12 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     private boolean checkGroups(HasGroups<T> groupObject) {
         T[] groupsGiven = groupObject.getGroups();
 
-        if( groupMode == GroupMode.ANY_OF_REQUIRED) {
-            return checkAnyRequiredGroups( groupsGiven );
-        } else if( groupMode == GroupMode.AT_LEAST_REQUIRED) {
-            return checkAtLeastRequiredGroups( groupsGiven );
-        } else if( groupMode == GroupMode.EXACTLY_REQUIRED) {
-            return checkExactlyRequiredGroups( groupsGiven );
+        switch( groupMode ) {
+            case ANY_OF_REQUIRED: return checkAnyRequiredGroups( groupsGiven );
+            case EXACTLY_REQUIRED: return checkExactlyRequiredGroups( groupsGiven );
+            case AT_LEAST_REQUIRED: return checkAtLeastRequiredGroups( groupsGiven );
+            default: LOG.error("Invalid group mode: {}", groupMode); return false;
         }
-        return false;
     }
 
     private boolean checkAnyRequiredGroups( T[] groupsGiven ) {

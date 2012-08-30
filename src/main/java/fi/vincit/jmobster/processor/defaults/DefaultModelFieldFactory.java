@@ -59,11 +59,6 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
     private final FieldScanMode scanMode;
     private final ValidatorScanner validatorScanner;
 
-    /**
-     * Creates new field scanner
-     * @param fieldDefaultValueProcessor Field default value processor
-     * TODO: Document
-     */
     public DefaultModelFieldFactory( FieldScanMode scanMode,
                                      FieldValueConverter fieldDefaultValueProcessor,
                                      ValidatorScanner validatorScanner ) {
@@ -127,7 +122,6 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
     }
 
     private Object getDefaultObject( Class clazz ) throws InstantiationException, IllegalAccessException {
-        // TODO: From DefaultValueExtractor
         return clazz.newInstance();
     }
 

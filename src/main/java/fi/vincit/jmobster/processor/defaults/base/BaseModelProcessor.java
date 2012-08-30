@@ -24,35 +24,17 @@ import java.io.IOException;
 
 public abstract class BaseModelProcessor implements ModelProcessor {
     private DataWriter writer;
-    private String modelFilePath;
-
-    public BaseModelProcessor( String modelFilePath ) {
-        this.modelFilePath = modelFilePath;
-    }
 
     public BaseModelProcessor( DataWriter writer ) {
         this.writer = writer;
     }
 
-    protected String getModelFilePath() {
-        return modelFilePath;
-    }
-
     /**
-     * Returns writer. If no writer exists tries to create one
-     * using model file path.
-     * TODO: Make more intuitive
+     * Returns writer.
      * @return Writer
      */
     protected DataWriter getWriter() {
-        try {
-            if( !hasWriter() ) {
-                setWriter(new FileDataWriter(getModelFilePath()));
-            }
-            return writer;
-        } catch( IOException e ) {
-            throw new RuntimeException(e);
-        }
+        return writer;
     }
 
     protected boolean hasWriter() {

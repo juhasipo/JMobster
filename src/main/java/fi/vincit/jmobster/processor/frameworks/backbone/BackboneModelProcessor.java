@@ -31,8 +31,8 @@ import java.io.IOException;
  * </p>
  */
 public class BackboneModelProcessor extends BaseModelProcessor {
-    private static final Logger LOG = LoggerFactory
-            .getLogger( BackboneModelProcessor.class );
+    private static final Logger LOG = LoggerFactory.getLogger( BackboneModelProcessor.class );
+
     private static final String NAMESPACE_START = "{";
     private static final String MODEL_EXTEND_START = ": Backbone.Model.extend({";
     private static final String MODEL_EXTEND_END = "})";
@@ -45,17 +45,6 @@ public class BackboneModelProcessor extends BaseModelProcessor {
     private String namespaceName;
 
     private BackboneModelWriter backboneModelWriter;
-
-    /**
-     * Constructs backbone model processor with a model writer that writes to the given file.
-     * @param modelFilePath File path
-     */
-    public BackboneModelProcessor( String modelFilePath ) {
-        super(modelFilePath);
-        this.startComment = DEFAULT_START_COMMENT;
-        this.namespaceName = DEFAULT_NAMESPACE;
-        this.backboneModelWriter = new BackboneModelWriter(getWriter());
-    }
 
     /**
      * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.

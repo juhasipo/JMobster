@@ -16,9 +16,10 @@ package fi.vincit.jmobster.processor.frameworks.html5;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.base.BaseModelWriter;
+import fi.vincit.jmobster.processor.ModelWriter;
 import fi.vincit.jmobster.processor.frameworks.html5.validator.writer.HTML5ValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.html.HTML5Writer;
+import fi.vincit.jmobster.processor.languages.html.TagEndMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
@@ -27,19 +28,18 @@ import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
-public class HTML5FormWriter extends BaseModelWriter {
+public class HTML5FormWriter implements ModelWriter {
     final private HTML5Writer writer;
     final private HTML5ValidatorWriterManager validatorWriterManager;
 
     public HTML5FormWriter( DataWriter writer ) {
-        super( writer );
         this.writer = new HTML5Writer(writer);
         this.validatorWriterManager = new HTML5ValidatorWriterManager(this.writer);
     }
 
     @Override
     public void write( Model model ) {
-        writer.startTag("form");
+        writer.startTag("form", TagEndMode.TAG_WITH_CONTENT);
 
         final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
             @Override
@@ -54,7 +54,7 @@ public class HTML5FormWriter extends BaseModelWriter {
                 writer.startTagWithAttr("input").writeAttr("type", "text");
                 ItemProcessor.process(field.getValidators()).with(validatorWriter);
                 writer.writeAttr("value", field.getDefaultValue());
-                writer.endStartTagWithAttr(true);
+                writer.endStartTagWithAttr(TagEndMode.EMPTY_TAG);
             }
         });
 

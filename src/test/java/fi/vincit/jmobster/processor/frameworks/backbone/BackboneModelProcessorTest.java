@@ -28,13 +28,10 @@ public class BackboneModelProcessorTest {
         bmp.startProcessing();
         bmp.processModel(testModel, ItemStatus.inMiddle());
         bmp.endProcessing();
-
-        // TODO: Test
     }
 
     @Test
     public void testProcessWithValidators() throws Exception {
-        // TODO: Test
     }
 
     private DataWriter mockWriter() {

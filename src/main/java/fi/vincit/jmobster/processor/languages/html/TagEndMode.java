@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.base;
+package fi.vincit.jmobster.processor.languages.html;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,19 +16,17 @@ package fi.vincit.jmobster.processor.defaults.base;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.ModelWriter;
-import fi.vincit.jmobster.util.writer.DataWriter;
-
 /**
- * Base class for model writers. Now it is more like an
- * guideline to use for model writers.
+ * How to end the current tag
  */
-public abstract class BaseModelWriter implements ModelWriter {
-
+public enum TagEndMode {
     /**
-     *
-     * @param writer
+     * Tag will be empty, close it right away (ends with /&gt)
      */
-    public BaseModelWriter(DataWriter writer) {
-    }
+    EMPTY_TAG,
+    /**
+     * Tag will contain data or other tags (ends with /&gt).
+     * You will need to end the tag later manually.
+     */
+    TAG_WITH_CONTENT
 }

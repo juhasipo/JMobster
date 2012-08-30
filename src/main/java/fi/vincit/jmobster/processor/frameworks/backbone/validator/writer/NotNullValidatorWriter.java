@@ -16,21 +16,17 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
+import fi.vincit.jmobster.processor.defaults.validator.NotNullValidator;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
-/**
- * Validator writer manager for Backbone
- */
-public class BackboneValidatorWriterManager extends BaseValidatorWriterManager<JavaScriptWriter> {
-    public BackboneValidatorWriterManager( JavaScriptWriter modelWriter ) {
-        super( modelWriter );
-        setValidator(
-                new SizeValidatorWriter(),
-                new PatternValidatorWriter(),
-                new MinValidatorWriter(),
-                new MaxValidatorWriter(),
-                new NotNullValidatorWriter()
-        );
+public class NotNullValidatorWriter extends JavaScriptValidatorWriter<NotNullValidator> {
+    public NotNullValidatorWriter() {
+        super( NotNullValidator.class );
+    }
+
+    @Override
+    protected void write( JavaScriptWriter writer, NotNullValidator validator, boolean isLast ) {
+        writer.writeKeyValue("required", "true", isLast);
     }
 }

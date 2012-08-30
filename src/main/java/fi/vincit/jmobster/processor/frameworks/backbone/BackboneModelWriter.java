@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.base.BaseModelWriter;
+import fi.vincit.jmobster.processor.ModelWriter;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
@@ -27,13 +27,12 @@ import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
-public class BackboneModelWriter extends BaseModelWriter {
+public class BackboneModelWriter implements ModelWriter {
 
     final private JavaScriptWriter writer;
     final private BackboneValidatorWriterManager validatorWriterManager;
 
     public BackboneModelWriter( DataWriter writer ) {
-        super( writer );
         this.writer = new JavaScriptWriter(writer);
         this.validatorWriterManager = new BackboneValidatorWriterManager(this.writer);
     }
