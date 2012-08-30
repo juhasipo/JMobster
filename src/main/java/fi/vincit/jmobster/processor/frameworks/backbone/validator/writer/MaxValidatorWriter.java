@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,23 +16,17 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.processor.defaults.validator.MaxValidator;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptValidatorWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
-public abstract class BaseValidator implements Validator {
-    private Class type;
-
-    protected BaseValidator() {
-        this.type = this.getClass();
+public class MaxValidatorWriter extends JavaScriptValidatorWriter<MaxValidator> {
+    public MaxValidatorWriter() {
+        super( MaxValidator.class );
     }
 
     @Override
-    public Class getType() {
-        return type;
-    }
-
-    public abstract void init(AnnotationBag annotationBag);
-
-    protected void setType(Class type) {
-        this.type = type;
+    protected void write( JavaScriptWriter writer, MaxValidator validator, boolean isLast ) {
+        writer.writeKeyValue("max", ""+validator.getMax(), isLast);
     }
 }

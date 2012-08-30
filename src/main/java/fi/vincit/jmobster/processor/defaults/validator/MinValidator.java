@@ -16,23 +16,18 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.Validator;
+import javax.validation.constraints.Min;
 
-public abstract class BaseValidator implements Validator {
-    private Class type;
-
-    protected BaseValidator() {
-        this.type = this.getClass();
-    }
+public class MinValidator extends BaseValidator {
+    private long min;
 
     @Override
-    public Class getType() {
-        return type;
+    public void init( AnnotationBag annotationBag ) {
+        Min maxValue = annotationBag.getAnnotation(Min.class);
+        this.min = maxValue.value();
     }
 
-    public abstract void init(AnnotationBag annotationBag);
-
-    protected void setType(Class type) {
-        this.type = type;
+    public long getMin() {
+        return min;
     }
 }

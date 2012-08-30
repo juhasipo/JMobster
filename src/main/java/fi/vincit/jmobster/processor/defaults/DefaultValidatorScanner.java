@@ -16,7 +16,6 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ValidatorFactory;
 import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
@@ -29,10 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 

@@ -50,7 +50,7 @@ public abstract class BaseValidatorWriter<V extends Validator, W extends DataWri
      * be to cast the validator to correct type.
      * @param writer Model writer
      * @param validator Validator to write
-     * @param isLast
+     * @param isLast TODO: Change to ItemStatus
      */
     @SuppressWarnings("unchecked")
     public void write( W writer, Object validator, boolean isLast ) {

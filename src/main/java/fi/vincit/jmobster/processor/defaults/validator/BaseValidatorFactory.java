@@ -20,14 +20,17 @@ import fi.vincit.jmobster.processor.ValidatorConstructor;
 import fi.vincit.jmobster.processor.ValidatorFactory;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 
 /**
  *
  */
 public abstract class BaseValidatorFactory implements ValidatorFactory {
+
+    private static final Logger LOG = LoggerFactory.getLogger( BaseValidatorFactory.class );
 
     final private Set<ValidatorConstructor> validatorConstructors;
 
@@ -47,7 +50,7 @@ public abstract class BaseValidatorFactory implements ValidatorFactory {
         for( ValidatorConstructor validatorConstructor : validatorConstructors ) {
             Validator validator = validatorConstructor.construct(annotations);
             if( validator != null ) {
-                validators.add(validator);
+                validators.add( validator );
             }
         }
         return validators;

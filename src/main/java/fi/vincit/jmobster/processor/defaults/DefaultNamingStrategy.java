@@ -16,7 +16,6 @@ package fi.vincit.jmobster.processor.defaults;
 */
 
 import fi.vincit.jmobster.processor.ModelNamingStrategy;
-import fi.vincit.jmobster.processor.model.Model;
 
 /**
  * Default naming strategy for model names. Uses the model name (simple name)

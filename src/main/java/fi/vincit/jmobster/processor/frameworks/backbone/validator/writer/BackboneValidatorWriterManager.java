@@ -19,8 +19,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
-import javax.validation.constraints.Size;
-
 /**
  * Validator writer manager for Backbone
  */
@@ -29,7 +27,9 @@ public class BackboneValidatorWriterManager extends BaseValidatorWriterManager<J
         super( modelWriter );
         setValidator(
                 new SizeValidatorWriter(),
-                new PatternValidatorWriter()
+                new PatternValidatorWriter(),
+                new MinValidatorWriter(),
+                new MaxValidatorWriter()
         );
     }
 }

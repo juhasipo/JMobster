@@ -19,7 +19,6 @@ package fi.vincit.jmobster.processor;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 
-import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.List;
 

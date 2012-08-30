@@ -16,11 +16,11 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
 import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
-public class SizeValidatorWriter extends BaseValidatorWriter<SizeValidator, JavaScriptWriter> {
+public class SizeValidatorWriter extends JavaScriptValidatorWriter<SizeValidator> {
 
     public SizeValidatorWriter() {
         super( SizeValidator.class );

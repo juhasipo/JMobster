@@ -25,7 +25,6 @@ import fi.vincit.jmobster.util.combination.RequiredTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -43,7 +42,6 @@ public class ValidatorConstructor {
     }
 
     public Validator construct( Collection<FieldAnnotation> annotations ) {
-        // Construct via reflection
         try {
             if( combinationManager.matches(annotations) ) {
                 return constructFromAnnotations( annotations );
@@ -64,12 +62,24 @@ public class ValidatorConstructor {
 
     private Validator constructFromAnnotations( Collection<FieldAnnotation> annotations )
             throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        AnnotationBag annotationBag = constructAnnotationBag( annotations );
+        return constructAndInitValidator( annotationBag );
+    }
+
+    private AnnotationBag constructAnnotationBag( Collection<FieldAnnotation> annotations ) {
         AnnotationBag annotationBag = new AnnotationBag();
         for( FieldAnnotation annotation : annotations ) {
             if( combinationManager.containsClass(annotation.getType()) ) {
                 annotationBag.addAnnotation(annotation);
             }
         }
-        return (Validator)validatorClass.getConstructor(AnnotationBag.class).newInstance(annotationBag);
+        return annotationBag;
+    }
+
+    private Validator constructAndInitValidator( AnnotationBag annotationBag )
+            throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        Validator validatorInstance = (Validator)validatorClass.getConstructor().newInstance();
+        validatorInstance.getClass().getMethod("init", AnnotationBag.class).invoke(validatorInstance, annotationBag);
+        return validatorInstance;
     }
 }

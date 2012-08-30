@@ -18,7 +18,8 @@ package fi.vincit.jmobster.processor.languages.html;
 
 import fi.vincit.jmobster.processor.defaults.base.BaseValueConverterManager;
 import fi.vincit.jmobster.processor.languages.html.valueconverters.ArrayConverter;
-import fi.vincit.jmobster.processor.languages.html.valueconverters.TextFieldConverter;import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
+import fi.vincit.jmobster.processor.languages.html.valueconverters.TextFieldConverter;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 
 import java.lang.reflect.Array;
 

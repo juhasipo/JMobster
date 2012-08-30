@@ -22,8 +22,8 @@ public class SizeValidator extends BaseValidator {
     private int min;
     private int max;
 
-    public SizeValidator( AnnotationBag annotationBag ) {
-        super( SizeValidator.class );
+    @Override
+    public void init( AnnotationBag annotationBag ) {
         Size size = annotationBag.getAnnotation(Size.class);
         this.min = size.min();
         this.max = size.max();

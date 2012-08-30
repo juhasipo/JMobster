@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.languages.javascript;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,23 +16,11 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
 import fi.vincit.jmobster.processor.model.Validator;
 
-public abstract class BaseValidator implements Validator {
-    private Class type;
-
-    protected BaseValidator() {
-        this.type = this.getClass();
-    }
-
-    @Override
-    public Class getType() {
-        return type;
-    }
-
-    public abstract void init(AnnotationBag annotationBag);
-
-    protected void setType(Class type) {
-        this.type = type;
+public abstract class JavaScriptValidatorWriter<T extends Validator> extends BaseValidatorWriter<T, JavaScriptWriter> {
+    protected JavaScriptValidatorWriter( Class supportedType ) {
+        super( supportedType );
     }
 }

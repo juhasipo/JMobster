@@ -22,10 +22,10 @@ import fi.vincit.jmobster.processor.languages.html.HTML5Writer;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.ItemStatus;
-import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
+import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 public class HTML5FormWriter extends BaseModelWriter {
     final private HTML5Writer writer;

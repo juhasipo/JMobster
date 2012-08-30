@@ -21,8 +21,7 @@ import fi.vincit.jmobster.processor.ValidatorConstructor;
 import fi.vincit.jmobster.util.combination.OptionalTypes;
 import fi.vincit.jmobster.util.combination.RequiredTypes;
 
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * Default implementation of validator factory. Contains
@@ -38,5 +37,17 @@ public class DefaultValidatorFactory extends BaseValidatorFactory {
                 PatternValidator.class,
                 RequiredTypes.get(Pattern.class),
                 OptionalTypes.get(OverridePattern.class)));
+        setValidator(new ValidatorConstructor(
+                MinValidator.class,
+                RequiredTypes.get(Min.class),
+                OptionalTypes.get()));
+        setValidator(new ValidatorConstructor(
+                MaxValidator.class,
+                RequiredTypes.get(Max.class),
+                OptionalTypes.get()));
+        setValidator(new ValidatorConstructor(
+                NotNullValidator.class,
+                RequiredTypes.get(NotNull.class),
+                OptionalTypes.get()));
     }
 }

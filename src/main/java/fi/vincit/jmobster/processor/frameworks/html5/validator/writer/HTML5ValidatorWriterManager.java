@@ -19,8 +19,6 @@ package fi.vincit.jmobster.processor.frameworks.html5.validator.writer;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.html.HTML5Writer;
 
-import javax.validation.constraints.Size;
-
 public class HTML5ValidatorWriterManager extends BaseValidatorWriterManager<HTML5Writer> {
     public HTML5ValidatorWriterManager( HTML5Writer modelWriter ) {
         super( modelWriter );

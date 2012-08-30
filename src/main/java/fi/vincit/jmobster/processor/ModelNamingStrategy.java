@@ -14,8 +14,6 @@ package fi.vincit.jmobster.processor;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.model.Model;
-
 /**
  * Interface for generating model name
  */

@@ -14,10 +14,10 @@ package fi.vincit.jmobster.processor.languages.javascript;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.util.ItemStatus;
-import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
+import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
  * Higher level abstraction for DataWriter that can write

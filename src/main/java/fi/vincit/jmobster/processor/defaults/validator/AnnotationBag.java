@@ -17,7 +17,6 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
-import fi.vincit.jmobster.util.groups.HasGroups;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;

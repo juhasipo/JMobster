@@ -16,8 +16,6 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.GroupMode;
-import fi.vincit.jmobster.util.groups.GroupFilter;
 import fi.vincit.jmobster.util.groups.HasGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +23,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
 
 public class FieldAnnotation implements HasGroups<Class>, HasType {
 

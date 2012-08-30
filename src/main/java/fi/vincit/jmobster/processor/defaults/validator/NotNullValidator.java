@@ -16,23 +16,8 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.Validator;
-
-public abstract class BaseValidator implements Validator {
-    private Class type;
-
-    protected BaseValidator() {
-        this.type = this.getClass();
-    }
-
+public class NotNullValidator extends BaseValidator {
     @Override
-    public Class getType() {
-        return type;
-    }
-
-    public abstract void init(AnnotationBag annotationBag);
-
-    protected void setType(Class type) {
-        this.type = type;
+    public void init( AnnotationBag annotationBag ) {
     }
 }

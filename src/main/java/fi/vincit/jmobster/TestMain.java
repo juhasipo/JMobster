@@ -55,6 +55,7 @@ public class TestMain {
         private String string2 = "test string";
 
         @Min(10)
+        @Max(100)
         Long longValue = 42L;
 
         @Size(min = 5, max = 255)
@@ -107,7 +108,7 @@ public class TestMain {
         final String BB = "backbone.js";
         ModelGenerator generator = JMobsterFactory.getInstance(BB, provider);
 
-        generator.process( BeanPropertyDemo.class );
+        generator.process( BeanPropertyDemo.class, MyModelDto.class );
 
         System.out.println(provider.getModel());
     }

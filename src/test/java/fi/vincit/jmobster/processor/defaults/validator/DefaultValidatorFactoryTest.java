@@ -32,6 +32,7 @@ public class DefaultValidatorFactoryTest {
         class SizeClass {
             @Size(min=1, max=3) public int i;
         }
+        // TODO: Test
         /*
         Validator validator = factory.createValidators( null );
         Assert.assertNotNull( validator );
