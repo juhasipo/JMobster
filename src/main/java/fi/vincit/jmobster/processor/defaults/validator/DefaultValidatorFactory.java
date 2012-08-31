@@ -17,7 +17,6 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.annotation.OverridePattern;
-import fi.vincit.jmobster.processor.ValidatorConstructor;
 import fi.vincit.jmobster.util.combination.OptionalTypes;
 import fi.vincit.jmobster.util.combination.RequiredTypes;
 
@@ -26,6 +25,8 @@ import javax.validation.constraints.*;
 /**
  * Default implementation of validator factory. Contains
  * validator constructors for basic JSR-303 validation annotations.
+ * Use {@link BaseValidatorFactory#setValidator(ValidatorConstructor)} to
+ * add more validators.
  */
 public class DefaultValidatorFactory extends BaseValidatorFactory {
     public DefaultValidatorFactory() {

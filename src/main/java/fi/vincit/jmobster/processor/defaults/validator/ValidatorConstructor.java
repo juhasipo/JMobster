@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor;
+package fi.vincit.jmobster.processor.defaults.validator;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,7 +16,6 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.AnnotationBag;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.combination.CombinationManager;
@@ -34,7 +33,6 @@ import java.util.Collection;
  */
 public class ValidatorConstructor {
     private static final Logger LOG = LoggerFactory.getLogger( ValidatorConstructor.class );
-    private static final String INIT_METHOD_NAME = "init";
 
     private CombinationManager<FieldAnnotation> combinationManager;
     private Class validatorClass;
@@ -68,13 +66,15 @@ public class ValidatorConstructor {
                 return null;
             }
         } catch( InstantiationException e ) {
-            LOG.error("Error", e);
+            LOG.error("Could not instantiate validator", e);
         } catch( IllegalAccessException e ) {
-            LOG.error("Error", e);
+            LOG.error("Could not access constructor of the validator", e);
         } catch( InvocationTargetException e ) {
-            LOG.error("Error", e);
+            LOG.error("Could not invoke validator constructor", e);
         } catch( NoSuchMethodException e ) {
-            LOG.error("Error", e);
+            LOG.error("Constructor not found", e);
+        } catch (Exception e ) {
+            LOG.error("Unknown exception", e);
         }
         return null;
     }
@@ -89,7 +89,7 @@ public class ValidatorConstructor {
      * @throws NoSuchMethodException
      */
     private Validator constructFromAnnotations( Collection<FieldAnnotation> annotations )
-            throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         AnnotationBag annotationBag = constructAnnotationBag( annotations );
         return constructAndInitValidator( annotationBag );
     }
@@ -120,12 +120,9 @@ public class ValidatorConstructor {
      * @throws NoSuchMethodException
      */
     private Validator constructAndInitValidator( AnnotationBag annotationBag )
-            throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
         final Validator validatorInstance = (Validator)validatorClass.getConstructor().newInstance();
-        final Class validatorClass = validatorInstance.getClass();
-        validatorClass
-                .getMethod( INIT_METHOD_NAME, AnnotationBag.class)
-                .invoke(validatorInstance, annotationBag );
+        validatorInstance.init( annotationBag );
         return validatorInstance;
     }
 }

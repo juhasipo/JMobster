@@ -25,6 +25,10 @@ import java.io.IOException;
 public abstract class BaseModelProcessor implements ModelProcessor {
     private DataWriter writer;
 
+    /**
+     * Initializes model processor with writer
+     * @param writer Writer to use
+     */
     public BaseModelProcessor( DataWriter writer ) {
         this.writer = writer;
     }
@@ -37,10 +41,17 @@ public abstract class BaseModelProcessor implements ModelProcessor {
         return writer;
     }
 
+    /**
+     * @return True if writer is set, otherwise false.
+     */
     protected boolean hasWriter() {
         return writer != null;
     }
 
+    /**
+     * Sets writer
+     * @param dataWriter Writer to set
+     */
     protected void setWriter( DataWriter dataWriter ) {
         this.writer = dataWriter;
     }

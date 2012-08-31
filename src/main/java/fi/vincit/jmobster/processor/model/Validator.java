@@ -15,8 +15,17 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.defaults.validator.AnnotationBag;
+
 /**
  * Interface for validators
  */
 public interface Validator extends HasType {
+    /**
+     * Initializes the validator. {@link AnnotationBag} given
+     * as parameter always contains required annotations and
+     * may contain optional annotations.
+     * @param annotationBag Annotation bag
+     */
+    void init(AnnotationBag annotationBag);
 }

@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorConstructor;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 

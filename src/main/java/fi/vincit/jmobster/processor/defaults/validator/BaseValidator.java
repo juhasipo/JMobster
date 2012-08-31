@@ -18,6 +18,11 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.model.Validator;
 
+/**
+ * Base class for implementing validators. By default sets
+ * the validator type with {@link Object#getClass()}. This can
+ * be overridden with {@link BaseValidator#setType(Class)}
+ */
 public abstract class BaseValidator implements Validator {
     private Class type;
 
@@ -29,8 +34,6 @@ public abstract class BaseValidator implements Validator {
     public Class getType() {
         return type;
     }
-
-    public abstract void init(AnnotationBag annotationBag);
 
     protected void setType(Class type) {
         this.type = type;
