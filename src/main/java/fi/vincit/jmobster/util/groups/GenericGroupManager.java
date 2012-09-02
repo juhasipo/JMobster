@@ -20,10 +20,7 @@ import fi.vincit.jmobster.processor.GroupMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Default implementation of group manager
@@ -124,9 +121,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
         final int groupsNeededCount = configuredGroups.size();
 
         final Set<T> givenGroups = new HashSet<T>(groupsGiven.length);
-        for( T group : groupsGiven ) {
-            givenGroups.add( group );
-        }
+        Collections.addAll( givenGroups, groupsGiven );
         final int groupsGivenCount = givenGroups.size();
 
         if( groupsGivenCount < groupsNeededCount ) {

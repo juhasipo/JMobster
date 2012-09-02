@@ -113,6 +113,7 @@ public abstract class BaseValueConverterManager implements FieldValueConverter {
         ValueConverter converter = getConverterByClass( clazz );
         if( converter == null ) {
             LOG.debug(value.getClass().getCanonicalName());
+            return nullValue;
         }
         return converter.convertValue(value);
     }

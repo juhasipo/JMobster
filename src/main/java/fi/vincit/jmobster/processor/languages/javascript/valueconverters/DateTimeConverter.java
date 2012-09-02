@@ -65,10 +65,10 @@ public class DateTimeConverter extends StringConverter {
 
     @Override
     protected String getTypeDefaultValue() {
-        Date defaultDate = null;
         if( defaultTime == null ) {
             throw new RuntimeException("DefaultTime for DateTimeConverter is not set");
         }
+        Date defaultDate;
         switch( defaultTime ) {
             case NOW: defaultDate = new Date(); break;
             case EPOCH_0: defaultDate = new Date(0); break;
