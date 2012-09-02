@@ -43,12 +43,16 @@ public class CachedModelProvider implements ModelProvider {
     private String cachedModel;
     private final DataWriter dataWriter;
 
+    public static CachedModelProvider createWithStringWriter(WriteMode writeMode) {
+        return new CachedModelProvider(writeMode, new StringBufferWriter());
+    }
+
     /**
      * Creates new model provider that caches the model output.
      * @param writeMode Write mode
      */
-    public CachedModelProvider( WriteMode writeMode ) {
-        this.dataWriter = new StringBufferWriter();
+    public CachedModelProvider( WriteMode writeMode, DataWriter dataWriter ) {
+        this.dataWriter = dataWriter;
         switch ( writeMode ) {
             case COMPACT: configureCompactMode( dataWriter ); break;
             case PRETTY: configurePrettyMode( dataWriter ); break;
@@ -84,5 +88,10 @@ public class CachedModelProvider implements ModelProvider {
     @Override
     public DataWriter getDataWriter() {
         return dataWriter;
+    }
+
+    @Override
+    public void clear() {
+        cachedModel = null;
     }
 }

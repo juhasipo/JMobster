@@ -104,8 +104,8 @@ public class TestMain {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         //DataWriter modelWriter = new StreamDataWriter("models.js");
-        CachedModelProvider provider1 = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY );
-        CachedModelProvider provider2 = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY );
+        CachedModelProvider provider1 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
+        CachedModelProvider provider2 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
         final String HTML5 = "html5";
         final String BB = "backbone.js";
         ModelGenerator generator = JMobsterFactory.getInstance(BB, provider1);

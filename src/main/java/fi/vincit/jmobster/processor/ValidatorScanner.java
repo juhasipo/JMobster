@@ -43,5 +43,11 @@ public interface ValidatorScanner {
      */
     Collection<Validator> getValidators( PropertyDescriptor property );
 
+    /**
+     * Sets filter group mode and filter groups for
+     * validation scanning.
+     * @param groupMode Filter group mode
+     * @param groups Groups to filter with
+     */
     void setFilterGroups( GroupMode groupMode, Collection<Class> groups );
 }

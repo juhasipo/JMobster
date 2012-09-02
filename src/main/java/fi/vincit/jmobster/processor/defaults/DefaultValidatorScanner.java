@@ -41,8 +41,8 @@ public class DefaultValidatorScanner implements ValidatorScanner {
 
     private static final Logger LOG = LoggerFactory.getLogger( DefaultValidatorScanner.class );
 
-    private ValidatorFactory validatorFactory;
-    private GroupFilter<FieldAnnotation, Class> filter;
+    final private ValidatorFactory validatorFactory;
+    final private GroupFilter<FieldAnnotation, Class> filter;
 
     public DefaultValidatorScanner( ValidatorFactory validatorFactory, GroupManager<Class> groupManager ) {
         this.validatorFactory = validatorFactory;

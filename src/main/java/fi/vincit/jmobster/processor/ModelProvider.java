@@ -19,4 +19,5 @@ import fi.vincit.jmobster.util.writer.DataWriter;
 public interface ModelProvider {
     String getModel();
     DataWriter getDataWriter();
+    void clear();
 }

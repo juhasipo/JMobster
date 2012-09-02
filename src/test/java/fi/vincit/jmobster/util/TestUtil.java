@@ -14,9 +14,12 @@ package fi.vincit.jmobster.util;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.defaults.validator.AnnotationBag;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.processor.model.ModelField;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -109,5 +112,31 @@ public class TestUtil {
      */
     public static String quoteString(String stringToQuote) {
         return "\"" + stringToQuote + "\"";
+    }
+
+    /**
+     * Creates a new annotation bag with given annotations. If none given,
+     * annotation bag will be empty.
+     * @param annotations Annotations
+     * @return Annotation bag with annotations
+     */
+    public static AnnotationBag generateAnnotationBag( Annotation... annotations ) {
+        AnnotationBag annotationBag = new AnnotationBag();
+        for( Annotation annotation : annotations ) {
+            annotationBag.addAnnotation( new FieldAnnotation( annotation ) );
+        }
+        return annotationBag;
+    }
+
+    /**
+     * Returns the nth annotation from the mth field of given class. Throws exceptions
+     * if the indices are not in range.
+     * @param clazz Class
+     * @param fieldIndex Index of the field
+     * @param annotationIndex Index of the annotation in finalIndex field
+     * @return Annotation
+     */
+    public static Annotation getAnnotationFromClass(Class clazz, int fieldIndex, int annotationIndex) {
+        return clazz.getDeclaredFields()[fieldIndex].getDeclaredAnnotations()[annotationIndex];
     }
 }

@@ -42,13 +42,6 @@ public abstract class BaseModelProcessor implements ModelProcessor {
     }
 
     /**
-     * @return True if writer is set, otherwise false.
-     */
-    protected boolean hasWriter() {
-        return writer != null;
-    }
-
-    /**
      * Sets writer
      * @param dataWriter Writer to set
      */
