@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
+import fi.vincit.jmobster.processor.FieldScanMode;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelFieldFactory;
 import fi.vincit.jmobster.processor.ValidatorScanner;
@@ -38,20 +39,6 @@ import java.util.List;
  */
 public class DefaultModelFieldFactory implements ModelFieldFactory {
     private static final Logger LOG = LoggerFactory.getLogger( DefaultModelFieldFactory.class );
-
-    /**
-     * How the fields are scanned from a class
-     */
-    public static enum FieldScanMode {
-        /**
-         * Use getters. In this mode static fields cannot be used.
-         */
-        BEAN_PROPERTY,
-        /**
-         * Get public/protected/fields directly
-         */
-        DIRECT_FIELD_ACCESS
-    }
 
     private final FieldValueConverter fieldDefaultValueProcessor;
     private boolean allowStaticFields;

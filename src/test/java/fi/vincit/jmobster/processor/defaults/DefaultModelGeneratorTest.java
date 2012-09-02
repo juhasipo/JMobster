@@ -41,9 +41,9 @@ public class DefaultModelGeneratorTest {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
         ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator dmg = new DefaultModelGenerator(modelProcessor, modelFieldFactory, modelNamingStrategy);
+        DefaultModelGenerator dmg = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).setModelFieldFactory( modelFieldFactory ).setModelNamingStrategy( modelNamingStrategy ).createDefaultModelGenerator();
 
         dmg.process();
 
@@ -58,9 +58,9 @@ public class DefaultModelGeneratorTest {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
         ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, modelFieldFactory, modelNamingStrategy);
+        DefaultModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).setModelFieldFactory( modelFieldFactory ).setModelNamingStrategy( modelNamingStrategy ).createDefaultModelGenerator();
 
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;
@@ -77,9 +77,9 @@ public class DefaultModelGeneratorTest {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         FieldValueConverter valueConverter = mock(FieldValueConverter.class);
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( DefaultModelFieldFactory.FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
+        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
         ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator modelGenerator = new DefaultModelGenerator(modelProcessor, modelFieldFactory, modelNamingStrategy);
+        DefaultModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).setModelFieldFactory( modelFieldFactory ).setModelNamingStrategy( modelNamingStrategy ).createDefaultModelGenerator();
 
         Class testClass = TestClass1.class;
         Class testClass2 = TestClass2.class;
