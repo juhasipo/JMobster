@@ -29,7 +29,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
 
 public class BackboneModelWriter implements ModelWriter {
 
-    final private JavaScriptWriter writer;
+    private JavaScriptWriter writer;
     final private BackboneValidatorWriterManager validatorWriterManager;
 
     public BackboneModelWriter( DataWriter writer ) {
@@ -83,5 +83,10 @@ public class BackboneModelWriter implements ModelWriter {
                 writer.endBlock(status.isLastItem());
             }
         });
+    }
+
+    public void setWriter( DataWriter writer ) {
+        this.writer = new JavaScriptWriter(writer);
+        this.validatorWriterManager.setWriter(this.writer);
     }
 }

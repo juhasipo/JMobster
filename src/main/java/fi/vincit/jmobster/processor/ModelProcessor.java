@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor;
 
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
 
@@ -45,4 +46,5 @@ public interface ModelProcessor {
      */
     void endProcessing() throws IOException;
 
+    void setWriter( DataWriter dataWriter );
 }

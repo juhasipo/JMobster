@@ -42,4 +42,6 @@ public interface ValidatorScanner {
      * @return Validation annotation. If nothing found returns an empty list.
      */
     Collection<Validator> getValidators( PropertyDescriptor property );
+
+    void setFilterGroups( GroupMode groupMode, Collection<Class> groups );
 }

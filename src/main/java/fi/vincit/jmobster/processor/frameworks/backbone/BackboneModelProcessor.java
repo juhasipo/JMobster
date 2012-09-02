@@ -77,6 +77,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
 
     @Override
     public void startProcessing() throws IOException {
+        backboneModelWriter.setWriter(getWriter());
         getWriter().open();
 
         getWriter().writeLine( startComment );

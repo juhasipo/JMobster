@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ValidatorFactory;
 import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
@@ -56,6 +57,11 @@ public class DefaultValidatorScanner implements ValidatorScanner {
     @Override
     public List<Validator> getValidators( PropertyDescriptor property ) {
         return getValidators( convertToFieldAnnotations( property.getReadMethod().getAnnotations() ) );
+    }
+
+    @Override
+    public void setFilterGroups( GroupMode groupMode, Collection<Class> groups ) {
+        filter.setFilterGroups(groupMode, groups);
     }
 
     private Collection<FieldAnnotation> convertToFieldAnnotations(Annotation[] annotations) {

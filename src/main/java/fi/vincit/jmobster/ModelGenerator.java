@@ -14,7 +14,9 @@ package fi.vincit.jmobster;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.Collection;
 
@@ -50,10 +52,7 @@ public interface ModelGenerator {
      */
     void process( Collection<Class> classes );
 
-    /**
-     * Returns used model processor. Use this to configure
-     * the model processor as you wish.
-     * @return Model processor used
-     */
-    ModelProcessor getModelProcessor();
+    void setWriter( DataWriter dataWriter );
+
+    void setValidatorFilterGroups( GroupMode groupMode, Class... classes );
 }

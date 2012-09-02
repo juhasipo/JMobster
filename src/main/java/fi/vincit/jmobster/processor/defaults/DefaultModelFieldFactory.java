@@ -18,10 +18,7 @@ package fi.vincit.jmobster.processor.defaults;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
-import fi.vincit.jmobster.processor.FieldScanMode;
-import fi.vincit.jmobster.processor.FieldValueConverter;
-import fi.vincit.jmobster.processor.ModelFieldFactory;
-import fi.vincit.jmobster.processor.ValidatorScanner;
+import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.model.ModelField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +29,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -63,6 +61,11 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
             case DIRECT_FIELD_ACCESS: return getFieldsByDirectFieldAccess( clazz );
             default: throw new RuntimeException("Invalid field scan mode: " + scanMode);
         }
+    }
+
+    @Override
+    public void setValidatorFilterGroups( GroupMode groupMode, Collection<Class> groups ) {
+        validatorScanner.setFilterGroups(groupMode, groups);
     }
 
     /**

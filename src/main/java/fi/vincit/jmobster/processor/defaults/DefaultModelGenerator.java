@@ -1,6 +1,7 @@
 package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.ModelGenerator;
+import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ModelFieldFactory;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;
 import fi.vincit.jmobster.processor.ModelProcessor;
@@ -8,11 +9,13 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -59,6 +62,16 @@ public class DefaultModelGenerator implements ModelGenerator {
     @Override
     public void process( Collection<Class> classes ) {
         processModelsInternal( getModels(classes) );
+    }
+
+    @Override
+    public void setWriter( DataWriter dataWriter ) {
+        modelProcessor.setWriter( dataWriter );
+    }
+
+    @Override
+    public void setValidatorFilterGroups( GroupMode groupMode, Class... classes ) {
+        modelFieldFactory.setValidatorFilterGroups( groupMode, Arrays.asList( classes ) );
     }
 
     /**
@@ -115,10 +128,5 @@ public class DefaultModelGenerator implements ModelGenerator {
     private void createModelAndAddToList( Class clazz, Collection<Model> models ) {
         Model model = new Model(clazz, modelNamingStrategy.getName(clazz), modelFieldFactory.getFields(clazz));
         models.add( model );
-    }
-
-    @Override
-    public ModelProcessor getModelProcessor() {
-        return modelProcessor;
     }
 }

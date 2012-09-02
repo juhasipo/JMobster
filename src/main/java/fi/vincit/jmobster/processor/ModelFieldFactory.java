@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor;
 
 import fi.vincit.jmobster.processor.model.ModelField;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -45,4 +46,5 @@ public interface ModelFieldFactory {
      */
     void setAllowFinalFields( boolean allowFinalFields );
 
+    void setValidatorFilterGroups( GroupMode groupMode, Collection<Class> groups );
 }

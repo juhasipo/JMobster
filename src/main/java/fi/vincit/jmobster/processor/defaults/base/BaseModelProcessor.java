@@ -52,7 +52,8 @@ public abstract class BaseModelProcessor implements ModelProcessor {
      * Sets writer
      * @param dataWriter Writer to set
      */
-    protected void setWriter( DataWriter dataWriter ) {
+    @Override
+    public void setWriter( DataWriter dataWriter ) {
         this.writer = dataWriter;
     }
 }

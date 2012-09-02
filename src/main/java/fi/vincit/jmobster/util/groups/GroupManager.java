@@ -16,6 +16,11 @@ package fi.vincit.jmobster.util.groups;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.GroupMode;
+
+import java.util.Collection;
+import java.util.List;
+
 /**
  * GroupManager handles checking whether a given validator
  * contains the required groups to be included in a model field.
@@ -27,4 +32,6 @@ public interface GroupManager<T> {
      * @return True if groups match, otherwise false
      */
     boolean match( HasGroups<T> groupObject );
+
+    void setGroups( GroupMode groupMode, Collection<T> groups );
 }

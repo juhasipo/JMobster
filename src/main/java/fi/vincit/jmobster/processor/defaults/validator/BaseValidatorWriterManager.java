@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
@@ -44,7 +45,7 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
     final private Map<Class, ValidatorWriter<? extends Validator, W>> writers =
             new HashMap<Class, ValidatorWriter<? extends Validator, W>>();
 
-    final private W dataWriter;
+    private W dataWriter;
 
     /**
      * Constructs validator writer manager with the given data writer
@@ -75,5 +76,9 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
             ValidatorWriter writer = writers.get(validatorType);
             writer.write( dataWriter, (Object)validator, isLast );
         }
+    }
+
+    public void setWriter( W dataWriter ) {
+        this.dataWriter = dataWriter;
     }
 }

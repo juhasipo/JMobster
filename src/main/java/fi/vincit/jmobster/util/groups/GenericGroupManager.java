@@ -33,7 +33,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     private static final Logger LOG = LoggerFactory.getLogger( GenericGroupManager.class );
 
     final private Collection<T> groups;
-    final private GroupMode groupMode;
+    private GroupMode groupMode;
     private boolean includeValidatorsWithoutGroup = true;
 
     /**
@@ -75,6 +75,13 @@ public class GenericGroupManager<T> implements GroupManager<T> {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void setGroups( GroupMode groupMode, Collection<T> groups ) {
+        this.groupMode = groupMode;
+        this.groups.clear();
+        this.groups.addAll(groups);
     }
 
     /**

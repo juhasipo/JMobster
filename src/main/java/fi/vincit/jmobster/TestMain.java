@@ -18,6 +18,7 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.annotation.Model;
 import fi.vincit.jmobster.annotation.OverridePattern;
+import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.defaults.CachedModelProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,8 +88,8 @@ public class TestMain {
     }
 
     public static class BeanPropertyDemo {
-        @OverridePattern(regexp = "foo", groups={String.class, Integer.class})
-        @Pattern(regexp = "[\\w]*")
+        @OverridePattern(regexp = "foo", groups={Integer.class})
+        @Pattern(regexp = "[\\w]*", groups={String.class, Integer.class})
         private String firstName = "John";
         @Size(min = 0, max = 255)
         @Pattern(regexp = "[\\w]*")
@@ -103,13 +104,21 @@ public class TestMain {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         //DataWriter modelWriter = new StreamDataWriter("models.js");
-        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY );
+        CachedModelProvider provider1 = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY );
+        CachedModelProvider provider2 = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY );
         final String HTML5 = "html5";
         final String BB = "backbone.js";
-        ModelGenerator generator = JMobsterFactory.getInstance(BB, provider);
+        ModelGenerator generator = JMobsterFactory.getInstance(BB, provider1);
 
+        generator.setWriter(provider1.getDataWriter());
         generator.process( BeanPropertyDemo.class, MyModelDto.class );
 
-        System.out.println(provider.getModel());
+        generator.setWriter(provider2.getDataWriter());
+        generator.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, String.class, Integer.class );
+        generator.process( BeanPropertyDemo.class );
+
+        System.out.println( provider1.getModel() );
+        System.out.println( "=====================================================" );
+        System.out.println( provider2.getModel() );
     }
 }

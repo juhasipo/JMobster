@@ -19,6 +19,7 @@ package fi.vincit.jmobster.util.groups;
 import fi.vincit.jmobster.processor.GroupMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,5 +39,9 @@ public class GroupFilter<T extends HasGroups<G>, G> {
         }
 
         return filtered;
+    }
+
+    public void setFilterGroups( GroupMode groupMode, Collection<G> groups ) {
+        groupManager.setGroups( groupMode, groups );
     }
 }
