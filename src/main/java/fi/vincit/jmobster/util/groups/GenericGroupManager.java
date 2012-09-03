@@ -138,11 +138,6 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     }
 
     private boolean checkExactlyRequiredGroups( T[] groupsGiven ) {
-        // If no groups configured, this always passes
-        if( groups.size() == 0 && groupsGiven.length == 0 ) {
-            return true;
-        }
-
         final int groupsNeededCount = this.groups.size();
         if( groupsGiven.length != groupsNeededCount ) {
             return false;

@@ -1,6 +1,7 @@
 package fi.vincit.jmobster.util.groups;
 
 import fi.vincit.jmobster.processor.GroupMode;
+import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -167,10 +168,18 @@ public class GenericGroupManagerTest {
         assertFalse( groupManager.match( hg1 ) );
     }
 
+    @Test
+    public void testExactlyNothingRequiredNothingGiven() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED );
+        HasGroups hg1 = create();
+
+        assertTrue( groupManager.match( hg1 ) );
+    }
+
 
 
     /*
-       Exactly tests
+       At least tests
     */
 
 
@@ -261,5 +270,20 @@ public class GenericGroupManagerTest {
         HasGroups hg1 = create();
 
         assertTrue( groupManager.match( hg1 ) );
+    }
+
+
+    /*
+      Other
+     */
+
+    @Test
+    public void testChangeModeAndGroups() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1.class, Group2.class );
+        HasGroups hg1 = create(Group1.class, Group2.class, Group3.class);
+        assertTrue( groupManager.match( hg1 ) );
+
+        groupManager.setGroups(GroupMode.EXACTLY_REQUIRED, TestUtil.collectionFromObjects(Group1.class, Group2.class));
+        assertFalse( groupManager.match( hg1 ) );
     }
 }

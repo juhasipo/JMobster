@@ -6,7 +6,7 @@ package fi.vincit.jmobster.util;
  * phase.
  */
 public class ItemStatusHelper {
-    
+
     public static ItemStatus firstOfMany() {
         return new ItemStatus(2);
     }

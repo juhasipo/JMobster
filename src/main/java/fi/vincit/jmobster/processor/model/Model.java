@@ -26,6 +26,12 @@ public class Model {
     private boolean validations;
     private String name;
 
+    /**
+     * Model constructed from fields
+     * @param modelClass Class this model represents
+     * @param name Name in target platform
+     * @param fields Fields
+     */
     public Model( Class modelClass, String name, List<ModelField> fields ) {
         this.name = name;
         this.modelClass = modelClass;

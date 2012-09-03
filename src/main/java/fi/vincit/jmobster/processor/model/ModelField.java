@@ -30,6 +30,11 @@ public class ModelField {
     private String defaultValue;
     final private String name;
 
+    /**
+     * Model field constructed from Java object field
+     * @param field Java field
+     * @param validators Validators
+     */
     public ModelField( Field field, Collection<Validator> validators ) {
         this.fieldType = field.getType();
         this.name = field.getName();
@@ -37,6 +42,11 @@ public class ModelField {
         addValidators(validators);
     }
 
+    /**
+     * Model field constructed from bean property
+     * @param property Bean property
+     * @param validators Validators
+     */
     public ModelField( PropertyDescriptor property, Collection<Validator> validators ) {
         this.fieldType  = property.getPropertyType();
         this.name = property.getName();
@@ -44,6 +54,10 @@ public class ModelField {
         addValidators(validators);
     }
 
+    /**
+     * Model field without validators.
+     * @param field
+     */
     public ModelField( ModelField field ) {
         this.fieldType = field.getFieldType();
         this.name = field.getName();
@@ -73,12 +87,5 @@ public class ModelField {
 
     public Collection<Validator> getValidators() {
         return this.validators;
-    }
-
-    /**
-     * @return True if the model field contains one or more validation annotations.
-     */
-    public boolean hasValidations() {
-        return !validators.isEmpty();
     }
 }

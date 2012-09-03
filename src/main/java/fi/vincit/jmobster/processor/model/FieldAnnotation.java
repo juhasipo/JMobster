@@ -24,6 +24,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * Field annotation is a wrapper for Java annotations. This
+ * class encapsulates information required in later processing
+ * phases. The annotations given to the constructor should have
+ * method called "groups" like JSR-303 annotations. This method
+ * is used for filtering annotations by group. If the method doesn't
+ * exist, the annotation cannot be filtered with groups.
+ */
 public class FieldAnnotation implements HasGroups<Class>, HasType {
 
     private static final Logger LOG = LoggerFactory.getLogger( FieldAnnotation.class );
@@ -33,6 +41,12 @@ public class FieldAnnotation implements HasGroups<Class>, HasType {
     final private Class type;
     final private Annotation annotation;
 
+    /**
+     * Constructs a new FieldAnnotation. Constructor tries to extract
+     * group information from annotation. If that information is not
+     * found, the annotation cannot be filtered with groups.
+     * @param annotation Annotation to wrap.
+     */
     public FieldAnnotation(Annotation annotation) {
         this.groups = extractGroupsFromAnnotation(annotation);
         this.type = annotation.annotationType();
