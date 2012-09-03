@@ -14,6 +14,8 @@ The project has just started so the backwards compatibility may break once in a 
 the code. The current version is not well tested yet with real Backbone.js client nor a working server so there will
 be a lot of bugs.
 
+![JMobster process](https://raw.github.com/juhasipo/JMobster/redesign/img/process.png)
+
 
 ### Requirements
 
@@ -201,41 +203,136 @@ only works with _DIRECT\_FIELD\_ACCESS_ mode. By default final fields are includ
 
 ### Classes and Default Values
 
-#### Requirements for Classes
+#### TODO
 
-Classes that are processed with JMobster have to have a default constructor. This
-constructor is used for field default values. If a field shouldn't have a default
-value, annotation IgnoreDefaultValue can be used. This can be handy e.g. for
-id values that should not have default value in client side model.
 
-If a class doesn't have a special converter class, it should have a toString() method. This
-method is used when converting values that don't have a converter. ToString() method implementation
-should return the value as it should be in the target model file. I.e. if it's represented in string form, the
-return value should be quoted appropriately.
+Default Process
+---------------
 
-**Note:** Nested classes have to be static classes in order to work. This limitation is due to class
-instantion via reflection.
-
-#### Default Conversion Process
-
-The default base value converter implementation first tries to match the convertable object by
-class' exact equality (i.e. class hash code). If it can't find the match, then it tries to find match for
-the super class and if no match is found, then for the interfaces. The search is recursive so the whole hierarchy
-is used in the search. The search is conducted in top-to-bottom manner where the first match wins.
-
-If no class is found in the search, the object is converted using the to string converter.
-Currently there is no way to figure out how the classes that should be converted with default
-toString method and the classes that shouldn't be converted at all other than manually specifying
-the classes with _BaseValueConverterManager.addConverter(ValueConverter, Class[])_ method. The library's default
-implementations will rely on the to string converter for all non-matching classes in order to widely support the
-Java's toString() methods on various classes (e.g. BigDecimal and BigInteger).
-
+JMobster has default implementations for standard JSR-303 validations and a set of default implementations for
+processing models. The default classes should work for most cases.
 
 Configuring
 -----------
 
+### Custom Validators
+
+To support new validators you will have implement several classes.
+
+#### Validator Annotation
+
+The first phase is to create your annotation. The annotation should have a method calles
+*groups* which has to return an array of *Classes*. This method is used for filtering annotations
+when constructing *ModelFields*.
+
+
+#### Validator Class
+
+The next phase is to create a wrapper for your annotation. The wrapper will be used in later phase of the process
+to get annotation values that should be written to *DataWriter*. These validator wrapper classes are generic and they
+only need to be implemented once per annotation.
+
+Here is an example of *MyValidator* for a custom *MyAnnotation* validator annotation:
+```java
+public class MyValidator extends BaseValidator {
+    private String requiredValue;
+    private String optionalValue;
+
+    @Override
+    public void init( AnnotationBag annotationBag ) {
+        MyAnnotation myAnnotation = annotationBag.getAnnotation(MyAnnotation.class);
+        this.requiredValue = myAnnotation.value();
+        if( annotationBag.hasAnnotation(MyOptionalAnnotation.class) ) {
+            MyOptionalAnnotation myOptionalAnnotation = annotationBag.getAnnotation(MyOptionalAnnotation.class);
+            optionalValue = myOptionalAnnotation.value();
+        }
+    }
+
+    // Getters
+}
+```
+
+As you can see, the *MyValidator* contains a two fields *requiredValue* and *optionalValue*. Values is set in the *init* method
+which takes an *AnnotationBag* as parameter. *AnnotationBag* contains all the annotations which are required
+for your annotation and optional annotations. These required and optional annotations are configured later. Difference
+between required and optional annotations is that required annotations are quaranteed to be present when the
+*Validator* is initialized. Optional annotations are not.
+
+
+#### Configuring Required and Optional Annotations
+
+Now that you have your *Validator* class, it requires required and optional annotations. This is done in
+*ValidatorFactories*. You have to choises:
+
+1. Use *DefaultValidatorFactory and configure* it to use your own custom validator
+2. Create your own *ValidatorFactory* which you configure by yourself
+
+Using the *DefaultValidatorFactory* is the easiest choise and it will contain supported JSR-303 validators. You can
+configure like following:
+
+```java
+DefaultValidatorFactory validatorFactory = new DefaultValidatorFactory();
+validatorFactory.setValidator(MyValidator.class, RequiredTypes.get(MyAnnotation.class), OptionalTypes.get());
+```
+
+This will add *MyValidator* class that will require *MyAnnotation* annotation.
+
+#### ValidatorWriter Class
+
+Now that you have your validator configured, you can make your *ValidatorWriter*. *ValidatorWriters* are language
+and framework specific. They get previously written *Validator* class as parameter.
+
+Here is an example of a *ValidatorWriter*:
+```java
+public class MyValidatorWriter extends BaseValidatorWriter<MyValidator, JavaScriptWriter> {
+    public MyValidatorWriter() {
+        super( MyValidator.class );
+    }
+
+    @Override
+    protected void write( JavaScriptWriter writer, MyValidator validator, boolean isLast ) {
+        String value = validator.getRequiredValue();
+        if( validator.hasOptionalValue() ) {
+            value += validator.getOptionalValue();
+        }
+        writer.writeKeyValue("value", value, isLast);
+    }
+}
+```
+
+The example implementation uses higher level *JavaScriptWriter* for output. The first generic parameter
+must match your *Validator* (in this case *MyValidator*) and the second must match or be super clasee for
+the writer that your frameworks' *ValidatorWriterManager* uses.
+
+In the constructor you will have to give the type of *Validator* your *ValidatorWriter* supports. This has
+to be done manually due to Java's type erasure. The writing itself is implemented in *write* method. You will get
+the writer to use and the validator as parameters. There is also *isLast* boolean parameter which is true
+if the validator you are writing is the last validator for the current *ModelField*.
+
+**Notice**: *ValidatorWriters* instances are reused so the internal state will stay across calls.
+
+
+#### Configuring ValidatorWriter to ValidatorWriterManager
+
+Once you have your *ValidatorWriter*, you have to configure *ValidatorWriterManager* to use your *ValidatorWriter*.
+
+```java
+ConcreteValidatorWriterManager validatorWriterManager = new ConcreteValidatorWriterManager();
+validatorWriterManager.setValidator(new MyValidatorWriter());
+```
+
+Now you have added support for your own validation annotation.
+
+### Custom Target Platform
+
+#### Supporting New Language
+Create new DataWriter...
+
+#### Supporting New Target Framework
+Create new Model processor...
+
 ### Model Naming Strategies
 
 In order to customize the produced model's name, a model naming strategy can be implemented. It basically
-takes a Model object and returns the name for the model.
+takes a Model class and returns the name for the model as string.
 

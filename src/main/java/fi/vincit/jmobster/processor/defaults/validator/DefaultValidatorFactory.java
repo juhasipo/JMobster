@@ -30,25 +30,25 @@ import javax.validation.constraints.*;
  */
 public class DefaultValidatorFactory extends BaseValidatorFactory {
     public DefaultValidatorFactory() {
-        setValidator(new ValidatorConstructor(
+        setValidator(
                 SizeValidator.class,
                 RequiredTypes.get(Size.class),
-                OptionalTypes.get()));
-        setValidator(new ValidatorConstructor(
+                OptionalTypes.get());
+        setValidator(
                 PatternValidator.class,
                 RequiredTypes.get(Pattern.class),
-                OptionalTypes.get(OverridePattern.class)));
-        setValidator(new ValidatorConstructor(
+                OptionalTypes.get(OverridePattern.class));
+        setValidator(
                 MinValidator.class,
                 RequiredTypes.get(Min.class),
-                OptionalTypes.get()));
-        setValidator(new ValidatorConstructor(
+                OptionalTypes.get());
+        setValidator(
                 MaxValidator.class,
                 RequiredTypes.get(Max.class),
-                OptionalTypes.get()));
-        setValidator(new ValidatorConstructor(
+                OptionalTypes.get());
+        setValidator(
                 NotNullValidator.class,
                 RequiredTypes.get(NotNull.class),
-                OptionalTypes.get()));
+                OptionalTypes.get());
     }
 }

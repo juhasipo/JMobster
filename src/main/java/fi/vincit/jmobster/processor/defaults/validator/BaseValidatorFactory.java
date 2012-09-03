@@ -19,6 +19,8 @@ package fi.vincit.jmobster.processor.defaults.validator;
 import fi.vincit.jmobster.processor.ValidatorFactory;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.combination.OptionalTypes;
+import fi.vincit.jmobster.util.combination.RequiredTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,11 @@ public abstract class BaseValidatorFactory implements ValidatorFactory {
     @Override
     public void setValidator(ValidatorConstructor validatorConstructor) {
         validatorConstructors.add( validatorConstructor );
+    }
+
+    @Override
+    public void setValidator(Class validatorClass, RequiredTypes requiredTypes, OptionalTypes optionalTypes) {
+        validatorConstructors.add( new ValidatorConstructor(validatorClass, requiredTypes, optionalTypes) );
     }
 
     @Override

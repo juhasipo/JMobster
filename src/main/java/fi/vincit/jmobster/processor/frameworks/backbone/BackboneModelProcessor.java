@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 */
 
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -44,6 +45,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
     private String startComment;
     private String namespaceName;
 
+    private JavaScriptWriter writer;
     private BackboneModelWriter backboneModelWriter;
 
     /**
@@ -77,32 +79,33 @@ public class BackboneModelProcessor extends BaseModelProcessor {
 
     @Override
     public void startProcessing() throws IOException {
-        backboneModelWriter.setWriter(getWriter());
-        getWriter().open();
+        this.writer = new JavaScriptWriter(getWriter());
+        this.writer.open();
+        backboneModelWriter.setWriter(this.writer);
 
-        getWriter().writeLine( startComment );
-        getWriter().writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
-        getWriter().indent();
+        this.writer.writeLine( startComment );
+        this.writer.writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
+        this.writer.indent();
     }
 
     @Override
     public void processModel( Model model, ItemStatus status ) {
         String modelName = model.getName();
 
-        getWriter().write(modelName).writeLine( MODEL_EXTEND_START ).indent();
+        this.writer.write(modelName).writeLine( MODEL_EXTEND_START ).indent();
 
         backboneModelWriter.write(model);
 
-        getWriter().indentBack();
-        getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
+        this.writer.indentBack();
+        this.writer.writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
     }
 
     @Override
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing() throws IOException {
-        getWriter().indentBack();
-        getWriter().writeLine( NAMESPACE_END );
-        getWriter().close();
+        this.writer.indentBack();
+        this.writer.writeLine( NAMESPACE_END );
+        this.writer.close();
     }
 
     /**
