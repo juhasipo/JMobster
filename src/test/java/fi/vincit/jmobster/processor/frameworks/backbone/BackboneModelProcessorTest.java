@@ -2,7 +2,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.ItemStatusHelper;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class BackboneModelProcessorTest {
         testModel.setValidations(false);
 
         bmp.startProcessing();
-        bmp.processModel(testModel, ItemStatus.inMiddle());
+        bmp.processModel(testModel, ItemStatusHelper.inMiddle());
         bmp.endProcessing();
     }
 
