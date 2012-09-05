@@ -16,19 +16,17 @@ package fi.vincit.jmobster;
 */
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
-import fi.vincit.jmobster.annotation.Model;
 import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.GroupMode;
+import fi.vincit.jmobster.processor.ModelFactory;
 import fi.vincit.jmobster.processor.defaults.CachedModelProvider;
+import fi.vincit.jmobster.processor.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class TestMain {
     private static final Logger LOG = LoggerFactory
@@ -40,7 +38,6 @@ public class TestMain {
     }
 
     @SuppressWarnings( "MismatchedReadAndWriteOfArray" )
-    @Model(name="TestModelRenamed")
     public static class MyModelDto {
 
         @IgnoreDefaultValue
@@ -106,16 +103,22 @@ public class TestMain {
         //DataWriter modelWriter = new StreamDataWriter("models.js");
         CachedModelProvider provider1 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
         CachedModelProvider provider2 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
+
         final String HTML5 = "html5";
         final String BB = "backbone.js";
-        ModelGenerator generator = JMobsterFactory.getInstance(BB, provider1);
 
+        ModelFactory factory = JMobsterFactory.getModelFactory(BB);
+        factory.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, String.class, Integer.class );
+        Collection<Model> models = factory.createAll( BeanPropertyDemo.class, MyModelDto.class );
+
+        ModelGenerator generator = JMobsterFactory.getInstance(BB, provider1);
         generator.setWriter(provider1.getDataWriter());
-        generator.process( BeanPropertyDemo.class, MyModelDto.class );
+        generator.processAll( models );
 
         generator.setWriter(provider2.getDataWriter());
-        generator.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, String.class, Integer.class );
-        generator.process( BeanPropertyDemo.class );
+        factory.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, String.class, Integer.class );
+        Collection<Model> models2 = factory.createAll( BeanPropertyDemo.class );
+        generator.processAll( models2 );
 
         System.out.println( provider1.getModel() );
         System.out.println( "=====================================================" );

@@ -25,6 +25,31 @@ public class JMobsterFactory {
     private JMobsterFactory() {
     }
 
+    public static ModelFactory getModelFactory(String framework) {
+        if( "backbone.js".equalsIgnoreCase(framework) || "backbone".equalsIgnoreCase(framework) ) {
+            ValidatorFactory validatorFactory = new DefaultValidatorFactory();
+            ClassGroupManager groupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
+            ValidatorScanner validatorScanner = new DefaultValidatorScanner(validatorFactory, groupManager);
+
+            FieldValueConverter valueConverter =
+                    new JavaToJSValueConverter(
+                            ConverterMode.NULL_AS_DEFAULT,
+                            EnumConverter.EnumMode.STRING,
+                            JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
+                    );
+            return new ModelFactoryBuilder()
+                    .setModelFieldFactory( new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner ) )
+                    .createDefaultModelFactory();
+        } else {
+            throwFrameworkNotSupported( framework );
+        }
+        return null;
+    }
+
+    private static ModelFactory throwFrameworkNotSupported( String framework ) {
+        throw new UnsupportedFramework("Framework " + framework + " not supported");
+    }
+
     /**
      * Creates a model generator instance that is pre-configured for the given framework.
      * @param framework Framework ID
@@ -36,24 +61,13 @@ public class JMobsterFactory {
         if( "backbone.js".equalsIgnoreCase(framework) || "backbone".equalsIgnoreCase(framework) ) {
             ModelProcessor modelProcessor = new BackboneModelProcessor(writer);
 
-            ValidatorFactory validatorFactory = new DefaultValidatorFactory();
-            ClassGroupManager groupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
-            ValidatorScanner validatorScanner = new DefaultValidatorScanner(validatorFactory, groupManager);
-
-            FieldValueConverter valueConverter =
-                    new JavaToJSValueConverter(
-                            ConverterMode.NULL_AS_DEFAULT,
-                            EnumConverter.EnumMode.STRING,
-                            JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
-                    );
-
             return new ModelGeneratorBuilder()
                     .setModelProcessor( modelProcessor )
-                    .setModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner )
                     .createDefaultModelGenerator();
         } else {
-            throw new UnsupportedFramework("Framework " + framework + " not supported");
+            throwFrameworkNotSupported( framework );
         }
+        return null;
     }
 
     /**

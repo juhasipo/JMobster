@@ -24,45 +24,16 @@ import fi.vincit.jmobster.processor.*;
  */
 public class ModelGeneratorBuilder {
     private ModelProcessor modelProcessor;
-    private ModelFieldFactory modelFieldFactory;
-    private ModelNamingStrategy modelNamingStrategy;
 
     public ModelGeneratorBuilder setModelProcessor( ModelProcessor modelProcessor ) {
         this.modelProcessor = modelProcessor;
         return this;
     }
 
-    public ModelGeneratorBuilder setModelFieldFactory( ModelFieldFactory modelFieldFactory ) {
-        this.modelFieldFactory = modelFieldFactory;
-        return this;
-    }
-
-    public ModelGeneratorBuilder setModelFieldFactory(FieldScanMode scanMode,
-                                                      FieldValueConverter valueConverter,
-                                                      ValidatorScanner validatorScanner ) {
-        this.modelFieldFactory = new DefaultModelFieldFactory(scanMode, valueConverter, validatorScanner);
-        return this;
-    }
-
-    public ModelGeneratorBuilder setModelNamingStrategy( ModelNamingStrategy modelNamingStrategy ) {
-        this.modelNamingStrategy = modelNamingStrategy;
-        return this;
-    }
-
     public DefaultModelGenerator createDefaultModelGenerator() {
-        checkAndCreateDefaults();
-        return new DefaultModelGenerator( modelProcessor, modelFieldFactory, modelNamingStrategy );
-    }
-
-    private void checkAndCreateDefaults() {
         if( modelProcessor == null ) {
             throw new IllegalArgumentException("No model processor defined");
         }
-        if( modelFieldFactory == null ) {
-            throw new IllegalArgumentException("No model field factory defined");
-        }
-        if( modelNamingStrategy == null ) {
-            modelNamingStrategy = new DefaultNamingStrategy();
-        }
+        return new DefaultModelGenerator( modelProcessor );
     }
 }

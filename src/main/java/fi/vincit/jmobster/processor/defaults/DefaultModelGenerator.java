@@ -37,41 +37,23 @@ public class DefaultModelGenerator implements ModelGenerator {
             .getLogger( DefaultModelGenerator.class );
 
     private ModelProcessor modelProcessor;
-    private ModelFieldFactory modelFieldFactory;
-    private ModelNamingStrategy modelNamingStrategy;
 
     /**
      * Creates new DefaultModelGenerator
      * @param modelProcessor Model processor to use
-     * @param modelFieldFactory Model field factory to use
      */
-    public DefaultModelGenerator(
-            ModelProcessor modelProcessor,
-            ModelFieldFactory modelFieldFactory,
-            ModelNamingStrategy modelNamingStrategy) {
+    public DefaultModelGenerator(ModelProcessor modelProcessor) {
         this.modelProcessor = modelProcessor;
-        this.modelFieldFactory = modelFieldFactory;
-        this.modelNamingStrategy = modelNamingStrategy;
     }
 
     @Override
-    public void process( Class... classes ) {
-        processModelsInternal( getModels( classes ) );
-    }
-
-    @Override
-    public void process( Collection<Class> classes ) {
-        processModelsInternal( getModels(classes) );
+    public void processAll( Collection<Model> models ) {
+        processModelsInternal( models );
     }
 
     @Override
     public void setWriter( DataWriter dataWriter ) {
         modelProcessor.setWriter( dataWriter );
-    }
-
-    @Override
-    public void setValidatorFilterGroups( GroupMode groupMode, Class... classes ) {
-        modelFieldFactory.setValidatorFilterGroups( groupMode, Arrays.asList( classes ) );
     }
 
     /**
@@ -94,39 +76,5 @@ public class DefaultModelGenerator implements ModelGenerator {
         }
     }
 
-    /**
-     * Get a list of internal model objects from the given classes.
-     * @param classes Found model classes as an array.
-     * @return List of models. If no models are suitable returns an empty list.
-     */
-    private List<Model> getModels( Class[] classes ) {
-        List<Model> models = new ArrayList<Model>(classes.length);
-        for( Class clazz : classes ) {
-            createModelAndAddToList( clazz, models );
-        }
-        return models;
-    }
 
-    /**
-     * Get a list of internal model objects from the given classes.
-     * @param classes Found model classes as a List.
-     * @return List of models. If no models are suitable returns an empty list.
-     */
-    private List<Model> getModels( Collection<Class> classes ) {
-        List<Model> models = new ArrayList<Model>(classes.size());
-        for( Class clazz : classes ) {
-            createModelAndAddToList( clazz, models );
-        }
-        return models;
-    }
-
-    /**
-     * Get model for the given class and add it to the given list.
-     * @param clazz Class for which model should be created
-     * @param models Models list
-     */
-    private void createModelAndAddToList( Class clazz, Collection<Model> models ) {
-        Model model = new Model(clazz, modelNamingStrategy.getName(clazz), modelFieldFactory.getFields(clazz));
-        models.add( model );
-    }
 }

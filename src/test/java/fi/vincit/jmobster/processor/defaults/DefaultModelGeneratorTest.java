@@ -23,6 +23,7 @@ import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 import org.mockito.InOrder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -39,13 +40,9 @@ public class DefaultModelGeneratorTest {
     @Test
     public void testProcessWithoutClasses() throws Exception {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
-        FieldValueConverter valueConverter = mock(FieldValueConverter.class);
-        ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
-        ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator dmg = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).setModelFieldFactory( modelFieldFactory ).setModelNamingStrategy( modelNamingStrategy ).createDefaultModelGenerator();
+        DefaultModelGenerator dmg = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).createDefaultModelGenerator();
 
-        dmg.process();
+        dmg.processAll( new ArrayList<Model>() );
 
         InOrder mpInOrder = inOrder(modelProcessor);
         mpInOrder.verify(modelProcessor, times(1)).startProcessing();
@@ -54,37 +51,13 @@ public class DefaultModelGeneratorTest {
     }
 
     @Test
-    public void testProcessVarArgs() throws Exception {
-        ModelProcessor modelProcessor = mock(ModelProcessor.class);
-        FieldValueConverter valueConverter = mock(FieldValueConverter.class);
-        ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
-        ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).setModelFieldFactory( modelFieldFactory ).setModelNamingStrategy( modelNamingStrategy ).createDefaultModelGenerator();
-
-        Class testClass = TestClass1.class;
-        Class testClass2 = TestClass2.class;
-        modelGenerator.process( testClass, testClass2 );
-
-        InOrder mpInOrder = inOrder(modelProcessor);
-        mpInOrder.verify(modelProcessor, times(1)).startProcessing();
-        mpInOrder.verify(modelProcessor, times(2)).processModel(any(Model.class), any(ItemStatus.class));
-        mpInOrder.verify(modelProcessor, times(1)).endProcessing();
-    }
-
-    @Test
     public void testProcessWithList() throws Exception {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
-        FieldValueConverter valueConverter = mock(FieldValueConverter.class);
-        ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        ModelFieldFactory modelFieldFactory = new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, valueConverter, validatorScanner);
-        ModelNamingStrategy modelNamingStrategy = mock(ModelNamingStrategy.class);
-        DefaultModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).setModelFieldFactory( modelFieldFactory ).setModelNamingStrategy( modelNamingStrategy ).createDefaultModelGenerator();
+        DefaultModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).createDefaultModelGenerator();
 
-        Class testClass = TestClass1.class;
-        Class testClass2 = TestClass2.class;
-        List<Class> testClasses = TestUtil.listFromObjects(testClass, testClass2);
-        modelGenerator.process( testClasses );
+        Model testModel1 = mock(Model.class);
+        Model testModel2 = mock(Model.class);
+        modelGenerator.processAll( TestUtil.collectionFromObjects( testModel1, testModel2 ) );
 
         InOrder mpInOrder = inOrder( modelProcessor );
         mpInOrder.verify(modelProcessor, times(1)).startProcessing();

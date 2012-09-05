@@ -1,4 +1,6 @@
-package fi.vincit.jmobster;/*
+package fi.vincit.jmobster.processor;
+
+/*
  * Copyright 2012 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,28 +14,15 @@ package fi.vincit.jmobster;/*
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 
-import fi.vincit.jmobster.processor.GroupMode;
-import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.Collection;
 
-/**
- * <p>
- *     Interface for generating models.
- * </p>
- */
-public interface ModelGenerator {
-
-    /**
-     * Process and create the client side model(s) for
-     * the given models.
-     * @param models One or more models for which the models should be generated.
-     */
-    void processAll( Collection<Model> models );
-
-    void setWriter( DataWriter dataWriter );
+public interface ModelFactory {
+    Model create(Class clazz);
+    Collection<Model> createAll(Collection<Class> classes);
+    Collection<Model> createAll( Class... classes );
+    void setValidatorFilterGroups( GroupMode groupMode, Class... classes );
 }
