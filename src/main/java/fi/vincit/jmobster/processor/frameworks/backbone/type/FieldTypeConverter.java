@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.model;
+package fi.vincit.jmobster.processor.frameworks.backbone.type;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,5 +16,9 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
  */
 
-public interface AnnotationType {
+import fi.vincit.jmobster.processor.model.ModelField;
+
+public interface FieldTypeConverter {
+    String convert( ModelField field );
+    Class[] getSupportedTypes();
 }

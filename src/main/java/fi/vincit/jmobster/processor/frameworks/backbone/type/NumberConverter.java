@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.frameworks.backbone.type;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,20 +16,15 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.AnnotationBag;
+import fi.vincit.jmobster.processor.model.ModelField;
 
-import javax.validation.constraints.Min;
-
-public class MinValidator extends BaseValidator {
-    private long min;
-
-    @Override
-    public void init( AnnotationBag annotationBag ) {
-        Min maxValue = annotationBag.getAnnotation(Min.class);
-        this.min = maxValue.value();
+public class NumberConverter extends BaseFieldTypeConverter {
+    public NumberConverter() {
+        super( Integer.class, int.class, Long.class, long.class, Double.class, double.class, Float.class, float.class );
     }
 
-    public long getMin() {
-        return min;
+    @Override
+    public String convert( ModelField field ) {
+        return "'Number'";
     }
 }

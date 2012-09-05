@@ -15,18 +15,22 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.util.AnnotationBag;
+
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 /**
  * Single model field that is converted to the target platform.
  */
 public class ModelField {
     final private Class fieldType;
-    final private List<Validator> validators;
+    final private Collection<Validator> validators;
+    final private AnnotationBag fieldAnnotations;
     final private String name;
 
     /**
@@ -38,6 +42,7 @@ public class ModelField {
         this.fieldType = field.getType();
         this.name = field.getName();
         this.validators = new ArrayList<Validator>();
+        this.fieldAnnotations = new AnnotationBag();
         addValidators(validators);
     }
 
@@ -50,6 +55,7 @@ public class ModelField {
         this.fieldType  = property.getPropertyType();
         this.name = property.getName();
         this.validators = new ArrayList<Validator>();
+        this.fieldAnnotations = new AnnotationBag();
         addValidators(validators);
     }
 
@@ -61,6 +67,7 @@ public class ModelField {
         this.fieldType = field.getFieldType();
         this.name = field.getName();
         this.validators = new ArrayList<Validator>();
+        this.fieldAnnotations = new AnnotationBag();
         addValidators(field.getValidators());
     }
 
@@ -77,6 +84,18 @@ public class ModelField {
     }
 
     public Collection<Validator> getValidators() {
-        return this.validators;
+        return Collections.unmodifiableCollection(this.validators);
+    }
+
+    public void addAnnotation(FieldAnnotation annotation) {
+        this.fieldAnnotations.addAnnotation(annotation);
+    }
+
+    public <T extends Annotation> T getAnnotation( Class<T> clazz ) {
+        return fieldAnnotations.getAnnotation( clazz );
+    }
+
+    public <T extends Annotation> boolean hasAnnotation( Class<T> annotationType ) {
+        return fieldAnnotations.hasAnnotation( annotationType );
     }
 }

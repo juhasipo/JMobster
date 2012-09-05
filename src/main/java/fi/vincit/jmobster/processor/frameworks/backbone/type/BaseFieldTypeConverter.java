@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.frameworks.backbone.type;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,20 +16,16 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.AnnotationBag;
+public abstract class BaseFieldTypeConverter implements FieldTypeConverter {
 
-import javax.validation.constraints.Min;
+    private Class[] supportedTypes;
 
-public class MinValidator extends BaseValidator {
-    private long min;
-
-    @Override
-    public void init( AnnotationBag annotationBag ) {
-        Min maxValue = annotationBag.getAnnotation(Min.class);
-        this.min = maxValue.value();
+    protected BaseFieldTypeConverter( Class... types ) {
+        this.supportedTypes = types;
     }
 
-    public long getMin() {
-        return min;
+    @Override
+    public Class[] getSupportedTypes() {
+        return supportedTypes;
     }
 }

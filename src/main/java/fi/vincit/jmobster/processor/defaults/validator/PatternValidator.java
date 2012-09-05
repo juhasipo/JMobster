@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.annotation.OverridePattern;
+import fi.vincit.jmobster.util.AnnotationBag;
 
 import javax.validation.constraints.Pattern;
 

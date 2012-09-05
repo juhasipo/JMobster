@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.annotation;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,20 +16,6 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.AnnotationBag;
-
-import javax.validation.constraints.Min;
-
-public class MinValidator extends BaseValidator {
-    private long min;
-
-    @Override
-    public void init( AnnotationBag annotationBag ) {
-        Min maxValue = annotationBag.getAnnotation(Min.class);
-        this.min = maxValue.value();
-    }
-
-    public long getMin() {
-        return min;
-    }
+public @interface TextArea {
+    public Class<?>[] groups() default {};
 }

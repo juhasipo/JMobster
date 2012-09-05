@@ -17,6 +17,7 @@ package fi.vincit.jmobster;
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.annotation.OverridePattern;
+import fi.vincit.jmobster.annotation.Password;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ModelFactory;
 import fi.vincit.jmobster.util.writer.CachedModelProvider;
@@ -92,6 +93,9 @@ public class TestMain {
         @Pattern(regexp = "[\\w]*")
         private String lastName = "Doe";
 
+        @NotNull
+        @Password
+        private String password;
 
         @Size(min = 0, max = 255)
         public String getFullName() {

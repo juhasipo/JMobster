@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.util;
 
 /*
  * Copyright 2012 Juha Siponen

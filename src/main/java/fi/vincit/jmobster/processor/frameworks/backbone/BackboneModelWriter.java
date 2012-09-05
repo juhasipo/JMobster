@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelWriter;
+import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
@@ -33,11 +34,13 @@ public class BackboneModelWriter implements ModelWriter {
     private JavaScriptWriter writer;
     final private BackboneValidatorWriterManager validatorWriterManager;
     final private FieldValueConverter valueConverter;
+    final private FieldTypeConverterManager typeConverterManager;
 
-    public BackboneModelWriter( DataWriter writer, FieldValueConverter valueConverter ) {
+    public BackboneModelWriter( DataWriter writer, FieldValueConverter valueConverter, FieldTypeConverterManager typeConverterManager ) {
         this.writer = new JavaScriptWriter(writer);
         this.validatorWriterManager = new BackboneValidatorWriterManager(this.writer);
         this.valueConverter = valueConverter;
+        this.typeConverterManager = typeConverterManager;
     }
 
     private static final String DEFAULTS_BLOCK_NAME = "defaults";
@@ -56,22 +59,14 @@ public class BackboneModelWriter implements ModelWriter {
     @Override
     public void write( Model model ) {
         writeStart(model);
+        writeSchema(model);
         writeFields( model );
-        writeValidators( model );
         writeEnd(model);
     }
 
-    private void writeFields( Model model ) {
-        ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
-            @Override
-            public void process( ModelField field, ItemStatus status ) {
-                String defaultValue = valueConverter.convert(field.getFieldType(), null);
-                writer.writeKeyValue(field.getName(), defaultValue, status.isLastItem());
-            }
-        });
-    }
+    private void writeSchema( Model model ) {
+        writer.writeKey("schema").startBlock();
 
-    private void writeValidators( Model model ) {
         final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
             @Override
             public void process( Validator validator, ItemStatus status ) {
@@ -82,9 +77,26 @@ public class BackboneModelWriter implements ModelWriter {
         ItemProcessor.process(model.getFields()).with(new ItemHandler<ModelField>() {
             @Override
             public void process( ModelField field, ItemStatus status ) {
-                writer.writeKey(field.getName()).startBlock();
                 ItemProcessor.process(validatorWriter, field.getValidators());
-                writer.endBlock(status.isLastItem());
+            }
+        });
+
+        ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
+            @Override
+            public void process( ModelField field, ItemStatus status ) {
+                String type = typeConverterManager.getType(field);
+                writer.writeKeyValue(field.getName(), type, status.isLastItem());
+            }
+        });
+        writer.endBlock(false);
+    }
+
+    private void writeFields( Model model ) {
+        ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
+            @Override
+            public void process( ModelField field, ItemStatus status ) {
+                String defaultValue = valueConverter.convert(field.getFieldType(), null);
+                writer.writeKeyValue(field.getName(), defaultValue, status.isLastItem());
             }
         });
     }

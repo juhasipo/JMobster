@@ -15,7 +15,7 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.defaults.validator.AnnotationBag;
+import fi.vincit.jmobster.util.AnnotationBag;
 
 /**
  * Interface for validators

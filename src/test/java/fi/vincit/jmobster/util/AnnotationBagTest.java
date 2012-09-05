@@ -1,10 +1,9 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.util;
 
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.util.AbstractAnnotation;
+import fi.vincit.jmobster.util.AnnotationBag;
 import org.junit.Test;
-
-import java.lang.annotation.Annotation;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelWriter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
+import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.ItemStatus;
@@ -54,11 +55,11 @@ public class BackboneModelProcessor extends BaseModelProcessor {
      * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
      * @param writer Writer
      */
-    public BackboneModelProcessor(DataWriter writer, FieldValueConverter valueConverter) {
+    public BackboneModelProcessor(DataWriter writer, FieldValueConverter valueConverter, FieldTypeConverterManager typeConverterManager) {
         super(writer, valueConverter);
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.backboneModelWriter = new BackboneModelWriter(writer, valueConverter);
+        this.backboneModelWriter = new BackboneModelWriter(writer, valueConverter, typeConverterManager);
     }
 
     /**

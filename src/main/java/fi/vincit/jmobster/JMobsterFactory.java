@@ -6,6 +6,8 @@ import fi.vincit.jmobster.processor.builder.ModelFactoryBuilder;
 import fi.vincit.jmobster.processor.builder.ModelGeneratorBuilder;
 import fi.vincit.jmobster.processor.defaults.*;
 import fi.vincit.jmobster.processor.defaults.validator.DefaultValidatorFactory;
+import fi.vincit.jmobster.processor.frameworks.backbone.type.BackboneFieldTypeConverterManager;
+import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
@@ -56,7 +58,8 @@ public class JMobsterFactory {
                             EnumConverter.EnumMode.STRING,
                             JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
                     );
-            ModelProcessor modelProcessor = new BackboneModelProcessor(writer, valueConverter);
+            FieldTypeConverterManager typeConverterManager = new BackboneFieldTypeConverterManager();
+            ModelProcessor modelProcessor = new BackboneModelProcessor(writer, valueConverter, typeConverterManager);
 
             return new ModelGeneratorBuilder()
                     .setModelProcessor( modelProcessor )

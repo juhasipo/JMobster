@@ -16,6 +16,8 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.util.AnnotationBag;
+
 public class NotNullValidator extends BaseValidator {
     @Override
     public void init( AnnotationBag annotationBag ) {

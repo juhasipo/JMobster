@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
 */
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,8 +48,8 @@ public class Model {
         return modelClass;
     }
 
-    public List<ModelField> getFields() {
-        return fields;
+    public Collection<ModelField> getFields() {
+        return Collections.unmodifiableCollection( fields );
     }
 
     /**

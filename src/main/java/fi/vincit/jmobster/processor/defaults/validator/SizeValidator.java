@@ -16,6 +16,8 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.util.AnnotationBag;
+
 import javax.validation.constraints.Size;
 
 public class SizeValidator extends BaseValidator {

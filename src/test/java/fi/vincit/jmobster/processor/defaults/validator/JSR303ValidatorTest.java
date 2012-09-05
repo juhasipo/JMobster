@@ -1,6 +1,7 @@
 package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.annotation.OverridePattern;
+import fi.vincit.jmobster.util.AnnotationBag;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 

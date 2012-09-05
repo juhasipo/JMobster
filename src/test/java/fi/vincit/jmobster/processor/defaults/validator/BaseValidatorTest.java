@@ -1,5 +1,6 @@
 package fi.vincit.jmobster.processor.defaults.validator;
 
+import fi.vincit.jmobster.util.AnnotationBag;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -25,6 +26,6 @@ public class BaseValidatorTest {
 
         TestClass1 testClass1 = new TestClass1();
         testClass1.setType(String.class);
-        assertEquals(testClass1.getType(), String.class);
+        assertEquals( testClass1.getType(), String.class );
     }
 }

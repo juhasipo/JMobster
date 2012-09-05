@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.AnnotationBag;
 import fi.vincit.jmobster.util.combination.CombinationManager;
 import fi.vincit.jmobster.util.combination.OptionalTypes;
 import fi.vincit.jmobster.util.combination.RequiredTypes;
