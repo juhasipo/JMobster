@@ -1,5 +1,6 @@
-package fi.vincit.jmobster.processor.defaults;
+package fi.vincit.jmobster.util.writer;
 
+import fi.vincit.jmobster.util.writer.CachedModelProvider;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Test;

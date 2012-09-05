@@ -16,7 +16,9 @@ package fi.vincit.jmobster.processor.defaults.base;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.ValueConverter;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.FileDataWriter;
 
@@ -24,12 +26,14 @@ import java.io.IOException;
 
 public abstract class BaseModelProcessor implements ModelProcessor {
     private DataWriter writer;
+    private FieldValueConverter valueConverter;
 
     /**
      * Initializes model processor with writer
      * @param writer Writer to use
      */
-    public BaseModelProcessor( DataWriter writer ) {
+    public BaseModelProcessor( DataWriter writer, FieldValueConverter valueConverter ) {
+        this.valueConverter = valueConverter;
         this.writer = writer;
     }
 
@@ -39,6 +43,10 @@ public abstract class BaseModelProcessor implements ModelProcessor {
      */
     protected DataWriter getWriter() {
         return writer;
+    }
+
+    protected FieldValueConverter getValueConverter() {
+        return valueConverter;
     }
 
     /**

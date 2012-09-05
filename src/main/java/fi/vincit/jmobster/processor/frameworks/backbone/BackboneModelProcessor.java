@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.ModelWriter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
@@ -52,29 +54,22 @@ public class BackboneModelProcessor extends BaseModelProcessor {
      * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
      * @param writer Writer
      */
-    public BackboneModelProcessor(DataWriter writer) {
-        super(writer);
+    public BackboneModelProcessor(DataWriter writer, FieldValueConverter valueConverter) {
+        super(writer, valueConverter);
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.backboneModelWriter = new BackboneModelWriter(writer);
+        this.backboneModelWriter = new BackboneModelWriter(writer, valueConverter);
     }
 
     /**
-     * Constructs fully customized model processor.
-     * @param writer Model writer to use
-     * @param startComment Start command
-     * @param namespaceName Namespace name
-     * @param backboneModelWriter Backbone model writer
+     * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
+     * @param writer Writer
      */
-    public BackboneModelProcessor(
-            DataWriter writer,
-            String startComment,
-            String namespaceName,
-            BackboneModelWriter backboneModelWriter ) {
-        super(writer);
-        this.startComment = startComment;
-        this.namespaceName = namespaceName;
-        this.backboneModelWriter = backboneModelWriter;
+    public BackboneModelProcessor(DataWriter writer, BackboneModelWriter modelWriter, FieldValueConverter valueConverter) {
+        super(writer, valueConverter);
+        this.startComment = DEFAULT_START_COMMENT;
+        this.namespaceName = DEFAULT_NAMESPACE;
+        this.backboneModelWriter = modelWriter;
     }
 
     @Override
@@ -84,7 +79,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
         backboneModelWriter.setWriter(this.writer);
 
         this.writer.writeLine( startComment );
-        this.writer.writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
+        this.writer.writeLine( VARIABLE + " " + namespaceName + " = " + NAMESPACE_START );
         this.writer.indent();
     }
 
@@ -92,7 +87,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
     public void processModel( Model model, ItemStatus status ) {
         String modelName = model.getName();
 
-        this.writer.write(modelName).writeLine( MODEL_EXTEND_START ).indent();
+        this.writer.write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
 
         backboneModelWriter.write(model);
 

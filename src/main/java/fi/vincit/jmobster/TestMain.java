@@ -19,7 +19,7 @@ import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ModelFactory;
-import fi.vincit.jmobster.processor.defaults.CachedModelProvider;
+import fi.vincit.jmobster.util.writer.CachedModelProvider;
 import fi.vincit.jmobster.processor.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +107,7 @@ public class TestMain {
         final String HTML5 = "html5";
         final String BB = "backbone.js";
 
-        ModelFactory factory = JMobsterFactory.getModelFactory(BB);
+        ModelFactory factory = JMobsterFactory.getModelFactory();
         factory.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, String.class, Integer.class );
         Collection<Model> models = factory.createAll( BeanPropertyDemo.class, MyModelDto.class );
 

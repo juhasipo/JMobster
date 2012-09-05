@@ -38,16 +38,12 @@ import java.util.List;
 public class DefaultModelFieldFactory implements ModelFieldFactory {
     private static final Logger LOG = LoggerFactory.getLogger( DefaultModelFieldFactory.class );
 
-    private final FieldValueConverter fieldDefaultValueProcessor;
     private boolean allowStaticFields;
     private boolean allowFinalFields;
     private final FieldScanMode scanMode;
     private final ValidatorScanner validatorScanner;
 
-    public DefaultModelFieldFactory( FieldScanMode scanMode,
-                                     FieldValueConverter fieldDefaultValueProcessor,
-                                     ValidatorScanner validatorScanner ) {
-        this.fieldDefaultValueProcessor = fieldDefaultValueProcessor;
+    public DefaultModelFieldFactory( FieldScanMode scanMode, ValidatorScanner validatorScanner ) {
         this.allowStaticFields = false;
         this.allowFinalFields = true;
         this.scanMode = scanMode;
@@ -89,8 +85,6 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
 
                     final Class fieldType = property.getPropertyType();
                     final Object fieldValue = property.getReadMethod().invoke( defaultObject );
-                    final String defaultValue = fieldDefaultValueProcessor.convert(fieldType, fieldValue );
-                    field.setDefaultValue(defaultValue);
 
                     fields.add(field);
                 }
@@ -133,7 +127,6 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
                 field.setAccessible(true);
                 if( shouldAddField(field) ) {
                     ModelField modelField = new ModelField(field, validatorScanner.getValidators( field ));
-                    modelField.setDefaultValue(fieldDefaultValueProcessor.convert( field, defaultObject ));
                     fields.add( modelField );
                 } else {
                     LOG.warn( "Field {} not added to model fields", field.getName() );

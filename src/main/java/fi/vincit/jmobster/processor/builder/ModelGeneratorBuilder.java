@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults;
+package fi.vincit.jmobster.processor.builder;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults;
  */
 
 import fi.vincit.jmobster.processor.*;
+import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 
 /**
  * Builder for ModelGenerator. Model processor and model field factory are

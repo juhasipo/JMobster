@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 
 /**

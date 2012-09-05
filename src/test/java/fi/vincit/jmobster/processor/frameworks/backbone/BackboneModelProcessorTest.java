@@ -1,5 +1,6 @@
 package fi.vincit.jmobster.processor.frameworks.backbone;
 
+import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.ItemStatusHelper;
@@ -17,8 +18,9 @@ public class BackboneModelProcessorTest {
     public void testProcessNoValidators() throws Exception {
         DataWriter writer = mockWriter();
         BackboneModelWriter backboneValueSectionWriter = mock(BackboneModelWriter.class);
+        FieldValueConverter valueConverter = mock(FieldValueConverter.class);
         BackboneModelProcessor bmp = new BackboneModelProcessor(
-                writer, "/**/", "ns", backboneValueSectionWriter
+                writer, backboneValueSectionWriter, valueConverter
         );
 
         final List<ModelField> fields = new ArrayList<ModelField>();

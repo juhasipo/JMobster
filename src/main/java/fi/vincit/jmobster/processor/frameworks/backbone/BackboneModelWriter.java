@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelWriter;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
@@ -31,10 +32,12 @@ public class BackboneModelWriter implements ModelWriter {
 
     private JavaScriptWriter writer;
     final private BackboneValidatorWriterManager validatorWriterManager;
+    final private FieldValueConverter valueConverter;
 
-    public BackboneModelWriter( DataWriter writer ) {
+    public BackboneModelWriter( DataWriter writer, FieldValueConverter valueConverter ) {
         this.writer = new JavaScriptWriter(writer);
         this.validatorWriterManager = new BackboneValidatorWriterManager(this.writer);
+        this.valueConverter = valueConverter;
     }
 
     private static final String DEFAULTS_BLOCK_NAME = "defaults";
@@ -62,7 +65,8 @@ public class BackboneModelWriter implements ModelWriter {
         ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
             @Override
             public void process( ModelField field, ItemStatus status ) {
-                writer.writeKeyValue(field.getName(), field.getDefaultValue(), status.isLastItem());
+                String defaultValue = valueConverter.convert(field.getFieldType(), null);
+                writer.writeKeyValue(field.getName(), defaultValue, status.isLastItem());
             }
         });
     }

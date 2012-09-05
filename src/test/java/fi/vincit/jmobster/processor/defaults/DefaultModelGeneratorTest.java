@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults;
 */
 
 import fi.vincit.jmobster.processor.*;
+import fi.vincit.jmobster.processor.builder.ModelGeneratorBuilder;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.TestUtil;
@@ -24,7 +25,6 @@ import org.junit.Test;
 import org.mockito.InOrder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -47,7 +47,7 @@ public class DefaultModelGeneratorTest {
         InOrder mpInOrder = inOrder(modelProcessor);
         mpInOrder.verify(modelProcessor, times(1)).startProcessing();
         mpInOrder.verify(modelProcessor, times(1)).endProcessing();
-        verify(modelProcessor, never()).processModel(any(Model.class), any( ItemStatus.class ));
+        verify( modelProcessor, never() ).processModel( any( Model.class ), any( ItemStatus.class ) );
     }
 
     @Test
@@ -56,7 +56,7 @@ public class DefaultModelGeneratorTest {
         DefaultModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).createDefaultModelGenerator();
 
         Model testModel1 = mock(Model.class);
-        Model testModel2 = mock(Model.class);
+        Model testModel2 = mock( Model.class );
         modelGenerator.processAll( TestUtil.collectionFromObjects( testModel1, testModel2 ) );
 
         InOrder mpInOrder = inOrder( modelProcessor );

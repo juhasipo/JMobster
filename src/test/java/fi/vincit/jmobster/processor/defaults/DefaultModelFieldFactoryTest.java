@@ -39,16 +39,13 @@ import static org.mockito.Mockito.*;
 
 public class DefaultModelFieldFactoryTest {
 
-    private FieldValueConverter valueConverter;
-
     private DefaultModelFieldFactory getFieldScanner(FieldScanMode scanMode) {
-        valueConverter = mock(FieldValueConverter.class);
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
         when(validatorScanner.getValidators(any(Field.class)))
                 .thenReturn( TestUtil.collectionFromObjects( mock( Validator.class ) ) );
         when(validatorScanner.getValidators(any(PropertyDescriptor.class)))
                 .thenReturn(TestUtil.collectionFromObjects(mock(Validator.class)));
-        return new DefaultModelFieldFactory(scanMode, valueConverter, validatorScanner);
+        return new DefaultModelFieldFactory(scanMode, validatorScanner);
     }
 
     public static class SimpleTestClass {
@@ -239,19 +236,6 @@ public class DefaultModelFieldFactoryTest {
             return longValue;
         }
 
-    }
-
-    @Test
-    public void testGetterScanning() {
-        DefaultModelFieldFactory fs = getFieldScanner( FieldScanMode.BEAN_PROPERTY );
-        List<ModelField> models = fs.getFields( SimpleTestGetterClass.class );
-        assertFieldNotFound(models, "string1");
-        assertFieldNotFound(models, "string2");
-        assertFieldFound(models, "combinedString");
-        assertFieldFound(models, "longValue");
-
-        verify( valueConverter, times(1)).convert(eq(String.class), eq("string1string2"));
-        verify( valueConverter, times(1)).convert(eq(Long.class), eq(42L));
     }
 
     @Test

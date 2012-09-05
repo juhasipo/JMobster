@@ -101,7 +101,6 @@ public class TestUtil {
     public static ModelField getField(List<Validator> validators) {
         class T {int field;}
         ModelField field = new ModelField(T.class.getDeclaredFields()[0], validators);
-        field.setDefaultValue("Test value");
         return field;
     }
 

@@ -27,7 +27,6 @@ import java.util.List;
 public class ModelField {
     final private Class fieldType;
     final private List<Validator> validators;
-    private String defaultValue;
     final private String name;
 
     /**
@@ -71,14 +70,6 @@ public class ModelField {
 
     public Class getFieldType() {
         return fieldType;
-    }
-
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue( String defaultValue ) {
-        this.defaultValue = defaultValue;
     }
 
     public void addValidators(Collection<? extends Validator> validators) {

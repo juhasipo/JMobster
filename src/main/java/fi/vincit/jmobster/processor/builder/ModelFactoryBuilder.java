@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults;
+package fi.vincit.jmobster.processor.builder;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -18,6 +18,8 @@ package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.processor.ModelFieldFactory;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;
+import fi.vincit.jmobster.processor.defaults.DefaultModelFactory;
+import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
 
 public class ModelFactoryBuilder {
     private ModelFieldFactory modelFieldFactory;
