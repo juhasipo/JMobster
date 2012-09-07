@@ -81,7 +81,7 @@ public class BackboneModelWriter implements ModelWriter {
                 writer.writeKeyValue(field.getName(), defaultValue, status.isLastItem());
             }
         });
-        writer.endBlock();
+        writer.endBlock(true);
         writer.endBlock(!model.hasValidations());
     }
 

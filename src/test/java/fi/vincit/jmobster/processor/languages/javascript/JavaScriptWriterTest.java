@@ -16,10 +16,13 @@ package fi.vincit.jmobster.processor.languages.javascript;/*
 
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class JavaScriptWriterTest {
     private DataWriter mw;
@@ -29,6 +32,58 @@ public class JavaScriptWriterTest {
     public void initTest() {
         mw = new StringBufferWriter();
         writer = new JavaScriptWriter(mw);
+    }
+
+    @After
+    public void tearDownTest() {
+        try { writer.close(); } catch (Exception e) {}
+    }
+
+    @Test
+    public void testIsOpen() {
+        assertTrue(writer.isOpen());
+    }
+
+    @Test
+    public void testIsOpenAfterClose() {
+        writer.close();
+        assertFalse( writer.isOpen() );
+    }
+
+    @Test
+    public void testToString() {
+        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction();
+        mw.close();
+        final String result = writer.toString();
+
+        assertEquals( "function(arg1, arg2, arg3) {\n}\n", result );
+    }
+
+    @Test
+    public void testWrite() {
+        writer.write("test");
+        mw.close();
+        final String result = writer.toString();
+
+        assertEquals( "test", result );
+    }
+
+    @Test
+    public void testWriteLine() {
+        writer.writeLine("Line");
+        mw.close();
+        final String result = writer.toString();
+
+        assertEquals( "Line\n", result );
+    }
+
+    @Test
+    public void testWriteChar() {
+        writer.write('c');
+        mw.close();
+        final String result = writer.toString();
+
+        assertEquals( "c", result );
     }
 
     @Test
@@ -66,6 +121,46 @@ public class JavaScriptWriterTest {
         assertEquals("key1: 1,\nkey2: 2,\nkey3: 3\n", mw.toString());
     }
 
+    @Test
+    public void testStartBlock() {
+        writer.startBlock();
+        mw.close();
+
+        assertEquals("{\n", mw.toString());
+    }
+
+    @Test
+    public void testEndBlock() {
+        writer.endBlock(false);
+        mw.close();
+
+        assertEquals("},\n", mw.toString());
+    }
+
+    @Test
+    public void testEndBlockAsLast() {
+        writer.endBlock(true);
+        mw.close();
+
+        assertEquals("}\n", mw.toString());
+    }
+
+    @Test
+    public void testArray() {
+        writer.writeArray(false, 1, 2, 3);
+        mw.close();
+
+        assertEquals("[1, 2, 3],\n", mw.toString());
+    }
+
+    @Test
+    public void testArrayAsLast() {
+        writer.writeArray(true, 1, 2, 3);
+        mw.close();
+
+        assertEquals("[1, 2, 3]\n", mw.toString());
+    }
+
     @Test(expected = RuntimeException.class)
     public void testUnclosedAnonFunction() {
         writer.startAnonFunction();
@@ -77,8 +172,32 @@ public class JavaScriptWriterTest {
         writer.close();
     }
     @Test(expected = RuntimeException.class)
+    public void testTooManyFunctionsClosedNonStarted() {
+        writer.endFunction();
+        writer.close();
+    }
+    @Test(expected = RuntimeException.class)
+    public void testTooManyFunctionsClosed() {
+        writer.startAnonFunction();
+        writer.endFunction();
+        writer.endFunction();
+        writer.close();
+    }
+    @Test(expected = RuntimeException.class)
     public void testUnclosedBlock() {
         writer.startBlock();
+        writer.close();
+    }
+    @Test(expected = RuntimeException.class)
+    public void testTooManyBlockClosedNonStarted() {
+        writer.endBlock(true);
+        writer.close();
+    }
+    @Test(expected = RuntimeException.class)
+    public void testTooManyBlockClosed() {
+        writer.startBlock();
+        writer.endBlock( false );
+        writer.endBlock(true);
         writer.close();
     }
 
@@ -113,7 +232,7 @@ public class JavaScriptWriterTest {
     public void testSetIndentation() {
         writer.setIndentation(3);
         writer.startBlock();
-        writer.endBlock();
+        writer.endBlock(true);
         mw.close();
 
         assertEquals("{\n}\n", mw.toString());
@@ -124,7 +243,7 @@ public class JavaScriptWriterTest {
         writer.setIndentationChar('\t', 2);
         writer.startBlock();
         writer.write("test");
-        writer.endBlock();
+        writer.endBlock(true);
         mw.close();
 
         assertEquals("{\n\t\ttest\n}\n", mw.toString());
@@ -134,7 +253,7 @@ public class JavaScriptWriterTest {
      public void testSetLineSeparator() {
         writer.setLineSeparator("l");
         writer.startBlock();
-        writer.endBlock();
+        writer.endBlock(true);
         mw.close();
 
         assertEquals("{l}l", mw.toString());

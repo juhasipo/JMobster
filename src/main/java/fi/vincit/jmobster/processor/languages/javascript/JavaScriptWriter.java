@@ -27,12 +27,19 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  */
 public class JavaScriptWriter implements DataWriter {
 
-    public static final String BLOCK_START = "{";
-    public static final String BLOCK_END = "}";
+    private static final String BLOCK_START = "{";
+    private static final String BLOCK_END = "}";
+
+    private static final String ARRAY_START = "[";
+    private static final String ARRAY_END = "]";
+    private static final String ARRAY_SEPARATOR = ", ";
+
     private static final String FUNCTION_ARG_START = "(";
     private static final String FUNCTION_ARG_END = ")";
+
     private static final String KEY_VALUE_SEPARATOR = ": ";
     private static final String LIST_SEPARATOR = ",";
+
     private static final String FUNCTION_DEF = "function";
     private String space = " ";
 
@@ -44,8 +51,28 @@ public class JavaScriptWriter implements DataWriter {
 
     private DataWriter writer;
 
+    private abstract static class ItemWriter<T> implements ItemHandler<T> {
+        private JavaScriptWriter writer;
+
+        protected ItemWriter( JavaScriptWriter writer ) {
+            this.writer = writer;
+        }
+
+        protected JavaScriptWriter getWriter() {
+            return writer;
+        }
+    }
+
+    private static ItemWriter<Object> arrayWriter;
+
     public JavaScriptWriter(DataWriter writer) {
         this.writer = writer;
+        this.arrayWriter = new ItemWriter<Object>(this) {
+            @Override
+            public void process( Object item, ItemStatus status ) {
+                getWriter().write(item.toString(), ARRAY_SEPARATOR, !status.isLastItem());
+            }
+        };
     }
 
     /**
@@ -56,7 +83,7 @@ public class JavaScriptWriter implements DataWriter {
      */
     public JavaScriptWriter startNamedFunction(String name, String... arguments) {
         ++functionsOpen;
-        return write(FUNCTION_DEF + space).write(name).writeFunctionArgsAndStartBlock(arguments);
+        return write(FUNCTION_DEF + space).write( name ).writeFunctionArgsAndStartBlock(arguments);
     }
 
     /**
@@ -66,7 +93,7 @@ public class JavaScriptWriter implements DataWriter {
      */
     public JavaScriptWriter startAnonFunction(String... arguments) {
         ++functionsOpen;
-        return write(FUNCTION_DEF).writeFunctionArgsAndStartBlock(arguments);
+        return write(FUNCTION_DEF).writeFunctionArgsAndStartBlock( arguments );
     }
 
     /**
@@ -93,7 +120,7 @@ public class JavaScriptWriter implements DataWriter {
      */
     public JavaScriptWriter endFunction() {
         --functionsOpen;
-        return endBlock();
+        return endBlock(true);
     }
 
     /**
@@ -102,16 +129,7 @@ public class JavaScriptWriter implements DataWriter {
      */
     public JavaScriptWriter startBlock() {
         ++blocksOpen;
-        return writeLine(BLOCK_START).indent();
-    }
-
-    /**
-     * Ends block. Indents back.
-     * @return Writer itself for chaining writes
-     */
-    public JavaScriptWriter endBlock() {
-        --blocksOpen;
-        return indentBack().writeLine(BLOCK_END);
+        return writeLine( BLOCK_START ).indent();
     }
 
     /**
@@ -120,7 +138,8 @@ public class JavaScriptWriter implements DataWriter {
      * @return Writer itself for chaining writes
      */
     public JavaScriptWriter endBlock(boolean isLast) {
-        return indentBack().write(BLOCK_END).writeLine("", LIST_SEPARATOR, !isLast);
+        --blocksOpen;
+        return indentBack().write( BLOCK_END ).writeLine( "", LIST_SEPARATOR, !isLast );
     }
 
     /**
@@ -129,7 +148,7 @@ public class JavaScriptWriter implements DataWriter {
      * @return Writer itself for chaining writes
      */
     public JavaScriptWriter writeKey(String key) {
-        return write(key).write(KEY_VALUE_SEPARATOR);
+        return write( key ).write( KEY_VALUE_SEPARATOR );
     }
 
     /**
@@ -144,6 +163,21 @@ public class JavaScriptWriter implements DataWriter {
     }
 
     /**
+     * Writes array of objects. Objects must have {@link Object#toString()} method
+     * implemented.
+     * @param objects Objects to write
+     * @return Writer itself for chaining writes
+     */
+    public JavaScriptWriter writeArray(boolean isLast, Object... objects) {
+        write(ARRAY_START);
+        ItemProcessor.process(arrayWriter, objects);
+        write(ARRAY_END);
+        write("", LIST_SEPARATOR, !isLast);
+        writeLine("");
+        return this;
+    }
+
+    /**
      * Writes space. Use this to enable easy to setup compact writing that
      * can ignore spaces. To disable spaces use {@link JavaScriptWriter#setSpace(String)}
      * method.
@@ -155,6 +189,12 @@ public class JavaScriptWriter implements DataWriter {
     }
 
     // Delegated methods
+
+    @Override
+    public JavaScriptWriter write(char c) {
+        writer.write(c);
+        return this;
+    }
 
     @Override
     public JavaScriptWriter write(String modelString) {
@@ -198,14 +238,24 @@ public class JavaScriptWriter implements DataWriter {
     }
 
     @Override
+    public boolean isOpen() {
+        return writer.isOpen();
+    }
+
+    @Override
     public void close() {
         writer.close();
         if( !lenientModeOn ) {
             if( functionsOpen > 0 ) {
                 throw new RuntimeException("There are still " + functionsOpen + "unclosed functions");
+            } else if( functionsOpen < 0 ) {
+                throw new RuntimeException("Too many functions closed. " + Math.abs(functionsOpen) + " times too many.");
             }
+
             if( blocksOpen > 0 ) {
                 throw new RuntimeException("There are still " + blocksOpen + "unclosed blocks");
+            } else if( blocksOpen < 0 ) {
+                throw new RuntimeException("Too many blocks closed. " + Math.abs(blocksOpen) + " times too many.");
             }
         }
     }

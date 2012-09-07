@@ -23,12 +23,16 @@ import javax.validation.constraints.Size;
 public class SizeValidator extends BaseValidator {
     private int min;
     private int max;
+    boolean hasMin;
+    boolean hasMax;
 
     @Override
     public void init( AnnotationBag annotationBag ) {
         Size size = annotationBag.getAnnotation(Size.class);
         this.min = size.min();
         this.max = size.max();
+        this.hasMin = min >= 0;
+        this.hasMax = max < Integer.MAX_VALUE;
     }
 
     public int getMin() {
@@ -36,5 +40,13 @@ public class SizeValidator extends BaseValidator {
     }
     public int getMax() {
         return max;
+    }
+
+    public boolean hasMin() {
+        return hasMin;
+    }
+
+    public boolean hasMax() {
+        return hasMax;
     }
 }

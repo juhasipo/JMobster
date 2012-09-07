@@ -68,7 +68,9 @@ public class FieldAnnotation implements HasGroups<Class>, HasType {
         try {
             final Method groupsMethod = annotation.getClass().getMethod( GROUPS_METHOD_NAME );
             final Object result = groupsMethod.invoke(annotation);
-            return (Class[])result;
+            if( result != null ) {
+                return (Class[])result;
+            }
         } catch( NoSuchMethodException e ) {
             LOG.warn( "Validator {} doesn't have groups. Ignoring grouping for that annotation", annotation.getClass().getName() );
         } catch( InvocationTargetException e ) {

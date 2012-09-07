@@ -28,6 +28,7 @@ import java.util.Collections;
  * Single model field that is converted to the target platform.
  */
 public class ModelField {
+
     final private Class fieldType;
     final private Collection<Validator> validators;
     final private AnnotationBag fieldAnnotations;
@@ -59,18 +60,6 @@ public class ModelField {
         addValidators(validators);
     }
 
-    /**
-     * Model field without validators.
-     * @param field
-     */
-    public ModelField( ModelField field ) {
-        this.fieldType = field.getFieldType();
-        this.name = field.getName();
-        this.validators = new ArrayList<Validator>();
-        this.fieldAnnotations = new AnnotationBag();
-        addValidators(field.getValidators());
-    }
-
     public String getName() {
         return name;
     }
@@ -87,6 +76,10 @@ public class ModelField {
         return Collections.unmodifiableCollection(this.validators);
     }
 
+    public boolean hasValidators() {
+        return !this.validators.isEmpty();
+    }
+
     public void addAnnotation(FieldAnnotation annotation) {
         this.fieldAnnotations.addAnnotation(annotation);
     }
@@ -97,5 +90,9 @@ public class ModelField {
 
     public <T extends Annotation> boolean hasAnnotation( Class<T> annotationType ) {
         return fieldAnnotations.hasAnnotation( annotationType );
+    }
+
+    public boolean hasAnnotations() {
+        return this.fieldAnnotations.hasAnnotations();
     }
 }

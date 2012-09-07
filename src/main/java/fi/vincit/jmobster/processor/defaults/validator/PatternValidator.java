@@ -24,6 +24,7 @@ import javax.validation.constraints.Pattern;
 public class PatternValidator extends BaseValidator {
     private String regexp;
     private Pattern.Flag[] flags;
+
     @Override
     public void init( AnnotationBag annotationBag ) {
         Pattern pattern = annotationBag.getAnnotation(Pattern.class);

@@ -16,6 +16,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.defaults.validator.NotNullValidator;
+import fi.vincit.jmobster.processor.defaults.validator.NumberRangeValidator;
 import fi.vincit.jmobster.processor.defaults.validator.PatternValidator;
 import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
@@ -46,13 +48,17 @@ public class BackboneValidatorWriterTest {
      * Size validator
      */
 
+    private final static int NO_MIN_SIZE = -1;
+    private final static int NO_MAX_SIZE = Integer.MAX_VALUE;
+
     private SizeValidator mockSizeValidator(int min, int max) {
         final SizeValidator validator = mock(SizeValidator.class);
 
         when(validator.getMin()).thenReturn(min);
         when(validator.getMax()).thenReturn(max);
         when(validator.getType()).thenReturn(SizeValidator.class);
-
+        when(validator.hasMin()).thenReturn(min != NO_MIN_SIZE);
+        when(validator.hasMax()).thenReturn(max != NO_MAX_SIZE);
         return validator;
     }
 
@@ -65,6 +71,30 @@ public class BackboneValidatorWriterTest {
 
         final String result = writer.toString();
         final String expected = "rangeLength: [1, 255],\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteNoMinOrMaxSize() {
+        final SizeValidator validator = mockSizeValidator(NO_MIN_SIZE, NO_MAX_SIZE);
+
+        writerManager.write( validator, false );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteNoMinOrMaxSizeAsLast() {
+        final SizeValidator validator = mockSizeValidator(NO_MIN_SIZE, NO_MAX_SIZE);
+
+        writerManager.write( validator, true );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "";
         assertEquals(expected, result);
     }
 
@@ -82,7 +112,7 @@ public class BackboneValidatorWriterTest {
 
     @Test
     public void testWriteMinSize() {
-        final SizeValidator validator = mockSizeValidator( 1, Integer.MAX_VALUE );
+        final SizeValidator validator = mockSizeValidator( 1, NO_MAX_SIZE );
 
         writerManager.write( validator, false );
         writer.close();
@@ -94,7 +124,7 @@ public class BackboneValidatorWriterTest {
 
     @Test
     public void testWriteMinSizeAsLast() {
-        final SizeValidator validator = mockSizeValidator( 1, Integer.MAX_VALUE );
+        final SizeValidator validator = mockSizeValidator( 1, NO_MAX_SIZE );
 
         writerManager.write( validator, true );
         writer.close();
@@ -106,7 +136,7 @@ public class BackboneValidatorWriterTest {
 
     @Test
     public void testWriteMaxSize() {
-        final SizeValidator validator = mockSizeValidator( -1, 255 );
+        final SizeValidator validator = mockSizeValidator( NO_MIN_SIZE, 255 );
 
         writerManager.write( validator, false );
         writer.close();
@@ -118,7 +148,7 @@ public class BackboneValidatorWriterTest {
 
     @Test
     public void testWriteMaxSizeAsLast() {
-        final SizeValidator validator = mockSizeValidator( -1, 255 );
+        final SizeValidator validator = mockSizeValidator( NO_MIN_SIZE, 255 );
 
         writerManager.write( validator, true );
         writer.close();
@@ -128,6 +158,120 @@ public class BackboneValidatorWriterTest {
         assertEquals(expected, result);
     }
 
+
+    /**
+     * Number Range Validator
+     */
+
+    private final static long NO_MIN_VALUE = Long.MIN_VALUE;
+    private final static long NO_MAX_VALUE = Long.MAX_VALUE;
+
+    private NumberRangeValidator mockNumberRangeValidator(long min, long max) {
+        final NumberRangeValidator validator = mock(NumberRangeValidator.class);
+
+        when(validator.getMin()).thenReturn(min);
+        when(validator.getMax()).thenReturn(max);
+        when(validator.getType()).thenReturn(NumberRangeValidator.class);
+        when(validator.hasMin()).thenReturn(min != NO_MIN_VALUE);
+        when(validator.hasMax()).thenReturn(max != NO_MAX_VALUE);
+        return validator;
+    }
+
+    @Test
+    public void testWriteMinAndMax() {
+        final NumberRangeValidator validator = mockNumberRangeValidator(1, 255);
+
+        writerManager.write( validator, false );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "range: [1, 255],\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteMinOrMax() {
+        final NumberRangeValidator validator = mockNumberRangeValidator(NO_MIN_VALUE, NO_MAX_VALUE);
+
+        writerManager.write( validator, false );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteMinOrMaxAsLast() {
+        final NumberRangeValidator validator = mockNumberRangeValidator(NO_MIN_VALUE, NO_MAX_VALUE);
+
+        writerManager.write( validator, true );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteMinAndMaxAsLast() {
+        final NumberRangeValidator validator = mockNumberRangeValidator(1, 255);
+
+        writerManager.write( validator, true );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "range: [1, 255]\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteMin() {
+        final NumberRangeValidator validator = mockNumberRangeValidator(1, NO_MAX_VALUE);
+
+        writerManager.write( validator, false );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "min: 1,\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteMinAsLast() {
+        final NumberRangeValidator validator = mockNumberRangeValidator(1, NO_MAX_VALUE);
+
+        writerManager.write( validator, true );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "min: 1\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteMax() {
+        final NumberRangeValidator validator = mockNumberRangeValidator(NO_MIN_VALUE, 255);
+
+        writerManager.write( validator, false );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "max: 255,\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWriteMaxAsLast() {
+        final NumberRangeValidator validator = mockNumberRangeValidator(NO_MIN_VALUE, 255);
+
+        writerManager.write( validator, true );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "max: 255\n";
+        assertEquals(expected, result);
+    }
 
     /**
      * Pattern validator
@@ -167,4 +311,32 @@ public class BackboneValidatorWriterTest {
         assertEquals(expected, result);
     }
 
+
+    /**
+     * Not Null
+     */
+
+    @Test
+    public void testNotNull() {
+        final NotNullValidator validator = new NotNullValidator();
+
+        writerManager.write(validator, false);
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "required: true,\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testNotNullAsLast() {
+        final NotNullValidator validator = new NotNullValidator();
+
+        writerManager.write(validator, true);
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "required: true\n";
+        assertEquals(expected, result);
+    }
 }

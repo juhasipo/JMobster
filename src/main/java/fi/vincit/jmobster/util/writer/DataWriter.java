@@ -27,6 +27,8 @@ public interface DataWriter {
      */
     void open();
 
+    boolean isOpen();
+
     /**
      * Write the given string
      * @param modelString String to write
@@ -98,4 +100,6 @@ public interface DataWriter {
      * @param lineSeparator String to use for line changes
      */
     void setLineSeparator( String lineSeparator );
+
+    DataWriter write( char c );
 }

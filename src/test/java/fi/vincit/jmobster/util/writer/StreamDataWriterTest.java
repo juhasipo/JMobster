@@ -17,9 +17,61 @@ package fi.vincit.jmobster.util.writer;
 
 import org.junit.Test;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 public class StreamDataWriterTest {
+
+    @Test
+    public void testOpen() throws Exception {
+        DataWriter mw = new StringBufferWriter();
+        mw.open();
+        assertTrue( mw.isOpen() );
+    }
+
+    @Test
+    public void testIsOpen() throws Exception {
+        DataWriter mw = new StringBufferWriter();
+        assertTrue(mw.isOpen());
+    }
+
+    @Test
+    public void testIsOpenAfterClose() throws Exception {
+        DataWriter mw = new StringBufferWriter();
+        mw.close();
+        assertFalse(mw.isOpen());
+    }
+
+    @Test( expected = RuntimeException.class )
+    public void testWriteToClosedStream() throws Exception {
+        DataWriter mw = new StringBufferWriter();
+        mw.close();
+        mw.write("Test");
+    }
+
+    @Test
+    public void testWriteToString() throws Exception {
+        DataWriter mw = new StringBufferWriter();
+        mw.write("Test");
+        mw.close();
+        assertEquals("Test", mw.toString());
+    }
+
+    @Test
+    public void testWriteChar() throws Exception {
+        DataWriter mw = new StringBufferWriter();
+        mw.write('c');
+        mw.close();
+        String actual = mw.toString();
+        String expected = "c";
+        assertEquals(expected, actual);
+    }
 
     @Test
     public void testWriteLines() throws Exception {
@@ -198,4 +250,71 @@ public class StreamDataWriterTest {
         assertEquals( expected, actual );
     }
 
+    @Test
+    public void testInitBufferedWriter() throws IOException {
+        class TestBufferedStreamWriter extends StreamDataWriter {
+            TestBufferedStreamWriter( BufferedWriter writer ) {
+                initializeBuffer(writer);
+            }
+        }
+
+        BufferedWriter bufferedWriter = mock(BufferedWriter.class);
+
+        TestBufferedStreamWriter testWriter = new TestBufferedStreamWriter(bufferedWriter);
+
+        final String testString = "test";
+        testWriter.write( testString );
+
+        verify(bufferedWriter, times(1)).write(eq(testString));
+        assertTrue( testWriter.isOpen() );
+    }
+
+    @Test
+    public void testThrowIOExceptionOnChar() throws IOException {
+        class TestBufferedStreamWriter extends StreamDataWriter {
+            TestBufferedStreamWriter( BufferedWriter writer ) {
+                initializeBuffer(writer);
+            }
+        }
+
+        BufferedWriter bufferedWriter = mock(BufferedWriter.class);
+        doThrow(new IOException("IO Test Fail")).when(bufferedWriter).write(any(int.class));
+
+        TestBufferedStreamWriter testWriter = new TestBufferedStreamWriter(bufferedWriter);
+        testWriter.write( 'c' );
+        assertFalse(testWriter.isOpen());
+    }
+
+
+    @Test
+    public void testThrowIOExceptionOnWriteString() throws IOException {
+        class TestBufferedStreamWriter extends StreamDataWriter {
+            TestBufferedStreamWriter( BufferedWriter writer ) {
+                initializeBuffer(writer);
+            }
+        }
+
+        BufferedWriter bufferedWriter = mock(BufferedWriter.class);
+        doThrow(new IOException("IO Test Fail")).when(bufferedWriter).write(any(String.class));
+
+        TestBufferedStreamWriter testWriter = new TestBufferedStreamWriter(bufferedWriter);
+        testWriter.write( "test" );
+        assertFalse(testWriter.isOpen());
+    }
+
+    @Test
+    public void testThrowIOExceptionOnClose() throws IOException {
+        class TestBufferedStreamWriter extends StreamDataWriter {
+            TestBufferedStreamWriter( BufferedWriter writer ) {
+                initializeBuffer(writer);
+            }
+        }
+
+        BufferedWriter bufferedWriter = mock(BufferedWriter.class);
+        doThrow(new IOException("IO Test Fail")).when(bufferedWriter).close();
+
+        TestBufferedStreamWriter testWriter = new TestBufferedStreamWriter(bufferedWriter);
+        testWriter.close();
+        assertFalse(testWriter.isOpen());
+    }
 }

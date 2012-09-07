@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class Model {
     private Class modelClass;
-    private List<ModelField> fields;
+    private Collection<ModelField> fields;
     private boolean validations;
     private String name;
 
@@ -34,10 +34,21 @@ public class Model {
      * @param name Name in target platform
      * @param fields Fields
      */
-    public Model( Class modelClass, String name, List<ModelField> fields ) {
+    public Model( Class modelClass, String name, Collection<ModelField> fields ) {
         this.name = name;
         this.modelClass = modelClass;
         this.fields = fields;
+        this.validations = false;
+        checkIfValidationsInFields();
+    }
+
+    private void checkIfValidationsInFields() {
+        for( ModelField field : this.fields ) {
+            if( field.hasValidators() ) {
+                this.validations = true;
+                break;
+            }
+        }
     }
 
     public String getName() {

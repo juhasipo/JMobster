@@ -36,13 +36,28 @@ public abstract class StreamDataWriter implements DataWriter {
     private boolean isLineIndented;
     private char indentationChar = ' ';
     private String lineSeparator = "\n";
+    private boolean isOpen;
 
     protected void initializeStream(OutputStream outputStream) {
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
         writer = new BufferedWriter(outputStreamWriter);
+        initDone();
     }
     protected void initializeBuffer( BufferedWriter bufferedWriter ) {
         this.writer = bufferedWriter;
+        initDone();
+    }
+
+    private void initDone() {
+        isOpen = true;
+    }
+    private void error() {
+        isOpen = false;
+    }
+    private void checkIsOpen() {
+        if( !isOpen() ) {
+            throw new RuntimeException("Writer is not open");
+        }
     }
 
     protected StreamDataWriter() {
@@ -50,14 +65,15 @@ public abstract class StreamDataWriter implements DataWriter {
         indentationInUnits = 0;
     }
 
-    protected BufferedWriter getBuffer() {
-        return this.writer;
-    }
-
     @Override
     @SuppressWarnings( "EmptyMethod" )
     public void open() {
         // Nothing to do
+    }
+
+    @Override
+    public boolean isOpen() {
+        return isOpen;
     }
 
     private void indentIfNeeded() {
@@ -72,18 +88,29 @@ public abstract class StreamDataWriter implements DataWriter {
 
     private void writeInternal(char c) {
         try {
+            checkIsOpen();
             writer.write(c);
         } catch (IOException e) {
             LOG.error("Could not write", e);
+            error();
         }
     }
 
     private void writeInternal(String string) {
         try {
+            checkIsOpen();
             writer.write(string);
         } catch (IOException e) {
             LOG.error("Could not write", e);
+            error();
         }
+    }
+
+    @Override
+    public DataWriter write( char c ) {
+        indentIfNeeded();
+        writeInternal(c);
+        return this;
     }
 
     @Override
@@ -128,8 +155,10 @@ public abstract class StreamDataWriter implements DataWriter {
             writer.close();
         } catch( IOException e ) {
             LOG.error("Error", e);
+            error();
+        } finally {
+            isOpen = false;
         }
-
     }
 
     @Override
@@ -162,15 +191,5 @@ public abstract class StreamDataWriter implements DataWriter {
     @Override
     public void setLineSeparator( String lineSeparator ) {
         this.lineSeparator = lineSeparator;
-    }
-
-    @Override
-    public String toString() {
-        try {
-            this.writer.flush();
-            return this.writer.toString();
-        } catch( IOException e ) {
-        }
-        return "";
     }
 }

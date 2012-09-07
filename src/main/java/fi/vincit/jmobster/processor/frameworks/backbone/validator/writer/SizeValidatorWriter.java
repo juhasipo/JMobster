@@ -22,27 +22,25 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
 public class SizeValidatorWriter extends JavaScriptValidatorWriter<SizeValidator> {
 
+    private static final String MIN_AND_MAX_KEY = "rangeLength";
+    private static final String MIN_ONLY_KEY = "minLength";
+    private static final String MAX_ONLY_KEY = "maxLength";
+
     public SizeValidatorWriter() {
         super( SizeValidator.class );
     }
 
     @Override
     public void write( JavaScriptWriter writer, SizeValidator validator, boolean isLast ) {
-        final boolean isMin = validator.getMin() >= 0;
-        final boolean isMax = validator.getMax() < Integer.MAX_VALUE;
-        if( isMin && isMax ) {
-            String key = "rangeLength";
-            // TODO: writer.writeArray(...)
-            String value = "[" + validator.getMin() + ", " + validator.getMax() + "]";
-            writer.writeKeyValue(key, value, isLast);
-        } else if( isMin ) {
-            String key = "minLength";
+        if( validator.hasMin() && validator.hasMax() ) {
+            writer.writeKey( MIN_AND_MAX_KEY );
+            writer.writeArray( isLast, validator.getMin(), validator.getMax() );
+        } else if( validator.hasMin() ) {
             String value = String.valueOf(validator.getMin());
-            writer.writeKeyValue(key, value, isLast);
-        } else if( isMax ) {
-            String key = "maxLength";
+            writer.writeKeyValue( MIN_ONLY_KEY, value, isLast);
+        } else if( validator.hasMax() ) {
             String value = String.valueOf(validator.getMax());
-            writer.writeKeyValue(key, value, isLast);
+            writer.writeKeyValue( MAX_ONLY_KEY, value, isLast);
         }
 
     }

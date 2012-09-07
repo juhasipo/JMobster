@@ -34,9 +34,6 @@ public final class JavaToJSPatternConverter {
     private static final String JAVASCRIPT_CASE_INSENSITIVE_MOD = "i";
     private static final String JAVASCRIPT_MULTI_LINE_MOD = "m";
 
-    private JavaToJSPatternConverter() {
-    }
-
     /**
      * Coverts the given regular expression patter from Java form
      * to JavaScript form. The only supported flags are at the moment

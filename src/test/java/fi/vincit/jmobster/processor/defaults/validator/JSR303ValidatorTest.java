@@ -71,6 +71,8 @@ public class JSR303ValidatorTest {
 
         assertEquals(1, sizeValidator.getMin());
         assertEquals(Integer.MAX_VALUE, sizeValidator.getMax());
+        assertTrue(sizeValidator.hasMin());
+        assertFalse(sizeValidator.hasMax());
     }
 
     @Test
@@ -85,6 +87,8 @@ public class JSR303ValidatorTest {
 
         assertEquals(0, sizeValidator.getMin());
         assertEquals(255, sizeValidator.getMax());
+        assertTrue(sizeValidator.hasMin());
+        assertTrue(sizeValidator.hasMax());
     }
 
     @Test
@@ -99,6 +103,8 @@ public class JSR303ValidatorTest {
 
         assertEquals(1, sizeValidator.getMin());
         assertEquals(255, sizeValidator.getMax());
+        assertTrue(sizeValidator.hasMin());
+        assertTrue(sizeValidator.hasMax());
     }
 
     @Test

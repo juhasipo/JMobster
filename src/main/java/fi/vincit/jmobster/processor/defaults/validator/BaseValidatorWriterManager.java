@@ -71,7 +71,7 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
      * @param isLast Set to true if the validator is the last validator that is going to be written for the field
      */
     public void write( Validator validator, boolean isLast ) {
-        Class validatorType = validator.getType();
+        final Class validatorType = validator.getType();
         if( writers.containsKey(validatorType) ) {
             ValidatorWriter writer = writers.get(validatorType);
             writer.write( dataWriter, (Object)validator, isLast );

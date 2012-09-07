@@ -73,12 +73,4 @@ public class JavaToJSValueConverter extends BaseValueConverterManager {
         setConverter( new CalendarConverter( dateTimePattern ), Calendar.class );
     }
 
-    /**
-     * Create new Java to JavaScript value converter with
-     * ALLOW_NULL converter mode
-     */
-    public JavaToJSValueConverter() {
-        this(ConverterMode.ALLOW_NULL, EnumConverter.EnumMode.STRING, ISO_8601_DATE_TIME_TZ_PATTERN );
-    }
-
 }

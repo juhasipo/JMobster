@@ -16,12 +16,16 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.NotNullValidator;
 import fi.vincit.jmobster.processor.defaults.validator.NumberRangeValidator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
 public class NumberRangeValidatorWriter extends JavaScriptValidatorWriter<NumberRangeValidator> {
+
+    private static final String MIN_AND_MAX_KEY = "range";
+    private static final String MIN_ONLY_KEY = "min";
+    private static final String MAX_ONLY_KEY = "max";
+
     public NumberRangeValidatorWriter() {
         super( NumberRangeValidator.class );
     }
@@ -29,18 +33,14 @@ public class NumberRangeValidatorWriter extends JavaScriptValidatorWriter<Number
     @Override
     protected void write( JavaScriptWriter writer, NumberRangeValidator validator, boolean isLast ) {
         if( validator.hasMin() && validator.hasMax() ) {
-            String key = "range";
-            // TODO: writer.writeArray(...)
-            String value = "[" + validator.getMin() + ", " + validator.getMax() + "]";
-            writer.writeKeyValue(key, value, isLast);
+            writer.writeKey( MIN_AND_MAX_KEY );
+            writer.writeArray( isLast, validator.getMin(), validator.getMax() );
         } else if( validator.hasMin() ) {
-            String key = "min";
             String value = String.valueOf(validator.getMin());
-            writer.writeKeyValue(key, value, isLast);
+            writer.writeKeyValue( MIN_ONLY_KEY, value, isLast);
         } else if( validator.hasMax() ) {
-            String key = "max";
             String value = String.valueOf(validator.getMax());
-            writer.writeKeyValue(key, value, isLast);
+            writer.writeKeyValue( MAX_ONLY_KEY, value, isLast);
         }
     }
 }

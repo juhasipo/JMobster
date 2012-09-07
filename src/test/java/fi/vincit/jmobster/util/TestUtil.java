@@ -18,7 +18,12 @@ import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.processor.model.ModelField;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -134,7 +139,7 @@ public class TestUtil {
      * @return Annotation
      */
     public static Annotation[] getAnnotationsFromClassField(Class clazz, int fieldIndex) {
-        return clazz.getDeclaredFields()[fieldIndex].getDeclaredAnnotations();
+        return getFieldFromClass(clazz, fieldIndex).getDeclaredAnnotations();
     }
 
     /**
@@ -147,5 +152,23 @@ public class TestUtil {
      */
     public static Annotation getAnnotationFromClass(Class clazz, int fieldIndex, int annotationIndex) {
         return getAnnotationsFromClassField(clazz, fieldIndex)[annotationIndex];
+    }
+
+    public static Field getFieldFromClass(Class clazz, int fieldIndex) {
+        return  clazz.getDeclaredFields()[fieldIndex];
+    }
+
+    public static PropertyDescriptor getPropertyFromClass(Class clazz, String propertyName) {
+        try {
+            final BeanInfo beanInfo = Introspector.getBeanInfo( clazz );
+            for( PropertyDescriptor property : beanInfo.getPropertyDescriptors() ) {
+                if( propertyName.equals(property.getName()) ) {
+                    return property;
+                }
+            }
+            throw new RuntimeException("No property with name " + propertyName + " + found");
+        } catch( IntrospectionException e ) {
+            throw new RuntimeException(e);
+        }
     }
 }

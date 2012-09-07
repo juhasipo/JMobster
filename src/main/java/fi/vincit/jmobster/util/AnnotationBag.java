@@ -56,4 +56,7 @@ public class AnnotationBag {
         annotations.put(annotation.getType(), annotation);
     }
 
+    public boolean hasAnnotations() {
+        return !annotations.isEmpty();
+    }
 }
