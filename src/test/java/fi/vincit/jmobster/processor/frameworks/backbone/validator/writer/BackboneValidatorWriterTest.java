@@ -64,7 +64,7 @@ public class BackboneValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "min: 1,\nmax: 255,\n";
+        final String expected = "rangeLength: [1, 255],\n";
         assertEquals(expected, result);
     }
 
@@ -76,7 +76,7 @@ public class BackboneValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "min: 1,\nmax: 255\n";
+        final String expected = "rangeLength: [1, 255]\n";
         assertEquals(expected, result);
     }
 
@@ -88,7 +88,7 @@ public class BackboneValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "min: 1,\n";
+        final String expected = "minLength: 1,\n";
         assertEquals(expected, result);
     }
 
@@ -100,7 +100,7 @@ public class BackboneValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "min: 1\n";
+        final String expected = "minLength: 1\n";
         assertEquals(expected, result);
     }
 
@@ -112,7 +112,7 @@ public class BackboneValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "max: 255,\n";
+        final String expected = "maxLength: 255,\n";
         assertEquals(expected, result);
     }
 
@@ -124,7 +124,7 @@ public class BackboneValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "max: 255\n";
+        final String expected = "maxLength: 255\n";
         assertEquals(expected, result);
     }
 

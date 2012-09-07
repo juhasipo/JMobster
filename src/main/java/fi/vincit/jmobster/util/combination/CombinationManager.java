@@ -70,14 +70,37 @@ public class CombinationManager<T extends HasType> {
         if( requiredClasses.isEmpty() && optionalClasses.isEmpty() ) {
             return false;
         }
+        if( !requiredClasses.isEmpty() ) {
+            return checkIfFoundFromRequired( classesWithType );
+        } else {
+            // If no required classes are configured, then only check
+            // optional. If no optional is found either, then it shouldn't
+            // match. This way user can create validators that don't actually
+            // require any class, but it should be created if one or more
+            // classes exist.
+            return checkIfFoundFromOptional( classesWithType );
+        }
+    }
 
+    private boolean checkIfFoundFromRequired( Collection<? extends T> classesWithType ) {
         int matchesFound = 0;
         for( T hasTypeClass : classesWithType ) {
-            if( requiredClasses.containsKey( hasTypeClass.getType() ) ) {
+            final Class typeToCheck = hasTypeClass.getType();
+            if( requiredClasses.containsKey( typeToCheck ) ) {
                 ++matchesFound;
             }
         }
         return matchesFound >= requiredClasses.size();
+    }
+
+    private boolean checkIfFoundFromOptional( Collection<? extends T> classesWithType ) {
+        for( T hasTypeClass : classesWithType ) {
+            final Class typeToCheck = hasTypeClass.getType();
+            if( optionalClasses.containsKey( typeToCheck ) ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

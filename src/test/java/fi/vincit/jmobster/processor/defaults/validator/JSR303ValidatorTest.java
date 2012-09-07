@@ -9,6 +9,8 @@ import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class JSR303ValidatorTest {
     @Test
@@ -18,9 +20,11 @@ public class JSR303ValidatorTest {
         Annotation minAnnotation = TestUtil.getAnnotationFromClass( MinClass.class, 0, 0 );
         AnnotationBag annotationBag = TestUtil.generateAnnotationBag( minAnnotation );
 
-        MinValidator minValidator = new MinValidator();
+        NumberRangeValidator minValidator = new NumberRangeValidator();
         minValidator.init(annotationBag);
 
+        assertTrue(minValidator.hasMin());
+        assertFalse(minValidator.hasMax());
         assertEquals(1, minValidator.getMin());
     }
 
@@ -31,10 +35,28 @@ public class JSR303ValidatorTest {
         Annotation maxAnnotation = TestUtil.getAnnotationFromClass( MaxClass.class, 0, 0 );
         AnnotationBag annotationBag = TestUtil.generateAnnotationBag( maxAnnotation );
 
-        MaxValidator maxValidator = new MaxValidator();
+        NumberRangeValidator maxValidator = new NumberRangeValidator();
         maxValidator.init( annotationBag );
 
+        assertFalse(maxValidator.hasMin());
+        assertTrue(maxValidator.hasMax());
         assertEquals(255, maxValidator.getMax());
+    }
+
+    @Test
+    public void testMinAndMax() throws Exception {
+        class MinMaxClass { @Min(1) @Max(255) public int max; }
+
+        Annotation[] minAndMaxAnnotations = TestUtil.getAnnotationsFromClassField(MinMaxClass.class, 0);
+        AnnotationBag annotationBag = TestUtil.generateAnnotationBag( minAndMaxAnnotations );
+
+        NumberRangeValidator minAndMaxValidator = new NumberRangeValidator();
+        minAndMaxValidator.init( annotationBag );
+
+        assertTrue( minAndMaxValidator.hasMin() );
+        assertTrue(minAndMaxValidator.hasMax());
+        assertEquals( 1, minAndMaxValidator.getMin() );
+        assertEquals(255, minAndMaxValidator.getMax());
     }
 
     @Test

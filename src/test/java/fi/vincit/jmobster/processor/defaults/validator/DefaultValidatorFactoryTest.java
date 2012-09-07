@@ -16,33 +16,118 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.List;
 
 public class DefaultValidatorFactoryTest {
     @Test
-    public void testSize() {
+    public void testSizeValidator() {
         DefaultValidatorFactory factory = new DefaultValidatorFactory();
         class SizeClass {
             @Size(min=1, max=3) public int i;
         }
-        // TODO: Test
-        /*
-        Validator validator = factory.createValidators( null );
-        Assert.assertNotNull( validator );
-        Assert.assertEquals( Size.class, validator.getType() );
-        */
+
+        Annotation[] annotations = TestUtil.getAnnotationsFromClassField(SizeClass.class, 0);
+        Collection<FieldAnnotation> fieldAnnotations = FieldAnnotation.convertToFieldAnnotations(annotations);
+        List<Validator> validators = factory.createValidators( fieldAnnotations );
+
+        Assert.assertNotNull( validators );
+        Assert.assertEquals( 1, validators.size() );
+        Assert.assertEquals( SizeValidator.class, validators.get( 0 ).getType() );
     }
 
-    private Annotation getAnnotation(Class clazz) {
-        Field[] fields = clazz.getDeclaredFields();
-        Annotation[] annotations = fields[0].getAnnotations();
-        return annotations[0];
+    @Test
+    public void testNumberRangeValidatorWithMin() {
+        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        class SizeClass {
+            @Min(1) public int i;
+        }
+
+        Annotation[] annotations = TestUtil.getAnnotationsFromClassField(SizeClass.class, 0);
+        Collection<FieldAnnotation> fieldAnnotations = FieldAnnotation.convertToFieldAnnotations(annotations);
+        List<Validator> validators = factory.createValidators( fieldAnnotations );
+
+        Assert.assertNotNull( validators );
+        Assert.assertEquals( 1, validators.size() );
+        Assert.assertEquals( NumberRangeValidator.class, validators.get(0).getType() );
     }
+
+    @Test
+    public void testNumberRangeValidatorWithMax() {
+        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        class SizeClass {
+            @Max(1) public int i;
+        }
+
+        Annotation[] annotations = TestUtil.getAnnotationsFromClassField(SizeClass.class, 0);
+        Collection<FieldAnnotation> fieldAnnotations = FieldAnnotation.convertToFieldAnnotations(annotations);
+        List<Validator> validators = factory.createValidators( fieldAnnotations );
+
+        Assert.assertNotNull( validators );
+        Assert.assertEquals( 1, validators.size() );
+        Assert.assertEquals( NumberRangeValidator.class, validators.get(0).getType() );
+    }
+
+    @Test
+    public void testNumberRangeValidatorWithMinAndMax() {
+        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        class SizeClass {
+            @Min(1) @Max(100) public int i;
+        }
+
+        Annotation[] annotations = TestUtil.getAnnotationsFromClassField(SizeClass.class, 0);
+        Collection<FieldAnnotation> fieldAnnotations = FieldAnnotation.convertToFieldAnnotations(annotations);
+        List<Validator> validators = factory.createValidators( fieldAnnotations );
+
+        Assert.assertNotNull( validators );
+        Assert.assertEquals( 1, validators.size() );
+        Assert.assertEquals( NumberRangeValidator.class, validators.get(0).getType() );
+    }
+
+    @Test
+    public void testNumberRangeValidatorWithMinAndMaxAndNotNull() {
+        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        class SizeClass {
+            @NotNull @Min(1) @Max(100) public int i;
+        }
+
+        Annotation[] annotations = TestUtil.getAnnotationsFromClassField(SizeClass.class, 0);
+        Collection<FieldAnnotation> fieldAnnotations = FieldAnnotation.convertToFieldAnnotations(annotations);
+        List<Validator> validators = factory.createValidators( fieldAnnotations );
+
+        Assert.assertNotNull( validators );
+        Assert.assertEquals( 2, validators.size() );
+        // Validator factory guarantees the order
+        Assert.assertEquals( NumberRangeValidator.class, validators.get(0).getType() );
+        Assert.assertEquals( NotNullValidator.class, validators.get(1).getType() );
+    }
+
+
+
+    @Test
+    public void testPatternValidator() {
+        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        class SizeClass {
+            @Pattern(regexp = "FooBar") public int i;
+        }
+
+        Annotation[] annotations = TestUtil.getAnnotationsFromClassField(SizeClass.class, 0);
+        Collection<FieldAnnotation> fieldAnnotations = FieldAnnotation.convertToFieldAnnotations(annotations);
+        List<Validator> validators = factory.createValidators( fieldAnnotations );
+
+        Assert.assertNotNull( validators );
+        Assert.assertEquals( 1, validators.size() );
+        Assert.assertEquals( PatternValidator.class, validators.get(0).getType() );
+    }
+
+
 }

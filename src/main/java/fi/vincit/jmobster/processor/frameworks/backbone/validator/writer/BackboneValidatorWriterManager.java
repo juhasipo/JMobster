@@ -28,8 +28,7 @@ public class BackboneValidatorWriterManager extends BaseValidatorWriterManager<J
         setValidator(
                 new SizeValidatorWriter(),
                 new PatternValidatorWriter(),
-                new MinValidatorWriter(),
-                new MaxValidatorWriter(),
+                new NumberRangeValidatorWriter(),
                 new NotNullValidatorWriter()
         );
     }

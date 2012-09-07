@@ -127,6 +127,17 @@ public class TestUtil {
     }
 
     /**
+     * Returns the annotations from the nth field of given class. Throws exceptions
+     * if the indices are not in range.
+     * @param clazz Class
+     * @param fieldIndex Index of the field
+     * @return Annotation
+     */
+    public static Annotation[] getAnnotationsFromClassField(Class clazz, int fieldIndex) {
+        return clazz.getDeclaredFields()[fieldIndex].getDeclaredAnnotations();
+    }
+
+    /**
      * Returns the nth annotation from the mth field of given class. Throws exceptions
      * if the indices are not in range.
      * @param clazz Class
@@ -135,6 +146,6 @@ public class TestUtil {
      * @return Annotation
      */
     public static Annotation getAnnotationFromClass(Class clazz, int fieldIndex, int annotationIndex) {
-        return clazz.getDeclaredFields()[fieldIndex].getDeclaredAnnotations()[annotationIndex];
+        return getAnnotationsFromClassField(clazz, fieldIndex)[annotationIndex];
     }
 }

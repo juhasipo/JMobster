@@ -39,13 +39,9 @@ public class DefaultValidatorFactory extends BaseValidatorFactory {
                 RequiredTypes.get(Pattern.class),
                 OptionalTypes.get(OverridePattern.class));
         setValidator(
-                MinValidator.class,
-                RequiredTypes.get(Min.class),
-                OptionalTypes.get());
-        setValidator(
-                MaxValidator.class,
-                RequiredTypes.get(Max.class),
-                OptionalTypes.get());
+                NumberRangeValidator.class,
+                RequiredTypes.get(),
+                OptionalTypes.get(Min.class, Max.class));
         setValidator(
                 NotNullValidator.class,
                 RequiredTypes.get(NotNull.class),

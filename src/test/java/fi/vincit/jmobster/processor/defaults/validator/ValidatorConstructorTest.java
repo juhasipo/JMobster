@@ -17,12 +17,14 @@ public class ValidatorConstructorTest {
         static private int initCalled;
 
         public TestValidator() {}
+
         @Override
         public void init( AnnotationBag annotationBag ) {
             ++initCalled;
             assertTrue(annotationBag.hasAnnotation(Type1.class));
             assertFalse( annotationBag.hasAnnotation( Type2.class ) );
         }
+
         public static int initCalled() { return initCalled; }
         public static void resetCalls() { initCalled = 0; }
         @Override public Class getType() { return Type1.class; }
@@ -72,6 +74,32 @@ public class ValidatorConstructorTest {
 
         assertNotNull(validatorOut);
         assertEquals( TestValidator.initCalled(), 1 );
+    }
+
+    @Test
+    public void testInitValidatorConstructorOnlyOptional() throws Exception {
+        TestValidator.resetCalls();
+        ValidatorConstructor constructor = new ValidatorConstructor(TestValidator.class, RequiredTypes.get(), OptionalTypes.get(Type1.class));
+
+        FieldAnnotation annotation = mock(FieldAnnotation.class);
+        when(annotation.getType()).thenReturn(Type1.class);
+        Validator validatorOut = constructor.construct( TestUtil.collectionFromObjects(annotation) );
+
+        assertNotNull(validatorOut);
+        assertEquals( TestValidator.initCalled(), 1 );
+    }
+
+    @Test
+    public void testInitValidatorConstructorOnlyOptionalDontGenerate() throws Exception {
+        TestValidator.resetCalls();
+        ValidatorConstructor constructor = new ValidatorConstructor(TestValidator.class, RequiredTypes.get(), OptionalTypes.get(Type2.class));
+
+        FieldAnnotation annotation = mock(FieldAnnotation.class);
+        when(annotation.getType()).thenReturn(Type1.class);
+        Validator validatorOut = constructor.construct( TestUtil.collectionFromObjects(annotation) );
+
+        assertNull(validatorOut);
+        assertEquals( TestValidator.initCalled(), 0 );
     }
 
     @Test

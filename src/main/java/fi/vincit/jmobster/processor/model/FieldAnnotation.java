@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Field annotation is a wrapper for Java annotations. This
@@ -51,6 +53,15 @@ public class FieldAnnotation implements HasGroups<Class>, HasType {
         this.groups = extractGroupsFromAnnotation(annotation);
         this.type = annotation.annotationType();
         this.annotation = annotation;
+    }
+
+    public static Collection<FieldAnnotation> convertToFieldAnnotations(Annotation[] annotations) {
+        Collection<FieldAnnotation> fieldAnnotations = new ArrayList<FieldAnnotation>(annotations.length);
+        for( Annotation annotation : annotations ) {
+            FieldAnnotation fieldAnnotation = new FieldAnnotation(annotation);
+            fieldAnnotations.add(fieldAnnotation);
+        }
+        return fieldAnnotations;
     }
 
     private Class[] extractGroupsFromAnnotation( Annotation annotation ) {

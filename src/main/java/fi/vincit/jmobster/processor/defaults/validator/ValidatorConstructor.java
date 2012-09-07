@@ -29,8 +29,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 /**
- * Constructs validator instance of configured type. The class will
+ * <p>
+ *     Constructs validator instance of configured type. The class will
  * initialize the constructed validator with correct parameters.
+ * </p>
+ * <p>
+ *     If required annotations are given, the constructor constructs the validator
+ * only if all required annotations are found. Optional annotations are then added
+ * if found.
+ * </p>
+ * <p>
+ *     If no required annotations are given, the constructor constructs the validator
+ * if at least one optional validator is found. All optional annotations are then added
+ * like when required annotations would be given.
+ * </p>
  */
 public class ValidatorConstructor {
     private static final Logger LOG = LoggerFactory.getLogger( ValidatorConstructor.class );

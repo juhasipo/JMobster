@@ -21,8 +21,31 @@ import fi.vincit.jmobster.processor.model.Model;
 import java.util.Collection;
 
 public interface ModelFactory {
+    /**
+     * Creates a model representing the given class
+     * @param clazz Class
+     * @return Model
+     */
     Model create(Class clazz);
+
+    /**
+     * Creates models for given collection of classes
+     * @param classes Classes
+     * @return Models
+     */
     Collection<Model> createAll(Collection<Class> classes);
+
+    /**
+     * Creates models for given classes
+     * @param classes One or more classes
+     * @return Models
+     */
     Collection<Model> createAll( Class... classes );
+
+    /**
+     * Sets validator filter groups
+     * @param groupMode Group mode
+     * @param classes Classes used for filtering
+     */
     void setValidatorFilterGroups( GroupMode groupMode, Class... classes );
 }

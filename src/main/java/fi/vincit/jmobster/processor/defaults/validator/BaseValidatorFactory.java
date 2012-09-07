@@ -27,30 +27,54 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- *
+ * Base class for validator factories.
  */
 public abstract class BaseValidatorFactory implements ValidatorFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger( BaseValidatorFactory.class );
 
-    final private Set<ValidatorConstructor> validatorConstructors;
+    // Use list so that the order is always the same when returning
+    // validators. This helps testing but is a good feature for some cases
+    final private List<ValidatorConstructor> validatorConstructors;
 
     protected BaseValidatorFactory() {
-        validatorConstructors = new HashSet<ValidatorConstructor>();
+        validatorConstructors = new ArrayList<ValidatorConstructor>();
     }
 
+    /**
+     * Adds new validator constructor to the factory. The order in which the constructors
+     * are added determines the priority. Constructors are always executed in same order:
+     * First added first executed.
+     * @param validatorConstructor Constructor that will create the validator
+     */
     @Override
     public void setValidator(ValidatorConstructor validatorConstructor) {
         validatorConstructors.add( validatorConstructor );
     }
 
+    /**
+     * Adds new validator constructor to the factory. The order in which the constructors
+     * are added determines the priority. Constructors are always executed in same order:
+     * First added first executed.
+     * @param validatorClass Validator class
+     * @param requiredTypes Required types for validator
+     * @param optionalTypes Optional types for validator
+     */
     @Override
     public void setValidator(Class validatorClass, RequiredTypes requiredTypes, OptionalTypes optionalTypes) {
         validatorConstructors.add( new ValidatorConstructor(validatorClass, requiredTypes, optionalTypes) );
     }
 
+    /**
+     * Creates all validators that can be constructed from the given field annotations.
+     * The order is determined by the order of adding validator constructors.
+     * @param annotations Collection of field annotations for which validators should be created.
+     * @return Created validators
+     */
     @Override
     public List<Validator> createValidators( Collection<FieldAnnotation> annotations ) {
+        // Use array list so that the order is always the same when returning
+        // validators. This helps testing but is a good feature for some cases
         List<Validator> validators = new ArrayList<Validator>(annotations.size());
 
         for( ValidatorConstructor validatorConstructor : validatorConstructors ) {

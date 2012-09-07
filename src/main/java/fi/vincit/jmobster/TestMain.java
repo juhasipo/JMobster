@@ -57,6 +57,10 @@ public class TestMain {
         @Max(100)
         Long longValue = 42L;
 
+        @Min(10)
+        Long longValue2 = 42L;
+
+
         @Size(min = 5, max = 255)
         private long[] longArray = {1L, 2L};
 

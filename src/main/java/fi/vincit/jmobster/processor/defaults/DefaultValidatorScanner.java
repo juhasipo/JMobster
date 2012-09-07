@@ -27,9 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -51,26 +49,17 @@ public class DefaultValidatorScanner implements ValidatorScanner {
 
     @Override
     public Collection<Validator> getValidators( Field field ) {
-        return getValidators( convertToFieldAnnotations( field.getAnnotations() ) );
+        return getValidators( FieldAnnotation.convertToFieldAnnotations( field.getAnnotations() ) );
     }
 
     @Override
     public List<Validator> getValidators( PropertyDescriptor property ) {
-        return getValidators( convertToFieldAnnotations( property.getReadMethod().getAnnotations() ) );
+        return getValidators( FieldAnnotation.convertToFieldAnnotations( property.getReadMethod().getAnnotations() ) );
     }
 
     @Override
     public void setFilterGroups( GroupMode groupMode, Collection<Class> groups ) {
         filter.setFilterGroups(groupMode, groups);
-    }
-
-    private Collection<FieldAnnotation> convertToFieldAnnotations(Annotation[] annotations) {
-        Collection<FieldAnnotation> fieldAnnotations = new ArrayList<FieldAnnotation>(annotations.length);
-        for( Annotation annotation : annotations ) {
-            FieldAnnotation fieldAnnotation = new FieldAnnotation(annotation);
-            fieldAnnotations.add(fieldAnnotation);
-        }
-        return fieldAnnotations;
     }
 
     private List<Validator> getValidators( Collection<FieldAnnotation> annotations ) {

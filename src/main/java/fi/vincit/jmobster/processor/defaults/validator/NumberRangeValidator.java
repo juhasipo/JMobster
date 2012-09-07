@@ -18,18 +18,41 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.util.AnnotationBag;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-public class MinValidator extends BaseValidator {
+public class NumberRangeValidator extends BaseValidator {
+
+    private boolean hasMin;
+    private boolean hasMax;
     private long min;
+    private long max;
 
     @Override
     public void init( AnnotationBag annotationBag ) {
-        Min maxValue = annotationBag.getAnnotation(Min.class);
-        this.min = maxValue.value();
+        if( annotationBag.hasAnnotation(Min.class) ) {
+            hasMin = true;
+            min = annotationBag.getAnnotation(Min.class).value();
+        }
+        if( annotationBag.hasAnnotation(Max.class) ) {
+            hasMax = true;
+            max = annotationBag.getAnnotation(Max.class).value();
+        }
+    }
+
+    public boolean hasMin() {
+        return hasMin;
+    }
+
+    public boolean hasMax() {
+        return hasMax;
     }
 
     public long getMin() {
         return min;
+    }
+
+    public long getMax() {
+        return max;
     }
 }

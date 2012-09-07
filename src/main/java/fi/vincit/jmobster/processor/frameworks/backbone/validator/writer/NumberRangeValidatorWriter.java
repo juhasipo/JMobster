@@ -16,34 +16,31 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
+import fi.vincit.jmobster.processor.defaults.validator.NotNullValidator;
+import fi.vincit.jmobster.processor.defaults.validator.NumberRangeValidator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 
-public class SizeValidatorWriter extends JavaScriptValidatorWriter<SizeValidator> {
-
-    public SizeValidatorWriter() {
-        super( SizeValidator.class );
+public class NumberRangeValidatorWriter extends JavaScriptValidatorWriter<NumberRangeValidator> {
+    public NumberRangeValidatorWriter() {
+        super( NumberRangeValidator.class );
     }
 
     @Override
-    public void write( JavaScriptWriter writer, SizeValidator validator, boolean isLast ) {
-        final boolean isMin = validator.getMin() >= 0;
-        final boolean isMax = validator.getMax() < Integer.MAX_VALUE;
-        if( isMin && isMax ) {
-            String key = "rangeLength";
+    protected void write( JavaScriptWriter writer, NumberRangeValidator validator, boolean isLast ) {
+        if( validator.hasMin() && validator.hasMax() ) {
+            String key = "range";
             // TODO: writer.writeArray(...)
             String value = "[" + validator.getMin() + ", " + validator.getMax() + "]";
             writer.writeKeyValue(key, value, isLast);
-        } else if( isMin ) {
-            String key = "minLength";
+        } else if( validator.hasMin() ) {
+            String key = "min";
             String value = String.valueOf(validator.getMin());
             writer.writeKeyValue(key, value, isLast);
-        } else if( isMax ) {
-            String key = "maxLength";
+        } else if( validator.hasMax() ) {
+            String key = "max";
             String value = String.valueOf(validator.getMax());
             writer.writeKeyValue(key, value, isLast);
         }
-
     }
 }
