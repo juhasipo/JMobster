@@ -4,8 +4,6 @@ Version preview-alpha 0.2
 
 ### Purpose and Current Status
 
-**The architecture is being redesigned at the moment. A lot of things are broken in this branch.**
-
 The purpose of this project is to enable automatic model generation from Java POJOs to Backbone.js models. It also
 supports client side validation generation from standard JSR-303 validation annotations. At the moment it's still
 more of an proof of concept type of project, but in future as I found some use for it may become more mature.
@@ -20,12 +18,11 @@ be a lot of bugs.
 ### Requirements
 
 * JDK 6 (SE or EE)
-* Backbone.js (tested only with 0.9.2)
-* Backbone.Validations
+* Backbone.js (Tested only with 0.9.2)
+* [Backbone.Validation](https://github.com/thedersen/backbone.validation) (Tested only with v0.6.2)
 
 At the moment only Java to Backbone.js model conversion is supported. Validation requires
-[Backbone.Validations](https://github.com/n-time/backbone.validations) plugin to work. Java dependencies are
-handled in Gradle build file.
+Backbone.Validation plugin to work. Java dependencies are handled in Gradle build file.
 
 
 Usage
@@ -54,70 +51,31 @@ public class UserDto {
     // Getters and setters omitted
 }
 ```
-And now you can create a model generator instance:
 
+JMobster works in two phases. In the first phase JMobster models are generated from Java entities/beans/DTOs with
+*ModelFactory*. In the second phase these models are given to JMobster *ModelGenerator* which processes and converts
+the given models to appropritate target platform format.
+
+In the next example a *ModelFactory* is created and then it is used to create JMobster models
+from three DTO classes:
 ```java
-ModelWriter modelWriter = new StreamModelWriter("models.js");
-ModelGenerator generator = JMobsterFactory.getInstance("Backbone.js", modelWriter);
+ModelFactory factory = JMobsterFactory.getModelFactory();
+factory.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
+
+Collection<Model> models = factory.createAll( MyModelDto1.class, MyModelDto2.class, MyModelDto3.class );
 ```
+This *ModelFactory* is same for all target languages and frameworks.
 
-And give the model class to the generator:
-
+In the next example a *CachedModelProvider* and a *ModelGenerator* is configured which then will take previously created JMobster models:
 ```java
-generator.process(UserDto.class);
+CachedModelProvider provider = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
+ModelGenerator generator = JMobsterFactory.getInstance("backbone.js", provider);
+generator.processAll( models );
 ```
-
-This will write a Backbone.js model file `models.js` to your working
-directory. The default naming strategy will remove Dto suffix from the
-model class name.
-
-
-```javascript
-/*
- * Auto-generated file
- */
-var Models = {
-    User: Backbone.Model.extend({
-        defaults: function() {
-            return {
-                fullName: "",
-                username: "",
-                birthYear: 1900,
-                roles: ["VIEW_PAGES", "EDIT_OWN_PAGES"]
-            }
-        },
-        validate: {
-            fullname: {
-                required: true,
-                minlength: 0,
-                maxlength: 255
-            },
-            username: {
-                required: true,
-                minlength: 0,
-                maxlength: 255
-            },
-            birthYear: {
-                required: true,
-                type: "number",
-                min: 1900
-            },
-            roles: {
-                minlength: 1
-            }
-        }
-    })
-};
-```
-
-You can also give the method more than classes. This can be done just by giving more than one class as parameter (vararg),
-an array of classes or a List of classes.
-
-```java
-generator.process(Model1.class, Model2.class, Model3.class);
-generator.process(new Class[] {Model1.class, Model2.class, Model3.class});
-generator.process(classList);
-```
+This created *ModelGenerator* is language and framework specific. The framework is given as the first parameter. The
+second parameter is a *ModelProvider* class or a *DataWriter* which is used for the output. In this case it is a
+*CachedModelProvider* which just stores the model as string for later use. Now the *CachedModelProvider* contains our
+generated models and can be e.g. written to a file or given via HTTP message by calling `provider.getModel()` method.
 
 
 
@@ -155,12 +113,6 @@ In _DIRECT\_FIELD\_ACCESS_ this will result:
 ```javascript
 var Models = {
     ScanningModeDemo: Backbone.Model.extend({
-        defaults: function() {
-            return {
-                firstName: "John",
-                lastName: "Doe"
-            }
-        },
         validate: {
             firstName: {
                 pattern: /[\w]*/
@@ -178,11 +130,6 @@ In _BEAN\_PROPERTY_ mode this will result:
 ```javascript
 var Models = {
     ScanningModeDemo: Backbone.Model.extend({
-        defaults: function() {
-            return {
-                fullName: "John Doe"
-            }
-        },
         validate: {
             fullName: {
                 maxlength: 255
@@ -200,10 +147,6 @@ member variable.
 In addition to scanning modes, there are extra settings that determine what kind of fields are included. The current
 options are to toggle static and/or final fields. Final field mode affects both scanning modes, but static field mode
 only works with _DIRECT\_FIELD\_ACCESS_ mode. By default final fields are included but static fields are not.
-
-### Classes and Default Values
-
-#### TODO
 
 
 Default Process

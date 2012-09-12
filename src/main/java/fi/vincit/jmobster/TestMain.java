@@ -120,7 +120,7 @@ public class TestMain {
         Collection<Model> models = factory.createAll( BeanPropertyDemo.class, MyModelDto.class );
 
         ModelGenerator generator = JMobsterFactory.getInstance(BB, provider1);
-        generator.setWriter(provider1.getDataWriter());
+        //generator.setWriter(provider1.getDataWriter());
         generator.processAll( models );
 
         generator.setWriter(provider2.getDataWriter());

@@ -20,7 +20,7 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelWriter;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
-import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;

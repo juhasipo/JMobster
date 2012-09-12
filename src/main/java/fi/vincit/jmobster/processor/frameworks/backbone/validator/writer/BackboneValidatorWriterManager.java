@@ -17,7 +17,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  */
 
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
-import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 
 /**
  * Validator writer manager for Backbone

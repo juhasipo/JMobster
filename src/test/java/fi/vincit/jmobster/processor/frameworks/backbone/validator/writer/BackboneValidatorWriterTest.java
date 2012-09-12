@@ -20,7 +20,7 @@ import fi.vincit.jmobster.processor.defaults.validator.NotNullValidator;
 import fi.vincit.jmobster.processor.defaults.validator.NumberRangeValidator;
 import fi.vincit.jmobster.processor.defaults.validator.PatternValidator;
 import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
-import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Before;
 import org.junit.Test;

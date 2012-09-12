@@ -17,7 +17,6 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
-import fi.vincit.jmobster.processor.languages.javascript.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
