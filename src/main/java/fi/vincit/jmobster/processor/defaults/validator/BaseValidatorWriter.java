@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
 import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
@@ -50,25 +51,25 @@ public abstract class BaseValidatorWriter<V extends Validator, W extends DataWri
      * be to cast the validator to correct type.
      * @param writer Model writer
      * @param validator Validator to write
-     * @param isLast TODO: Change to ItemStatus
+     * @param status Item status
      */
     @SuppressWarnings("unchecked")
-    public void write( W writer, Object validator, boolean isLast ) {
+    public void write( W writer, Object validator, ItemStatus status ) {
         /*
         To get this work this in a meta programming way this has to be done
         like this. When this fails, there may be some strange errors
         or exceptions thrown.
          */
-        write( writer, (V)validator, isLast );
+        write( writer, (V)validator, status );
     }
 
     /**
      * Writes validator to given writer
      * @param writer Writer
      * @param validator Validator to write
-     * @param isLast True if the validator is the last validator to be written for the field
+     * @param status Item status
      */
-    protected abstract void write(W writer, V validator, boolean isLast);
+    protected abstract void write(W writer, V validator, ItemStatus status);
 
     @Override
     public Class getSupportedType() {

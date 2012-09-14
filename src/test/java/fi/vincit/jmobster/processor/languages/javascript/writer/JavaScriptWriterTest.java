@@ -14,6 +14,7 @@ package fi.vincit.jmobster.processor.languages.javascript.writer;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.util.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.After;
@@ -52,7 +53,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testToString() {
-        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction( true );
+        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction( ItemStatuses.last() );
         mw.close();
         final String result = writer.toString();
 
@@ -88,7 +89,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testAnonFunction() {
-        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction( true );
+        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction( ItemStatuses.last() );
         mw.close();
 
         assertEquals("function(arg1, arg2, arg3) {\n}\n", mw.toString());
@@ -96,7 +97,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testNamedFunction() {
-        writer.startNamedFunction("func", "arg1", "arg2", "arg3").endFunction( true );
+        writer.startNamedFunction("func", "arg1", "arg2", "arg3").endFunction( ItemStatuses.last() );
         mw.close();
 
         assertEquals("function func(arg1, arg2, arg3) {\n}\n", mw.toString());
@@ -105,7 +106,7 @@ public class JavaScriptWriterTest {
     @Test
     public void testFunctionWithContent() {
         writer.startAnonFunction("arg1", "arg2", "arg3");
-        writer.writeLine("return this;").endFunction( true );
+        writer.writeLine("return this;").endFunction( ItemStatuses.last() );
         mw.close();
 
         assertEquals("function(arg1, arg2, arg3) {\n    return this;\n}\n", mw.toString());
@@ -113,9 +114,9 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testKeyValuesFunction() {
-        writer.writeKeyValue("key1", "1", false);
-        writer.writeKeyValue("key2", "2", false);
-        writer.writeKeyValue("key3", "3", true);
+        writer.writeKeyValue("key1", "1", ItemStatuses.notLast());
+        writer.writeKeyValue("key2", "2", ItemStatuses.notLast());
+        writer.writeKeyValue("key3", "3", ItemStatuses.last());
         mw.close();
 
         assertEquals("key1: 1,\nkey2: 2,\nkey3: 3\n", mw.toString());
@@ -131,7 +132,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testEndBlock() {
-        writer.endBlock(false);
+        writer.endBlock( ItemStatuses.notLast());
         mw.close();
 
         assertEquals("},\n", mw.toString());
@@ -139,7 +140,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testEndBlockAsLast() {
-        writer.endBlock(true);
+        writer.endBlock( ItemStatuses.last());
         mw.close();
 
         assertEquals("}\n", mw.toString());
@@ -147,7 +148,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testArray() {
-        writer.writeArray(false, 1, 2, 3);
+        writer.writeArray( ItemStatuses.notLast(), 1, 2, 3);
         mw.close();
 
         assertEquals("[1, 2, 3],\n", mw.toString());
@@ -155,7 +156,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testArrayAsLast() {
-        writer.writeArray(true, 1, 2, 3);
+        writer.writeArray( ItemStatuses.last(), 1, 2, 3);
         mw.close();
 
         assertEquals("[1, 2, 3]\n", mw.toString());
@@ -173,14 +174,14 @@ public class JavaScriptWriterTest {
     }
     @Test(expected = RuntimeException.class)
     public void testTooManyFunctionsClosedNonStarted() {
-        writer.endFunction( true );
+        writer.endFunction( ItemStatuses.last() );
         writer.close();
     }
     @Test(expected = RuntimeException.class)
     public void testTooManyFunctionsClosed() {
         writer.startAnonFunction();
-        writer.endFunction( true );
-        writer.endFunction( true );
+        writer.endFunction( ItemStatuses.last() );
+        writer.endFunction( ItemStatuses.last() );
         writer.close();
     }
     @Test(expected = RuntimeException.class)
@@ -190,14 +191,14 @@ public class JavaScriptWriterTest {
     }
     @Test(expected = RuntimeException.class)
     public void testTooManyBlockClosedNonStarted() {
-        writer.endBlock(true);
+        writer.endBlock( ItemStatuses.last());
         writer.close();
     }
     @Test(expected = RuntimeException.class)
     public void testTooManyBlockClosed() {
         writer.startBlock();
-        writer.endBlock( false );
-        writer.endBlock(true);
+        writer.endBlock( ItemStatuses.notLast() );
+        writer.endBlock( ItemStatuses.last());
         writer.close();
     }
 
@@ -232,7 +233,7 @@ public class JavaScriptWriterTest {
     public void testSetIndentation() {
         writer.setIndentation(3);
         writer.startBlock();
-        writer.endBlock(true);
+        writer.endBlock( ItemStatuses.last());
         mw.close();
 
         assertEquals("{\n}\n", mw.toString());
@@ -243,7 +244,7 @@ public class JavaScriptWriterTest {
         writer.setIndentationChar('\t', 2);
         writer.startBlock();
         writer.write("test");
-        writer.endBlock(true);
+        writer.endBlock( ItemStatuses.last());
         mw.close();
 
         assertEquals("{\n\t\ttest\n}\n", mw.toString());
@@ -253,7 +254,7 @@ public class JavaScriptWriterTest {
      public void testSetLineSeparator() {
         writer.setLineSeparator("l");
         writer.startBlock();
-        writer.endBlock(true);
+        writer.endBlock( ItemStatuses.last());
         mw.close();
 
         assertEquals("{l}l", mw.toString());
@@ -263,7 +264,7 @@ public class JavaScriptWriterTest {
     public void testSetSpace() {
         writer.setSpace("_SPACE_");
         writer.startNamedFunction("func", "arg1");
-        writer.endFunction( true );
+        writer.endFunction( ItemStatuses.last() );
         mw.close();
 
         assertEquals("function_SPACE_func(arg1)_SPACE_{\n}\n", mw.toString());

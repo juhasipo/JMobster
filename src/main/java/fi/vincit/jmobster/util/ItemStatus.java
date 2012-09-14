@@ -16,15 +16,42 @@ package fi.vincit.jmobster.util;
  * limitations under the License.
  */
 
+/**
+ * Item status is a helper method for iterating items with
+ * {@link ItemProcessor} class. Item status tells in which part
+ * the processing is. Initialize the Item status with the item
+ * count and then call {@link ItemStatus#update(int)} method with
+ * the current index.
+ */
 public class ItemStatus {
     final private int numberOfItems;
     boolean firstItem;
     boolean lastItem;
 
+    /**
+     * Initializes with given number of items and
+     * assumes to start from index 0.
+     * @param numberOfItems Number of items to process
+     */
     public ItemStatus(int numberOfItems) {
-        this.numberOfItems = numberOfItems;
+        this(numberOfItems, 0);
     }
 
+    /**
+     * Initializes with given number of items and
+     * assumes to start from index 0.
+     * @param numberOfItems Number of items to process
+     * @param start 0 based start index
+     */
+    public ItemStatus(int numberOfItems, int start) {
+        this.numberOfItems = numberOfItems;
+        update(start);
+    }
+
+    /**
+     * Update the processing
+     * @param itemIndex 0 based index.
+     */
     public void update(int itemIndex) {
         firstItem = itemIndex == 0;
         lastItem = itemIndex == (numberOfItems-1);

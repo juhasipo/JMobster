@@ -20,6 +20,7 @@ import fi.vincit.jmobster.processor.defaults.validator.PatternValidator;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSPatternConverter;
+import fi.vincit.jmobster.util.ItemStatus;
 
 public class PatternValidatorWriter extends JavaScriptValidatorWriter<PatternValidator> {
     public PatternValidatorWriter() {
@@ -27,8 +28,8 @@ public class PatternValidatorWriter extends JavaScriptValidatorWriter<PatternVal
     }
 
     @Override
-    protected void write( JavaScriptWriter writer, PatternValidator validator, boolean isLast ) {
+    protected void write( JavaScriptWriter writer, PatternValidator validator, ItemStatus status ) {
         String pattern = JavaToJSPatternConverter.convertFromJava(validator.getRegexp(), validator.getFlags());
-        writer.writeKeyValue("pattern", pattern, isLast);
+        writer.writeKeyValue("pattern", pattern, status);
     }
 }

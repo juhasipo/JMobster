@@ -26,6 +26,7 @@ import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.ItemHandler;
 import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,7 +106,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
         final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
             @Override
             public void process( Validator validator, ItemStatus status ) {
-                validatorWriterManager.write( validator, status.isLastItem() );
+                validatorWriterManager.write( validator, status );
             }
         };
 
@@ -114,10 +115,10 @@ public class BackboneModelProcessor extends BaseModelProcessor {
             public void process( ModelField field, ItemStatus status ) {
                 writer.writeKey(field.getName()).startBlock();
                 ItemProcessor.process(validatorWriter, field.getValidators());
-                writer.endBlock( status.isLastItem() );
+                writer.endBlock( status );
             }
         });
-        writer.endBlock(false);
+        writer.endBlock( ItemStatuses.notLast());
     }
 
     private void writeFields( Model model ) {
@@ -127,11 +128,11 @@ public class BackboneModelProcessor extends BaseModelProcessor {
             @Override
             public void process( ModelField field, ItemStatus status ) {
                 String defaultValue = valueConverter.convert(field.getFieldType(), null);
-                writer.writeKeyValue(field.getName(), defaultValue, status.isLastItem());
+                writer.writeKeyValue(field.getName(), defaultValue, status);
             }
         });
-        writer.endBlock(true);
-        writer.endFunction(!model.hasValidations());
+        writer.endBlock( ItemStatuses.last());
+        writer.endFunction( ItemStatuses.lastIfFalse( model.hasValidations() ) );
     }
 
     @Override

@@ -19,6 +19,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.util.ItemStatus;
 
 public class SizeValidatorWriter extends JavaScriptValidatorWriter<SizeValidator> {
 
@@ -31,16 +32,16 @@ public class SizeValidatorWriter extends JavaScriptValidatorWriter<SizeValidator
     }
 
     @Override
-    public void write( JavaScriptWriter writer, SizeValidator validator, boolean isLast ) {
+    public void write( JavaScriptWriter writer, SizeValidator validator, ItemStatus status ) {
         if( validator.hasMin() && validator.hasMax() ) {
             writer.writeKey( MIN_AND_MAX_KEY );
-            writer.writeArray( isLast, validator.getMin(), validator.getMax() );
+            writer.writeArray( status, validator.getMin(), validator.getMax() );
         } else if( validator.hasMin() ) {
             String value = String.valueOf(validator.getMin());
-            writer.writeKeyValue( MIN_ONLY_KEY, value, isLast);
+            writer.writeKeyValue( MIN_ONLY_KEY, value, status);
         } else if( validator.hasMax() ) {
             String value = String.valueOf(validator.getMax());
-            writer.writeKeyValue( MAX_ONLY_KEY, value, isLast);
+            writer.writeKeyValue( MAX_ONLY_KEY, value, status);
         }
 
     }

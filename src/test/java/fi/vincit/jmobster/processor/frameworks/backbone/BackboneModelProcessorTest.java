@@ -1,14 +1,7 @@
 package fi.vincit.jmobster.processor.frameworks.backbone;
 
-import fi.vincit.jmobster.processor.FieldValueConverter;
-import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.util.ItemStatusHelper;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;

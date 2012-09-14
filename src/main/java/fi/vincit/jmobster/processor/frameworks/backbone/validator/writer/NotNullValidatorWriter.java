@@ -19,6 +19,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 import fi.vincit.jmobster.processor.defaults.validator.NotNullValidator;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.util.ItemStatus;
 
 public class NotNullValidatorWriter extends JavaScriptValidatorWriter<NotNullValidator> {
     public NotNullValidatorWriter() {
@@ -26,7 +27,7 @@ public class NotNullValidatorWriter extends JavaScriptValidatorWriter<NotNullVal
     }
 
     @Override
-    protected void write( JavaScriptWriter writer, NotNullValidator validator, boolean isLast ) {
-        writer.writeKeyValue("required", "true", isLast);
+    protected void write( JavaScriptWriter writer, NotNullValidator validator, ItemStatus status ) {
+        writer.writeKeyValue("required", "true", status);
     }
 }

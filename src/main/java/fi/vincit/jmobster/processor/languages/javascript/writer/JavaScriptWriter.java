@@ -117,11 +117,11 @@ public class JavaScriptWriter implements DataWriter {
     /**
      * Ends function and blocks.
      * @return Writer itself for chaining writes
-     * @param isLast
+     * @param status Writes list separator item is last
      */
-    public JavaScriptWriter endFunction( boolean isLast ) {
+    public JavaScriptWriter endFunction( ItemStatus status ) {
         --functionsOpen;
-        return endBlock(isLast);
+        return endBlock(status);
     }
 
     /**
@@ -135,12 +135,12 @@ public class JavaScriptWriter implements DataWriter {
 
     /**
      * Ends block. Indents back. Writes list separator (default ",") if isLast is false.
-     * @param isLast Writes list separator if set to false.
+     * @param status Writes list separator item is last
      * @return Writer itself for chaining writes
      */
-    public JavaScriptWriter endBlock(boolean isLast) {
+    public JavaScriptWriter endBlock(ItemStatus status) {
         --blocksOpen;
-        return indentBack().write( BLOCK_END ).writeLine( "", LIST_SEPARATOR, !isLast );
+        return indentBack().write( BLOCK_END ).writeLine( "", LIST_SEPARATOR, status.isNotLastItem() );
     }
 
     /**
@@ -156,24 +156,25 @@ public class JavaScriptWriter implements DataWriter {
      * Writes object key and value. Writes list separator (default ",") if isLast is false.
      * @param key Key name
      * @param value Value
-     * @param isLast If set to false writes list separator.
+     * @param status Writes list separator item is last
      * @return Writer itself for chaining writes
      */
-    public JavaScriptWriter writeKeyValue(String key, String value, boolean isLast) {
-        return writeKey(key).write(value).writeLine("", LIST_SEPARATOR, !isLast);
+    public JavaScriptWriter writeKeyValue(String key, String value, ItemStatus status) {
+        return writeKey(key).write(value).writeLine("", LIST_SEPARATOR, status.isNotLastItem());
     }
 
     /**
      * Writes array of objects. Objects must have {@link Object#toString()} method
      * implemented.
+     * @param status Writes list separator item is last
      * @param objects Objects to write
      * @return Writer itself for chaining writes
      */
-    public JavaScriptWriter writeArray(boolean isLast, Object... objects) {
+    public JavaScriptWriter writeArray(ItemStatus status, Object... objects) {
         write(ARRAY_START);
         ItemProcessor.process(arrayWriter, objects);
         write(ARRAY_END);
-        write("", LIST_SEPARATOR, !isLast);
+        write("", LIST_SEPARATOR, status.isNotLastItem());
         writeLine("");
         return this;
     }

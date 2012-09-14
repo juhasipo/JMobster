@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
 import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.HashMap;
@@ -67,13 +68,13 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
     /**
      * Writes the given validator with tie configured data writer
      * @param validator Validator to write
-     * @param isLast Set to true if the validator is the last validator that is going to be written for the field
+     * @param status Item status
      */
-    public void write( Validator validator, boolean isLast ) {
+    public void write( Validator validator, ItemStatus status ) {
         final Class validatorType = validator.getType();
         if( writers.containsKey(validatorType) ) {
             ValidatorWriter writer = writers.get(validatorType);
-            writer.write( dataWriter, validator, isLast );
+            writer.write( dataWriter, validator, status );
         }
     }
 

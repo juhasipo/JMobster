@@ -1,6 +1,7 @@
 package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.util.AnnotationBag;
+import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StreamDataWriter;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class BaseValidatorWriterManagerTest {
         }
         class TestValidatorWriter extends BaseValidatorWriter<TestValidator, DataWriter> {
             TestValidatorWriter() { super( TestValidator.class ); }
-            @Override protected void write( DataWriter writer, TestValidator validator, boolean isLast ) {}
+            @Override protected void write( DataWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<DataWriter> {
             TestManager() { super( null ); }
@@ -44,7 +45,7 @@ public class BaseValidatorWriterManagerTest {
         }
         class TestValidatorWriter extends BaseValidatorWriter<TestValidator, TestWriter> {
             TestValidatorWriter() { super( TestValidator.class ); }
-            @Override protected void write( TestWriter writer, TestValidator validator, boolean isLast ) {}
+            @Override protected void write( TestWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<TestWriter> {
             TestManager() { super( null ); }
@@ -66,7 +67,7 @@ public class BaseValidatorWriterManagerTest {
         }
         class TestValidatorWriter extends BaseValidatorWriter<TestValidator, DataWriter> {
             TestValidatorWriter() { super( TestValidator.class ); }
-            @Override protected void write( DataWriter writer, TestValidator validator, boolean isLast ) {}
+            @Override protected void write( DataWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<TestWriter> {
             TestManager() { super( null ); }

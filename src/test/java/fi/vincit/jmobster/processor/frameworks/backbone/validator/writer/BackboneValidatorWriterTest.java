@@ -21,6 +21,7 @@ import fi.vincit.jmobster.processor.defaults.validator.NumberRangeValidator;
 import fi.vincit.jmobster.processor.defaults.validator.PatternValidator;
 import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.util.ItemStatuses;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,7 +67,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinAndMaxSize() {
         final SizeValidator validator = mockSizeValidator(1, 255);
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -78,7 +79,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteNoMinOrMaxSize() {
         final SizeValidator validator = mockSizeValidator(NO_MIN_SIZE, NO_MAX_SIZE);
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -90,7 +91,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteNoMinOrMaxSizeAsLast() {
         final SizeValidator validator = mockSizeValidator(NO_MIN_SIZE, NO_MAX_SIZE);
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -102,7 +103,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinAndMaxSizeAsLast() {
         final SizeValidator validator = mockSizeValidator( 1, 255 );
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -114,7 +115,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinSize() {
         final SizeValidator validator = mockSizeValidator( 1, NO_MAX_SIZE );
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -126,7 +127,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinSizeAsLast() {
         final SizeValidator validator = mockSizeValidator( 1, NO_MAX_SIZE );
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -138,7 +139,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMaxSize() {
         final SizeValidator validator = mockSizeValidator( NO_MIN_SIZE, 255 );
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -150,7 +151,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMaxSizeAsLast() {
         final SizeValidator validator = mockSizeValidator( NO_MIN_SIZE, 255 );
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -181,7 +182,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinAndMax() {
         final NumberRangeValidator validator = mockNumberRangeValidator(1, 255);
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -193,7 +194,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinOrMax() {
         final NumberRangeValidator validator = mockNumberRangeValidator(NO_MIN_VALUE, NO_MAX_VALUE);
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -205,7 +206,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinOrMaxAsLast() {
         final NumberRangeValidator validator = mockNumberRangeValidator(NO_MIN_VALUE, NO_MAX_VALUE);
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -217,7 +218,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinAndMaxAsLast() {
         final NumberRangeValidator validator = mockNumberRangeValidator(1, 255);
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -229,7 +230,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMin() {
         final NumberRangeValidator validator = mockNumberRangeValidator(1, NO_MAX_VALUE);
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -241,7 +242,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMinAsLast() {
         final NumberRangeValidator validator = mockNumberRangeValidator(1, NO_MAX_VALUE);
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -253,7 +254,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMax() {
         final NumberRangeValidator validator = mockNumberRangeValidator(NO_MIN_VALUE, 255);
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -265,7 +266,7 @@ public class BackboneValidatorWriterTest {
     public void testWriteMaxAsLast() {
         final NumberRangeValidator validator = mockNumberRangeValidator(NO_MIN_VALUE, 255);
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -291,7 +292,7 @@ public class BackboneValidatorWriterTest {
     public void testWritePattern() {
         final PatternValidator validator = mockPatternValidator( "[ABCdef]*" );
 
-        writerManager.write( validator, false );
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
         writer.close();
 
         final String result = writer.toString();
@@ -303,7 +304,7 @@ public class BackboneValidatorWriterTest {
     public void testWritePatternLast() {
         final PatternValidator validator = mockPatternValidator( "[ABCdef]*" );
 
-        writerManager.write( validator, true );
+        writerManager.write( validator, ItemStatuses.last() );
         writer.close();
 
         final String result = writer.toString();
@@ -320,7 +321,7 @@ public class BackboneValidatorWriterTest {
     public void testNotNull() {
         final NotNullValidator validator = new NotNullValidator();
 
-        writerManager.write(validator, false);
+        writerManager.write(validator, ItemStatuses.notFirstNorLast());
         writer.close();
 
         final String result = writer.toString();
@@ -332,7 +333,7 @@ public class BackboneValidatorWriterTest {
     public void testNotNullAsLast() {
         final NotNullValidator validator = new NotNullValidator();
 
-        writerManager.write(validator, true);
+        writerManager.write(validator, ItemStatuses.last());
         writer.close();
 
         final String result = writer.toString();
