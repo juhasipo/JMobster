@@ -58,7 +58,7 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
      * Configure new validator writer.
      * @param validatorWriters One or more validation writers to add.
      */
-    public void setValidator(ValidatorWriter<? extends Validator, W>... validatorWriters) {
+    public void setValidator(ValidatorWriter<? extends Validator, ? super W>... validatorWriters) {
         for( ValidatorWriter validatorWriter : validatorWriters ) {
             writers.put( validatorWriter.getSupportedType(), validatorWriter );
         }
@@ -73,7 +73,7 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
         final Class validatorType = validator.getType();
         if( writers.containsKey(validatorType) ) {
             ValidatorWriter writer = writers.get(validatorType);
-            writer.write( dataWriter, (Object)validator, isLast );
+            writer.write( dataWriter, validator, isLast );
         }
     }
 

@@ -302,7 +302,9 @@ used *ValidatorWriterManager*.
 Implementing *ValidatorWriterManager* is quite straight forward. The class has to extend *BaseValidatorWriterManager<W extends DataWriter>*
 abstract class where the *W* generic parameter is the *DataWriter* you want to use.
 
-**Note** *DataWriter* given as generic parameter has to be compatible with your *ValidatorWriters*.
+**Notice** *DataWriter* given as generic parameter has to be compatible with your *ValidatorWriters*. What this means
+is that if your *ValidatorWriter* requires a writer that implements *DataWriter* but you specify *ValidatorWriterManager*
+to use only *DataWriter*, the system won't work because you can't even add your *ValidatorWriters* to *ValidatorWriterManager*.
 
 
 ### Model Naming Strategies
