@@ -27,7 +27,11 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * Base class for validator factories.
+ * Base class for validator factories. Extends this class to create factories for a
+ * custom set of validators. If you only need to add more validators to an existing factory
+ * you don't need to create new class. Use {@link BaseValidatorFactory#setValidator(ValidatorConstructor)} or
+ * {@link BaseValidatorFactory#setValidator(Class, fi.vincit.jmobster.util.combination.RequiredTypes, fi.vincit.jmobster.util.combination.OptionalTypes)}
+ * to add new validators to the factory.
  */
 public abstract class BaseValidatorFactory implements ValidatorFactory {
 

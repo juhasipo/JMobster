@@ -16,10 +16,10 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.NumberRangeValidator;
+import fi.vincit.jmobster.processor.defaults.validator.jsr303.NumberRangeValidator;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class NumberRangeValidatorWriter extends JavaScriptValidatorWriter<NumberRangeValidator> {
 

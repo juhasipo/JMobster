@@ -14,26 +14,27 @@ package fi.vincit.jmobster;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.GroupMode;
-import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.Collection;
 
 /**
- * <p>
- *     Interface for generating models.
- * </p>
+ * Model generator processes given models and outputs the data
+ * in format that can be used in the target platform. Use {@link fi.vincit.jmobster.processor.ModelFactory}
+ * to generate the {@link Model} objects to process.
  */
 public interface ModelGenerator {
 
     /**
-     * Process and create the client side model(s) for
-     * the given models.
+     * Process and create the client side model(s) for the given models.
      * @param models One or more models for which the models should be generated.
      */
     void processAll( Collection<Model> models );
 
+    /**
+     * Sets data writer to use
+     * @param dataWriter Data writer
+     */
     void setWriter( DataWriter dataWriter );
 }

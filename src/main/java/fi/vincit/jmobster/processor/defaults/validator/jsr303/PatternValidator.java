@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.defaults.validator.jsr303;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -17,7 +17,8 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.annotation.OverridePattern;
-import fi.vincit.jmobster.util.AnnotationBag;
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
+import fi.vincit.jmobster.util.collection.AnnotationBag;
 
 import javax.validation.constraints.Pattern;
 

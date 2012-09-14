@@ -1,5 +1,6 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.collection;
 
+import fi.vincit.jmobster.util.collection.TypeCollection;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

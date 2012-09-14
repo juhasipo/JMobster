@@ -56,7 +56,7 @@ public abstract class StreamDataWriter implements DataWriter {
     }
     private void checkIsOpen() {
         if( !isOpen() ) {
-            throw new RuntimeException("Writer is not open");
+            throw new IllegalStateException("Writer is not open");
         }
     }
 

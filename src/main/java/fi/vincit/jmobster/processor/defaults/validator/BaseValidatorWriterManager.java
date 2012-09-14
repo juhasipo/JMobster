@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.HashMap;
@@ -40,6 +40,7 @@ import java.util.Map;
  * </p>
  *
  * @param <W> DataWriter to use. This has be compatible with the ValidatorWriters that are given to this manager.
+ * @see BaseValidatorWriter
  */
 public abstract class BaseValidatorWriterManager<W extends DataWriter> {
     final private Map<Class, ValidatorWriter<? extends Validator, W>> writers =

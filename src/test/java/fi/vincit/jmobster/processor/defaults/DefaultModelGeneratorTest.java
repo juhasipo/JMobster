@@ -19,7 +19,7 @@ package fi.vincit.jmobster.processor.defaults;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.builder.ModelGeneratorBuilder;
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 import org.mockito.InOrder;

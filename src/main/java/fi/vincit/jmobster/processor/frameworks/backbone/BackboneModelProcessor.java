@@ -23,10 +23,10 @@ import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.ItemHandler;
-import fi.vincit.jmobster.util.ItemProcessor;
-import fi.vincit.jmobster.util.ItemStatus;
-import fi.vincit.jmobster.util.ItemStatuses;
+import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
+import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

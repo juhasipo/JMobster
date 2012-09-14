@@ -50,8 +50,7 @@ public final class EnumConverter extends StringConverter {
         switch( enumMode ) {
             case STRING: return super.getValueAsString(value);
             case ORDINAL: return getEnumOrdinal(value);
-            default:
-                throw new RuntimeException("Invalid enum mode: " + enumMode);
+            default: throw new IllegalArgumentException("Invalid enum mode: " + enumMode);
         }
     }
 

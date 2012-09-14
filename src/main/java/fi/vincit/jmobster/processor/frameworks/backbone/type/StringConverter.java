@@ -16,8 +16,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone.type;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.annotation.Password;
-import fi.vincit.jmobster.annotation.TextArea;
 import fi.vincit.jmobster.processor.model.ModelField;
 
 public class StringConverter extends BaseFieldTypeConverter {
@@ -28,12 +26,6 @@ public class StringConverter extends BaseFieldTypeConverter {
 
     @Override
     public String convert( ModelField field ) {
-        if( field.hasAnnotation(Password.class) ) {
-            return "'Password'";
-        } else if( field.hasAnnotation(TextArea.class) ) {
-            return "'TextArea'";
-        } else {
-            return "'Text'";
-        }
+        return "'Text'";
     }
 }

@@ -20,6 +20,10 @@ import fi.vincit.jmobster.processor.model.Model;
 
 import java.util.Collection;
 
+/**
+ * Model factory produces JMobster internal {@link Model} objects
+ * that can be processed with {@link fi.vincit.jmobster.ModelGenerator}.
+ */
 public interface ModelFactory {
     /**
      * Creates a model representing the given class

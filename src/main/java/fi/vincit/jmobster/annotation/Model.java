@@ -20,7 +20,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Overrides model name
+ * Overrides model name. {@link fi.vincit.jmobster.processor.ModelNamingStrategy} won't
+ * be called for models that have overridden name.
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE})

@@ -66,13 +66,13 @@ public class DateTimeConverter extends StringConverter {
     @Override
     protected String getTypeDefaultValue() {
         if( defaultTime == null ) {
-            throw new RuntimeException("DefaultTime for DateTimeConverter is not set");
+            throw new IllegalStateException("DefaultTime for DateTimeConverter is not set");
         }
         Date defaultDate;
         switch( defaultTime ) {
             case NOW: defaultDate = new Date(); break;
             case EPOCH_0: defaultDate = new Date(0); break;
-            default: throw new RuntimeException("DefaultTime for DateTimeConverter is not set");
+            default: throw new IllegalStateException("DefaultTime for DateTimeConverter is not set");
         }
         return super.getValueAsString( dateFormat.format( defaultDate ) );
     }

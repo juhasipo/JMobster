@@ -14,7 +14,7 @@ package fi.vincit.jmobster.processor.languages.javascript.writer;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.util.ItemStatuses;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.After;

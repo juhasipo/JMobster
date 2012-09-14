@@ -5,7 +5,7 @@ import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.builder.ModelFactoryBuilder;
 import fi.vincit.jmobster.processor.builder.ModelGeneratorBuilder;
 import fi.vincit.jmobster.processor.defaults.*;
-import fi.vincit.jmobster.processor.defaults.validator.DefaultValidatorFactory;
+import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.BackboneFieldTypeConverterManager;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
@@ -30,7 +30,7 @@ public class JMobsterFactory {
     }
 
     public static ModelFactory getModelFactory() {
-        ValidatorFactory validatorFactory = new DefaultValidatorFactory();
+        ValidatorFactory validatorFactory = new JSR303ValidatorFactory();
         ClassGroupManager groupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
         ValidatorScanner validatorScanner = new DefaultValidatorScanner(validatorFactory, groupManager);
 

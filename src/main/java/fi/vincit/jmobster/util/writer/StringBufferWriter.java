@@ -22,6 +22,9 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+/**
+ * Data writer that writes to a String buffer (not Java's StringBuffer).
+ */
 public class StringBufferWriter extends StreamDataWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger( StringBufferWriter.class );

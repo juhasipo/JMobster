@@ -16,10 +16,10 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.NotNullValidator;
+import fi.vincit.jmobster.processor.defaults.validator.jsr303.NotNullValidator;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class NotNullValidatorWriter extends JavaScriptValidatorWriter<NotNullValidator> {
     public NotNullValidatorWriter() {

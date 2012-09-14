@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
@@ -28,6 +28,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  *
  * @param <V> Validator type the writer uses
  * @param <W> Writer used to write the validator
+ * @see BaseValidatorWriterManager
  */
 public abstract class BaseValidatorWriter<V extends Validator, W extends DataWriter> implements ValidatorWriter<V,W> {
     final private Class supportedType;

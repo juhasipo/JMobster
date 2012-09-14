@@ -17,6 +17,7 @@ package fi.vincit.jmobster.util;/*
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.processor.model.ModelField;
+import fi.vincit.jmobster.util.collection.AnnotationBag;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;

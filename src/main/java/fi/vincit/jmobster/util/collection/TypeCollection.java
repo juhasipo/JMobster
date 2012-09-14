@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.collection;
 
 /*
  * Copyright 2012 Juha Siponen

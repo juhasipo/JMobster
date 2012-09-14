@@ -115,27 +115,6 @@ public class DefaultModelFieldFactoryTest {
         private String privateStringField;
     }
 
-    @Test(expected = DefaultConstructorMissingError.class)
-    public void testNoDefaultConstructor() {
-        DefaultModelFieldFactory fs = getFieldScanner( FieldScanMode.DIRECT_FIELD_ACCESS );
-        fs.getFields( TestClassNoDefaultConstructor.class );
-    }
-
-    public static class TestClassPrivateDefaultConstructor {
-        private TestClassPrivateDefaultConstructor() {
-        }
-
-        public Long publicLongField;
-        protected Integer protectedIntegerField;
-        private String privateStringField;
-    }
-
-    @Test(expected = CannotAccessDefaultConstructorError.class)
-    public void testPrivateDefaultConstructor() {
-        DefaultModelFieldFactory fs = getFieldScanner( FieldScanMode.DIRECT_FIELD_ACCESS );
-        fs.getFields( TestClassPrivateDefaultConstructor.class );
-    }
-
     public static class TestClassWithStaticMember {
         public static int staticMember;
         public final int finalInt = 1;

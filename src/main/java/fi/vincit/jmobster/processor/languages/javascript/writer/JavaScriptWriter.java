@@ -14,9 +14,9 @@ package fi.vincit.jmobster.processor.languages.javascript.writer;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.util.ItemHandler;
-import fi.vincit.jmobster.util.ItemProcessor;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
+import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
@@ -244,20 +244,23 @@ public class JavaScriptWriter implements DataWriter {
         return writer.isOpen();
     }
 
+    /**
+     * @throws IllegalStateException If lenient mode is on and the writer has unclosed functions or blocks.
+     */
     @Override
     public void close() {
         writer.close();
         if( !lenientModeOn ) {
             if( functionsOpen > 0 ) {
-                throw new RuntimeException("There are still " + functionsOpen + "unclosed functions");
+                throw new IllegalStateException("There are still " + functionsOpen + "unclosed functions");
             } else if( functionsOpen < 0 ) {
-                throw new RuntimeException("Too many functions closed. " + Math.abs(functionsOpen) + " times too many.");
+                throw new IllegalStateException("Too many functions closed. " + Math.abs(functionsOpen) + " times too many.");
             }
 
             if( blocksOpen > 0 ) {
-                throw new RuntimeException("There are still " + blocksOpen + "unclosed blocks");
+                throw new IllegalStateException("There are still " + blocksOpen + "unclosed blocks");
             } else if( blocksOpen < 0 ) {
-                throw new RuntimeException("Too many blocks closed. " + Math.abs(blocksOpen) + " times too many.");
+                throw new IllegalStateException("Too many blocks closed. " + Math.abs(blocksOpen) + " times too many.");
             }
         }
     }

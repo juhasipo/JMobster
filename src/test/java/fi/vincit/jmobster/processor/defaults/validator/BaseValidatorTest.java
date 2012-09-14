@@ -1,6 +1,6 @@
 package fi.vincit.jmobster.processor.defaults.validator;
 
-import fi.vincit.jmobster.util.AnnotationBag;
+import fi.vincit.jmobster.util.collection.AnnotationBag;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

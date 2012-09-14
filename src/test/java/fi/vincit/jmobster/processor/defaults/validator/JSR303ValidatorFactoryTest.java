@@ -16,6 +16,10 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.defaults.validator.jsr303.NotNullValidator;
+import fi.vincit.jmobster.processor.defaults.validator.jsr303.NumberRangeValidator;
+import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
+import fi.vincit.jmobster.processor.defaults.validator.jsr303.SizeValidator;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.TestUtil;
@@ -24,14 +28,13 @@ import org.junit.Test;
 
 import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
-public class DefaultValidatorFactoryTest {
+public class JSR303ValidatorFactoryTest {
     @Test
     public void testSizeValidator() {
-        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
         class SizeClass {
             @Size(min=1, max=3) public int i;
         }
@@ -47,7 +50,7 @@ public class DefaultValidatorFactoryTest {
 
     @Test
     public void testNumberRangeValidatorWithMin() {
-        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
         class SizeClass {
             @Min(1) public int i;
         }
@@ -63,7 +66,7 @@ public class DefaultValidatorFactoryTest {
 
     @Test
     public void testNumberRangeValidatorWithMax() {
-        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
         class SizeClass {
             @Max(1) public int i;
         }
@@ -79,7 +82,7 @@ public class DefaultValidatorFactoryTest {
 
     @Test
     public void testNumberRangeValidatorWithMinAndMax() {
-        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
         class SizeClass {
             @Min(1) @Max(100) public int i;
         }
@@ -95,7 +98,7 @@ public class DefaultValidatorFactoryTest {
 
     @Test
     public void testNumberRangeValidatorWithMinAndMaxAndNotNull() {
-        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
         class SizeClass {
             @NotNull @Min(1) @Max(100) public int i;
         }
@@ -115,7 +118,7 @@ public class DefaultValidatorFactoryTest {
 
     @Test
     public void testPatternValidator() {
-        DefaultValidatorFactory factory = new DefaultValidatorFactory();
+        JSR303ValidatorFactory factory = new JSR303ValidatorFactory();
         class SizeClass {
             @Pattern(regexp = "FooBar") public int i;
         }

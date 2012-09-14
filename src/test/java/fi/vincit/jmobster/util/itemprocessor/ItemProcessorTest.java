@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.itemprocessor;
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -16,6 +16,10 @@ package fi.vincit.jmobster.util;
 */
 
 
+import fi.vincit.jmobster.util.TestUtil;
+import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
+import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import org.junit.Test;
 
 import java.util.List;
@@ -55,7 +59,7 @@ public class ItemProcessorTest {
         LastItemCaller lic = new LastItemCaller();
         ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        ItemProcessor.process((List)TestUtil.listFromObjects("item1")).with(itemProcessor);
+        ItemProcessor.process( (List)TestUtil.listFromObjects( "item1" ) ).with(itemProcessor);
 
         assertEquals("item1", sb.toString());
         assertEquals(1, lic.calledWithLastTrue);

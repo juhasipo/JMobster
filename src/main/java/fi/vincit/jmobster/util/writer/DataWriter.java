@@ -18,7 +18,7 @@ package fi.vincit.jmobster.util.writer;/*
  * Interface for writing model to a stream, file or other
  * output. Contains simple write and indentation methods. Write methods contain
  * simple write string and write line methods, but also methods that can be used
- * to write e.g. comma separated lists. When used with {@link fi.vincit.jmobster.util.ItemProcessor} the
+ * to write e.g. comma separated lists. When used with {@link fi.vincit.jmobster.util.itemprocessor.ItemProcessor} the
  * final comma can be easily left out after the last item in the list.
  */
 public interface DataWriter {

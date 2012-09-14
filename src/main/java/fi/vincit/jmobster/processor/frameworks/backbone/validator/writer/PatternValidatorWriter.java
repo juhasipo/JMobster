@@ -16,11 +16,11 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.PatternValidator;
+import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSPatternConverter;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class PatternValidatorWriter extends JavaScriptValidatorWriter<PatternValidator> {
     public PatternValidatorWriter() {

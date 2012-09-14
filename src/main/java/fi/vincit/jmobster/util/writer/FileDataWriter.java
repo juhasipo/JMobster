@@ -23,6 +23,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Data writer that writes to a file.
+ */
 public class FileDataWriter extends StreamDataWriter {
 
     private static final Logger LOG = LoggerFactory.getLogger( FileDataWriter.class );
@@ -30,6 +33,12 @@ public class FileDataWriter extends StreamDataWriter {
     final private String path;
     final private FileWriter file;
 
+    /**
+     * Initializes FileDataWriter and opens file with given path
+     * for writing.
+     * @param path File path
+     * @throws IOException
+     */
     public FileDataWriter( String path ) throws IOException {
         this.path = path;
         this.file = new FileWriter(path);
@@ -48,6 +57,10 @@ public class FileDataWriter extends StreamDataWriter {
         }
     }
 
+    /**
+     * Returns path
+     * @return
+     */
     public String getPath() {
         return this.path;
     }

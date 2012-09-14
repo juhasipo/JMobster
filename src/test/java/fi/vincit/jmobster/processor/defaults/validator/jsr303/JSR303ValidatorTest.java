@@ -1,7 +1,7 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.defaults.validator.jsr303;
 
 import fi.vincit.jmobster.annotation.OverridePattern;
-import fi.vincit.jmobster.util.AnnotationBag;
+import fi.vincit.jmobster.util.collection.AnnotationBag;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 
@@ -23,9 +23,9 @@ public class JSR303ValidatorTest {
         NumberRangeValidator minValidator = new NumberRangeValidator();
         minValidator.init(annotationBag);
 
-        assertTrue(minValidator.hasMin());
-        assertFalse(minValidator.hasMax());
-        assertEquals(1, minValidator.getMin());
+        assertTrue( minValidator.hasMin() );
+        assertFalse( minValidator.hasMax() );
+        assertEquals( 1, minValidator.getMin() );
     }
 
     @Test
@@ -38,9 +38,9 @@ public class JSR303ValidatorTest {
         NumberRangeValidator maxValidator = new NumberRangeValidator();
         maxValidator.init( annotationBag );
 
-        assertFalse(maxValidator.hasMin());
-        assertTrue(maxValidator.hasMax());
-        assertEquals(255, maxValidator.getMax());
+        assertFalse( maxValidator.hasMin() );
+        assertTrue( maxValidator.hasMax() );
+        assertEquals( 255, maxValidator.getMax() );
     }
 
     @Test
@@ -54,9 +54,9 @@ public class JSR303ValidatorTest {
         minAndMaxValidator.init( annotationBag );
 
         assertTrue( minAndMaxValidator.hasMin() );
-        assertTrue(minAndMaxValidator.hasMax());
+        assertTrue( minAndMaxValidator.hasMax() );
         assertEquals( 1, minAndMaxValidator.getMin() );
-        assertEquals(255, minAndMaxValidator.getMax());
+        assertEquals( 255, minAndMaxValidator.getMax() );
     }
 
     @Test
@@ -69,10 +69,10 @@ public class JSR303ValidatorTest {
         SizeValidator sizeValidator = new SizeValidator();
         sizeValidator.init( annotationBag );
 
-        assertEquals(1, sizeValidator.getMin());
-        assertEquals(Integer.MAX_VALUE, sizeValidator.getMax());
-        assertTrue(sizeValidator.hasMin());
-        assertFalse(sizeValidator.hasMax());
+        assertEquals( 1, sizeValidator.getMin() );
+        assertEquals( Integer.MAX_VALUE, sizeValidator.getMax() );
+        assertTrue( sizeValidator.hasMin() );
+        assertFalse( sizeValidator.hasMax() );
     }
 
     @Test
@@ -85,10 +85,10 @@ public class JSR303ValidatorTest {
         SizeValidator sizeValidator = new SizeValidator();
         sizeValidator.init( annotationBag );
 
-        assertEquals(0, sizeValidator.getMin());
-        assertEquals(255, sizeValidator.getMax());
-        assertTrue(sizeValidator.hasMin());
-        assertTrue(sizeValidator.hasMax());
+        assertEquals( 0, sizeValidator.getMin() );
+        assertEquals( 255, sizeValidator.getMax() );
+        assertTrue( sizeValidator.hasMin() );
+        assertTrue( sizeValidator.hasMax() );
     }
 
     @Test
@@ -101,10 +101,10 @@ public class JSR303ValidatorTest {
         SizeValidator sizeValidator = new SizeValidator();
         sizeValidator.init( annotationBag );
 
-        assertEquals(1, sizeValidator.getMin());
-        assertEquals(255, sizeValidator.getMax());
-        assertTrue(sizeValidator.hasMin());
-        assertTrue(sizeValidator.hasMax());
+        assertEquals( 1, sizeValidator.getMin() );
+        assertEquals( 255, sizeValidator.getMax() );
+        assertTrue( sizeValidator.hasMin() );
+        assertTrue( sizeValidator.hasMax() );
     }
 
     @Test
@@ -128,8 +128,8 @@ public class JSR303ValidatorTest {
         PatternValidator patternValidator = new PatternValidator();
         patternValidator.init( annotationBag );
 
-        assertEquals("testregexp", patternValidator.getRegexp());
-        assertEquals(0, patternValidator.getFlags().length);
+        assertEquals( "testregexp", patternValidator.getRegexp() );
+        assertEquals( 0, patternValidator.getFlags().length );
     }
 
     @Test
@@ -142,9 +142,9 @@ public class JSR303ValidatorTest {
         PatternValidator patternValidator = new PatternValidator();
         patternValidator.init( annotationBag );
 
-        assertEquals("testregexp", patternValidator.getRegexp());
-        assertEquals(1, patternValidator.getFlags().length);
-        assertEquals(Pattern.Flag.CASE_INSENSITIVE, patternValidator.getFlags()[0]);
+        assertEquals( "testregexp", patternValidator.getRegexp() );
+        assertEquals( 1, patternValidator.getFlags().length );
+        assertEquals( Pattern.Flag.CASE_INSENSITIVE, patternValidator.getFlags()[0] );
     }
 
     @Test
@@ -158,8 +158,8 @@ public class JSR303ValidatorTest {
         PatternValidator patternValidator = new PatternValidator();
         patternValidator.init( annotationBag );
 
-        assertEquals("overridden", patternValidator.getRegexp());
-        assertEquals(0, patternValidator.getFlags().length);
+        assertEquals( "overridden", patternValidator.getRegexp() );
+        assertEquals( 0, patternValidator.getFlags().length );
     }
 
 }

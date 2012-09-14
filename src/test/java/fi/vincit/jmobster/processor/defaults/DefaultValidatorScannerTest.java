@@ -2,8 +2,6 @@ package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ValidatorFactory;
-import fi.vincit.jmobster.processor.defaults.validator.SizeValidator;
-import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.TestUtil;
 import fi.vincit.jmobster.util.groups.GroupManager;
 import org.junit.Test;
@@ -12,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.util.Collection;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;

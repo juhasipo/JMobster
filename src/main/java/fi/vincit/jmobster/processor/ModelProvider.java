@@ -16,8 +16,24 @@ package fi.vincit.jmobster.processor;/*
 
 import fi.vincit.jmobster.util.writer.DataWriter;
 
+/**
+ * Class for caching model.
+ */
 public interface ModelProvider {
+    /**
+     * Flush and get model as String
+     * @return Model as string
+     */
     String getModel();
+
+    /**
+     * @return Providers {@link DataWriter}
+     */
     DataWriter getDataWriter();
+
+    /**
+     * Clears the cache. Next time the {@link #getModel()} is called
+     * the models are refreshed from the data writer.
+     */
     void clear();
 }

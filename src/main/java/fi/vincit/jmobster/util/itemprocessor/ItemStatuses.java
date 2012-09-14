@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.itemprocessor;
 
 /**
  * Collection of helper method for generating

@@ -1,5 +1,7 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.itemprocessor;
 
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

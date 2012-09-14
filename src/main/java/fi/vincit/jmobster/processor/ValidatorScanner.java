@@ -32,20 +32,19 @@ public interface ValidatorScanner {
     /**
      * Gets the validators for the given field
      * @param field Field to scan
-     * @return Validation annotation. If nothing found returns an empty list.
+     * @return Validation annotation. If nothing found returns an empty collection.
      */
     Collection<Validator> getValidators( Field field );
 
     /**
      * Gets the validators for the given property
      * @param property Property to scan
-     * @return Validation annotation. If nothing found returns an empty list.
+     * @return Validation annotation. If nothing found returns an empty collection.
      */
     Collection<Validator> getValidators( PropertyDescriptor property );
 
     /**
-     * Sets filter group mode and filter groups for
-     * validation scanning.
+     * Sets filter group mode and filter groups for validation scanning.
      * @param groupMode Filter group mode
      * @param groups Groups to filter with
      */

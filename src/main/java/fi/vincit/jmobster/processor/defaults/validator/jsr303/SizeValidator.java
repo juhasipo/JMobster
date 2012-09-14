@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.defaults.validator.jsr303;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,28 +16,31 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.AnnotationBag;
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
+import fi.vincit.jmobster.util.collection.AnnotationBag;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
-public class NumberRangeValidator extends BaseValidator {
-
-    private boolean hasMin;
-    private boolean hasMax;
-    private long min;
-    private long max;
+public class SizeValidator extends BaseValidator {
+    private int min;
+    private int max;
+    boolean hasMin;
+    boolean hasMax;
 
     @Override
     public void init( AnnotationBag annotationBag ) {
-        if( annotationBag.hasAnnotation(Min.class) ) {
-            hasMin = true;
-            min = annotationBag.getAnnotation(Min.class).value();
-        }
-        if( annotationBag.hasAnnotation(Max.class) ) {
-            hasMax = true;
-            max = annotationBag.getAnnotation(Max.class).value();
-        }
+        Size size = annotationBag.getAnnotation(Size.class);
+        this.min = size.min();
+        this.max = size.max();
+        this.hasMin = min >= 0;
+        this.hasMax = max < Integer.MAX_VALUE;
+    }
+
+    public int getMin() {
+        return min;
+    }
+    public int getMax() {
+        return max;
     }
 
     public boolean hasMin() {
@@ -46,13 +49,5 @@ public class NumberRangeValidator extends BaseValidator {
 
     public boolean hasMax() {
         return hasMax;
-    }
-
-    public long getMin() {
-        return min;
-    }
-
-    public long getMax() {
-        return max;
     }
 }

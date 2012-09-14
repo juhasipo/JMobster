@@ -1,7 +1,7 @@
 package fi.vincit.jmobster.processor.defaults.validator;
 
-import fi.vincit.jmobster.util.AnnotationBag;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.collection.AnnotationBag;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StreamDataWriter;
 import org.junit.Test;

@@ -1,32 +1,25 @@
 package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.ModelGenerator;
-import fi.vincit.jmobster.processor.GroupMode;
-import fi.vincit.jmobster.processor.ModelFieldFactory;
-import fi.vincit.jmobster.processor.ModelNamingStrategy;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.util.ItemHandler;
-import fi.vincit.jmobster.util.ItemProcessor;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
+import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * <p>
- *      Class used to create a client side model from
- *  server side Java entity/DTO/POJO.
+ *      Class used to create a client side model from server side Java entity/DTO/POJO.
  * </p>
  * <p>
- *     If uncaught IOExceptions are caught, the
- *  model processing will be terminated. {@link fi.vincit.jmobster.processor.ModelProcessor#endProcessing()}
+ *     If uncaught IOExceptions are caught, the model processing will be terminated.
+ *  {@link fi.vincit.jmobster.processor.ModelProcessor#endProcessing()}
  *  is not called in those cases (of unless the exception was thrown from that method).
  *  The error will be logged (level: Error).
  * </p>

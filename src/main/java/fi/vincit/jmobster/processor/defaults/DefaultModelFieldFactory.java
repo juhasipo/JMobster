@@ -55,7 +55,7 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
         switch( scanMode ) {
             case BEAN_PROPERTY: return getFieldsByGetters( clazz );
             case DIRECT_FIELD_ACCESS: return getFieldsByDirectFieldAccess( clazz );
-            default: throw new RuntimeException("Invalid field scan mode: " + scanMode);
+            default: throw new IllegalArgumentException("Invalid field scan mode: " + scanMode);
         }
     }
 
@@ -74,39 +74,24 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
     private List<ModelField> getFieldsByGetters(Class clazz) {
         List<ModelField> fields = new ArrayList<ModelField>();
         try {
-            final Object defaultObject = getDefaultObject( clazz );
-
             final BeanInfo beanInfo = Introspector.getBeanInfo( clazz );
             for( PropertyDescriptor property : beanInfo.getPropertyDescriptors() ) {
                 if( shouldAddField(property) ) {
                     final String name = property.getName();
-                    if( name.equals("class") ) { continue; }
+                    // Java's standard class getter is omitted
+                    if( name.equals("class") ) {
+                        continue;
+                    }
+
                     final ModelField field = new ModelField(property, validatorScanner.getValidators( property ));
-
-                    final Class fieldType = property.getPropertyType();
-                    final Object fieldValue = property.getReadMethod().invoke( defaultObject );
-
                     fields.add(field);
                 }
             }
         } catch( IntrospectionException e ) {
             LOG.error("Introspection failed", e);
-            throw new RuntimeException("Introspection failed", e);
-        } catch( InvocationTargetException e ) {
-            LOG.error("Invocation failed", e);
-            throw new RuntimeException("Invocation failed", e);
-        } catch( InstantiationException e ) {
-            LOG.error("Instantiation failed", e);
-            throw new DefaultConstructorMissingError("Class " + clazz + " does not have a default constructor");
-        } catch( IllegalAccessException e ) {
-            LOG.error( "Illegal access", e );
-            throw new CannotAccessDefaultConstructorError(e.getMessage());
+            throw new IllegalArgumentException("Cannot init property: Introspection failed", e);
         }
         return fields;
-    }
-
-    private Object getDefaultObject( Class clazz ) throws InstantiationException, IllegalAccessException {
-        return clazz.newInstance();
     }
 
 
@@ -120,25 +105,16 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
     private List<ModelField> getFieldsByDirectFieldAccess( Class clazz ) {
         List<ModelField> fields = new ArrayList<ModelField>();
 
-        try {
-            final Object defaultObject = getDefaultObject( clazz );
-            for( Field field : clazz.getDeclaredFields() ) {
-                final boolean wasAccessible = field.isAccessible();
-                field.setAccessible(true);
-                if( shouldAddField(field) ) {
-                    ModelField modelField = new ModelField(field, validatorScanner.getValidators( field ));
-                    fields.add( modelField );
-                } else {
-                    LOG.warn( "Field {} not added to model fields", field.getName() );
-                }
-                field.setAccessible(wasAccessible);
+        for( Field field : clazz.getDeclaredFields() ) {
+            final boolean wasAccessible = field.isAccessible();
+            field.setAccessible(true);
+            if( shouldAddField(field) ) {
+                ModelField modelField = new ModelField(field, validatorScanner.getValidators( field ));
+                fields.add( modelField );
+            } else {
+                LOG.warn( "Field {} not added to model fields", field.getName() );
             }
-        } catch( InstantiationException e ) {
-            LOG.error("Instantiation failed", e);
-            throw new DefaultConstructorMissingError("Class " + clazz + " does not have a default constructor");
-        } catch( IllegalAccessException e ) {
-            LOG.error( "Illegal access", e );
-            throw new CannotAccessDefaultConstructorError(e.getMessage());
+            field.setAccessible(wasAccessible);
         }
 
         return fields;

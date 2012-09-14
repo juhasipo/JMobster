@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor;
 */
 
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.util.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;

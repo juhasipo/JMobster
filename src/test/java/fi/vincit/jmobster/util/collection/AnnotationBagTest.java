@@ -1,8 +1,8 @@
-package fi.vincit.jmobster.util;
+package fi.vincit.jmobster.util.collection;
 
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.util.AbstractAnnotation;
-import fi.vincit.jmobster.util.AnnotationBag;
+import fi.vincit.jmobster.util.collection.AnnotationBag;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

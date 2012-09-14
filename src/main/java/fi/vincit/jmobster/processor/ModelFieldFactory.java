@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Interface for field scanners. Field scanners searches for
- * model fields from classes.
+ * Model field factory produces JMobster internal {@link ModelField}
+ * objects that the{@link fi.vincit.jmobster.processor.model.Model} objects contain.
  */
 public interface ModelFieldFactory {
     /**
@@ -46,5 +46,10 @@ public interface ModelFieldFactory {
      */
     void setAllowFinalFields( boolean allowFinalFields );
 
+    /**
+     * Sets filters which are used for filtering validators
+     * @param groupMode Group mode
+     * @param groups Groups to use for filtering
+     */
     void setValidatorFilterGroups( GroupMode groupMode, Collection<Class> groups );
 }

@@ -16,10 +16,10 @@ package fi.vincit.jmobster.util.combination;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.TypeCollection;
+import fi.vincit.jmobster.util.collection.TypeCollection;
 
 /**
- * Class to mark a set of classes as required types.
+ * Set of required types.
  */
 public class RequiredTypes extends TypeCollection<Class> {
 

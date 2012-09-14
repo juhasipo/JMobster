@@ -18,6 +18,9 @@ package fi.vincit.jmobster.util.groups;
 
 import fi.vincit.jmobster.processor.GroupMode;
 
+/**
+ * Group manager that uses Java's Class type as group type.
+ */
 public class ClassGroupManager extends GenericGroupManager<Class> {
     public ClassGroupManager( GroupMode groupMode, Class... requiredGroups ) {
         super( groupMode, requiredGroups );
