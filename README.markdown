@@ -245,12 +245,14 @@ public class MyValidatorWriter extends BaseValidatorWriter<MyValidator, JavaScri
 
 The example implementation uses higher level *JavaScriptWriter* for output. The first generic parameter
 must match your *Validator* (in this case *MyValidator*) and the second must match or be super clasee for
-the writer that your frameworks' *ValidatorWriterManager* uses.
+the writer that your framework's *ValidatorWriterManager* uses. More about implementing *ValidatorWriterManager*
+is discused in chapter Supporting New Target Framework.
 
 In the constructor you will have to give the type of *Validator* your *ValidatorWriter* supports. This has
 to be done manually due to Java's type erasure. The writing itself is implemented in *write* method. You will get
 the writer to use and the validator as parameters. There is also *isLast* boolean parameter which is true
 if the validator you are writing is the last validator for the current *ModelField*.
+
 
 **Notice**: *ValidatorWriters* instances are reused so the internal state will stay across calls.
 
@@ -268,11 +270,40 @@ Now you have added support for your own validation annotation.
 
 ### Custom Target Platform
 
+TODO: Intro
+
 #### Supporting New Language
-Create new DataWriter...
+
+To implement support for new language it is recommended that a customized *DataWriter* is created. JMobster provides
+a simple *DataWriter* with few helpful write methods, but a higher level *DataWriter* can be useful.
+
+Custom *DataWriters* have to implement *DataWriter* interface. The implementation itself can rely either on inheritance
+or delegation.
+
+TODO: Default value converters
 
 #### Supporting New Target Framework
-Create new Model processor...
+
+Supporting a new framework requires implementation of *ValidatorWriters* and *ModelProcessor* interface. Implementing
+*ValidatorWriter* classes was covered in Custom Validators chapter. This chapter will cover implementing *ModelProcessor*.
+
+To get started creating a *ModelProcessor*, *BaseModelProcessor* base class can be used. For now it doesn't contain
+any functions, but contains the most useful classes that you will need. There are three methods that need to be
+implemented: *void startProcessing()*, *void endProcessing()* and *void processModel( Model model, ItemStatus status )*-
+The start and end methods are called when processing of all models given for processing is started/ended. *ProcessModel*
+method will be called for each model exactly once. Writing the models is usually done in this method and at this phase
+the models are already processed so that they contain all necessary fields, validators and annotations etc. so no
+filtering should be required.
+
+What you need for your *ModelProcessor* are: *DataWriter* and *ValidatorWriterManager*. *DataWriter* can be a custom
+*DataWriter* for a certain language or a generic *DataWriter. Only requirement is that is has to support the
+used *ValidatorWriterManager*.
+
+Implementing *ValidatorWriterManager* is quite straight forward. The class has to extend *BaseValidatorWriterManager<W extends DataWriter>*
+abstract class where the *W* generic parameter is the *DataWriter* you want to use.
+
+**Note** *DataWriter* given as generic parameter has to be compatible with your *ValidatorWriters*.
+
 
 ### Model Naming Strategies
 

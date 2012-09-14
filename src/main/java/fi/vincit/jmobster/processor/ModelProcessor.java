@@ -33,7 +33,7 @@ public interface ModelProcessor {
     void startProcessing() throws IOException;
 
     /**
-     * Called for each model once in the order the models
+     * Called exactly once for each model once in the order the models
      * were given to the {@link fi.vincit.jmobster.ModelGenerator}.
      * @param model Model to process
      * @param status

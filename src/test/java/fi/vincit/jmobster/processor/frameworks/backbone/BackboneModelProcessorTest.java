@@ -16,20 +16,6 @@ import static org.mockito.Mockito.*;
 public class BackboneModelProcessorTest {
     @Test
     public void testProcessNoValidators() throws Exception {
-        DataWriter writer = mockWriter();
-        BackboneModelWriter backboneValueSectionWriter = mock(BackboneModelWriter.class);
-        FieldValueConverter valueConverter = mock(FieldValueConverter.class);
-        BackboneModelProcessor bmp = new BackboneModelProcessor(
-                writer, backboneValueSectionWriter, valueConverter
-        );
-
-        final List<ModelField> fields = new ArrayList<ModelField>();
-        final Model testModel = new Model(String.class, "String", fields);
-        testModel.setValidations(false);
-
-        bmp.startProcessing();
-        bmp.processModel(testModel, ItemStatusHelper.inMiddle());
-        bmp.endProcessing();
     }
 
     @Test

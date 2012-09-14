@@ -18,8 +18,13 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
+import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.processor.model.ModelField;
+import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.ItemHandler;
+import fi.vincit.jmobster.util.ItemProcessor;
 import fi.vincit.jmobster.util.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
@@ -37,18 +42,27 @@ public class BackboneModelProcessor extends BaseModelProcessor {
     private static final Logger LOG = LoggerFactory.getLogger( BackboneModelProcessor.class );
 
     private static final String NAMESPACE_START = "{";
-    private static final String MODEL_EXTEND_START = ": Backbone.Model.extend({";
-    private static final String MODEL_EXTEND_END = "})";
+
+
     private static final String VARIABLE = "var";
     private static final String NAMESPACE_END = "};";
     private static final String DEFAULT_START_COMMENT = "/*\n * Auto-generated file\n */";
     private static final String DEFAULT_NAMESPACE = "Models";
 
+    private static final String DEFAULTS_BLOCK_NAME = "defaults";
+    private static final String RETURN_BLOCK = "return "; // Note the space
+    private static final String VALIDATOR_BLOCK_NAME = "validation";
+
+    private static final String MODEL_EXTEND_START = ": Backbone.Model.extend({";
+    private static final String MODEL_EXTEND_END = "})";
+
     private String startComment;
     private String namespaceName;
 
     private JavaScriptWriter writer;
-    private BackboneModelWriter backboneModelWriter;
+
+    final private BackboneValidatorWriterManager validatorWriterManager;
+    final private FieldValueConverter valueConverter;
 
     /**
      * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
@@ -58,25 +72,15 @@ public class BackboneModelProcessor extends BaseModelProcessor {
         super(writer, valueConverter);
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.backboneModelWriter = new BackboneModelWriter(writer, valueConverter, typeConverterManager);
-    }
-
-    /**
-     * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
-     * @param writer Writer
-     */
-    public BackboneModelProcessor(DataWriter writer, BackboneModelWriter modelWriter, FieldValueConverter valueConverter) {
-        super(writer, valueConverter);
-        this.startComment = DEFAULT_START_COMMENT;
-        this.namespaceName = DEFAULT_NAMESPACE;
-        this.backboneModelWriter = modelWriter;
+        this.validatorWriterManager = new BackboneValidatorWriterManager(this.writer);
+        this.valueConverter = valueConverter;
     }
 
     @Override
     public void startProcessing() throws IOException {
         this.writer = new JavaScriptWriter(getWriter());
         this.writer.open();
-        backboneModelWriter.setWriter(this.writer);
+        this.validatorWriterManager.setWriter(this.writer);
 
         this.writer.writeLine( startComment );
         this.writer.writeLine( VARIABLE + " " + namespaceName + " = " + NAMESPACE_START );
@@ -89,10 +93,45 @@ public class BackboneModelProcessor extends BaseModelProcessor {
 
         this.writer.write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
 
-        backboneModelWriter.write(model);
+        writeValidators( model );
+        writeFields( model );
 
         this.writer.indentBack();
         this.writer.writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
+    }
+
+    private void writeValidators( Model model ) {
+        writer.writeKey( VALIDATOR_BLOCK_NAME ).startBlock();
+        final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
+            @Override
+            public void process( Validator validator, ItemStatus status ) {
+                validatorWriterManager.write( validator, status.isLastItem() );
+            }
+        };
+
+        ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
+            @Override
+            public void process( ModelField field, ItemStatus status ) {
+                writer.writeKey(field.getName()).startBlock();
+                ItemProcessor.process(validatorWriter, field.getValidators());
+                writer.endBlock( status.isLastItem() );
+            }
+        });
+        writer.endBlock(false);
+    }
+
+    private void writeFields( Model model ) {
+        writer.writeKey(DEFAULTS_BLOCK_NAME).startAnonFunction();
+        writer.write(RETURN_BLOCK).startBlock();
+        ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
+            @Override
+            public void process( ModelField field, ItemStatus status ) {
+                String defaultValue = valueConverter.convert(field.getFieldType(), null);
+                writer.writeKeyValue(field.getName(), defaultValue, status.isLastItem());
+            }
+        });
+        writer.endBlock(true);
+        writer.endFunction(!model.hasValidations());
     }
 
     @Override

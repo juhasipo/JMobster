@@ -14,7 +14,6 @@ package fi.vincit.jmobster.processor.languages.javascript.writer;/*
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.After;
@@ -53,7 +52,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testToString() {
-        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction();
+        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction( true );
         mw.close();
         final String result = writer.toString();
 
@@ -89,7 +88,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testAnonFunction() {
-        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction();
+        writer.startAnonFunction("arg1", "arg2", "arg3").endFunction( true );
         mw.close();
 
         assertEquals("function(arg1, arg2, arg3) {\n}\n", mw.toString());
@@ -97,7 +96,7 @@ public class JavaScriptWriterTest {
 
     @Test
     public void testNamedFunction() {
-        writer.startNamedFunction("func", "arg1", "arg2", "arg3").endFunction();
+        writer.startNamedFunction("func", "arg1", "arg2", "arg3").endFunction( true );
         mw.close();
 
         assertEquals("function func(arg1, arg2, arg3) {\n}\n", mw.toString());
@@ -106,7 +105,7 @@ public class JavaScriptWriterTest {
     @Test
     public void testFunctionWithContent() {
         writer.startAnonFunction("arg1", "arg2", "arg3");
-        writer.writeLine("return this;").endFunction();
+        writer.writeLine("return this;").endFunction( true );
         mw.close();
 
         assertEquals("function(arg1, arg2, arg3) {\n    return this;\n}\n", mw.toString());
@@ -174,14 +173,14 @@ public class JavaScriptWriterTest {
     }
     @Test(expected = RuntimeException.class)
     public void testTooManyFunctionsClosedNonStarted() {
-        writer.endFunction();
+        writer.endFunction( true );
         writer.close();
     }
     @Test(expected = RuntimeException.class)
     public void testTooManyFunctionsClosed() {
         writer.startAnonFunction();
-        writer.endFunction();
-        writer.endFunction();
+        writer.endFunction( true );
+        writer.endFunction( true );
         writer.close();
     }
     @Test(expected = RuntimeException.class)
@@ -264,7 +263,7 @@ public class JavaScriptWriterTest {
     public void testSetSpace() {
         writer.setSpace("_SPACE_");
         writer.startNamedFunction("func", "arg1");
-        writer.endFunction();
+        writer.endFunction( true );
         mw.close();
 
         assertEquals("function_SPACE_func(arg1)_SPACE_{\n}\n", mw.toString());

@@ -117,10 +117,11 @@ public class JavaScriptWriter implements DataWriter {
     /**
      * Ends function and blocks.
      * @return Writer itself for chaining writes
+     * @param isLast
      */
-    public JavaScriptWriter endFunction() {
+    public JavaScriptWriter endFunction( boolean isLast ) {
         --functionsOpen;
-        return endBlock(true);
+        return endBlock(isLast);
     }
 
     /**
