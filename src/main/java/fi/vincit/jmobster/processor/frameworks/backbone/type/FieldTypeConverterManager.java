@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FieldTypeConverterManager {
-    private Map<Class, FieldTypeConverter> fieldTypeConvertersByClass;
+    private final Map<Class, FieldTypeConverter> fieldTypeConvertersByClass;
 
     public FieldTypeConverterManager() {
         fieldTypeConvertersByClass = new HashMap<Class, FieldTypeConverter>();

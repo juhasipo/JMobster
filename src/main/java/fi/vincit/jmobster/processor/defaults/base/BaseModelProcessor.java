@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public abstract class BaseModelProcessor implements ModelProcessor {
     private DataWriter writer;
-    private FieldValueConverter valueConverter;
+    final private FieldValueConverter valueConverter;
 
     /**
      * Initializes model processor with writer

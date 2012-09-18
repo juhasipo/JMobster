@@ -44,7 +44,7 @@ import java.util.Collection;
  */
 public class ItemProcessor<T> {
 
-    private Collection<? extends T> items;
+    private final Collection<? extends T> items;
 
     protected ItemProcessor( Collection<? extends T> items )  {
         this.items = items;
@@ -53,6 +53,7 @@ public class ItemProcessor<T> {
     public static <T> ItemProcessor<T> process(Collection<? extends T> items) {
         return new ItemProcessor<T>(items);
     }
+    @SuppressWarnings( "unchecked" )
     public void with(ItemHandler<? super T> itemHandler) {
         ItemProcessor.process(itemHandler, this.items);
     }

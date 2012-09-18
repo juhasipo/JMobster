@@ -32,7 +32,7 @@ import java.util.Map;
 
 /**
  * <p>
- *     The implementation first tries to match the convertable object by class' exact equality
+ *     The implementation first tries to match the convertible object by class' exact equality
  * (i.e. class hash code). If it can't find the match, then it tries to find match for
  * the super class and if no match is found, then for the interfaces. The search is
  * recursive so the whole hierarchy is used in the search. The search is conducted in

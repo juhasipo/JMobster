@@ -24,13 +24,13 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Class that filters given classes by usgin the given {@link GroupManager}
+ * Class that filters given classes by using the given {@link GroupManager}
  * @param <T> Class that implements {@link HasGroups} HasGroups type has to be same as Group type given to this class
  *           and the given {@link GroupManager} uses.
  * @param <G> Group type the {@link GroupManager} uses.
  */
 public class GroupFilter<T extends HasGroups<G>, G> {
-    private GroupManager<G> groupManager;
+    private final GroupManager<G> groupManager;
     public GroupFilter(GroupManager<G> groupManager) {
         this.groupManager = groupManager;
     }

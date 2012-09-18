@@ -43,8 +43,8 @@ import java.util.Map;
  * @see BaseValidatorWriter
  */
 public abstract class BaseValidatorWriterManager<W extends DataWriter> {
-    final private Map<Class, ValidatorWriter<? extends Validator, W>> writers =
-            new HashMap<Class, ValidatorWriter<? extends Validator, W>>();
+    final private Map<Class, ValidatorWriter<? extends Validator, ? super W>> writers =
+            new HashMap<Class, ValidatorWriter<? extends Validator, ? super W>>();
 
     private W dataWriter;
 
@@ -61,7 +61,7 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
      * @param validatorWriters One or more validation writers to add.
      */
     public void setValidator(ValidatorWriter<? extends Validator, ? super W>... validatorWriters) {
-        for( ValidatorWriter validatorWriter : validatorWriters ) {
+        for( ValidatorWriter<? extends Validator, ? super W> validatorWriter : validatorWriters ) {
             writers.put( validatorWriter.getSupportedType(), validatorWriter );
         }
     }
@@ -72,9 +72,9 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
      * @param status Item status
      */
     public void write( Validator validator, ItemStatus status ) {
-        final Class validatorType = validator.getType();
+        final Class<?> validatorType = validator.getType();
         if( writers.containsKey(validatorType) ) {
-            ValidatorWriter writer = writers.get(validatorType);
+            ValidatorWriter<? extends Validator, ? super W> writer = writers.get(validatorType);
             writer.write( dataWriter, validator, status );
         }
     }

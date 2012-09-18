@@ -29,8 +29,8 @@ import java.util.List;
 
 public class DefaultModelFactory implements ModelFactory {
 
-    private ModelFieldFactory modelFieldFactory;
-    private ModelNamingStrategy modelNamingStrategy;
+    private final ModelFieldFactory modelFieldFactory;
+    private final ModelNamingStrategy modelNamingStrategy;
 
     public DefaultModelFactory( ModelFieldFactory modelFieldFactory,
                                 ModelNamingStrategy modelNamingStrategy ) {

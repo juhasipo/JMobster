@@ -24,8 +24,8 @@ import javax.validation.constraints.Size;
 public class SizeValidator extends BaseValidator {
     private int min;
     private int max;
-    boolean hasMin;
-    boolean hasMax;
+    private boolean hasMin;
+    private boolean hasMax;
 
     @Override
     public void init( AnnotationBag annotationBag ) {

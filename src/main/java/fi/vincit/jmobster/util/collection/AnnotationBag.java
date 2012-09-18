@@ -32,6 +32,10 @@ public class AnnotationBag {
     public <T extends Annotation> T getAnnotation(Class<T> clazz) {
         if( annotations.containsKey(clazz) ) {
             FieldAnnotation annotation = annotations.get(clazz);
+            // This is really what we want to do. This is always right
+            // type since it is fetched by class type. Suppressing warning
+            // of IntelliJ IDEA Inspector
+            //noinspection unchecked
             return (T)annotation.getAnnotation();
         } else {
             return null;

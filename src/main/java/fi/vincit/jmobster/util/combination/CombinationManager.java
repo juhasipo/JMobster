@@ -28,10 +28,8 @@ import java.util.*;
  */
 public class CombinationManager<T extends HasType> {
 
-    private static final Logger LOG = LoggerFactory.getLogger( CombinationManager.class );
-
-    private Map<Class, Class> requiredClasses;
-    private Map<Class, Class> optionalClasses;
+    private final Map<Class, Class> requiredClasses;
+    private final Map<Class, Class> optionalClasses;
 
     /**
      * Constructs manager with only required types.
@@ -120,7 +118,11 @@ public class CombinationManager<T extends HasType> {
      * @param <T> Class type
      * @return Found class. If not found, null.
      */
+    @SuppressWarnings( "unchecked" )
     public <T> T findClass(Class<T> type) {
+        // Return values are mapped by class which makes sure
+        // that the returned type is always correct and therefore
+        // we can safely suppress warnings
         if( requiredClasses.containsKey(type) ) {
             return (T)requiredClasses.get(type);
         } else if( optionalClasses.containsKey(type) ) {

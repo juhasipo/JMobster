@@ -39,6 +39,7 @@ import java.io.IOException;
  *     all the given models inside a single namespace called "Models".
  * </p>
  */
+@SuppressWarnings( "HardcodedFileSeparator" )
 public class BackboneModelProcessor extends BaseModelProcessor {
     private static final Logger LOG = LoggerFactory.getLogger( BackboneModelProcessor.class );
 
@@ -79,6 +80,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
 
     @Override
     public void startProcessing() throws IOException {
+        LOG.trace("Starting to process models");
         this.writer = new JavaScriptWriter(getWriter());
         this.writer.open();
         this.validatorWriterManager.setWriter(this.writer);
@@ -90,6 +92,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
 
     @Override
     public void processModel( Model model, ItemStatus status ) {
+        LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
 
         this.writer.write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
@@ -141,6 +144,7 @@ public class BackboneModelProcessor extends BaseModelProcessor {
         this.writer.indentBack();
         this.writer.writeLine( NAMESPACE_END );
         this.writer.close();
+        LOG.trace("Processing models done");
     }
 
     /**

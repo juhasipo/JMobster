@@ -32,7 +32,7 @@ public final class CollectionConverter extends BaseValueConverter {
     private static final String COLLECTION_START = "[";
     private static final String COLLECTION_END = "]";
     private static final String COLLECTION_ITEM_SEPARATOR = ", ";
-    private FieldValueConverter fieldValueConverter;
+    private final FieldValueConverter fieldValueConverter;
 
     public CollectionConverter( FieldValueConverter fieldValueConverter ) {
         this.fieldValueConverter = fieldValueConverter;

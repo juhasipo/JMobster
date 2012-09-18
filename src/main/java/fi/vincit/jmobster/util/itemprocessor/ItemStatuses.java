@@ -5,6 +5,7 @@ package fi.vincit.jmobster.util.itemprocessor;
  * ItemStatus object that are initialized to a certain
  * phase.
  */
+@SuppressWarnings( "UtilityClassWithoutPrivateConstructor" )
 public class ItemStatuses {
 
     /**
@@ -18,8 +19,7 @@ public class ItemStatuses {
      * @return Item status which is last (but not first)
      */
     public static ItemStatus last() {
-        ItemStatus status = new ItemStatus(2, 1);
-        return status;
+        return new ItemStatus(2, 1);
     }
 
     /**
@@ -47,8 +47,7 @@ public class ItemStatuses {
      * @return Item status which is not first nor last
      */
     public static ItemStatus notFirstNorLast() {
-        ItemStatus status = new ItemStatus(3, 1);
-        return status;
+        return new ItemStatus(3, 1);
     }
 
     /**

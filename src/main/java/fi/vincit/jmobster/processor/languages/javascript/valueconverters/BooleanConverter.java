@@ -18,9 +18,8 @@ package fi.vincit.jmobster.processor.languages.javascript.valueconverters;
 import fi.vincit.jmobster.processor.defaults.base.BaseValueConverter;
 
 /**
- * Converter for Java Boolean objects. Primitive booleans
- * are boxed to Boolean objects and converted with this
- * converter.
+ * Converter for Java Boolean objects. Primitive boolean values
+ * are boxed to Boolean objects and converted with this converter.
  */
 public final class BooleanConverter extends BaseValueConverter {
     @Override

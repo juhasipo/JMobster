@@ -37,8 +37,6 @@ import java.util.List;
  */
 public class DefaultValidatorScanner implements ValidatorScanner {
 
-    private static final Logger LOG = LoggerFactory.getLogger( DefaultValidatorScanner.class );
-
     final private ValidatorFactory validatorFactory;
     final private GroupFilter<FieldAnnotation, Class> filter;
 

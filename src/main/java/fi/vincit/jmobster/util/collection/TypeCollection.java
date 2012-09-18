@@ -29,12 +29,12 @@ import java.lang.reflect.Array;
  * Java collections or lists, this uses shorter and prettier syntax and is supports
  * overloading better. For example there can be two methods with same name and take
  * different combinations of type collections, but since the type collections can be
- * subclassed, the method signatures don't conflict.
+ * extended, the method signatures don't conflict.
  * </p>
  * @param <T> Type of objects the collection holds
  */
 public class TypeCollection<T> {
-    private T[] types;
+    private final T[] types;
 
     public TypeCollection( T... types ) {
         this.types = types;

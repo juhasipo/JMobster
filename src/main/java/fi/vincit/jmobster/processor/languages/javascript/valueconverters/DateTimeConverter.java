@@ -40,7 +40,7 @@ public class DateTimeConverter extends StringConverter {
         EPOCH_0
     }
 
-    private DateFormat dateFormat;
+    private final DateFormat dateFormat;
     private DefaultTime defaultTime = DefaultTime.EPOCH_0;
 
     public DateTimeConverter(String pattern) {

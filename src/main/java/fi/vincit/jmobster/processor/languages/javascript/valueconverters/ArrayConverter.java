@@ -30,7 +30,7 @@ public final class ArrayConverter extends BaseValueConverter {
     private static final String EMPTY_ARRAY = "[]";
     private static final String ARRAY_END = "]";
     private static final String ARRAY_ITEM_SEPARATOR = ", ";
-    private FieldValueConverter fieldValueConverter;
+    private final FieldValueConverter fieldValueConverter;
 
     public ArrayConverter( FieldValueConverter fieldValueConverter ) {
         this.fieldValueConverter = fieldValueConverter;

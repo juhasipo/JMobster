@@ -24,14 +24,15 @@ import java.util.List;
 /**
  * GroupManager handles checking whether a given validator
  * contains the required groups to be included in a model field.
+ * @param <G> Group type
  */
-public interface GroupManager<T> {
+public interface GroupManager<G> {
     /**
      * Checks if the validator has the required groups
      * @param groupObject Object with groups
      * @return True if groups match, otherwise false
      */
-    boolean match( HasGroups<T> groupObject );
+    boolean match( HasGroups<G> groupObject );
 
-    void setGroups( GroupMode groupMode, Collection<T> groups );
+    void setGroups( GroupMode groupMode, Collection<G> groups );
 }

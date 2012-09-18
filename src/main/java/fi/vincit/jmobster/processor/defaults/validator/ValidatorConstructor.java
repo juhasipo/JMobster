@@ -47,8 +47,8 @@ import java.util.Collection;
 public class ValidatorConstructor {
     private static final Logger LOG = LoggerFactory.getLogger( ValidatorConstructor.class );
 
-    private CombinationManager<FieldAnnotation> combinationManager;
-    private Class validatorClass;
+    private final CombinationManager<FieldAnnotation> combinationManager;
+    private final Class validatorClass;
 
     /**
      * Configures the validator constructor. Validators the ValidatorConstructor
@@ -59,7 +59,7 @@ public class ValidatorConstructor {
      * @param optionalTypes Optional annotation types (classes) that can be given to this validator
      */
     public ValidatorConstructor(Class validatorClass, RequiredTypes requiredTypes, OptionalTypes optionalTypes) {
-        this.combinationManager = new CombinationManager(requiredTypes, optionalTypes);
+        this.combinationManager = new CombinationManager<FieldAnnotation>(requiredTypes, optionalTypes);
         this.validatorClass = validatorClass;
     }
 

@@ -270,7 +270,14 @@ Now you have added support for your own validation annotation.
 
 ### Custom Target Platform
 
-TODO: Intro
+While the JMobster library itself doesn't provide wide support for different target languages or frameworks, it still
+provides ways to implement that support. Implementing support for a new framework is separeted into to two phases:
+
+1. Support for the language
+2. Support for the framework
+
+If your platform happens to use language JMobster already supports, then the second one is only needed to be
+implemented.
 
 #### Supporting New Language
 
@@ -280,7 +287,8 @@ a simple *DataWriter* with few helpful write methods, but a higher level *DataWr
 Custom *DataWriters* have to implement *DataWriter* interface. The implementation itself can rely either on inheritance
 or delegation.
 
-TODO: Default value converters
+In future JMobster will support converting object values to target platform values. This is still very WIP feature and
+it is not recommended to be used even when some classes exist in the library.
 
 #### Supporting New Target Framework
 

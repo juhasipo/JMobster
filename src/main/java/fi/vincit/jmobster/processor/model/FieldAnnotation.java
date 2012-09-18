@@ -37,6 +37,7 @@ import java.util.Collection;
 public class FieldAnnotation implements HasGroups<Class>, HasType {
 
     private static final Logger LOG = LoggerFactory.getLogger( FieldAnnotation.class );
+    private static final Class[] NO_GROUPS = new Class[0];
     private static final String GROUPS_METHOD_NAME = "groups";
 
     final private Class[] groups;
@@ -78,7 +79,7 @@ public class FieldAnnotation implements HasGroups<Class>, HasType {
         } catch( IllegalAccessException e ) {
             LOG.error( "Error e", e );
         }
-        return new Class[0];
+        return NO_GROUPS;
     }
 
     @Override

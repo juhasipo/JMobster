@@ -68,7 +68,7 @@ public class ModelField {
         return fieldType;
     }
 
-    public void addValidators(Collection<? extends Validator> validators) {
+    public final void addValidators(Collection<? extends Validator> validators) {
         this.validators.addAll(validators);
     }
 

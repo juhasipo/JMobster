@@ -23,10 +23,10 @@ import java.util.List;
  * A single model that is converted to the target platform.
  */
 public class Model {
-    private Class modelClass;
-    private Collection<ModelField> fields;
+    private final Class modelClass;
+    private final Collection<ModelField> fields;
     private boolean validations;
-    private String name;
+    private final String name;
 
     /**
      * Model constructed from fields
@@ -72,5 +72,10 @@ public class Model {
     }
     public void setValidations(boolean validations) {
         this.validations = validations;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

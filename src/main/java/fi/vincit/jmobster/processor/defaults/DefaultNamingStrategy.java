@@ -23,6 +23,9 @@ import fi.vincit.jmobster.processor.ModelNamingStrategy;
  * E.g. MyModelDto will be converted to MyModel
  */
 public class DefaultNamingStrategy implements ModelNamingStrategy {
+
+    private final static String DTO_POSTFIX = "dto";
+
     @Override
     public String getName( Class clazz ) {
         if( clazz.isAnnotationPresent(fi.vincit.jmobster.annotation.Model.class) ) {
@@ -34,7 +37,6 @@ public class DefaultNamingStrategy implements ModelNamingStrategy {
         }
     }
 
-    final static String DTO_POSTFIX = "dto";
     private String stripDtoFromName( String modelName ) {
         if( modelName.toLowerCase().endsWith(DTO_POSTFIX) ) {
             modelName = modelName.substring(0, modelName.length() - DTO_POSTFIX.length());

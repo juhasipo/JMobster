@@ -36,7 +36,7 @@ public interface ModelProcessor {
      * Called exactly once for each model once in the order the models
      * were given to the {@link fi.vincit.jmobster.ModelGenerator}.
      * @param model Model to process
-     * @param status
+     * @param status Item status
      */
     void processModel( Model model, ItemStatus status );
 

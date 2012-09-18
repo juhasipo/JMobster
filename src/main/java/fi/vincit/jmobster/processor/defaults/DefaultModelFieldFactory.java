@@ -133,7 +133,7 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
      * Checks if the property should be added to model fields. Uses
      * the getter method properties to determine this.
      * @param property Bean property to check
-     * @return True if the property should be inclided in the model fields. Otherwise false.
+     * @return True if the property should be included in the model fields. Otherwise false.
      */
     private boolean shouldAddField(PropertyDescriptor property) {
         Method method = property.getReadMethod();

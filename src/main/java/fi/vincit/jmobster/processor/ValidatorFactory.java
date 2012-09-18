@@ -31,12 +31,10 @@ import java.util.List;
 public interface ValidatorFactory {
 
     /**
-     * Returns a new validator instance for the given annotation.
-     * To prevent null pointer exceptions, check if the validator
-     * can be constructed with {@link ValidatorFactory#isValidationAnnotation(java.lang.annotation.Annotation)}
-     * method.
+     * Returns a new validator instance for the given set of annotations.
+     * All possible combinations of validators are created.
      * @param annotations List of all annotations
-     * @return New validator instance if exists, otherwise null.
+     * @return List of created validators. Empty list if no validators are created.
      */
     List<Validator> createValidators(Collection<FieldAnnotation> annotations);
 

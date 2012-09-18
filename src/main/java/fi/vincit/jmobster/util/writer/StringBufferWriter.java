@@ -27,9 +27,7 @@ import java.io.IOException;
  */
 public class StringBufferWriter extends StreamDataWriter {
 
-    private static final Logger LOG = LoggerFactory.getLogger( StringBufferWriter.class );
-
-    private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
     public StringBufferWriter() {
         super();

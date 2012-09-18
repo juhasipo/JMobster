@@ -28,16 +28,16 @@ import javax.validation.constraints.*;
 import java.io.IOException;
 import java.util.*;
 
+@SuppressWarnings( "ALL" )
 public class TestMain {
-    private static final Logger LOG = LoggerFactory
-            .getLogger( TestMain.class );
 
+    @SuppressWarnings( { "MismatchedReadAndWriteOfArray", "MismatchedQueryAndUpdateOfCollection", "UnusedDeclaration" } )
     public static class InnerClass {
         @NotNull
         public String innerString = "Inner string";
     }
 
-    @SuppressWarnings( "MismatchedReadAndWriteOfArray" )
+    @SuppressWarnings( { "MismatchedReadAndWriteOfArray", "MismatchedQueryAndUpdateOfCollection", "UnusedDeclaration" } )
     public static class MyModelDto {
 
         @IgnoreDefaultValue
@@ -82,12 +82,14 @@ public class TestMain {
 
     }
 
+    @SuppressWarnings( { "MismatchedReadAndWriteOfArray", "MismatchedQueryAndUpdateOfCollection", "UnusedDeclaration" } )
     public static class DirectFieldAccessDemo {
         @Min(1)
         @Max(10)
         private int value = 4;
     }
 
+    @SuppressWarnings( { "MismatchedReadAndWriteOfArray", "MismatchedQueryAndUpdateOfCollection", "UnusedDeclaration", "HardcodedFileSeparator" } )
     public static class BeanPropertyDemo {
         @OverridePattern(regexp = "foo", groups={Integer.class})
         @Pattern(regexp = "[\\w]*", groups={String.class, Integer.class})
@@ -105,12 +107,13 @@ public class TestMain {
         }
     }
 
+
     public static void main(String[] args) throws IOException, InterruptedException {
         //DataWriter modelWriter = new StreamDataWriter("models.js");
         CachedModelProvider provider1 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
         CachedModelProvider provider2 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
 
-        final String HTML5 = "html5";
+        //final String HTML5 = "html5";
         final String BB = "backbone.js";
 
         ModelFactory factory = JMobsterFactory.getModelFactory();

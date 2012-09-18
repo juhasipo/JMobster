@@ -58,8 +58,7 @@ public class FileDataWriter extends StreamDataWriter {
     }
 
     /**
-     * Returns path
-     * @return
+     * @return Path
      */
     public String getPath() {
         return this.path;

@@ -24,6 +24,7 @@ import javax.validation.constraints.Pattern;
  * Converts Java regular expression pattern to
  * JavaScrip pattern
  */
+@SuppressWarnings( { "HardcodedFileSeparator", "UtilityClassWithoutPrivateConstructor" } )
 public final class JavaToJSPatternConverter {
     private static final Logger LOG = LoggerFactory
             .getLogger( JavaToJSPatternConverter.class );
@@ -38,7 +39,7 @@ public final class JavaToJSPatternConverter {
      * Coverts the given regular expression patter from Java form
      * to JavaScript form. The only supported flags are at the moment
      * Pattern.Flag.CASE_INSENSITIVE and Pattern.Flag.MULTILINE. The current
-     * version may not produce accurate results for all special metacharacters
+     * version may not produce accurate results for all special meta-characters
      * but support will be added later.
      * @param javaPattern Java regular expression pattern
      * @param flags 0..N flags

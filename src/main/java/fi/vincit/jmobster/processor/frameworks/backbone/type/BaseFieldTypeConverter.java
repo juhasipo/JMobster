@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.type;
 
 public abstract class BaseFieldTypeConverter implements FieldTypeConverter {
 
-    private Class[] supportedTypes;
+    final private Class[] supportedTypes;
 
     protected BaseFieldTypeConverter( Class... types ) {
         this.supportedTypes = types;

@@ -29,7 +29,7 @@ public class DefaultModelGenerator implements ModelGenerator {
     private static final Logger LOG = LoggerFactory
             .getLogger( DefaultModelGenerator.class );
 
-    private ModelProcessor modelProcessor;
+    private final ModelProcessor modelProcessor;
 
     /**
      * Creates new DefaultModelGenerator

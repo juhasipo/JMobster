@@ -25,8 +25,8 @@ package fi.vincit.jmobster.util.itemprocessor;
  */
 public class ItemStatus {
     final private int numberOfItems;
-    boolean firstItem;
-    boolean lastItem;
+    private boolean firstItem;
+    private boolean lastItem;
 
     /**
      * Initializes with given number of items and
@@ -52,7 +52,7 @@ public class ItemStatus {
      * Update the processing
      * @param itemIndex 0 based index.
      */
-    public void update(int itemIndex) {
+    final public void update(int itemIndex) {
         firstItem = itemIndex == 0;
         lastItem = itemIndex == (numberOfItems-1);
     }

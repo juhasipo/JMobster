@@ -25,6 +25,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  * all functions and blocks are closed when the writer is closed.
  * This feature can be turned of with {@link JavaScriptWriter#lenientModeOn}.
  */
+@SuppressWarnings( "UnusedReturnValue" )
 public class JavaScriptWriter implements DataWriter {
 
     private static final String BLOCK_START = "{";
@@ -49,30 +50,33 @@ public class JavaScriptWriter implements DataWriter {
     private int functionsOpen = 0;
     private int blocksOpen = 0;
 
-    private DataWriter writer;
+    private final DataWriter writer;
 
     private abstract static class ItemWriter<T> implements ItemHandler<T> {
-        private JavaScriptWriter writer;
+        private final JavaScriptWriter writer;
 
-        protected ItemWriter( JavaScriptWriter writer ) {
+        ItemWriter( JavaScriptWriter writer ) {
             this.writer = writer;
         }
 
-        protected JavaScriptWriter getWriter() {
+        JavaScriptWriter getWriter() {
             return writer;
         }
     }
 
-    private static ItemWriter<Object> arrayWriter;
+    // TODO: Test that this works now as it should. Used to be as static variable which is VERY wrong
+    private final ItemWriter<Object> arrayWriter = new ItemWriter<Object>(this) {
+        @Override
+        public void process( Object item, ItemStatus status ) {
+            getWriter().write(item.toString(), ARRAY_SEPARATOR, !status.isLastItem());
+        }
+    };
+
+
+
 
     public JavaScriptWriter(DataWriter writer) {
         this.writer = writer;
-        this.arrayWriter = new ItemWriter<Object>(this) {
-            @Override
-            public void process( Object item, ItemStatus status ) {
-                getWriter().write(item.toString(), ARRAY_SEPARATOR, !status.isLastItem());
-            }
-        };
     }
 
     /**

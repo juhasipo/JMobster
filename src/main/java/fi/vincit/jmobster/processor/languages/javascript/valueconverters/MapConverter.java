@@ -33,7 +33,7 @@ public class MapConverter extends BaseValueConverter {
     private static final String MAP_KEY_VALUE_SEPARATOR = ": ";
     private static final String MAP_KEY_VALUE_PAIR_SEPARATOR = ", ";
 
-    private FieldValueConverter fieldValueConverter;
+    private final FieldValueConverter fieldValueConverter;
 
     public MapConverter( FieldValueConverter fieldValueConverter ) {
         this.fieldValueConverter = fieldValueConverter;
@@ -44,9 +44,12 @@ public class MapConverter extends BaseValueConverter {
         return EMPTY_MAP;
     }
 
+    @SuppressWarnings( "unchecked" )
     @Override
     protected String getValueAsString( Object values ) {
-        Map<Object,Object> map = (Map)values;
+        // Since this is a map converter, this can safely cast the parameter
+        // into to a map
+        Map<Object,Object> map = (Map<Object,Object>)values;
         StringBuilder sb = new StringBuilder();
         sb.append( MAP_START );
         final int size = map.size();

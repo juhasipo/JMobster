@@ -35,8 +35,6 @@ import java.util.*;
  */
 public abstract class BaseValidatorFactory implements ValidatorFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger( BaseValidatorFactory.class );
-
     // Use list so that the order is always the same when returning
     // validators. This helps testing but is a good feature for some cases
     final private List<ValidatorConstructor> validatorConstructors;

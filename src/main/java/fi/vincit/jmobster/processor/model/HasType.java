@@ -20,5 +20,5 @@ package fi.vincit.jmobster.processor.model;
  * Interface for classes that have type (as Class)
  */
 public interface HasType {
-    Class getType();
+    Class<?> getType();
 }
