@@ -35,18 +35,18 @@ Basic usage is simple. Create Java classes, use JSR-303 annotations and give the
 public class UserDto {
     @NotNull
     @Size(max = 255)
-    private String fullname;
+    private String fullname = "";
 
     @NotNull
     @Size(max = 255)
-    private String username;
+    private String username = "";
 
     @NotNull
     @Min(1900)
-    private Integer birthYear = 1900;
+    private Integer birthYear = 0;
 
     @Size(min = 1)
-    private String[] roles = { "VIEW_PAGES", "EDIT_OWN_PAGES" };
+    private String[] roles = {};
 
     // Getters and setters omitted
 }
