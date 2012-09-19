@@ -149,7 +149,8 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
      */
     private boolean shouldAddField(PropertyDescriptor property) {
         Method method = property.getReadMethod();
-        return allowedByAnnotation(method) && allowedByModifiers(method.getModifiers());
+        return allowedByAnnotation(method)
+                && allowedByModifiers(method.getModifiers());
     }
 
     /**

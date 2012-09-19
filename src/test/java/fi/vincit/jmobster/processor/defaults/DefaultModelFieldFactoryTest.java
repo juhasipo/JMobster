@@ -366,27 +366,27 @@ public class DefaultModelFieldFactoryTest {
     }
     public static class BaseTestBean {
         public Long getPublicLongField() { return 0L; }
-        public Integer getProtectedIntegerField() { return 1; }
-        public String getPrivateStringField() { return ""; }
+        protected Integer getProtectedIntegerField() { return 1; }
+        private String getPrivateStringField() { return ""; }
     }
 
     public static class ExtendedTestBean extends BaseTestBean {
         public Long getPublicLongFieldEx() { return 0L; }
-        public Integer getProtectedIntegerFieldEx() { return 1; }
-        public String getPrivateStringFieldEx() { return ""; }
+        protected Integer getProtectedIntegerFieldEx() { return 1; }
+        private String getPrivateStringFieldEx() { return ""; }
     }
 
     public static class ExtendedInterfacedTestBean extends BaseTestBean implements BeanInterface {
         public Long getPublicLongFieldEx() { return 0L; }
-        public Integer getProtectedIntegerFieldEx() { return 1; }
-        public String getPrivateStringFieldEx() { return ""; }
+        protected Integer getProtectedIntegerFieldEx() { return 1; }
+        private String getPrivateStringFieldEx() { return ""; }
         @Override public String getPublicStringIn() { return ""; }
     }
 
     public static class ExtendedOverrideTestBean extends BaseTestBean {
         public Long getPublicLongFieldEx() { return 0L; }
-        public Integer getProtectedIntegerFieldEx() { return 1; }
-        public String getPrivateStringFieldEx() { return ""; }
+        protected Integer getProtectedIntegerFieldEx() { return 1; }
+        private String getPrivateStringFieldEx() { return ""; }
 
         @Override public Long getPublicLongField() { return super.getPublicLongField(); }
     }
@@ -397,8 +397,8 @@ public class DefaultModelFieldFactoryTest {
         List<ModelField> models = fs.getFields( BaseTestBean.class );
 
         assertFieldFoundOnce( models, "publicLongField" );
-        assertFieldFoundOnce( models, "protectedIntegerField" );
-        assertFieldFoundOnce( models, "privateStringField" );
+        assertFieldNotFound( models, "protectedIntegerField" );
+        assertFieldNotFound( models, "privateStringField" );
     }
 
     @Test
@@ -407,11 +407,11 @@ public class DefaultModelFieldFactoryTest {
         List<ModelField> models = fs.getFields( ExtendedTestBean.class );
 
         assertFieldFoundOnce( models, "publicLongField" );
-        assertFieldFoundOnce( models, "protectedIntegerField" );
-        assertFieldFoundOnce( models, "privateStringField" );
+        assertFieldNotFound( models, "protectedIntegerField" );
+        assertFieldNotFound( models, "privateStringField" );
         assertFieldFoundOnce( models, "publicLongFieldEx" );
-        assertFieldFoundOnce( models, "protectedIntegerFieldEx" );
-        assertFieldFoundOnce( models, "privateStringFieldEx" );
+        assertFieldNotFound( models, "protectedIntegerFieldEx" );
+        assertFieldNotFound( models, "privateStringFieldEx" );
     }
 
     @Test
@@ -420,11 +420,11 @@ public class DefaultModelFieldFactoryTest {
         List<ModelField> models = fs.getFields( ExtendedInterfacedTestBean.class );
 
         assertFieldFoundOnce( models, "publicLongField" );
-        assertFieldFoundOnce( models, "protectedIntegerField" );
-        assertFieldFoundOnce( models, "privateStringField" );
+        assertFieldNotFound( models, "protectedIntegerField" );
+        assertFieldNotFound( models, "privateStringField" );
         assertFieldFoundOnce( models, "publicLongFieldEx" );
-        assertFieldFoundOnce( models, "protectedIntegerFieldEx" );
-        assertFieldFoundOnce( models, "privateStringFieldEx" );
+        assertFieldNotFound( models, "protectedIntegerFieldEx" );
+        assertFieldNotFound( models, "privateStringFieldEx" );
         assertFieldFoundOnce( models, "publicStringIn" );
     }
 
@@ -434,10 +434,10 @@ public class DefaultModelFieldFactoryTest {
         List<ModelField> models = fs.getFields( ExtendedOverrideTestBean.class );
 
         assertFieldFoundOnce( models, "publicLongField" );
-        assertFieldFoundOnce( models, "protectedIntegerField" );
-        assertFieldFoundOnce( models, "privateStringField" );
+        assertFieldNotFound( models, "protectedIntegerField" );
+        assertFieldNotFound( models, "privateStringField" );
         assertFieldFoundOnce( models, "publicLongFieldEx" );
-        assertFieldFoundOnce( models, "protectedIntegerFieldEx" );
-        assertFieldFoundOnce( models, "privateStringFieldEx" );
+        assertFieldNotFound( models, "protectedIntegerFieldEx" );
+        assertFieldNotFound( models, "privateStringFieldEx" );
     }
 }
