@@ -43,15 +43,23 @@ public class TestUtil {
      * @param fieldName Field name
      * @return Index in which the found field is.
      */
-    public static int assertFieldFound(List<ModelField> modelFields, String fieldName) {
+    public static int assertFieldFoundOnce( List<ModelField> modelFields, String fieldName ) {
+        int foundIndex = -1;
         for( int i = 0; i < modelFields.size(); ++i ) {
-            ModelField field = modelFields.get(i);
+            final ModelField field = modelFields.get(i);
             if( field.getName().equals(fieldName) ) {
-                return i;
+                if( foundIndex >= 0 ) {
+                    assertTrue("Field <"+fieldName+"> found more than once.", false);
+                }
+                foundIndex = i;
             }
         }
-        assertTrue( "Field with name <" + fieldName + "> not found.", false );
-        return -1; // Never returned due to assertion
+        if( foundIndex < 0 ) {
+            assertTrue( "Field with name <" + fieldName + "> not found.", false );
+            return -1; // Never returned due to assertion
+        } else {
+            return foundIndex;
+        }
     }
 
     /**

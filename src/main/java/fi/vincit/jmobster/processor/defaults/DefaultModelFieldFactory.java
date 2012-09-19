@@ -74,7 +74,8 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
     private List<ModelField> getFieldsByGetters(Class clazz) {
         List<ModelField> fields = new ArrayList<ModelField>();
         try {
-            final BeanInfo beanInfo = Introspector.getBeanInfo( clazz );
+            // Introspector will find also properties from super classes
+            final BeanInfo beanInfo = Introspector.getBeanInfo( clazz, Introspector.USE_ALL_BEANINFO );
             for( PropertyDescriptor property : beanInfo.getPropertyDescriptors() ) {
                 if( shouldAddField(property) ) {
                     final String name = property.getName();
@@ -115,6 +116,11 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
                 LOG.warn( "Field {} not added to model fields", field.getName() );
             }
             field.setAccessible(wasAccessible);
+        }
+
+        // Also find all fields from every super classes
+        if( clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class) ) {
+            fields.addAll(getFieldsByDirectFieldAccess(clazz.getSuperclass()));
         }
 
         return fields;
