@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.defaults;/*
 
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.processor.FieldScanMode;
+import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
@@ -25,14 +26,15 @@ import org.junit.Test;
 import javax.validation.constraints.Min;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static fi.vincit.jmobster.util.TestUtil.assertFieldFoundOnce;
 import static fi.vincit.jmobster.util.TestUtil.assertFieldNotFound;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class DefaultModelFieldFactoryTest {
 
@@ -45,17 +47,27 @@ public class DefaultModelFieldFactoryTest {
         return new DefaultModelFieldFactory(scanMode, validatorScanner);
     }
 
+    @Test
+    public void testSetValidatorFilterGroups() {
+        ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
+        DefaultModelFieldFactory fs =
+                new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, validatorScanner );
+        final GroupMode groupMode = GroupMode.ANY_OF_REQUIRED;
+        final Collection<Class> groups = new ArrayList<Class>();
+        fs.setValidatorFilterGroups(groupMode, groups);
+
+        verify(validatorScanner, times(1)).setFilterGroups(groupMode, groups);
+    }
+
     public static class SimpleTestClass {
         public Long publicLongField;
         protected Integer protectedIntegerField;
         private String privateStringField;
     }
 
-
-
     @Test
     public void testGetFields() {
-        DefaultModelFieldFactory fs = getFieldScanner( FieldScanMode.DIRECT_FIELD_ACCESS);
+        DefaultModelFieldFactory fs = getFieldScanner( FieldScanMode.DIRECT_FIELD_ACCESS );
         List<ModelField> models = fs.getFields( SimpleTestClass.class );
 
         assertFieldFoundOnce( models, "publicLongField" );

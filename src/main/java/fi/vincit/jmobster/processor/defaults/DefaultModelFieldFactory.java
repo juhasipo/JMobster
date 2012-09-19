@@ -68,8 +68,6 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
      * Scans the given class for model fields. Accesses bean properties (getter methods).
      * @param clazz Class to scan
      * @return List of model fields. Empty list if nothing found.
-     * @throws CannotAccessDefaultConstructorError If the default constructor exists but cannot be accessed
-     * @throws DefaultConstructorMissingError If the given model does not have a default constructor
      */
     private List<ModelField> getFieldsByGetters(Class clazz) {
         List<ModelField> fields = new ArrayList<ModelField>();
@@ -100,12 +98,22 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
      * Scans the given class for model fields. Accesses field directly via member variables.
      * @param clazz Class to scan
      * @return List of model fields. Empty list if nothing found.
-     * @throws CannotAccessDefaultConstructorError If the default constructor exists but cannot be accessed
-     * @throws DefaultConstructorMissingError If the given model does not have a default constructor
      */
     private List<ModelField> getFieldsByDirectFieldAccess( Class clazz ) {
         List<ModelField> fields = new ArrayList<ModelField>();
+        getFieldsByDirectFieldAccess(clazz, fields);
+        return fields;
+    }
 
+    /**
+     * Sames as {@link DefaultModelFieldFactory#getFieldsByDirectFieldAccess(Class)} but
+     * takes a list as a parameter for performance reasons. Since some calls may be recursive
+     * it is more efficient to use the same list than to allocate new list for every recursion
+     * level.
+     * @param clazz Class to scan
+     * @param fields List of model fields
+     */
+    private void getFieldsByDirectFieldAccess( Class clazz, List<ModelField> fields) {
         for( Field field : clazz.getDeclaredFields() ) {
             final boolean wasAccessible = field.isAccessible();
             field.setAccessible(true);
@@ -120,10 +128,8 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
 
         // Also find all fields from every super classes
         if( clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class) ) {
-            fields.addAll(getFieldsByDirectFieldAccess(clazz.getSuperclass()));
+            getFieldsByDirectFieldAccess(clazz.getSuperclass(), fields);
         }
-
-        return fields;
     }
 
     /**
