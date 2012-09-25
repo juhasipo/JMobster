@@ -45,7 +45,6 @@ public class DefaultModelFieldFactorySecurityTest {
             } catch (RuntimeException e) {
                 // Only check setAccessible accesses
                 if( permission.getName().equals("suppressAccessChecks") ) {
-                    System.out.print("");
                     throw e;
                 }
             }
