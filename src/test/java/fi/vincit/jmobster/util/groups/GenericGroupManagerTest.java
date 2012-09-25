@@ -15,6 +15,9 @@ public class GenericGroupManagerTest {
     public static interface Group2 {}
     public static interface Group3 {}
 
+    public static interface Group1And2 extends Group1, Group2 {}
+    public static interface Group1And2And3 extends Group1And2, Group3 {}
+
     private HasGroups create(Class... groups) {
         HasGroups hasGroups = mock( HasGroups.class );
         final boolean groupsExist = groups.length > 0;
@@ -285,5 +288,60 @@ public class GenericGroupManagerTest {
 
         groupManager.setGroups(GroupMode.EXACTLY_REQUIRED, TestUtil.collectionFromObjects(Group1.class, Group2.class));
         assertFalse( groupManager.match( hg1 ) );
+    }
+
+
+    /**
+     * Advanced multi-level inheritance tests
+     */
+
+    @Test
+    public void testAnyOfRequiredInheritance() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class, Group2.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAnyOfRequiredInheritance2() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class, Group3.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertTrue( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAnyOfRequiredInheritance3() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group3.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertFalse( groupManager.match( hg12 ) );
+        assertTrue( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAnyOfRequiredMultiLevelInheritance1() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class );
+        HasGroups hg123 = create(Group1And2And3.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAnyOfRequiredMultiLevelInheritance2() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group3.class );
+        HasGroups hg123 = create(Group1And2And3.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertTrue( groupManager.match( hg3 ) );
     }
 }

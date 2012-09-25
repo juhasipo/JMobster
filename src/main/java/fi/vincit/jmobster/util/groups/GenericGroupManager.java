@@ -108,6 +108,19 @@ public class GenericGroupManager<T> implements GroupManager<T> {
                 if( group.equals(myGroup) ) {
                     return true;
                 }
+
+                if( group instanceof Class && checkInterfaces( (Class)group, myGroup ) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkInterfaces( Class group, T myGroup ) {
+        for( Class groupInterface : group.getInterfaces() ) {
+            if( groupInterface.equals(myGroup) || checkInterfaces(groupInterface, myGroup) ) {
+                return true;
             }
         }
         return false;
