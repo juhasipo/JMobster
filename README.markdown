@@ -87,6 +87,8 @@ be written for the member variables. The mode doesn't care about the visibility 
 package and private fields are considered equal in that sense. Also every member variable from super classes will be
 included.
 
+**Notice**: When using _DIRECT\_FIELD\_ACCESS_ mode the scanning may be restricted by Java's *SecurityManager*.
+
 _BEAN\_PROPERTY_ mode will use standard getter methods to find available model fields (e.g. _getName()_ for field "name").
 This mode will ignore _getClass()_ getter. in this mode the annotations must be written to the getter methods in order
 them to work since it won't be possible to find the corresponding member variable just with the method name (the getter

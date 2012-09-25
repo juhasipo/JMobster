@@ -28,6 +28,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -115,15 +116,17 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
      */
     private void getFieldsByDirectFieldAccess( Class clazz, List<ModelField> fields) {
         for( Field field : clazz.getDeclaredFields() ) {
-            final boolean wasAccessible = field.isAccessible();
-            field.setAccessible(true);
-            if( shouldAddField(field) ) {
-                ModelField modelField = new ModelField(field, validatorScanner.getValidators( field ));
-                fields.add( modelField );
-            } else {
-                LOG.warn( "Field {} not added to model fields", field.getName() );
+            try {
+                field.setAccessible(true);
+                if( shouldAddField(field) ) {
+                    ModelField modelField = new ModelField(field, validatorScanner.getValidators( field ));
+                    fields.add( modelField );
+                } else {
+                    LOG.warn( "Field {} not added to model fields", field.getName() );
+                }
+            } catch (AccessControlException ace) {
+                LOG.warn( "Field {} not added to model fields due to SecurityManager", field.getName() );
             }
-            field.setAccessible(wasAccessible);
         }
 
         // Also find all fields from every super classes
