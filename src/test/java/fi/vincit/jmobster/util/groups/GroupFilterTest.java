@@ -12,10 +12,13 @@ import static org.junit.Assert.assertEquals;
 
 public class GroupFilterTest {
 
+    public static interface Group1 {}
+    public static interface Group2 {}
+    
     public static class Obj1 implements HasGroups<Class> {
         @Override
         public Class[] getGroups() {
-            return new Class[] { String.class, Integer.class };
+            return new Class[] { Group2.class, Group1.class };
         }
 
         @Override
@@ -27,7 +30,7 @@ public class GroupFilterTest {
     public static class Obj2 implements HasGroups<Class> {
         @Override
         public Class[] getGroups() {
-            return new Class[] { String.class };
+            return new Class[] { Group2.class };
         }
 
         @Override
@@ -35,10 +38,12 @@ public class GroupFilterTest {
             return true;
         }
     }
+    
+    
 
     @Test
     public void testFilterAnyOfRequired() {
-        GroupManager<Class> mgr = new GenericGroupManager<Class>( GroupMode.ANY_OF_REQUIRED, Integer.class );
+        GroupManager<Class> mgr = new GenericGroupManager<Class>( GroupMode.ANY_OF_REQUIRED, Group1.class );
         GroupFilter<HasGroups<Class>, Class> filter = new GroupFilter<HasGroups<Class>, Class>(mgr);
 
         Collection<HasGroups<Class>> filtered = filter.filterByGroups( TestUtil.collectionFromObjects(new Obj1(), new Obj2()) );
@@ -47,7 +52,7 @@ public class GroupFilterTest {
 
     @Test
     public void testFilterExactlyRequired() {
-        GroupManager<Class> mgr = new GenericGroupManager<Class>( GroupMode.EXACTLY_REQUIRED, String.class );
+        GroupManager<Class> mgr = new GenericGroupManager<Class>( GroupMode.EXACTLY_REQUIRED, Group2.class );
         GroupFilter<HasGroups<Class>, Class> filter = new GroupFilter<HasGroups<Class>, Class>(mgr);
 
         Collection<HasGroups<Class>> filtered = filter.filterByGroups( TestUtil.collectionFromObjects(new Obj1(), new Obj2()) );

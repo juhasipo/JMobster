@@ -23,7 +23,12 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * Default implementation of group manager
+ * Default implementation of group manager. Function of this class is based on
+ * breaking down the given group trees to list of leaves. So if the manager is set
+ * to require a class which is a tree of interfaces, that class is broken down so that
+ * the manager only contains the leaf interfaces. Also the input groups for match method
+ * are broken down in similar way. These leaves are then used for the comparison which
+ * makes checking different permutations much easier.
  */
 public class GenericGroupManager<T> implements GroupManager<T> {
 
@@ -48,11 +53,8 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      * @param requiredGroups Required groups
      */
     public GenericGroupManager( GroupMode groupMode, Collection<T> requiredGroups ) {
-        this.groupMode = groupMode;
         this.groups = new HashSet<T>(requiredGroups.size());
-        for( T group : requiredGroups ) {
-            this.groups.add(group);
-        }
+        setGroups(groupMode, requiredGroups);
     }
 
     /**
@@ -75,10 +77,15 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     }
 
     @Override
-    public void setGroups( GroupMode groupMode, Collection<T> groups ) {
+    public void setGroups( GroupMode groupMode, Collection<T> requiredGroups ) {
         this.groupMode = groupMode;
         this.groups.clear();
-        this.groups.addAll(groups);
+        // Break down groups to lowest level so that we only have leafs of the
+        // group tree
+        if( requiredGroups.size() > 0 ) {
+            List<T> groupTreeLeaves = breakDownGenericGroupsToLeaves( requiredGroups );
+            this.groups.addAll(groupTreeLeaves);
+        }
     }
 
     /**
@@ -109,7 +116,9 @@ public class GenericGroupManager<T> implements GroupManager<T> {
                     return true;
                 }
 
-                if( group instanceof Class && checkInterfaces( (Class)group, myGroup ) ) {
+                // In case the group is a class, it may have interfaces that we also
+                // should check to support advanced grouping like JSR-303 does
+                if( group instanceof Class && checkMatchFromInterfaces( (Class)group, myGroup ) ) {
                     return true;
                 }
             }
@@ -117,9 +126,16 @@ public class GenericGroupManager<T> implements GroupManager<T> {
         return false;
     }
 
-    private boolean checkInterfaces( Class group, T myGroup ) {
-        for( Class groupInterface : group.getInterfaces() ) {
-            if( groupInterface.equals(myGroup) || checkInterfaces(groupInterface, myGroup) ) {
+    /**
+     * Recursive matcher for checking if the given group has an interface
+     * that matches the given group.
+     * @param groupWithInterfaces Group to check. The one that might have interfaces
+     * @param groupToCheck Group to check against.
+     * @return True if the given groupWithInterfaces has an interface that matches the given groupToCheck.
+     */
+    private boolean checkMatchFromInterfaces( Class groupWithInterfaces, T groupToCheck ) {
+        for( Class groupInterface : groupWithInterfaces.getInterfaces() ) {
+            if( groupInterface.equals(groupToCheck) || checkMatchFromInterfaces( groupInterface, groupToCheck ) ) {
                 return true;
             }
         }
@@ -127,42 +143,97 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     }
 
     private boolean checkAtLeastRequiredGroups( T[] groupsGiven ) {
-        final Set<T> configuredGroups = new HashSet<T>(groups.size());
-        for( T group : groups ) {
-            configuredGroups.add( group );
-        }
+        // First arrange the configured groups to a set so that we can
+        // use contains method for fast checks later and no duplicates exist
+        final Set<T> configuredGroups = new HashSet<T>(groups);
         final int groupsNeededCount = configuredGroups.size();
 
-        final Set<T> givenGroups = new HashSet<T>(groupsGiven.length);
-        Collections.addAll( givenGroups, groupsGiven );
+        // Then break down the input groups to leaf interface list
+        // HashSet prevents duplicated groups
+        final Set<T> givenGroups = new HashSet<T>( breakDownClassesGroupTreeLeaves( groupsGiven ));
         final int groupsGivenCount = givenGroups.size();
 
+        // If given number of groups is less than the needed number of groups
+        // then there is no way this method will return true
         if( groupsGivenCount < groupsNeededCount ) {
             return false;
         }
 
+        // Then check that there are at least the required amount of groups
+        int groupsFoundCount = countNumberOfGroupsMatch( configuredGroups, givenGroups );
+        // Since we use HashSets as the data structure, it makes sure that we only
+        // one instance of each group in use. This is why we can compare equality here.
+        return groupsFoundCount == groupsNeededCount;
+    }
+
+    private int countNumberOfGroupsMatch( Set<T> configuredGroups, Set<T> givenGroups ) {
         int groupsFoundCount = 0;
         for( T givenGroup : givenGroups ) {
             if( configuredGroups.contains(givenGroup) ) {
                 ++groupsFoundCount;
             }
         }
-        return groupsFoundCount == groupsNeededCount;
+        return groupsFoundCount;
     }
 
     private boolean checkExactlyRequiredGroups( T[] groupsGiven ) {
-        final int groupsNeededCount = this.groups.size();
-        if( groupsGiven.length != groupsNeededCount ) {
+        // First arrange the configured groups to a set so that we can
+        // use contains method for fast checks later and no duplicates
+        // exist
+        final Set<T> configuredGroups = new HashSet<T>(groups);
+        final int groupsNeededCount = configuredGroups.size();
+
+        // Then break down the input groups to leaf interface list
+        // HashSet prevents duplicated groups
+        final Set<T> givenGroups = new HashSet<T>( breakDownClassesGroupTreeLeaves( groupsGiven ));
+        final int groupsGivenCount = givenGroups.size();
+
+        // If given number of groups is not equal to the needed number of groups
+        // then there is no way this method will return true
+        if( groupsGivenCount != groupsNeededCount ) {
             return false;
         }
-        int groupsFoundCount = 0;
-        for( T aGroup : groupsGiven ) {
-            for( T vGroup : this.groups ) {
-                if( aGroup.equals(vGroup) ) {
-                    ++groupsFoundCount;
+
+        // Then check that there are exact the required amount of groups
+        // Above we checked that the number of groups is the same so we can be sure
+        // that if the found group count is equal, the match is exact.
+        int groupsFoundCount = countNumberOfGroupsMatch( configuredGroups, givenGroups );
+        return groupsFoundCount == groupsNeededCount;
+    }
+
+    private void addLeavesToList(Class group, List groupTreeLeaves) {
+        if( group.getInterfaces().length == 0 ) {
+            groupTreeLeaves.add(group);
+        } else {
+            for( Class childGroup : group.getInterfaces() ) {
+                addLeavesToList(childGroup, groupTreeLeaves);
+            }
+        }
+    }
+
+    private List<T> breakDownClassesGroupTreeLeaves( T[] groupsGiven ) {
+        final List<T> groupsToCheck = new ArrayList<T>();
+        if( groupsGiven.length > 0 ) {
+            for( T groupGiven : groupsGiven ) {
+                if( groupGiven instanceof Class ) {
+                    addLeavesToList((Class)groupGiven, groupsToCheck);
+                } else {
+                    groupsToCheck.add(groupGiven);
                 }
             }
         }
-        return groupsFoundCount == groupsNeededCount;
+        return groupsToCheck;
+    }
+
+    private List<T> breakDownGenericGroupsToLeaves( Collection<T> requiredGroups ) {
+        final List<T> groupTreeLeaves = new ArrayList<T>();
+        for( T group : requiredGroups ) {
+            if( group instanceof Class ) {
+                addLeavesToList((Class)group, (List)groupTreeLeaves);
+            } else {
+                groupTreeLeaves.add(group);
+            }
+        }
+        return groupTreeLeaves;
     }
 }

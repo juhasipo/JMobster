@@ -275,6 +275,33 @@ public class GenericGroupManagerTest {
         assertTrue( groupManager.match( hg1 ) );
     }
 
+    @Test
+    public void testAtLeastRequiredNoGroupsAcceptedGiveSameGroupTwice() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1.class );
+
+        HasGroups hg1 = create(Group2.class, Group2.class);
+
+        assertFalse( groupManager.match( hg1 ) );
+    }
+
+    @Test
+    public void testAtLeastRequiredNoGroupsAcceptedGiveAllRequiredButSameGroupTwice() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1.class );
+
+        HasGroups hg1 = create(Group1.class, Group2.class, Group2.class);
+
+        assertTrue( groupManager.match( hg1 ) );
+    }
+
+    @Test
+    public void testAtLeastRequiredNoGroupsAcceptedGiveCorrectGroupTwice() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1.class );
+
+        HasGroups hg1 = create(Group1.class, Group1.class);
+
+        assertTrue( groupManager.match( hg1 ) );
+    }
+
 
     /*
       Other
@@ -295,8 +322,12 @@ public class GenericGroupManagerTest {
      * Advanced multi-level inheritance tests
      */
 
+    /**
+     * Any of Required
+     */
+
     @Test
-    public void testAnyOfRequiredInheritance() {
+    public void testAnyOfRequiredInheritanceBothInheritedGroups() {
         GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class, Group2.class );
         HasGroups hg12 = create(Group1And2.class);
         HasGroups hg3 = create(Group3.class);
@@ -306,7 +337,7 @@ public class GenericGroupManagerTest {
     }
 
     @Test
-    public void testAnyOfRequiredInheritance2() {
+    public void testAnyOfRequiredInheritanceOnlyOneInheritedGroup() {
         GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class, Group3.class );
         HasGroups hg12 = create(Group1And2.class);
         HasGroups hg3 = create(Group3.class);
@@ -316,7 +347,7 @@ public class GenericGroupManagerTest {
     }
 
     @Test
-    public void testAnyOfRequiredInheritance3() {
+    public void testAnyOfRequiredInheritanceNoGroups() {
         GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group3.class );
         HasGroups hg12 = create(Group1And2.class);
         HasGroups hg3 = create(Group3.class);
@@ -325,8 +356,9 @@ public class GenericGroupManagerTest {
         assertTrue( groupManager.match( hg3 ) );
     }
 
+
     @Test
-    public void testAnyOfRequiredMultiLevelInheritance1() {
+    public void testAnyOfRequiredMultiLevelInheritanceOnlyToInheritedGroup() {
         GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class );
         HasGroups hg123 = create(Group1And2And3.class);
         HasGroups hg3 = create(Group3.class);
@@ -336,7 +368,7 @@ public class GenericGroupManagerTest {
     }
 
     @Test
-    public void testAnyOfRequiredMultiLevelInheritance2() {
+    public void testAnyOfRequiredMultiLevelInheritanceOnlyOneBottomLevelGroup() {
         GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group3.class );
         HasGroups hg123 = create(Group1And2And3.class);
         HasGroups hg3 = create(Group3.class);
@@ -344,4 +376,187 @@ public class GenericGroupManagerTest {
         assertTrue( groupManager.match( hg123 ) );
         assertTrue( groupManager.match( hg3 ) );
     }
+
+
+    @Test
+    public void testAnyOfRequiredInheritanceInheritedMatch() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1And2.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAnyOfRequiredInheritanceInheritedPartialMatch() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1And2.class );
+        HasGroups hg1 = create(Group1.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg1 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAnyOfRequiredInheritanceInheritedPartialMatchAll() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1And2And3.class );
+        HasGroups hg1 = create(Group1.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg1 ) );
+        assertTrue( groupManager.match( hg3 ) );
+    }
+
+    /**
+     * Exactly Required
+     */
+
+    @Test
+    public void testExactlyRequiredInheritanceExactMatch() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testExactlyRequiredInheritanceNoMatch() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class, Group3.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertFalse( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+
+
+    @Test
+    public void testExactlyRequiredInheritancePartialMatch() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertFalse( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testExactlyRequiredInheritancePartialMatch2() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1And2.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testExactlyRequiredInheritancePartialMatch3() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1And2.class );
+        HasGroups hg12 = create(Group1.class, Group2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testExactlyRequiredInheritancePartialMatch4() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1And2And3.class );
+        HasGroups hg123 = create(Group1.class, Group2.class, Group3.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testExactlyRequiredInheritancePartialMatch5() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1And2And3.class );
+        HasGroups hg123 = create(Group1And2And3.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testExactlyRequiredInheritancePartialMatchOverlappingGroups() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1And2And3.class, Group1And2.class );
+        HasGroups hg123 = create(Group1And2And3.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testExactlyRequiredInheritancePartialMatchTwoSameGroups() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group1And2And3.class, Group1And2And3.class );
+        HasGroups hg123 = create(Group1And2And3.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+
+    /**
+     * At Least Required
+     */
+
+    @Test
+    public void testAtLeastRequiredInheritanceExactMatch() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1.class, Group2.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAtLeastRequiredInheritancePartialMatch() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1.class );
+        HasGroups hg12 = create(Group1And2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAtLeastRequiredInheritancePartialMatch2() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1And2.class );
+        HasGroups hg12 = create(Group1.class, Group2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg12 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAtLeastRequiredInheritancePartialMatch3() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1And2.class );
+        HasGroups hg123 = create(Group1.class, Group2.class, Group3.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAtLeastRequiredInheritancePartialMatch4() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.AT_LEAST_REQUIRED, Group1And2And3.class );
+        HasGroups hg123 = create(Group1.class, Group3.class, Group2.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
 }
