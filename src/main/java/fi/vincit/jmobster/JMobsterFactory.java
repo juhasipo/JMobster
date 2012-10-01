@@ -3,16 +3,7 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.exception.UnsupportedFramework;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.builder.ModelFactoryBuilder;
-import fi.vincit.jmobster.processor.builder.ModelGeneratorBuilder;
-import fi.vincit.jmobster.processor.defaults.*;
-import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
-import fi.vincit.jmobster.processor.frameworks.backbone.type.BackboneFieldTypeConverterManager;
-import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
-import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
-import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
-import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
-import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
-import fi.vincit.jmobster.util.groups.ClassGroupManager;
+import fi.vincit.jmobster.processor.frameworks.backbone.ModelGeneratorBuilder;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
@@ -29,18 +20,8 @@ public class JMobsterFactory {
     private JMobsterFactory() {
     }
 
-    public static ModelFactory getModelFactory() {
-        ValidatorFactory validatorFactory = new JSR303ValidatorFactory();
-        ClassGroupManager groupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
-        ValidatorScanner validatorScanner = new DefaultValidatorScanner(validatorFactory, groupManager);
-
-        return new ModelFactoryBuilder()
-                .setModelFieldFactory( new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, validatorScanner ) )
-                .createDefaultModelFactory();
-    }
-
-    private static ModelFactory throwFrameworkNotSupported( String framework ) {
-        throw new UnsupportedFramework("Framework " + framework + " not supported");
+    public static ModelFactoryBuilder getModelFactoryBuilder() {
+        return new ModelFactoryBuilder();
     }
 
     /**
@@ -50,20 +31,9 @@ public class JMobsterFactory {
      * @return Configured model generator
      * @throws UnsupportedFramework If the framework is not supported
      */
-    public static ModelGenerator getInstance(String framework, DataWriter writer) {
+    public static ModelGeneratorBuilder getBuilder( String framework, DataWriter writer ) {
         if( "backbone.js".equalsIgnoreCase(framework) || "backbone".equalsIgnoreCase(framework) ) {
-            FieldValueConverter valueConverter =
-                    new JavaToJSValueConverter(
-                            ConverterMode.NULL_AS_DEFAULT,
-                            EnumConverter.EnumMode.STRING,
-                            JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
-                    );
-            FieldTypeConverterManager typeConverterManager = new BackboneFieldTypeConverterManager();
-            ModelProcessor modelProcessor = new BackboneModelProcessor(writer, valueConverter, typeConverterManager);
-
-            return new ModelGeneratorBuilder()
-                    .setModelProcessor( modelProcessor )
-                    .createDefaultModelGenerator();
+            return new ModelGeneratorBuilder().setDataWriter(writer);
         } else {
             throwFrameworkNotSupported( framework );
         }
@@ -77,7 +47,11 @@ public class JMobsterFactory {
      * @return Configured model generator
      * @throws UnsupportedFramework If the framework is not supported
      */
-    public static ModelGenerator getInstance(String framework, ModelProvider provider) {
-        return getInstance(framework, provider.getDataWriter());
+    public static ModelGeneratorBuilder getBuilder(String framework, ModelProvider provider) {
+        return getBuilder( framework, provider.getDataWriter() );
+    }
+
+    private static ModelFactory throwFrameworkNotSupported( String framework ) {
+        throw new UnsupportedFramework("Framework " + framework + " not supported");
     }
 }

@@ -15,11 +15,14 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.annotation.FieldGroupFilter;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
 import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.model.ModelField;
+import fi.vincit.jmobster.util.groups.ClassGroupManager;
+import fi.vincit.jmobster.util.groups.HasGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +37,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Scans the given bean for fields that should be included in the client side model.
+ * Scans the given bean for fields that should be included in the client side model. Field group filtering settings
+ * use GroupMode.ANY_OF_REQUIRED with no groups as default which allows all fields and properties.
  */
 public class DefaultModelFieldFactory implements ModelFieldFactory {
     private static final Logger LOG = LoggerFactory.getLogger( DefaultModelFieldFactory.class );
@@ -43,12 +47,14 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
     private boolean allowFinalFields;
     private final FieldScanMode scanMode;
     private final ValidatorScanner validatorScanner;
+    private final ClassGroupManager fieldGroupManager;
 
-    public DefaultModelFieldFactory( FieldScanMode scanMode, ValidatorScanner validatorScanner ) {
+    public DefaultModelFieldFactory( FieldScanMode scanMode, ValidatorScanner validatorScanner, ClassGroupManager fieldGroupManager ) {
         this.allowStaticFields = false;
         this.allowFinalFields = true;
         this.scanMode = scanMode;
         this.validatorScanner = validatorScanner;
+        this.fieldGroupManager = fieldGroupManager;
     }
 
     @Override
@@ -63,6 +69,11 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
     @Override
     public void setValidatorFilterGroups( GroupMode groupMode, Collection<Class> groups ) {
         validatorScanner.setFilterGroups(groupMode, groups);
+    }
+
+    @Override
+    public void setFieldFilterGroups( GroupMode groupMode, Collection<Class> groups ) {
+        fieldGroupManager.setGroups(groupMode, groups);
     }
 
     /**
@@ -175,7 +186,19 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
      * @return True if the field or property should be included, otherwise false.
      */
     private boolean allowedByAnnotation(AnnotatedElement element) {
-        return !element.isAnnotationPresent(IgnoreField.class);
+        if( element.isAnnotationPresent(IgnoreField.class) ) {
+            return false;
+        }
+        if( element.isAnnotationPresent( FieldGroupFilter.class ) ) {
+            FieldGroupFilter fieldGroupFilter = element.getAnnotation(FieldGroupFilter.class);
+            final Class[] groups = fieldGroupFilter.groups();
+            HasGroups<Class> groupsObject = new HasGroups<Class>() {
+                @Override public Class[] getGroups() { return groups; }
+                @Override public boolean hasGroups() { return groups.length > 0; }
+            };
+            return fieldGroupManager.match(groupsObject);
+        }
+        return true;
     }
 
     @Override

@@ -54,7 +54,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      */
     public GenericGroupManager( GroupMode groupMode, Collection<T> requiredGroups ) {
         this.groups = new HashSet<T>(requiredGroups.size());
-        setGroups(groupMode, requiredGroups);
+        setGroups( groupMode, requiredGroups );
     }
 
     /**
@@ -68,11 +68,21 @@ public class GenericGroupManager<T> implements GroupManager<T> {
 
     @Override
     public boolean match( HasGroups<T> groupObject ) {
-        if( groupObject.hasGroups() && checkGroups( groupObject ) ) {
-            return true;
+        if( groupObject.hasGroups() ) {
+            return checkGroups( groupObject );
         } else if( !groupObject.hasGroups() && includeValidatorsWithoutGroup ) {
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean match( T[] groups ) {
+        return false;
+    }
+
+    @Override
+    public boolean match( Collection<T> groups ) {
         return false;
     }
 

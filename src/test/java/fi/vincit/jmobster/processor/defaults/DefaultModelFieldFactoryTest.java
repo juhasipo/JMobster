@@ -14,6 +14,7 @@ package fi.vincit.jmobster.processor.defaults;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.annotation.FieldGroupFilter;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.processor.FieldScanMode;
 import fi.vincit.jmobster.processor.GroupMode;
@@ -21,6 +22,7 @@ import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.TestUtil;
+import fi.vincit.jmobster.util.groups.ClassGroupManager;
 import org.junit.Test;
 
 import javax.validation.constraints.Min;
@@ -44,14 +46,16 @@ public class DefaultModelFieldFactoryTest {
                 .thenReturn( TestUtil.collectionFromObjects( mock( Validator.class ) ) );
         when(validatorScanner.getValidators(any(PropertyDescriptor.class)))
                 .thenReturn(TestUtil.collectionFromObjects(mock(Validator.class)));
-        return new DefaultModelFieldFactory(scanMode, validatorScanner);
+        ClassGroupManager fieldGroupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
+        return new DefaultModelFieldFactory(scanMode, validatorScanner, fieldGroupManager);
     }
 
     @Test
     public void testSetValidatorFilterGroups() {
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
+        ClassGroupManager fieldGroupManager = mock(ClassGroupManager.class);
         DefaultModelFieldFactory fs =
-                new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, validatorScanner );
+                new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, validatorScanner, fieldGroupManager );
         final GroupMode groupMode = GroupMode.ANY_OF_REQUIRED;
         final Collection<Class> groups = new ArrayList<Class>();
         fs.setValidatorFilterGroups(groupMode, groups);
@@ -439,5 +443,43 @@ public class DefaultModelFieldFactoryTest {
         assertFieldFoundOnce( models, "publicLongFieldEx" );
         assertFieldNotFound( models, "protectedIntegerFieldEx" );
         assertFieldNotFound( models, "privateStringFieldEx" );
+    }
+
+
+    public static interface Group1 {}
+    public static interface Group2 {}
+
+    public interface FilteredInterface {
+        @FieldGroupFilter(groups = {Group1.class})
+        public String getFiltered1();
+        @FieldGroupFilter(groups = {Group2.class})
+        public String getFiltered2();
+    }
+
+    @Test
+    public void testBeanPropertyFiltering() {
+        DefaultModelFieldFactory fs = getFieldScanner( FieldScanMode.BEAN_PROPERTY);
+        fs.setFieldFilterGroups(GroupMode.EXACTLY_REQUIRED, TestUtil.collectionFromObjects((Class)Group1.class));
+        List<ModelField> models = fs.getFields( FilteredInterface.class );
+
+        assertFieldFoundOnce( models, "filtered1" );
+        assertFieldNotFound( models, "filtered2" );
+    }
+
+    public static class FilteredClass {
+        @FieldGroupFilter(groups = {Group1.class})
+        public String filtered1;
+        @FieldGroupFilter(groups = {Group2.class})
+        public String filtered2;
+    }
+
+    @Test
+    public void testClassFieldFiltering() {
+        DefaultModelFieldFactory fs = getFieldScanner( FieldScanMode.DIRECT_FIELD_ACCESS);
+        fs.setFieldFilterGroups(GroupMode.EXACTLY_REQUIRED, TestUtil.collectionFromObjects((Class)Group1.class));
+        List<ModelField> models = fs.getFields( FilteredClass.class );
+
+        assertFieldFoundOnce( models, "filtered1" );
+        assertFieldNotFound( models, "filtered2" );
     }
 }

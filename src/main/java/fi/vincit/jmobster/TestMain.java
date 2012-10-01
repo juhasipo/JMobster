@@ -17,12 +17,13 @@ package fi.vincit.jmobster;
 
 import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.annotation.OverridePattern;
-import fi.vincit.jmobster.processor.GroupMode;
-import fi.vincit.jmobster.processor.ModelFactory;
+import fi.vincit.jmobster.processor.*;
+import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
+import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
+import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
 import fi.vincit.jmobster.util.writer.CachedModelProvider;
 import fi.vincit.jmobster.processor.model.Model;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.*;
 import java.io.IOException;
@@ -116,11 +117,21 @@ public class TestMain {
         //final String HTML5 = "html5";
         final String BB = "backbone.js";
 
-        ModelFactory factory = JMobsterFactory.getModelFactory();
-        factory.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, String.class, Integer.class );
+        ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
+                .setFieldScanMode( FieldScanMode.DIRECT_FIELD_ACCESS )
+                .setFieldGroups( GroupMode.ANY_OF_REQUIRED )
+                .setValidatorGroups( GroupMode.ANY_OF_REQUIRED, String.class, Integer.class )
+                .setValidatorFactory( new JSR303ValidatorFactory() )
+                .build();
         Collection<Model> models = factory.createAll( BeanPropertyDemo.class, MyModelDto.class );
 
-        ModelGenerator generator = JMobsterFactory.getInstance(BB, provider1);
+        ModelGenerator generator = JMobsterFactory.getBuilder(BB, provider2)
+                .setFieldValueConverter(new JavaToJSValueConverter(
+                        ConverterMode.NULL_AS_DEFAULT,
+                        EnumConverter.EnumMode.STRING,
+                        JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
+                ))
+                .build();
         //generator.setWriter(provider1.getDataWriter());
         generator.processAll( models );
 

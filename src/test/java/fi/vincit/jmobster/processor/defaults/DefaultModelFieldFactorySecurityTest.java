@@ -5,6 +5,7 @@ import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.TestUtil;
+import fi.vincit.jmobster.util.groups.ClassGroupManager;
 import org.junit.After;
 import org.junit.Test;
 
@@ -81,6 +82,7 @@ public class DefaultModelFieldFactorySecurityTest {
                 .thenReturn( TestUtil.collectionFromObjects( mock( Validator.class ) ) );
         when(validatorScanner.getValidators(any(PropertyDescriptor.class)))
                 .thenReturn(TestUtil.collectionFromObjects(mock(Validator.class)));
-        return new DefaultModelFieldFactory(scanMode, validatorScanner);
+        ClassGroupManager fieldGroupManager = mock(ClassGroupManager.class);
+        return new DefaultModelFieldFactory(scanMode, validatorScanner, fieldGroupManager);
     }
 }
