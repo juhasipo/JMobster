@@ -35,15 +35,15 @@ Basic usage is simple. Create Java classes, use JSR-303 annotations and give the
 public class UserDto {
     @NotNull
     @Size(max = 255)
-    private String fullname = "";
+    private String fullname = "John";
 
     @NotNull
     @Size(max = 255)
-    private String username = "";
+    private String username = "Smith";
 
     @NotNull
     @Min(1900)
-    private Integer birthYear = 0;
+    private Integer birthYear = 1950;
 
     @Size(min = 1)
     private String[] roles = {};
@@ -59,9 +59,12 @@ the given models to appropritate target platform format.
 In the next example a *ModelFactory* is created and then it is used to create JMobster models
 from three DTO classes:
 ```java
-ModelFactory factory = JMobsterFactory.getModelFactory();
-factory.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
-
+ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
+                .setFieldScanMode( FieldScanMode.DIRECT_FIELD_ACCESS )
+                .setFieldGroups( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class )
+                .setValidatorGroups( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class )
+                .setValidatorFactory( new JSR303ValidatorFactory() )
+                .build();
 Collection<Model> models = factory.createAll( MyModelDto1.class, MyModelDto2.class, MyModelDto3.class );
 ```
 This *ModelFactory* is same for all target languages and frameworks.
@@ -69,7 +72,12 @@ This *ModelFactory* is same for all target languages and frameworks.
 In the next example a *CachedModelProvider* and a *ModelGenerator* is configured which then will take previously created JMobster models:
 ```java
 CachedModelProvider provider = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
-ModelGenerator generator = JMobsterFactory.getInstance("backbone.js", provider);
+ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( "backbone.js", provider )
+                .setFieldValueConverter(new JavaToJSValueConverter(
+                        ConverterMode.NULL_AS_DEFAULT,
+                        EnumConverter.EnumMode.STRING,
+                        JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
+                )).build()
 generator.processAll( models );
 ```
 This created *ModelGenerator* is language and framework specific. The framework is given as the first parameter. The

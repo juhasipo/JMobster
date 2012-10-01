@@ -31,18 +31,18 @@ public class JMobsterFactoryTest {
 
     @Test
     public void testCreateBackboneInstance() throws IOException {
-        ModelGenerator generator = JMobsterFactory.getBuilder( "Backbone", getModelWriter() ).build();
+        ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( "Backbone", getModelWriter() ).build();
         assertNotNull(generator);
     }
 
     @Test
     public void testCreateBackboneJSInstance() throws IOException {
-        ModelGenerator generator = JMobsterFactory.getBuilder( "Backbone.js", getModelWriter() ).build();
+        ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( "Backbone.js", getModelWriter() ).build();
         assertNotNull(generator);
     }
 
     @Test(expected = UnsupportedFramework.class)
     public void testCreateUnsupportedInstance() throws IOException {
-        JMobsterFactory.getBuilder( "Invalid framework", getModelWriter() );
+        JMobsterFactory.getModelGeneratorBuilder( "Invalid framework", getModelWriter() );
     }
 }

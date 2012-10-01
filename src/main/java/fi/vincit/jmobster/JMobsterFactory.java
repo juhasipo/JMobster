@@ -31,7 +31,7 @@ public class JMobsterFactory {
      * @return Configured model generator
      * @throws UnsupportedFramework If the framework is not supported
      */
-    public static ModelGeneratorBuilder getBuilder( String framework, DataWriter writer ) {
+    public static ModelGeneratorBuilder getModelGeneratorBuilder( String framework, DataWriter writer ) {
         if( "backbone.js".equalsIgnoreCase(framework) || "backbone".equalsIgnoreCase(framework) ) {
             return new ModelGeneratorBuilder().setDataWriter(writer);
         } else {
@@ -47,8 +47,8 @@ public class JMobsterFactory {
      * @return Configured model generator
      * @throws UnsupportedFramework If the framework is not supported
      */
-    public static ModelGeneratorBuilder getBuilder(String framework, ModelProvider provider) {
-        return getBuilder( framework, provider.getDataWriter() );
+    public static ModelGeneratorBuilder getModelGeneratorBuilder( String framework, ModelProvider provider ) {
+        return getModelGeneratorBuilder( framework, provider.getDataWriter() );
     }
 
     private static ModelFactory throwFrameworkNotSupported( String framework ) {

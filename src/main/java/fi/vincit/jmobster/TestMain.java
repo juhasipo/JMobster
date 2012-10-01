@@ -114,7 +114,6 @@ public class TestMain {
         CachedModelProvider provider1 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
         CachedModelProvider provider2 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
 
-        //final String HTML5 = "html5";
         final String BB = "backbone.js";
 
         ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
@@ -125,13 +124,12 @@ public class TestMain {
                 .build();
         Collection<Model> models = factory.createAll( BeanPropertyDemo.class, MyModelDto.class );
 
-        ModelGenerator generator = JMobsterFactory.getBuilder(BB, provider2)
+        ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( BB, provider1 )
                 .setFieldValueConverter(new JavaToJSValueConverter(
                         ConverterMode.NULL_AS_DEFAULT,
                         EnumConverter.EnumMode.STRING,
                         JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
-                ))
-                .build();
+                )).build();
         //generator.setWriter(provider1.getDataWriter());
         generator.processAll( models );
 
