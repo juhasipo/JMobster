@@ -34,7 +34,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger( GenericGroupManager.class );
 
-    final private Collection<T> groups;
+    final private Set<T> requiredGroups;
     private GroupMode groupMode;
     private boolean includeValidatorsWithoutGroup = true;
 
@@ -53,7 +53,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      * @param requiredGroups Required groups
      */
     public GenericGroupManager( GroupMode groupMode, Collection<T> requiredGroups ) {
-        this.groups = new HashSet<T>(requiredGroups.size());
+        this.requiredGroups = new HashSet<T>(requiredGroups.size());
         setGroups( groupMode, requiredGroups );
     }
 
@@ -89,12 +89,12 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     @Override
     public void setGroups( GroupMode groupMode, Collection<T> requiredGroups ) {
         this.groupMode = groupMode;
-        this.groups.clear();
+        this.requiredGroups.clear();
         // Break down groups to lowest level so that we only have leafs of the
         // group tree
         if( requiredGroups.size() > 0 ) {
             List<T> groupTreeLeaves = breakDownGenericGroupsToLeaves( requiredGroups );
-            this.groups.addAll(groupTreeLeaves);
+            this.requiredGroups.addAll( groupTreeLeaves );
         }
     }
 
@@ -108,20 +108,20 @@ public class GenericGroupManager<T> implements GroupManager<T> {
 
         switch( groupMode ) {
             case ANY_OF_REQUIRED: return checkAnyRequiredGroups( groupsGiven );
-            case EXACTLY_REQUIRED: return checkExactlyRequiredGroups( groupsGiven );
-            case AT_LEAST_REQUIRED: return checkAtLeastRequiredGroups( groupsGiven );
+            case EXACTLY_REQUIRED: return checkRequiredGroups( groupsGiven, CompareMode.Exactly );
+            case AT_LEAST_REQUIRED: return checkRequiredGroups( groupsGiven, CompareMode.AtLeast );
             default: LOG.error("Invalid group mode: {}", groupMode); return false;
         }
     }
 
     private boolean checkAnyRequiredGroups( T[] groupsGiven ) {
         // If no groups configured, this always passes
-        if( groups.size() == 0 ) {
+        if( requiredGroups.size() == 0 ) {
             return true;
         }
 
         for( T group : groupsGiven ) {
-            for( T myGroup : this.groups ) {
+            for( T myGroup : this.requiredGroups ) {
                 if( group.equals(myGroup) ) {
                     return true;
                 }
@@ -151,31 +151,6 @@ public class GenericGroupManager<T> implements GroupManager<T> {
         }
         return false;
     }
-
-    private boolean checkAtLeastRequiredGroups( T[] groupsGiven ) {
-        // First arrange the configured groups to a set so that we can
-        // use contains method for fast checks later and no duplicates exist
-        final Set<T> configuredGroups = new HashSet<T>(groups);
-        final int groupsNeededCount = configuredGroups.size();
-
-        // Then break down the input groups to leaf interface list
-        // HashSet prevents duplicated groups
-        final Set<T> givenGroups = new HashSet<T>( breakDownClassesGroupTreeLeaves( groupsGiven ));
-        final int groupsGivenCount = givenGroups.size();
-
-        // If given number of groups is less than the needed number of groups
-        // then there is no way this method will return true
-        if( groupsGivenCount < groupsNeededCount ) {
-            return false;
-        }
-
-        // Then check that there are at least the required amount of groups
-        int groupsFoundCount = countNumberOfGroupsMatch( configuredGroups, givenGroups );
-        // Since we use HashSets as the data structure, it makes sure that we only
-        // one instance of each group in use. This is why we can compare equality here.
-        return groupsFoundCount == groupsNeededCount;
-    }
-
     private int countNumberOfGroupsMatch( Set<T> configuredGroups, Set<T> givenGroups ) {
         int groupsFoundCount = 0;
         for( T givenGroup : givenGroups ) {
@@ -186,28 +161,33 @@ public class GenericGroupManager<T> implements GroupManager<T> {
         return groupsFoundCount;
     }
 
-    private boolean checkExactlyRequiredGroups( T[] groupsGiven ) {
-        // First arrange the configured groups to a set so that we can
-        // use contains method for fast checks later and no duplicates
-        // exist
-        final Set<T> configuredGroups = new HashSet<T>(groups);
-        final int groupsNeededCount = configuredGroups.size();
+    private static enum CompareMode {
+        Exactly,
+        AtLeast
+    }
 
+    private boolean checkRequiredGroups( T[] groupsGiven, CompareMode compareMode ) {
         // Then break down the input groups to leaf interface list
         // HashSet prevents duplicated groups
-        final Set<T> givenGroups = new HashSet<T>( breakDownClassesGroupTreeLeaves( groupsGiven ));
+        final Set<T> givenGroups = new HashSet<T>( breakDownClassesGroupTreeLeaves(groupsGiven) );
         final int groupsGivenCount = givenGroups.size();
 
-        // If given number of groups is not equal to the needed number of groups
-        // then there is no way this method will return true
-        if( groupsGivenCount != groupsNeededCount ) {
-            return false;
+        // Here we check that the given count and needed count aren't unsuitable. With these tests
+        // we can determine quite many cases that can't in any case make this method return true.
+        // If these checks are not false, we can later just count the group count and check the equality
+        // of group count.
+        // When we do it in this order (first check given count and needed count and then count matches)
+        // we can leave counting matches to the last possible moment.
+        final int groupsNeededCount = requiredGroups.size();
+        switch (compareMode) {
+            case Exactly: if( groupsGivenCount != groupsNeededCount ) { return false; } break;
+            case AtLeast: if( groupsGivenCount < groupsNeededCount ) { return false; } break;
         }
 
         // Then check that there are exact the required amount of groups
-        // Above we checked that the number of groups is the same so we can be sure
-        // that if the found group count is equal, the match is exact.
-        int groupsFoundCount = countNumberOfGroupsMatch( configuredGroups, givenGroups );
+        // Above we checked that the number of groups is the same or less so we can be sure
+        // that if the found equal number of group matches, the match is exact.
+        int groupsFoundCount = countNumberOfGroupsMatch( requiredGroups, givenGroups );
         return groupsFoundCount == groupsNeededCount;
     }
 
