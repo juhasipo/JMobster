@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.util.groups;
+package fi.vincit.jmobster.group;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,13 +16,8 @@ package fi.vincit.jmobster.util.groups;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.GroupMode;
-
 /**
- * Group manager that uses Java's Class type as group type.
+ * Default group
  */
-public class ClassGroupManager extends GenericGroupManager<Class> {
-    public ClassGroupManager( GroupMode groupMode, Class... requiredGroups ) {
-        super( groupMode, requiredGroups );
-    }
+public interface Default {
 }

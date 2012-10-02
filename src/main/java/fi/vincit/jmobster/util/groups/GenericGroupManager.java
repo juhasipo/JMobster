@@ -16,10 +16,11 @@ package fi.vincit.jmobster.util.groups;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.group.Default;
 import fi.vincit.jmobster.processor.GroupMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.lang.Class;
 import java.util.*;
 
 /**
@@ -30,11 +31,11 @@ import java.util.*;
  * are broken down in similar way. These leaves are then used for the comparison which
  * makes checking different permutations much easier.
  */
-public class GenericGroupManager<T> implements GroupManager<T> {
+public class GenericGroupManager implements GroupManager<Class> {
 
     private static final Logger LOG = LoggerFactory.getLogger( GenericGroupManager.class );
 
-    final private Set<T> requiredGroups;
+    final private Set<Class> requiredGroups;
     private GroupMode groupMode;
     private boolean includeValidatorsWithoutGroup = true;
 
@@ -43,8 +44,8 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      * @param groupMode Group mode
      * @param requiredGroups Required groups
      */
-    public GenericGroupManager( GroupMode groupMode, T... requiredGroups ) {
-        this(groupMode, Arrays.asList(requiredGroups));
+    public GenericGroupManager( GroupMode groupMode, Class... requiredGroups ) {
+        this( groupMode, Arrays.asList( requiredGroups ) );
     }
 
     /**
@@ -52,8 +53,8 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      * @param groupMode Group mode
      * @param requiredGroups Required groups
      */
-    public GenericGroupManager( GroupMode groupMode, Collection<T> requiredGroups ) {
-        this.requiredGroups = new HashSet<T>(requiredGroups.size());
+    public GenericGroupManager( GroupMode groupMode, Collection<Class> requiredGroups ) {
+        this.requiredGroups = new HashSet<Class>(requiredGroups.size());
         setGroups( groupMode, requiredGroups );
     }
 
@@ -67,7 +68,7 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     }
 
     @Override
-    public boolean match( HasGroups<T> groupObject ) {
+    public boolean match( HasGroups<Class> groupObject ) {
         if( groupObject.hasGroups() ) {
             return checkGroups( groupObject );
         } else if( !groupObject.hasGroups() && includeValidatorsWithoutGroup ) {
@@ -77,23 +78,23 @@ public class GenericGroupManager<T> implements GroupManager<T> {
     }
 
     @Override
-    public boolean match( T[] groups ) {
+    public boolean match( Class[] groups ) {
         return false;
     }
 
     @Override
-    public boolean match( Collection<T> groups ) {
+    public boolean match( Collection<Class> groups ) {
         return false;
     }
 
     @Override
-    public void setGroups( GroupMode groupMode, Collection<T> requiredGroups ) {
+    public void setGroups( GroupMode groupMode, Collection<Class> requiredGroups ) {
         this.groupMode = groupMode;
         this.requiredGroups.clear();
         // Break down groups to lowest level so that we only have leafs of the
         // group tree
         if( requiredGroups.size() > 0 ) {
-            List<T> groupTreeLeaves = breakDownGenericGroupsToLeaves( requiredGroups );
+            List<Class> groupTreeLeaves = breakDownGenericGroupsToLeaves( requiredGroups );
             this.requiredGroups.addAll( groupTreeLeaves );
         }
     }
@@ -103,8 +104,8 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      * @param groupObject Validator
      * @return True if groups match according to groupMode, otherwise false.
      */
-    private boolean checkGroups(HasGroups<T> groupObject) {
-        T[] groupsGiven = groupObject.getGroups();
+    private boolean checkGroups(HasGroups<Class> groupObject) {
+        Class[] groupsGiven = groupObject.getGroups();
 
         switch( groupMode ) {
             case ANY_OF_REQUIRED: return checkAnyRequiredGroups( groupsGiven );
@@ -114,21 +115,18 @@ public class GenericGroupManager<T> implements GroupManager<T> {
         }
     }
 
-    private boolean checkAnyRequiredGroups( T[] groupsGiven ) {
+    private boolean checkAnyRequiredGroups( Class[] groupsGiven ) {
         // If no groups configured, this always passes
         if( requiredGroups.size() == 0 ) {
             return true;
         }
 
-        for( T group : groupsGiven ) {
-            for( T myGroup : this.requiredGroups ) {
-                if( group.equals(myGroup) ) {
-                    return true;
-                }
-
-                // In case the group is a class, it may have interfaces that we also
-                // should check to support advanced grouping like JSR-303 does
-                if( group instanceof Class && checkMatchFromInterfaces( (Class)group, myGroup ) ) {
+        for( Class groupToCheck : groupsGiven ) {
+            if( this.requiredGroups.contains(groupToCheck) ) {
+                return true;
+            }
+            for( Class requiredGroup : this.requiredGroups ) {
+                if( checkMatchFromInterfaces( groupToCheck, requiredGroup ) ) {
                     return true;
                 }
             }
@@ -140,20 +138,20 @@ public class GenericGroupManager<T> implements GroupManager<T> {
      * Recursive matcher for checking if the given group has an interface
      * that matches the given group.
      * @param groupWithInterfaces Group to check. The one that might have interfaces
-     * @param groupToCheck Group to check against.
-     * @return True if the given groupWithInterfaces has an interface that matches the given groupToCheck.
+     * @param requiredgroup Group to check against.
+     * @return True if the given groupWithInterfaces has an interface that matches the given requiredgroup.
      */
-    private boolean checkMatchFromInterfaces( Class groupWithInterfaces, T groupToCheck ) {
+    private boolean checkMatchFromInterfaces( Class groupWithInterfaces, Class requiredgroup ) {
         for( Class groupInterface : groupWithInterfaces.getInterfaces() ) {
-            if( groupInterface.equals(groupToCheck) || checkMatchFromInterfaces( groupInterface, groupToCheck ) ) {
+            if( groupInterface.equals(requiredgroup) || checkMatchFromInterfaces( groupInterface, requiredgroup ) ) {
                 return true;
             }
         }
         return false;
     }
-    private int countNumberOfGroupsMatch( Set<T> configuredGroups, Set<T> givenGroups ) {
+    private int countNumberOfGroupsMatch( Set<Class> configuredGroups, Set<Class> givenGroups ) {
         int groupsFoundCount = 0;
-        for( T givenGroup : givenGroups ) {
+        for( Class givenGroup : givenGroups ) {
             if( configuredGroups.contains(givenGroup) ) {
                 ++groupsFoundCount;
             }
@@ -166,10 +164,10 @@ public class GenericGroupManager<T> implements GroupManager<T> {
         AtLeast
     }
 
-    private boolean checkRequiredGroups( T[] groupsGiven, CompareMode compareMode ) {
+    private boolean checkRequiredGroups( Class[] groupsGiven, CompareMode compareMode ) {
         // Then break down the input groups to leaf interface list
         // HashSet prevents duplicated groups
-        final Set<T> givenGroups = new HashSet<T>( breakDownClassesGroupTreeLeaves(groupsGiven) );
+        final Set<Class> givenGroups = new HashSet<Class>( breakDownClassesGroupTreeLeaves(groupsGiven) );
         final int groupsGivenCount = givenGroups.size();
 
         // Here we check that the given count and needed count aren't unsuitable. With these tests
@@ -201,28 +199,20 @@ public class GenericGroupManager<T> implements GroupManager<T> {
         }
     }
 
-    private List<T> breakDownClassesGroupTreeLeaves( T[] groupsGiven ) {
-        final List<T> groupsToCheck = new ArrayList<T>();
+    private List<Class> breakDownClassesGroupTreeLeaves( Class[] groupsGiven ) {
+        final List<Class> groupsToCheck = new ArrayList<Class>();
         if( groupsGiven.length > 0 ) {
-            for( T groupGiven : groupsGiven ) {
-                if( groupGiven instanceof Class ) {
-                    addLeavesToList((Class)groupGiven, groupsToCheck);
-                } else {
-                    groupsToCheck.add(groupGiven);
-                }
+            for( Class groupGiven : groupsGiven ) {
+                addLeavesToList((Class)groupGiven, groupsToCheck);
             }
         }
         return groupsToCheck;
     }
 
-    private List<T> breakDownGenericGroupsToLeaves( Collection<T> requiredGroups ) {
-        final List<T> groupTreeLeaves = new ArrayList<T>();
-        for( T group : requiredGroups ) {
-            if( group instanceof Class ) {
-                addLeavesToList((Class)group, (List)groupTreeLeaves);
-            } else {
-                groupTreeLeaves.add(group);
-            }
+    private List<Class> breakDownGenericGroupsToLeaves( Collection<Class> requiredGroups ) {
+        final List<Class> groupTreeLeaves = new ArrayList<Class>();
+        for( Class group : requiredGroups ) {
+            addLeavesToList((Class)group, (List)groupTreeLeaves);
         }
         return groupTreeLeaves;
     }

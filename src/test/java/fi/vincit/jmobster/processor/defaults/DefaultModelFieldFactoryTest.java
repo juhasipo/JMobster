@@ -22,7 +22,7 @@ import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.TestUtil;
-import fi.vincit.jmobster.util.groups.ClassGroupManager;
+import fi.vincit.jmobster.util.groups.GenericGroupManager;
 import org.junit.Test;
 
 import javax.validation.constraints.Min;
@@ -46,14 +46,14 @@ public class DefaultModelFieldFactoryTest {
                 .thenReturn( TestUtil.collectionFromObjects( mock( Validator.class ) ) );
         when(validatorScanner.getValidators(any(PropertyDescriptor.class)))
                 .thenReturn(TestUtil.collectionFromObjects(mock(Validator.class)));
-        ClassGroupManager fieldGroupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
+        GenericGroupManager fieldGroupManager = new GenericGroupManager(GroupMode.ANY_OF_REQUIRED);
         return new DefaultModelFieldFactory(scanMode, validatorScanner, fieldGroupManager);
     }
 
     @Test
     public void testSetValidatorFilterGroups() {
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        ClassGroupManager fieldGroupManager = mock(ClassGroupManager.class);
+        GenericGroupManager fieldGroupManager = mock(GenericGroupManager.class);
         DefaultModelFieldFactory fs =
                 new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, validatorScanner, fieldGroupManager );
         final GroupMode groupMode = GroupMode.ANY_OF_REQUIRED;

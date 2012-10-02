@@ -17,11 +17,9 @@ package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.annotation.FieldGroupFilter;
 import fi.vincit.jmobster.annotation.IgnoreField;
-import fi.vincit.jmobster.exception.CannotAccessDefaultConstructorError;
-import fi.vincit.jmobster.exception.DefaultConstructorMissingError;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.util.groups.ClassGroupManager;
+import fi.vincit.jmobster.util.groups.GenericGroupManager;
 import fi.vincit.jmobster.util.groups.HasGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +45,9 @@ public class DefaultModelFieldFactory implements ModelFieldFactory {
     private boolean allowFinalFields;
     private final FieldScanMode scanMode;
     private final ValidatorScanner validatorScanner;
-    private final ClassGroupManager fieldGroupManager;
+    private final GenericGroupManager fieldGroupManager;
 
-    public DefaultModelFieldFactory( FieldScanMode scanMode, ValidatorScanner validatorScanner, ClassGroupManager fieldGroupManager ) {
+    public DefaultModelFieldFactory( FieldScanMode scanMode, ValidatorScanner validatorScanner, GenericGroupManager fieldGroupManager ) {
         this.allowStaticFields = false;
         this.allowFinalFields = true;
         this.scanMode = scanMode;

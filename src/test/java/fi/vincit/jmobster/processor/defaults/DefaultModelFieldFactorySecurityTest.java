@@ -5,7 +5,7 @@ import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.TestUtil;
-import fi.vincit.jmobster.util.groups.ClassGroupManager;
+import fi.vincit.jmobster.util.groups.GenericGroupManager;
 import org.junit.After;
 import org.junit.Test;
 
@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
 import java.security.Permission;
 import java.util.List;
 
-import static fi.vincit.jmobster.util.TestUtil.assertFieldFoundOnce;
 import static fi.vincit.jmobster.util.TestUtil.assertFieldNotFound;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -82,7 +81,7 @@ public class DefaultModelFieldFactorySecurityTest {
                 .thenReturn( TestUtil.collectionFromObjects( mock( Validator.class ) ) );
         when(validatorScanner.getValidators(any(PropertyDescriptor.class)))
                 .thenReturn(TestUtil.collectionFromObjects(mock(Validator.class)));
-        ClassGroupManager fieldGroupManager = mock(ClassGroupManager.class);
+        GenericGroupManager fieldGroupManager = mock(GenericGroupManager.class);
         return new DefaultModelFieldFactory(scanMode, validatorScanner, fieldGroupManager);
     }
 }

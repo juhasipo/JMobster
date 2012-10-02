@@ -43,7 +43,7 @@ public class GroupFilterTest {
 
     @Test
     public void testFilterAnyOfRequired() {
-        GroupManager<Class> mgr = new GenericGroupManager<Class>( GroupMode.ANY_OF_REQUIRED, Group1.class );
+        GroupManager<Class> mgr = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group1.class );
         GroupFilter<HasGroups<Class>, Class> filter = new GroupFilter<HasGroups<Class>, Class>(mgr);
 
         Collection<HasGroups<Class>> filtered = filter.filterByGroups( TestUtil.collectionFromObjects(new Obj1(), new Obj2()) );
@@ -52,7 +52,7 @@ public class GroupFilterTest {
 
     @Test
     public void testFilterExactlyRequired() {
-        GroupManager<Class> mgr = new GenericGroupManager<Class>( GroupMode.EXACTLY_REQUIRED, Group2.class );
+        GroupManager<Class> mgr = new GenericGroupManager( GroupMode.EXACTLY_REQUIRED, Group2.class );
         GroupFilter<HasGroups<Class>, Class> filter = new GroupFilter<HasGroups<Class>, Class>(mgr);
 
         Collection<HasGroups<Class>> filtered = filter.filterByGroups( TestUtil.collectionFromObjects(new Obj1(), new Obj2()) );

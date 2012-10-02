@@ -22,10 +22,7 @@ import fi.vincit.jmobster.processor.defaults.DefaultModelFactory;
 import fi.vincit.jmobster.processor.defaults.DefaultModelFieldFactory;
 import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
 import fi.vincit.jmobster.processor.defaults.DefaultValidatorScanner;
-import fi.vincit.jmobster.util.groups.ClassGroupManager;
-
-import java.util.Arrays;
-import java.util.Collections;
+import fi.vincit.jmobster.util.groups.GenericGroupManager;
 
 /**
  * Builder that constructs new ModelFactory using default implementations. If you want
@@ -34,8 +31,8 @@ import java.util.Collections;
 public class ModelFactoryBuilder {
     // These classes may have some default values since there are no external dependencies
     private FieldScanMode scanMode = FieldScanMode.DIRECT_FIELD_ACCESS;
-    private ClassGroupManager validatorGroupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
-    private ClassGroupManager fieldGroupManager = new ClassGroupManager(GroupMode.ANY_OF_REQUIRED);
+    private GenericGroupManager validatorGroupManager = new GenericGroupManager(GroupMode.ANY_OF_REQUIRED);
+    private GenericGroupManager fieldGroupManager = new GenericGroupManager(GroupMode.ANY_OF_REQUIRED);
 
     // Following classes have dependencies so they cannot have any default values at this point
     private ModelFieldFactory modelFieldFactory;
@@ -81,21 +78,21 @@ public class ModelFactoryBuilder {
         return this;
     }
 
-    public ModelFactoryBuilder setValidatorGroupManager( ClassGroupManager validatorGroupManager ) {
+    public ModelFactoryBuilder setValidatorGroupManager( GenericGroupManager validatorGroupManager ) {
         this.validatorGroupManager = validatorGroupManager;
         return this;
     }
     public ModelFactoryBuilder setValidatorGroups( GroupMode groupMode, Class... groups ) {
-        this.validatorGroupManager = new ClassGroupManager(groupMode, groups);
+        this.validatorGroupManager = new GenericGroupManager(groupMode, groups);
         return this;
     }
 
-    public ModelFactoryBuilder setFieldGroupManager( ClassGroupManager fieldGroupManager ) {
+    public ModelFactoryBuilder setFieldGroupManager( GenericGroupManager fieldGroupManager ) {
         this.fieldGroupManager = fieldGroupManager;
         return this;
     }
     public ModelFactoryBuilder setFieldGroups( GroupMode groupMode, Class... groups ) {
-        this.fieldGroupManager = new ClassGroupManager(groupMode, groups);
+        this.fieldGroupManager = new GenericGroupManager(groupMode, groups);
         return this;
     }
 

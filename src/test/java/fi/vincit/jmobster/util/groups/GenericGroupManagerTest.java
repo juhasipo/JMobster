@@ -1,5 +1,6 @@
 package fi.vincit.jmobster.util.groups;
 
+import fi.vincit.jmobster.group.Default;
 import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
@@ -363,6 +364,16 @@ public class GenericGroupManagerTest {
         assertTrue( groupManager.match( hg3 ) );
     }
 
+    @Test
+    public void testAnyOfRequiredMultiLevelInheritanceOnlyOneMiddleLevelGroup() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Group2.class );
+        HasGroups hg123 = create(Group1And2And3.class);
+        HasGroups hg3 = create(Group3.class);
+
+        assertTrue( groupManager.match( hg123 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
 
     @Test
     public void testAnyOfRequiredInheritanceInheritedMatch() {
@@ -573,6 +584,55 @@ public class GenericGroupManagerTest {
 
         assertTrue( groupManager.match( hg123 ) );
         assertFalse( groupManager.match( hg3 ) );
+    }
+
+    /**
+     * Default group
+     */
+
+    public interface HasDefault extends Default {
+    }
+    public interface NoDefault {
+    }
+
+    @Test
+    public void testAnyOfRequiredWithDefaultGroup1() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED );
+        HasGroups hg1 = create(HasDefault.class);
+        HasGroups hg3 = create(NoDefault.class);
+
+        assertTrue( groupManager.match( hg1 ) );
+        assertTrue( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAnyOfRequiredWithDefaultGroup2() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, HasDefault.class );
+        HasGroups hg1 = create(HasDefault.class);
+        HasGroups hg3 = create(NoDefault.class);
+
+        assertTrue( groupManager.match( hg1 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAnyOfRequiredWithDefaultGroup3() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, Default.class );
+        HasGroups hg1 = create(HasDefault.class);
+        HasGroups hg3 = create(NoDefault.class);
+
+        assertTrue( groupManager.match( hg1 ) );
+        assertFalse( groupManager.match( hg3 ) );
+    }
+
+    @Test
+    public void testAtLeastRequiredWithDefaultGroup() {
+        GroupManager groupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED, NoDefault.class );
+        HasGroups hg1 = create(HasDefault.class);
+        HasGroups hg3 = create(NoDefault.class);
+
+        assertFalse( groupManager.match( hg1 ) );
+        assertTrue( groupManager.match( hg3 ) );
     }
 
     /*
