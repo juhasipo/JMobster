@@ -52,4 +52,11 @@ public interface ModelFactory {
      * @param classes Classes used for filtering
      */
     void setValidatorFilterGroups( GroupMode groupMode, Class... classes );
+
+    /**
+     * Sets field filter groups
+     * @param groupMode Group mode
+     * @param classes Classes used for filtering
+     */
+    void setFieldFilterGroups( GroupMode groupMode, Class... classes );
 }

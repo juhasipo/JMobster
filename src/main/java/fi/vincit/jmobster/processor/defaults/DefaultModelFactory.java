@@ -65,4 +65,9 @@ public class DefaultModelFactory implements ModelFactory {
     public void setValidatorFilterGroups( GroupMode groupMode, Class... classes ) {
         modelFieldFactory.setValidatorFilterGroups( groupMode, Arrays.asList( classes ) );
     }
+
+    @Override
+    public void setFieldFilterGroups( GroupMode groupMode, Class... classes ) {
+        modelFieldFactory.setFieldFilterGroups(groupMode, Arrays.asList( classes ));
+    }
 }

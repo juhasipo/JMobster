@@ -159,6 +159,40 @@ In addition to scanning modes, there are extra settings that determine what kind
 options are to toggle static and/or final fields. Final field mode affects both scanning modes, but static field mode
 only works with _DIRECT\_FIELD\_ACCESS_ mode. By default final fields are included but static fields are not.
 
+### Validator and Field Groups
+
+JMobster uses JSR-303 like groups for filtering validators and fields that are added to output models. Like JSR-303
+also JMobster supports group inheritance. Groups are specified with interfaces. For validators the groups are given
+as the JSR-303 *groups* attribute. For fields there is a special annotation *FieldGroupFilter* which also contains
+*groups* attribute. The *groups* takes a list of classes that specify which groups the validator or filter belongs to.
+
+In addition JMobster also supports different grouping modes. The grouping mode will determine how the validator and
+field groups are interpreted. Supported grouping modes are:
+
+1. *GroupMode.ANY_OF_REQUIRED*
+2. *GroupMode.EXACTLY_REQUIRED*
+3. *GroupMode.AT_LEAST_REQUIRED*
+
+The default mode is *GroupMode.ANY_OF_REQUIRED* which allows validator or field to be included in model if any of the
+specified groups exist in the validator or field. *GroupMode.EXACTLY_REQUIRED* mode will include validator or field when the
+group combination is exactly the same. *GroupMode.AT_LEAST_REQUIRED* mode will include validator or field when there
+are at least the specified groups.
+
+Groups and groupmodes can be given to *ModelFactory* when building the class and, after the factory has been built,
+with *setValidatorFilterGroups* and *setFieldFilterGroups* methods.
+
+```java
+ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
+                .setFieldScanMode( FieldScanMode.DIRECT_FIELD_ACCESS )
+                .setFieldGroups( GroupMode.ANY_OF_REQUIRED )
+                .setValidatorGroups( GroupMode.ANY_OF_REQUIRED, Group1.class, Group2.class )
+                .setValidatorFactory( new JSR303ValidatorFactory() )
+                .build();
+
+factory.setValidatorFilterGroups(GroupMode.AT_LEAST_REQUIRED, Group1.class, Group2.class);
+factory.setFieldFilterGroups(GroupMode.AT_LEAST_REQUIRED, Group1.class, Group2.class);
+```
+
 
 Default Process
 ---------------
