@@ -1,12 +1,9 @@
 package fi.vincit.jmobster.util.groups;
 
-import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

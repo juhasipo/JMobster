@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor;
  */
 
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.groups.GroupMode;
 
 import java.util.Collection;
 

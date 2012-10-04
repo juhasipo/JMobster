@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor;/*
+package fi.vincit.jmobster.util.groups;/*
  * Copyright 2012 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

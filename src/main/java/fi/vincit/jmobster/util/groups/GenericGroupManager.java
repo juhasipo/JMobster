@@ -16,8 +16,6 @@ package fi.vincit.jmobster.util.groups;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.group.Default;
-import fi.vincit.jmobster.processor.GroupMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.Class;

@@ -23,6 +23,7 @@ import fi.vincit.jmobster.processor.defaults.DefaultModelFieldFactory;
 import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
 import fi.vincit.jmobster.processor.defaults.DefaultValidatorScanner;
 import fi.vincit.jmobster.util.groups.GenericGroupManager;
+import fi.vincit.jmobster.util.groups.GroupMode;
 
 /**
  * Builder that constructs new ModelFactory using default implementations. If you want
@@ -32,7 +33,7 @@ public class ModelFactoryBuilder {
     // These classes may have some default values since there are no external dependencies
     private FieldScanMode scanMode = FieldScanMode.DIRECT_FIELD_ACCESS;
     private GenericGroupManager validatorGroupManager = new GenericGroupManager(GroupMode.ANY_OF_REQUIRED);
-    private GenericGroupManager fieldGroupManager = new GenericGroupManager(GroupMode.ANY_OF_REQUIRED);
+    private GenericGroupManager fieldGroupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED);
 
     // Following classes have dependencies so they cannot have any default values at this point
     private ModelFieldFactory modelFieldFactory;

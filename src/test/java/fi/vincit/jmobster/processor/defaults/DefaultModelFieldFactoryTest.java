@@ -17,7 +17,7 @@ package fi.vincit.jmobster.processor.defaults;/*
 import fi.vincit.jmobster.annotation.FieldGroupFilter;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.processor.FieldScanMode;
-import fi.vincit.jmobster.processor.GroupMode;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
@@ -476,7 +476,7 @@ public class DefaultModelFieldFactoryTest {
     @Test
     public void testClassFieldFiltering() {
         DefaultModelFieldFactory fs = getFieldScanner( FieldScanMode.DIRECT_FIELD_ACCESS);
-        fs.setFieldFilterGroups(GroupMode.EXACTLY_REQUIRED, TestUtil.collectionFromObjects((Class)Group1.class));
+        fs.setFieldFilterGroups( GroupMode.EXACTLY_REQUIRED, TestUtil.collectionFromObjects((Class)Group1.class));
         List<ModelField> models = fs.getFields( FilteredClass.class );
 
         assertFieldFoundOnce( models, "filtered1" );

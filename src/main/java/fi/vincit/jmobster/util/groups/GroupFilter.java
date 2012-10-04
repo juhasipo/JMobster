@@ -16,10 +16,7 @@ package fi.vincit.jmobster.util.groups;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.GroupMode;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 

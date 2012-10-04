@@ -1,7 +1,6 @@
 package fi.vincit.jmobster.util.groups;
 
 import fi.vincit.jmobster.group.Default;
-import fi.vincit.jmobster.processor.GroupMode;
 import fi.vincit.jmobster.util.TestUtil;
 import org.junit.Test;
 

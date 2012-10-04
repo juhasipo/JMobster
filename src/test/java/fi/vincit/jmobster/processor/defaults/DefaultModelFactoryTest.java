@@ -1,13 +1,12 @@
 package fi.vincit.jmobster.processor.defaults;
 
-import fi.vincit.jmobster.processor.GroupMode;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.processor.ModelFactory;
 import fi.vincit.jmobster.processor.ModelFieldFactory;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.TestUtil;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 

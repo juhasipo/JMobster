@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.GroupMode;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.processor.ModelFactory;
 import fi.vincit.jmobster.processor.ModelFieldFactory;
 import fi.vincit.jmobster.processor.ModelNamingStrategy;

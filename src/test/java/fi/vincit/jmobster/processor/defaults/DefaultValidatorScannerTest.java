@@ -1,6 +1,6 @@
 package fi.vincit.jmobster.processor.defaults;
 
-import fi.vincit.jmobster.processor.GroupMode;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.processor.ValidatorFactory;
 import fi.vincit.jmobster.util.TestUtil;
 import fi.vincit.jmobster.util.groups.GroupManager;

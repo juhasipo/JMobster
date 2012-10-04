@@ -20,6 +20,7 @@ import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.groups.GenericGroupManager;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.util.groups.HasGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

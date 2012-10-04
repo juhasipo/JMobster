@@ -22,6 +22,7 @@ import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.util.writer.CachedModelProvider;
 import fi.vincit.jmobster.processor.model.Model;
 
