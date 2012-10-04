@@ -23,15 +23,15 @@ import fi.vincit.jmobster.util.collection.TypeCollection;
  */
 public class OptionalTypes extends TypeCollection<Class> {
     /**
-     * Creates an OptionalTypes object with the given annotations
-     * @param annotations Annotations to use as optional types
-     * @return OptionalTypes object with given annotations
+     * Creates an OptionalTypes object with the given types
+     * @param types Annotations to use as optional types
+     * @return OptionalTypes object with given types
      */
-    public static OptionalTypes get(Class... annotations) {
-        return new OptionalTypes(annotations);
+    public static OptionalTypes get(Class... types) {
+        return new OptionalTypes(types);
     }
 
-    protected OptionalTypes(Class... annotations) {
-        super(annotations);
+    protected OptionalTypes(Class... types) {
+        super(types);
     }
 }

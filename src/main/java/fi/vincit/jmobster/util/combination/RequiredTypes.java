@@ -24,15 +24,15 @@ import fi.vincit.jmobster.util.collection.TypeCollection;
 public class RequiredTypes extends TypeCollection<Class> {
 
     /**
-     * Creates an RequiredTypes object with the given annotations
-     * @param annotations Annotations to use as required types
-     * @return RequiredTypes object with given annotations
+     * Creates an RequiredTypes object with the given types
+     * @param types Annotations to use as required types
+     * @return RequiredTypes object with given types
      */
-    public static RequiredTypes get(Class... annotations) {
-        return new RequiredTypes(annotations);
+    public static RequiredTypes get(Class... types) {
+        return new RequiredTypes(types);
     }
 
-    protected RequiredTypes(Class... annotations) {
-        super(annotations);
+    protected RequiredTypes(Class... types) {
+        super(types);
     }
 }
