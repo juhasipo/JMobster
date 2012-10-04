@@ -14,6 +14,7 @@ repositories {
 }
 
 dependencies {
+    // Needed for JSR-303 annotations
     compile group: 'org.hibernate', name: 'hibernate-validator', version: '4.3.0.Final'
     compile group: 'org.hibernate', name: 'hibernate-validator-annotation-processor', version: '4.3.0.Final'
 
