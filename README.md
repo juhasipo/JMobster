@@ -17,7 +17,14 @@ be a lot of bugs.
 
 ### Requirements
 
+**Java**
+
 * JDK 6 (SE or EE)
+* [SLF4J](http://www.slf4j.org/)
+* JSR-303 annotations (e.g. [hibernate-validation](http://www.hibernate.org/subprojects/validator/download.html))
+
+**JavaScript**
+
 * Backbone.js (Tested only with 0.9.2)
 * [Backbone.Validation](https://github.com/thedersen/backbone.validation) (Tested only with v0.6.2)
 
