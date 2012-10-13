@@ -11,4 +11,17 @@ public class StringBufferWriterTest {
         writer.write("Test string");
         assertEquals("Test string", writer.toString());
     }
+
+    @Test
+    public void testClear() throws Exception {
+        StringBufferWriter writer = new StringBufferWriter();
+        writer.write("Test string");
+        assertEquals("Test string", writer.toString());
+
+        writer.clear();
+        assertEquals("", writer.toString());
+
+        writer.write("Testing");
+        assertEquals("Testing", writer.toString());
+    }
 }
