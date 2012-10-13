@@ -21,6 +21,7 @@ import fi.vincit.jmobster.processor.frameworks.backbone.ModelGeneratorBuilder;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.TestUtil;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
 import org.mockito.InOrder;
 
@@ -45,8 +46,8 @@ public class DefaultModelGeneratorTest {
         dmg.processAll( new ArrayList<Model>() );
 
         InOrder mpInOrder = inOrder(modelProcessor);
-        mpInOrder.verify(modelProcessor, times(1)).startProcessing();
-        mpInOrder.verify(modelProcessor, times(1)).endProcessing();
+        mpInOrder.verify(modelProcessor, times(1)).startProcessing(ItemStatuses.firstAndLast());
+        mpInOrder.verify(modelProcessor, times(1)).endProcessing(ItemStatuses.firstAndLast());
         verify( modelProcessor, never() ).processModel( any( Model.class ), any( ItemStatus.class ) );
     }
 
@@ -60,8 +61,8 @@ public class DefaultModelGeneratorTest {
         modelGenerator.processAll( TestUtil.collectionFromObjects( testModel1, testModel2 ) );
 
         InOrder mpInOrder = inOrder( modelProcessor );
-        mpInOrder.verify(modelProcessor, times(1)).startProcessing();
+        mpInOrder.verify(modelProcessor, times(1)).startProcessing( ItemStatuses.firstAndLast() );
         mpInOrder.verify(modelProcessor, times(2)).processModel( any( Model.class ), any( ItemStatus.class ) );
-        mpInOrder.verify(modelProcessor, times(1)).endProcessing();
+        mpInOrder.verify(modelProcessor, times(1)).endProcessing( ItemStatuses.firstAndLast() );
     }
 }

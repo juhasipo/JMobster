@@ -3,23 +3,29 @@ package fi.vincit.jmobster.util.itemprocessor;
 /**
  * Collection of helper method for generating
  * ItemStatus object that are initialized to a certain
- * phase.
+ * phase. Returned {@link ItemStatus} object cannot be modified.
  */
 @SuppressWarnings( "UtilityClassWithoutPrivateConstructor" )
 public class ItemStatuses {
+
+    private static ItemStatus first = new ImmutableItemStatus(2);
+    private static ItemStatus last = new ImmutableItemStatus(2, 1);
+    private static ItemStatus firstAndLast = new ImmutableItemStatus(1);
+    private static ItemStatus notFirstNorLast = new ImmutableItemStatus(3, 1);
+
 
     /**
      * @return Item status which is first (but not last)
      */
     public static ItemStatus first() {
-        return new ItemStatus(2);
+        return first;
     }
 
     /**
      * @return Item status which is last (but not first)
      */
     public static ItemStatus last() {
-        return new ItemStatus(2, 1);
+        return last;
     }
 
     /**
@@ -40,14 +46,14 @@ public class ItemStatuses {
      * @return Item status which is first and last.
      */
     public static ItemStatus firstAndLast() {
-        return new ItemStatus(1);
+        return firstAndLast;
     }
 
     /**
      * @return Item status which is not first nor last
      */
     public static ItemStatus notFirstNorLast() {
-        return new ItemStatus(3, 1);
+        return notFirstNorLast;
     }
 
     /**

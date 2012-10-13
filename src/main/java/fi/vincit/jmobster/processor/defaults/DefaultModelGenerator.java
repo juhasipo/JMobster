@@ -6,6 +6,7 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import java.util.Collection;
  * </p>
  * <p>
  *     If uncaught IOExceptions are caught, the model processing will be terminated.
- *  {@link fi.vincit.jmobster.processor.ModelProcessor#endProcessing()}
+ *  {@link fi.vincit.jmobster.processor.ModelProcessor#endProcessing(ItemStatus)}
  *  is not called in those cases (of unless the exception was thrown from that method).
  *  The error will be logged (level: Error).
  * </p>
@@ -45,6 +46,17 @@ public class DefaultModelGenerator implements ModelGenerator {
     }
 
     @Override
+    public void process( Model model ) {
+        try {
+            modelProcessor.startProcessing(ItemStatuses.firstAndLast());
+            modelProcessor.processModel(model, ItemStatuses.firstAndLast());
+            modelProcessor.endProcessing(ItemStatuses.firstAndLast());
+        } catch (IOException e) {
+            LOG.error("Error", e);
+        }
+    }
+
+    @Override
     public void setWriter( DataWriter dataWriter ) {
         modelProcessor.setWriter( dataWriter );
     }
@@ -56,14 +68,14 @@ public class DefaultModelGenerator implements ModelGenerator {
      */
     private void processModelsInternal( Collection<Model> models ) {
         try {
-            modelProcessor.startProcessing();
+            modelProcessor.startProcessing(ItemStatuses.firstAndLast());
             ItemProcessor.process(models).with(new ItemHandler<Model>() {
                 @Override
                 public void process( Model model, ItemStatus status ) {
                     modelProcessor.processModel( model, status );
                 }
             });
-            modelProcessor.endProcessing();
+            modelProcessor.endProcessing(ItemStatuses.firstAndLast());
         } catch (IOException e) {
             LOG.error("Error", e);
         }

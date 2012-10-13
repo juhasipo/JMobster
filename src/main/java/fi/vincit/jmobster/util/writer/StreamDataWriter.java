@@ -43,9 +43,17 @@ public abstract class StreamDataWriter implements DataWriter {
         writer = new BufferedWriter(outputStreamWriter);
         initDone();
     }
+
     protected void initializeBuffer( BufferedWriter bufferedWriter ) {
         this.writer = bufferedWriter;
         initDone();
+    }
+
+    protected void flush() {
+        try {
+            this.writer.flush();
+        } catch( IOException e ) {
+        }
     }
 
     private void initDone() {
@@ -63,12 +71,6 @@ public abstract class StreamDataWriter implements DataWriter {
     protected StreamDataWriter() {
         indentationInChars = 4;
         indentationInUnits = 0;
-    }
-
-    @Override
-    @SuppressWarnings( "EmptyMethod" )
-    public void open() {
-        // Nothing to do
     }
 
     @Override

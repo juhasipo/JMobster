@@ -22,11 +22,10 @@ package fi.vincit.jmobster.util.writer;/*
  * final comma can be easily left out after the last item in the list.
  */
 public interface DataWriter {
-    /**
-     * Open the writer
-     */
-    void open();
 
+    /**
+     * @return True if open, otherwise false.
+     */
     boolean isOpen();
 
     /**

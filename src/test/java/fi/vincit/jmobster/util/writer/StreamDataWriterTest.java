@@ -31,7 +31,6 @@ public class StreamDataWriterTest {
     @Test
     public void testOpen() throws Exception {
         DataWriter mw = new StringBufferWriter();
-        mw.open();
         assertTrue( mw.isOpen() );
     }
 

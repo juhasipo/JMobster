@@ -223,12 +223,6 @@ public class JavaScriptWriterTest {
         writer.close();
     }
 
-
-    @Test
-    public void testOpen() {
-        writer.open();
-    }
-
     @Test
     public void testSetIndentation() {
         writer.setIndentation(3);

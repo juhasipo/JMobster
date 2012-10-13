@@ -239,11 +239,6 @@ public class JavaScriptWriter implements DataWriter {
     }
 
     @Override
-    public void open() {
-        // Do nothing
-    }
-
-    @Override
     public boolean isOpen() {
         return writer.isOpen();
     }

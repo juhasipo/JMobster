@@ -24,15 +24,15 @@ import fi.vincit.jmobster.util.writer.FileDataWriter;
 
 import java.io.IOException;
 
-public abstract class BaseModelProcessor implements ModelProcessor {
-    private DataWriter writer;
+public abstract class BaseModelProcessor<W extends DataWriter> implements ModelProcessor<W> {
+    private W writer;
     final private FieldValueConverter valueConverter;
 
     /**
      * Initializes model processor with writer
      * @param writer Writer to use
      */
-    public BaseModelProcessor( DataWriter writer, FieldValueConverter valueConverter ) {
+    public BaseModelProcessor( W writer, FieldValueConverter valueConverter ) {
         this.valueConverter = valueConverter;
         this.writer = writer;
     }
@@ -41,7 +41,7 @@ public abstract class BaseModelProcessor implements ModelProcessor {
      * Returns writer.
      * @return Writer
      */
-    protected DataWriter getWriter() {
+    protected W getWriter() {
         return writer;
     }
 
@@ -54,7 +54,7 @@ public abstract class BaseModelProcessor implements ModelProcessor {
      * @param dataWriter Writer to set
      */
     @Override
-    public void setWriter( DataWriter dataWriter ) {
+    public void setWriter( W dataWriter ) {
         this.writer = dataWriter;
     }
 }

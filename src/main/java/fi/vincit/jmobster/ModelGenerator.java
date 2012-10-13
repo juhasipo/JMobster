@@ -33,6 +33,12 @@ public interface ModelGenerator {
     void processAll( Collection<Model> models );
 
     /**
+     * Process a single model
+     * @param model Model to process
+     */
+    void process(Model model);
+
+    /**
      * Sets data writer to use
      * @param dataWriter Data writer
      */

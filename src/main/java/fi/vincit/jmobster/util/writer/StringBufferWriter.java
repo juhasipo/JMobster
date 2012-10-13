@@ -16,11 +16,7 @@ package fi.vincit.jmobster.util.writer;
  * limitations under the License.
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 /**
  * Data writer that writes to a String buffer (not Java's StringBuffer).
@@ -34,8 +30,13 @@ public class StringBufferWriter extends StreamDataWriter {
         initializeStream( outputStream );
     }
 
+    /**
+     * Flushes written data and returns it as string
+     * @return Written data
+     */
     @Override
     public String toString() {
+        this.flush();
         return outputStream.toString();
     }
 }

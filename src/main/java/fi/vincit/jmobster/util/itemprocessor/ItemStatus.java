@@ -45,14 +45,22 @@ public class ItemStatus {
      */
     public ItemStatus(int numberOfItems, int start) {
         this.numberOfItems = numberOfItems;
-        update(start);
+        updateInternal(start);
     }
 
     /**
      * Update the processing
      * @param itemIndex 0 based index.
      */
-    final public void update(int itemIndex) {
+    public void update(int itemIndex) {
+        updateInternal(itemIndex);
+    }
+
+    /**
+     * Update the processing
+     * @param itemIndex 0 based index.
+     */
+    final private void updateInternal(int itemIndex) {
         firstItem = itemIndex == 0;
         lastItem = itemIndex == (numberOfItems-1);
     }

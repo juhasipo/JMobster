@@ -16,13 +16,13 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 */
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
@@ -40,7 +40,7 @@ import java.io.IOException;
  * </p>
  */
 @SuppressWarnings( "HardcodedFileSeparator" )
-public class BackboneModelProcessor extends BaseModelProcessor {
+public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter> {
     private static final Logger LOG = LoggerFactory.getLogger( BackboneModelProcessor.class );
 
     private static final String NAMESPACE_START = "{";
@@ -52,7 +52,6 @@ public class BackboneModelProcessor extends BaseModelProcessor {
     private static final String DEFAULT_NAMESPACE = "Models";
 
     private static final String DEFAULTS_BLOCK_NAME = "defaults";
-    private static final String RETURN_BLOCK = "return "; // Note the space
     private static final String VALIDATOR_BLOCK_NAME = "validation";
 
     private static final String MODEL_EXTEND_START = ": Backbone.Model.extend({";
@@ -61,33 +60,27 @@ public class BackboneModelProcessor extends BaseModelProcessor {
     private String startComment;
     private String namespaceName;
 
-    private JavaScriptWriter writer;
-
-    final private BackboneValidatorWriterManager validatorWriterManager;
-    final private FieldValueConverter valueConverter;
+    final private ValidatorProcessor validatorProcessor;
+    final private DefaultValueProcessor defaultValueProcessor;
 
     /**
      * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
      * @param writer Writer
      */
     public BackboneModelProcessor(DataWriter writer, FieldValueConverter valueConverter, FieldTypeConverterManager typeConverterManager) {
-        super(writer, valueConverter);
+        super(new JavaScriptWriter(writer), valueConverter);
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.validatorWriterManager = new BackboneValidatorWriterManager(this.writer);
-        this.valueConverter = valueConverter;
+        this.validatorProcessor = new ValidatorProcessor(getWriter(), valueConverter, new BackboneValidatorWriterManager( getWriter() ));
+        this.defaultValueProcessor = new DefaultValueProcessor(getWriter(), valueConverter);
     }
 
     @Override
-    public void startProcessing() throws IOException {
-        LOG.trace("Starting to process models");
-        this.writer = new JavaScriptWriter(getWriter());
-        this.writer.open();
-        this.validatorWriterManager.setWriter(this.writer);
-
-        this.writer.writeLine( startComment );
-        this.writer.writeLine( VARIABLE + " " + namespaceName + " = " + NAMESPACE_START );
-        this.writer.indent();
+    public void startProcessing(ItemStatus status) throws IOException {
+        LOG.trace( "Starting to process models" );
+        getWriter().writeLine( startComment );
+        getWriter().writeLine( VARIABLE + " " + namespaceName + " = " + NAMESPACE_START );
+        getWriter().indent();
     }
 
     @Override
@@ -95,55 +88,32 @@ public class BackboneModelProcessor extends BaseModelProcessor {
         LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
 
-        this.writer.write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
+        getWriter().write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
 
-        writeValidators( model );
-        writeFields( model );
+        writeSection(VALIDATOR_BLOCK_NAME, model, validatorProcessor, ItemStatuses.first());
+        writeSection(DEFAULTS_BLOCK_NAME, model, defaultValueProcessor, ItemStatuses.last());
 
-        this.writer.indentBack();
-        this.writer.writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
+        getWriter().indentBack();
+        getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
     }
 
-    private void writeValidators( Model model ) {
-        writer.writeKey( VALIDATOR_BLOCK_NAME ).startBlock();
-        final ItemHandler<Validator> validatorWriter = new ItemHandler<Validator>() {
-            @Override
-            public void process( Validator validator, ItemStatus status ) {
-                validatorWriterManager.write( validator, status );
-            }
-        };
-
-        ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
-            @Override
-            public void process( ModelField field, ItemStatus status ) {
-                writer.writeKey(field.getName()).startBlock();
-                ItemProcessor.process(validatorWriter, field.getValidators());
-                writer.endBlock( status );
-            }
-        });
-        writer.endBlock( ItemStatuses.notLast());
-    }
-
-    private void writeFields( Model model ) {
-        writer.writeKey(DEFAULTS_BLOCK_NAME).startAnonFunction();
-        writer.write(RETURN_BLOCK).startBlock();
-        ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
-            @Override
-            public void process( ModelField field, ItemStatus status ) {
-                String defaultValue = valueConverter.convert(field.getFieldType(), null);
-                writer.writeKeyValue(field.getName(), defaultValue, status);
-            }
-        });
-        writer.endBlock( ItemStatuses.last());
-        writer.endFunction( ItemStatuses.lastIfFalse( model.hasValidations() ) );
+    private void writeSection(String sectionName, Model model, ModelProcessor processor, ItemStatus position) {
+        try {
+            getWriter().writeKey( sectionName );
+            processor.startProcessing(position);
+            processor.processModel(model, ItemStatuses.firstAndLast());
+            processor.endProcessing(position);
+        } catch( IOException e ) {
+            LOG.error("Error while processing section "+sectionName, e);
+        }
     }
 
     @Override
     @SuppressWarnings( "RedundantThrows" )
-    public void endProcessing() throws IOException {
-        this.writer.indentBack();
-        this.writer.writeLine( NAMESPACE_END );
-        this.writer.close();
+    public void endProcessing(ItemStatus status) throws IOException {
+        getWriter().indentBack();
+        getWriter().writeLine( NAMESPACE_END );
+        getWriter().close();
         LOG.trace("Processing models done");
     }
 

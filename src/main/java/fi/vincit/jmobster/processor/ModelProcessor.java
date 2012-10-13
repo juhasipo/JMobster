@@ -25,12 +25,13 @@ import java.io.IOException;
  * ModelProcessor controls how the models given from {@link fi.vincit.jmobster.ModelGenerator}
  * are processed.
  */
-public interface ModelProcessor {
+public interface ModelProcessor<W extends DataWriter> {
     /**
      * Called before the first model is processed.
+     * @status Item status
      * @throws IOException If something goes wrong with writing the data
      */
-    void startProcessing() throws IOException;
+    void startProcessing(ItemStatus status) throws IOException;
 
     /**
      * Called exactly once for each model once in the order the models
@@ -42,9 +43,10 @@ public interface ModelProcessor {
 
     /**
      * Called when the last model has been processed.
+     * @status Item status
      * @throws IOException If something goes wrong with writing the data
      */
-    void endProcessing() throws IOException;
+    void endProcessing(ItemStatus status) throws IOException;
 
-    void setWriter( DataWriter dataWriter );
+    void setWriter( W dataWriter );
 }

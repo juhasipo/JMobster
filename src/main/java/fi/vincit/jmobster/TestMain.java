@@ -19,11 +19,15 @@ import fi.vincit.jmobster.annotation.IgnoreDefaultValue;
 import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
+import fi.vincit.jmobster.processor.frameworks.backbone.ValidatorProcessor;
+import fi.vincit.jmobster.processor.frameworks.backbone.type.BackboneFieldTypeConverterManager;
+import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.util.groups.GroupMode;
-import fi.vincit.jmobster.util.writer.CachedModelProvider;
+import fi.vincit.jmobster.util.writer.*;
 import fi.vincit.jmobster.processor.model.Model;
 
 import javax.validation.constraints.*;
@@ -111,9 +115,9 @@ public class TestMain {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //DataWriter modelWriter = new StreamDataWriter("models.js");
-        CachedModelProvider provider1 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
-        CachedModelProvider provider2 = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
+        //DataWriter modelWriter = new FileDataWriter("static/models.js");
+        DataWriter modelWriter = new StringBufferWriter();
+        CachedModelProvider provider1 = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY, modelWriter );
 
         final String BB = "backbone.js";
 
@@ -125,22 +129,29 @@ public class TestMain {
                 .build();
         Collection<Model> models = factory.createAll( BeanPropertyDemo.class, MyModelDto.class );
 
+        JavaScriptWriter jsWriter = new JavaScriptWriter(provider1.getDataWriter());
+        ModelProcessor mp = new ValidatorProcessor(
+                jsWriter,
+                new JavaToJSValueConverter(
+                    ConverterMode.NULL_AS_DEFAULT,
+                    EnumConverter.EnumMode.STRING,
+                    JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN),
+               new BackboneValidatorWriterManager(jsWriter));
         ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( BB, provider1 )
-                .setFieldValueConverter(new JavaToJSValueConverter(
-                        ConverterMode.NULL_AS_DEFAULT,
-                        EnumConverter.EnumMode.STRING,
-                        JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
-                )).build();
+                .setModelProcessor(mp)
+                .build();
         //generator.setWriter(provider1.getDataWriter());
         generator.processAll( models );
-
-        generator.setWriter(provider2.getDataWriter());
+/*
+        generator.setWriter(provider1.getDataWriter());
         factory.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, String.class, Integer.class );
         Collection<Model> models2 = factory.createAll( BeanPropertyDemo.class );
         generator.processAll( models2 );
 
         System.out.println( provider1.getModel() );
         System.out.println( "=====================================================" );
-        System.out.println( provider2.getModel() );
+        System.out.println( provider1.getModel() );
+        */
+        System.out.println(modelWriter.toString());
     }
 }
