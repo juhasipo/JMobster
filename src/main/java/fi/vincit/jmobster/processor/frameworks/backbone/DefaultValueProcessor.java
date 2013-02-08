@@ -18,7 +18,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
-import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;

@@ -16,12 +16,14 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.ModelGenerator;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.frameworks.backbone.ModelGeneratorBuilder;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.TestUtil;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
+import fi.vincit.jmobster.util.writer.DataWriter;
 import org.junit.Test;
 import org.mockito.InOrder;
 
@@ -41,9 +43,9 @@ public class DefaultModelGeneratorTest {
     @Test
     public void testProcessWithoutClasses() throws Exception {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
-        DefaultModelGenerator dmg = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).build();
+        ModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor(modelProcessor).build();
 
-        dmg.processAll( new ArrayList<Model>() );
+        modelGenerator.processAll(new ArrayList<Model>());
 
         InOrder mpInOrder = inOrder(modelProcessor);
         mpInOrder.verify(modelProcessor, times(1)).startProcessing(ItemStatuses.firstAndLast());
@@ -54,7 +56,7 @@ public class DefaultModelGeneratorTest {
     @Test
     public void testProcessWithList() throws Exception {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
-        DefaultModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor( modelProcessor ).build();
+        ModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor(modelProcessor).build();
 
         Model testModel1 = mock(Model.class);
         Model testModel2 = mock( Model.class );

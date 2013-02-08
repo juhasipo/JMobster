@@ -1,11 +1,13 @@
 apply plugin: 'java'
 
-sourceCompatibility = 1.6
+sourceCompatibility = 1.7
 version = '0.2.2-alpha'
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'JMobster', 'Implementation-Version': version, 'Main-Class': 'fi.vincit.jmobster.TestMain'
+        attributes 'Implementation-Title': 'JMobster',
+                   'Implementation-Version': version,
+                   'Main-Class': 'fi.vincit.jmobster.TestMain'
     }
 }
 
@@ -18,10 +20,12 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-validator', version: '4.3.0.Final'
     runtime group: 'org.hibernate', name: 'hibernate-validator-annotation-processor', version: '4.3.0.Final'
 
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.3'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.5'
+    // Only for logging in test programs
     runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.6'
     runtime group: 'ch.qos.logback', name: 'logback-core', version: '1.0.6'
 
+    // Test dependencies
     testCompile group: 'junit', name: 'junit', version: '4.10'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.0'
 }

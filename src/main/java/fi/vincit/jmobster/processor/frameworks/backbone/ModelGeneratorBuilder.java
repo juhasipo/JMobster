@@ -27,7 +27,7 @@ import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumCon
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
- * Builder for ModelGenerator. Model processor and model field factory are
+ * ModelGenerator builder for Backbone-validation. Model processor and model field factory are
  * mandatory. If no model naming strategy is given, default is used.
  */
 public class ModelGeneratorBuilder {
@@ -36,13 +36,13 @@ public class ModelGeneratorBuilder {
     private FieldTypeConverterManager fieldTypeConverterManager;
     private DataWriter dataWriter;
 
-    public ModelGeneratorBuilder setModelProcessor( ModelProcessor modelProcessor ) {
-        this.modelProcessor = modelProcessor;
+    public ModelGeneratorBuilder setDataWriter(DataWriter dataWriter) {
+        this.dataWriter = dataWriter;
         return this;
     }
 
-    public ModelGeneratorBuilder setDataWriter(DataWriter dataWriter) {
-        this.dataWriter = dataWriter;
+    public ModelGeneratorBuilder setModelProcessor(ModelProcessor modelProcessor) {
+        this.modelProcessor = modelProcessor;
         return this;
     }
 

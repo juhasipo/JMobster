@@ -115,12 +115,6 @@ public class TestMain {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //DataWriter modelWriter = new FileDataWriter("static/models.js");
-        DataWriter modelWriter = new StringBufferWriter();
-        CachedModelProvider provider1 = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY, modelWriter );
-
-        final String BB = "backbone.js";
-
         ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
                 .setFieldScanMode( FieldScanMode.DIRECT_FIELD_ACCESS )
                 .setFieldGroups( GroupMode.ANY_OF_REQUIRED )
@@ -128,6 +122,11 @@ public class TestMain {
                 .setValidatorFactory( new JSR303ValidatorFactory() )
                 .build();
         Collection<Model> models = factory.createAll( BeanPropertyDemo.class, MyModelDto.class );
+
+        final String BB = "backbone.js";
+        //DataWriter modelWriter = new FileDataWriter("static/models.js");
+        DataWriter modelWriter = new StringBufferWriter();
+        CachedModelProvider provider1 = new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY, modelWriter );
 
         JavaScriptWriter jsWriter = new JavaScriptWriter(provider1.getDataWriter());
         ModelProcessor mp = new ValidatorProcessor(
@@ -137,9 +136,8 @@ public class TestMain {
                     EnumConverter.EnumMode.STRING,
                     JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN),
                new BackboneValidatorWriterManager(jsWriter));
-        ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( BB, provider1 )
-                .setModelProcessor(mp)
-                .build();
+        ModelGenerator generator = JMobsterFactory.getModelGenerator( mp );
+
         //generator.setWriter(provider1.getDataWriter());
         generator.processAll( models );
 /*

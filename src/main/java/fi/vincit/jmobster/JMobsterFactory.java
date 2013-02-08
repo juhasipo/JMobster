@@ -3,6 +3,7 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.exception.UnsupportedFramework;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.builder.ModelFactoryBuilder;
+import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.frameworks.backbone.ModelGeneratorBuilder;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
@@ -49,6 +50,15 @@ public class JMobsterFactory {
      */
     public static ModelGeneratorBuilder getModelGeneratorBuilder( String framework, ModelProvider provider ) {
         return getModelGeneratorBuilder( framework, provider.getDataWriter() );
+    }
+
+    /**
+     * Creates a model generator instance with custom {@link ModelProcessor}.
+     * @param modelProcessor
+     * @return
+     */
+    public static ModelGenerator getModelGenerator(ModelProcessor modelProcessor) {
+        return new DefaultModelGenerator(modelProcessor);
     }
 
     private static ModelFactory throwFrameworkNotSupported( String framework ) {
