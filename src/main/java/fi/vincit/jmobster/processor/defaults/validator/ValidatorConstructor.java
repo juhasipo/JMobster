@@ -134,7 +134,7 @@ public class ValidatorConstructor {
      */
     private Validator constructAndInitValidator( AnnotationBag annotationBag )
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        final Validator validatorInstance = (Validator)validatorClass.getConstructor().newInstance();
+        final BaseValidator validatorInstance = (BaseValidator)validatorClass.getConstructor().newInstance();
         validatorInstance.init( annotationBag );
         return validatorInstance;
     }

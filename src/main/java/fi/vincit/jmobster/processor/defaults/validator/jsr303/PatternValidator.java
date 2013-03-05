@@ -16,9 +16,9 @@ package fi.vincit.jmobster.processor.defaults.validator.jsr303;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.annotation.InitMethod;
 import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
-import fi.vincit.jmobster.util.collection.AnnotationBag;
 
 import javax.validation.constraints.Pattern;
 
@@ -26,18 +26,19 @@ public class PatternValidator extends BaseValidator {
     private String regexp;
     private Pattern.Flag[] flags;
 
-    @Override
-    public void init( AnnotationBag annotationBag ) {
-        Pattern pattern = annotationBag.getAnnotation(Pattern.class);
+    @InitMethod
+    public void init( Pattern pattern ) {
         this.flags = pattern.flags();
-
-        if( annotationBag.hasAnnotation( OverridePattern.class ) ) {
-            OverridePattern overriddenPattern = annotationBag.getAnnotation(OverridePattern.class);
-            regexp = overriddenPattern.regexp();
-        } else {
-            regexp = pattern.regexp();
+        if( this.regexp == null ) {
+            this.regexp = pattern.regexp();
         }
     }
+
+    @InitMethod
+    public void init( OverridePattern overridePattern ) {
+        this.regexp = overridePattern.regexp();
+    }
+
 
     public String getRegexp() {
         return regexp;

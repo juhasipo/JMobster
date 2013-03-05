@@ -29,6 +29,14 @@ import java.util.Map;
 public class AnnotationBag {
     final private Map<Class, FieldAnnotation> annotations = new HashMap<Class, FieldAnnotation>();
 
+    public static AnnotationBag forAnnotations(FieldAnnotation... annotations) {
+        AnnotationBag annotationBag = new AnnotationBag();
+        for( FieldAnnotation fieldAnnotation : annotations ) {
+            annotationBag.addAnnotation(fieldAnnotation);
+        }
+        return annotationBag;
+    }
+
     public <T extends Annotation> T getAnnotation(Class<T> clazz) {
         if( annotations.containsKey(clazz) ) {
             FieldAnnotation annotation = annotations.get(clazz);

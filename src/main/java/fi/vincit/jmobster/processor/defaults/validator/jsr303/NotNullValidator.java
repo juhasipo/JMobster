@@ -20,7 +20,4 @@ import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
 import fi.vincit.jmobster.util.collection.AnnotationBag;
 
 public class NotNullValidator extends BaseValidator {
-    @Override
-    public void init( AnnotationBag annotationBag ) {
-    }
 }

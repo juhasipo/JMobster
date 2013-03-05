@@ -16,8 +16,8 @@ package fi.vincit.jmobster.processor.defaults.validator.jsr303;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.annotation.InitMethod;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
-import fi.vincit.jmobster.util.collection.AnnotationBag;
 
 import javax.validation.constraints.Size;
 
@@ -27,9 +27,8 @@ public class SizeValidator extends BaseValidator {
     private boolean hasMin;
     private boolean hasMax;
 
-    @Override
-    public void init( AnnotationBag annotationBag ) {
-        Size size = annotationBag.getAnnotation(Size.class);
+    @InitMethod
+    public void init(Size size) {
         this.min = size.min();
         this.max = size.max();
         this.hasMin = min >= 0;

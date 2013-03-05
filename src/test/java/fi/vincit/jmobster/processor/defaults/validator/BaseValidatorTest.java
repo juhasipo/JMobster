@@ -1,9 +1,20 @@
 package fi.vincit.jmobster.processor.defaults.validator;
 
+import fi.vincit.jmobster.annotation.InitMethod;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.util.collection.AnnotationBag;
 import org.junit.Test;
 
+import javax.validation.constraints.*;
+import java.lang.annotation.Annotation;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class BaseValidatorTest {
     @Test
@@ -27,5 +38,135 @@ public class BaseValidatorTest {
         TestClass1 testClass1 = new TestClass1();
         testClass1.setType(String.class);
         assertEquals( testClass1.getType(), String.class );
+    }
+
+    @Test
+    public void testInitWithOneParam() {
+        class TestClass1 extends  BaseValidator {
+            Size size;
+            TestClass1() {}
+            @InitMethod public void init(Size size) {
+                this.size = size;
+            }
+        }
+
+        TestClass1 c = new TestClass1();
+        Size s = mockAnnotation(Size.class);
+        c.init(AnnotationBag.forAnnotations(new FieldAnnotation(s)));
+
+        assertThat(c.size, sameInstance(s));
+    }
+
+    @Test
+    public void testInitWithThreeParams() {
+        class TestClass1 extends  BaseValidator {
+            Min min;
+            NotNull notNull;
+            Max max;
+
+            TestClass1() {}
+            @InitMethod public void init(Min min, Max max, NotNull notNull) {
+                this.min = min;
+                this.max = max;
+                this.notNull = notNull;
+            }
+        }
+
+        TestClass1 c = new TestClass1();
+        Min min = mockAnnotation(Min.class);
+        Max max = mockAnnotation(Max.class);
+        NotNull notNull = mockAnnotation(NotNull.class);
+
+        c.init(AnnotationBag.forAnnotations(
+                new FieldAnnotation(min),
+                new FieldAnnotation(max),
+                new FieldAnnotation(notNull)));
+
+        assertThat(c.min, sameInstance(min));
+        assertThat(c.max, sameInstance(max));
+        assertThat(c.notNull, sameInstance(notNull));
+    }
+
+    @Test
+    public void testInitWithMultipleInitMethods1() {
+        class TestClass1 extends  BaseValidator {
+            Min min;
+            NotNull notNull;
+            Max max;
+
+            TestClass1() {}
+            @InitMethod public void init(Min min, Max max, NotNull notNull) {
+                this.min = min;
+                this.max = max;
+                this.notNull = notNull;
+            }
+
+            @InitMethod public void init(Min min, Max max) {
+                this.min = min;
+                this.max = max;
+            }
+        }
+
+        TestClass1 c = new TestClass1();
+        Min min = mockAnnotation(Min.class);
+        Max max = mockAnnotation(Max.class);
+        NotNull notNull = mockAnnotation(NotNull.class);
+
+        c.init(AnnotationBag.forAnnotations(
+                new FieldAnnotation(min),
+                new FieldAnnotation(max),
+                new FieldAnnotation(notNull)));
+
+        assertThat(c.min, sameInstance(min));
+        assertThat(c.max, sameInstance(max));
+        assertThat(c.notNull, sameInstance(notNull));
+    }
+
+    @Test
+    public void testInitWithMultipleInitMethods2() {
+        class TestClass1 extends  BaseValidator {
+            Min min;
+            NotNull notNull;
+            Max max;
+
+            TestClass1() {}
+            @InitMethod public void init(Min min, Max max, NotNull notNull) {
+                this.min = min;
+                this.max = max;
+                this.notNull = notNull;
+                assert false;
+            }
+
+            @InitMethod public void init(Min min, Max max) {
+                this.min = min;
+                this.max = max;
+            }
+        }
+
+        TestClass1 c = new TestClass1();
+        Min min = mockAnnotation(Min.class);
+        Max max = mockAnnotation(Max.class);
+
+        c.init(AnnotationBag.forAnnotations(
+                new FieldAnnotation(min),
+                new FieldAnnotation(max)));
+
+        assertThat(c.min, sameInstance(min));
+        assertThat(c.max, sameInstance(max));
+        assertThat(c.notNull, nullValue());
+    }
+
+    @Test
+    public void testMockAnnotation() {
+        Size s = mockAnnotation(Size.class);
+
+        assertThat(s.annotationType().equals(Size.class), is(true));
+    }
+
+    private static <T extends Annotation> T mockAnnotation(Class<T> type) {
+        Class typeClass = type;
+        T typeMock = mock(type);
+        when(typeMock.annotationType()).thenReturn(typeClass);
+        return typeMock;
     }
 }

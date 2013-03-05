@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.model;
+package fi.vincit.jmobster.annotation;
 /*
  * Copyright 2012 Juha Siponen
  *
@@ -15,10 +15,12 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
 */
 
-import fi.vincit.jmobster.util.collection.AnnotationBag;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-/**
- * Interface for validators
- */
-public interface Validator extends HasType {
+@Retention(value = RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+public @interface InitMethod {
 }
