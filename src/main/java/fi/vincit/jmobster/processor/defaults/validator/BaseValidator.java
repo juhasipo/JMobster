@@ -31,6 +31,13 @@ import java.util.List;
  * Base class for implementing validators. By default sets
  * the validator type with {@link Object#getClass()}. This can
  * be overridden with {@link BaseValidator#setType(Class)}
+ *
+ * To initialize the subclass with correct validation data, use
+ * {@link InitMethod} annotation and create an init method. The name
+ * of the method doesn't matter. The only thing that matters is that
+ * the method parameters exist. The init method is only called when
+ * every required method parameter is found from the given annotation
+ * bag.
  */
 public abstract class BaseValidator implements Validator {
     private static final Logger LOG = LoggerFactory.getLogger(BaseValidator.class);
@@ -41,15 +48,23 @@ public abstract class BaseValidator implements Validator {
     }
 
     public void init(AnnotationBag annotations) {
-        List<Method> methods = findInitMethods();
-
         // TODO: BeforeInit
-        // TODO: Init via reflection
+        callInitMethods(annotations, findMethodsWithAnnotation(InitMethod.class));
+        // TODO: AfterInit
+    }
+
+    private void callMethods(List<Method> methods, Object... params) throws Exception {
+        for( Method m : methods ) {
+            m.invoke(this, params);
+        }
+    }
+
+    private void callInitMethods(AnnotationBag annotations, List<Method> methods) {
         for( Method m : methods ) {
             Class[] paramTypes = m.getParameterTypes();
             Annotation[] params = new Annotation[paramTypes.length];
 
-            int numberFound = getParams(annotations, paramTypes, params);
+            int numberFound = collectParams(annotations, paramTypes, params);
             if( numberFound == paramTypes.length ) {
                 try {
                     m.invoke(this, params);
@@ -58,16 +73,19 @@ public abstract class BaseValidator implements Validator {
                 }
             }
         }
-        // TODO: AfterInit
     }
 
-    private int getParams(AnnotationBag annotations, Class[] paramTypes, Annotation[] params) {
+    private int collectParams(AnnotationBag annotations, Class[] paramTypes, Annotation[] params) {
         int numberFound = 0;
         for( int i = 0; i < paramTypes.length; ++i ) {
             Class<?> paramType = paramTypes[i];
             if( Annotation.class.isAssignableFrom(paramType) ) {
                 // Now we know that the paramType is an Annotation
+                // We can cast it to correct type of class type
                 Class<? extends Annotation> annotationType = paramType.asSubclass(Annotation.class);
+
+                // Only add as found, if the annotation is actually found.
+                // Ensures that init methods are always called with non null values.
                 Annotation annotation = annotations.getAnnotation(annotationType);
                 if( annotation != null ) {
                     params[i] = annotation;
@@ -78,10 +96,10 @@ public abstract class BaseValidator implements Validator {
         return numberFound;
     }
 
-    private List<Method> findInitMethods() {
+    private List<Method> findMethodsWithAnnotation(Class<? extends Annotation> methodAnnotation) {
         List<Method> initMethods = new ArrayList<Method>();
         for( Method m : type.getMethods() ) {
-            if( m.isAnnotationPresent(InitMethod.class) ) {
+            if( m.isAnnotationPresent(methodAnnotation) ) {
                 initMethods.add(m);
             }
         }
