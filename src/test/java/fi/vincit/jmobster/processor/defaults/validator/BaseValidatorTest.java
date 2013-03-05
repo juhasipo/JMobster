@@ -1,16 +1,19 @@
 package fi.vincit.jmobster.processor.defaults.validator;
 
+import fi.vincit.jmobster.annotation.AfterInit;
+import fi.vincit.jmobster.annotation.BeforeInit;
 import fi.vincit.jmobster.annotation.InitMethod;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.util.collection.AnnotationBag;
 import org.junit.Test;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.lang.annotation.Annotation;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -155,6 +158,57 @@ public class BaseValidatorTest {
         assertThat(c.max, sameInstance(max));
         assertThat(c.notNull, nullValue());
     }
+
+
+    static int beforeAfterTestOrder = 0;
+    @Test
+    public void testBeforeAndAfterInit() {
+
+        class BeforeAfterTestClass extends  BaseValidator {
+            int afterCalled;
+            int beforeCalled;
+            BeforeAfterTestClass() {}
+            @BeforeInit public void initBefore() { beforeCalled = beforeAfterTestOrder; ++beforeAfterTestOrder; }
+            @AfterInit public void initAfter() { afterCalled = beforeAfterTestOrder; ++beforeAfterTestOrder; }
+        }
+
+        BeforeAfterTestClass c = new BeforeAfterTestClass();
+        c.init(new AnnotationBag());
+
+        assertThat(c.beforeCalled, sameInstance(0));
+        assertThat(c.afterCalled, sameInstance(1));
+    }
+
+    @Test
+    public void testBeforeInit() {
+        class TestClass1 extends  BaseValidator {
+            boolean called;
+            TestClass1() {}
+            @BeforeInit public void init() { called = true; }
+        }
+
+        TestClass1 c = new TestClass1();
+        c.init(new AnnotationBag());
+
+        assertThat(c.called, sameInstance(true));
+    }
+
+    @Test
+    public void testAfterInit() {
+        class TestClass1 extends  BaseValidator {
+            boolean called;
+            TestClass1() {}
+            @AfterInit public void init() { called = true; }
+        }
+
+        TestClass1 c = new TestClass1();
+        c.init(new AnnotationBag());
+
+        assertThat(c.called, sameInstance(true));
+    }
+
+
+
 
     @Test
     public void testMockAnnotation() {

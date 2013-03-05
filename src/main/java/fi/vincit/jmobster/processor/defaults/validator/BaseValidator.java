@@ -16,6 +16,8 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.annotation.AfterInit;
+import fi.vincit.jmobster.annotation.BeforeInit;
 import fi.vincit.jmobster.annotation.InitMethod;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.collection.AnnotationBag;
@@ -38,6 +40,12 @@ import java.util.List;
  * the method parameters exist. The init method is only called when
  * every required method parameter is found from the given annotation
  * bag.
+ *
+ * You can also use annotations {@link BeforeInit} and {@link AfterInit}
+ * to mark classes that should be called before and after initialization.
+ * These methods don't take any parameters.
+ *
+ * The order in which the init methods are called is not deterministic.
  */
 public abstract class BaseValidator implements Validator {
     private static final Logger LOG = LoggerFactory.getLogger(BaseValidator.class);
@@ -48,29 +56,32 @@ public abstract class BaseValidator implements Validator {
     }
 
     public void init(AnnotationBag annotations) {
-        // TODO: BeforeInit
-        callInitMethods(annotations, findMethodsWithAnnotation(InitMethod.class));
-        // TODO: AfterInit
-    }
+        try {
+            callMethods(findMethodsWithAnnotation(BeforeInit.class));
 
-    private void callMethods(List<Method> methods, Object... params) throws Exception {
-        for( Method m : methods ) {
-            m.invoke(this, params);
+            callInitMethods(annotations, findMethodsWithAnnotation(InitMethod.class));
+
+            callMethods(findMethodsWithAnnotation(AfterInit.class));
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
-    private void callInitMethods(AnnotationBag annotations, List<Method> methods) {
+    private void callMethods(List<Method> methods) throws Exception {
+        for( Method m : methods ) {
+            m.invoke(this);
+        }
+    }
+
+    private void callInitMethods(AnnotationBag annotations, List<Method> methods) throws Exception {
         for( Method m : methods ) {
             Class[] paramTypes = m.getParameterTypes();
             Annotation[] params = new Annotation[paramTypes.length];
 
             int numberFound = collectParams(annotations, paramTypes, params);
             if( numberFound == paramTypes.length ) {
-                try {
-                    m.invoke(this, params);
-                } catch (Exception e) {
-                    LOG.error(e.getMessage(), e);
-                }
+                m.invoke(this, params);
             }
         }
     }
