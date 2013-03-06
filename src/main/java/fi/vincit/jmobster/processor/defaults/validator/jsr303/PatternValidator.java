@@ -19,6 +19,7 @@ package fi.vincit.jmobster.processor.defaults.validator.jsr303;
 import fi.vincit.jmobster.annotation.InitMethod;
 import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
+import fi.vincit.jmobster.util.Optional;
 
 import javax.validation.constraints.Pattern;
 
@@ -27,16 +28,13 @@ public class PatternValidator extends BaseValidator {
     private Pattern.Flag[] flags;
 
     @InitMethod
-    public void init( Pattern pattern ) {
+    public void init( Pattern pattern, Optional<OverridePattern> overridePattern) {
         this.flags = pattern.flags();
-        if( this.regexp == null ) {
+        if( overridePattern.isPresent() ) {
+            this.regexp = overridePattern.getValue().regexp();
+        } else {
             this.regexp = pattern.regexp();
         }
-    }
-
-    @InitMethod
-    public void init( OverridePattern overridePattern ) {
-        this.regexp = overridePattern.regexp();
     }
 
 

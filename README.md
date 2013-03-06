@@ -243,10 +243,20 @@ public class MyValidator extends BaseValidator {
         }
     }
 
+    @InitMethod
+    public void initRequired(MyAnnotation myAnnotation) {
+        this.requiredValue = myAnnotation.value();
+    }
+    @InitMethod
+    public void initOptional(MyOptionalAnnotation myOptionalAnnotation) {
+        this.optionalValue = myOptionalAnnotation.value();
+    }
+
     // Getters
 }
 ```
 
+TODO: Write for the new version
 As you can see, the *MyValidator* contains a two fields *requiredValue* and *optionalValue*. Values is set in the *init* method
 which takes an *AnnotationBag* as parameter. *AnnotationBag* contains all the annotations which are required
 for your annotation and optional annotations. These required and optional annotations are configured later. Difference

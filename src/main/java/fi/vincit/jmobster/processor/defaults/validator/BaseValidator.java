@@ -20,12 +20,13 @@ import fi.vincit.jmobster.annotation.AfterInit;
 import fi.vincit.jmobster.annotation.BeforeInit;
 import fi.vincit.jmobster.annotation.InitMethod;
 import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.Optional;
 import fi.vincit.jmobster.util.collection.AnnotationBag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,22 +63,24 @@ public abstract class BaseValidator implements Validator {
             callInitMethods(annotations, findMethodsWithAnnotation(InitMethod.class));
 
             callMethods(findMethodsWithAnnotation(AfterInit.class));
-        } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void callMethods(List<Method> methods) throws Exception {
+    private void callMethods(List<Method> methods) throws InvocationTargetException, IllegalAccessException {
         for( Method m : methods ) {
             m.invoke(this);
         }
     }
 
-    private void callInitMethods(AnnotationBag annotations, List<Method> methods) throws Exception {
+    private void callInitMethods(AnnotationBag annotations, List<Method> methods) throws InvocationTargetException, IllegalAccessException {
         for( Method m : methods ) {
-            Class[] paramTypes = m.getParameterTypes();
-            Annotation[] params = new Annotation[paramTypes.length];
+            Type[] paramTypes = m.getGenericParameterTypes();
+            Object[] params = new Object[paramTypes.length];
+
 
             int numberFound = collectParams(annotations, paramTypes, params);
             if( numberFound == paramTypes.length ) {
@@ -86,20 +89,80 @@ public abstract class BaseValidator implements Validator {
         }
     }
 
-    private int collectParams(AnnotationBag annotations, Class[] paramTypes, Annotation[] params) {
+    private static class ParamType {
+        private Class type;
+        private boolean isOptional;
+
+        private ParamType(Class type, boolean optional) {
+            this.type = type;
+            isOptional = optional;
+        }
+
+        public Class getType() {
+            return type;
+        }
+
+        public boolean isOptional() {
+            return isOptional;
+        }
+
+        public Object toParameter(Annotation annotation) {
+            if( isOptional ) {
+                return new Optional(annotation);
+            } else {
+                return annotation;
+            }
+        }
+
+        public boolean isOfType(Class clazz) {
+            return clazz.isAssignableFrom(type);
+        }
+    }
+
+    private ParamType resolveParamType(Type type) {
+        Type genericType = type;
+        Class<?> paramType = null;
+        boolean isOptional = false;
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType)genericType;
+            if( pt.getRawType().equals(Optional.class) ) {
+                Type actualType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                paramType = castGenericToClass(actualType);
+                isOptional = true;
+            } else {
+                throw new IllegalArgumentException("Invalid generic parameter type. Optional or Annotation expected.");
+            }
+        } else {
+            paramType = (Class)type;
+        }
+
+        return new ParamType(paramType, isOptional);
+    }
+
+    private Class castGenericToClass(Type actualType) {
+        if( actualType instanceof WildcardType) {
+            WildcardType wildcardType = (WildcardType)actualType;
+            return (Class)wildcardType.getUpperBounds()[0];
+        } else {
+            return (Class)actualType;
+        }
+    }
+
+    private int collectParams(AnnotationBag annotations, Type[] paramTypes, Object[] params) {
         int numberFound = 0;
         for( int i = 0; i < paramTypes.length; ++i ) {
-            Class<?> paramType = paramTypes[i];
-            if( Annotation.class.isAssignableFrom(paramType) ) {
+            ParamType type = resolveParamType(paramTypes[i]);
+            if( type.isOfType(Annotation.class) ) {
                 // Now we know that the paramType is an Annotation
                 // We can cast it to correct type of class type
-                Class<? extends Annotation> annotationType = paramType.asSubclass(Annotation.class);
+                Class<? extends Annotation> annotationType =
+                        type.getType().asSubclass(Annotation.class);
 
                 // Only add as found, if the annotation is actually found.
                 // Ensures that init methods are always called with non null values.
                 Annotation annotation = annotations.getAnnotation(annotationType);
-                if( annotation != null ) {
-                    params[i] = annotation;
+                if( annotation != null || type.isOptional ) {
+                    params[i] = type.toParameter(annotation);
                     ++numberFound;
                 }
             }

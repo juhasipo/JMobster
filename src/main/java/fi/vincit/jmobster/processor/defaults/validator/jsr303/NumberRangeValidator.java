@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator.jsr303;
 
 import fi.vincit.jmobster.annotation.InitMethod;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
+import fi.vincit.jmobster.util.Optional;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -30,14 +31,16 @@ public class NumberRangeValidator extends BaseValidator {
     private long max;
 
     @InitMethod
-    public void init(Min min) {
-        hasMin = true;
-        this.min = min.value();
-    }
-    @InitMethod
-    public void init(Max max) {
-        hasMax = true;
-        this.max = max.value();
+    public void init(Optional<Min> min, Optional<Max> max) {
+        if( min.isPresent() ) {
+            hasMin = true;
+            this.min = min.getValue().value();
+        }
+
+        if( max.isPresent() ) {
+            hasMax = true;
+            this.max = max.getValue().value();
+        }
     }
 
     public boolean hasMin() {
