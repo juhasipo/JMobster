@@ -40,13 +40,19 @@ import java.util.List;
  * of the method doesn't matter. The only thing that matters is that
  * the method parameters exist. The init method is only called when
  * every required method parameter is found from the given annotation
- * bag.
+ * bag. Optional parameters can be given with {@link Optional} generic
+ * parameter.
+ *
+ * Required parameters are always non null. Optional parameters may not
+ * be present so you should check that before getting the parameter out
+ * from optional object.
  *
  * You can also use annotations {@link BeforeInit} and {@link AfterInit}
  * to mark classes that should be called before and after initialization.
  * These methods don't take any parameters.
  *
- * The order in which the init methods are called is not deterministic.
+ * The order in which the init methods are called is not deterministic. Only
+ * the order BeforeInit, InitMethod and AfterInit method types is quaranteed.
  */
 public abstract class BaseValidator implements Validator {
     private static final Logger LOG = LoggerFactory.getLogger(BaseValidator.class);
