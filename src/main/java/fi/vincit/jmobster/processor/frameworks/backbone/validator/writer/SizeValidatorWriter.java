@@ -27,10 +27,6 @@ public class SizeValidatorWriter extends JavaScriptValidatorWriter<SizeValidator
     private static final String MIN_ONLY_KEY = "minLength";
     private static final String MAX_ONLY_KEY = "maxLength";
 
-    public SizeValidatorWriter() {
-        super( SizeValidator.class );
-    }
-
     @Override
     public void write( JavaScriptWriter writer, SizeValidator validator, ItemStatus status ) {
         if( validator.hasMin() && validator.hasMax() ) {

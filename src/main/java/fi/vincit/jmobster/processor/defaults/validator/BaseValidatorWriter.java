@@ -19,7 +19,10 @@ package fi.vincit.jmobster.processor.defaults.validator;
 import fi.vincit.jmobster.processor.ValidatorWriter;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
+import fi.vincit.jmobster.util.reflection.CastUtil;
 import fi.vincit.jmobster.util.writer.DataWriter;
+
+import java.lang.reflect.Type;
 
 /**
  * Base class for validator writers. This should be extended when creating own
@@ -34,12 +37,17 @@ public abstract class BaseValidatorWriter<V extends Validator, W extends DataWri
     final private Class supportedType;
 
     /**
-     * Configures the validator writer to support the given validator
-     * class.
-     * @param supportedType Validator type (Class of the validator)
+     * Configures the validator writer to support the given validator V class.
+     *
+     * The type is resolved from the given generic type parameter V.
      */
-    protected BaseValidatorWriter( Class supportedType ) {
-        this.supportedType = supportedType;
+    protected BaseValidatorWriter() {
+        this.supportedType = resolveSupportedType();
+    }
+
+    private Class resolveSupportedType() {
+        Type type = this.getClass().getGenericSuperclass();
+        return CastUtil.castGenericTypeToClass(type);
     }
 
     /**

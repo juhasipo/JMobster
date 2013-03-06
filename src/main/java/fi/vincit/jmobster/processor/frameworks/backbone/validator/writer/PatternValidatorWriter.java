@@ -23,9 +23,6 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaToJSPatternConverte
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class PatternValidatorWriter extends JavaScriptValidatorWriter<PatternValidator> {
-    public PatternValidatorWriter() {
-        super( PatternValidator.class );
-    }
 
     @Override
     protected void write( JavaScriptWriter writer, PatternValidator validator, ItemStatus status ) {

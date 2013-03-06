@@ -27,10 +27,6 @@ public class NumberRangeValidatorWriter extends JavaScriptValidatorWriter<Number
     private static final String MIN_ONLY_KEY = "min";
     private static final String MAX_ONLY_KEY = "max";
 
-    public NumberRangeValidatorWriter() {
-        super( NumberRangeValidator.class );
-    }
-
     @Override
     protected void write( JavaScriptWriter writer, NumberRangeValidator validator, ItemStatus status) {
         if( validator.hasMin() && validator.hasMax() ) {

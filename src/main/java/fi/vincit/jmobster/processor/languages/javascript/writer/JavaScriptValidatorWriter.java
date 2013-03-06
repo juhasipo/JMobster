@@ -20,7 +20,7 @@ import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
 import fi.vincit.jmobster.processor.model.Validator;
 
 public abstract class JavaScriptValidatorWriter<T extends Validator> extends BaseValidatorWriter<T, JavaScriptWriter> {
-    protected JavaScriptValidatorWriter( Class supportedType ) {
-        super( supportedType );
+    protected JavaScriptValidatorWriter() {
+        super();
     }
 }

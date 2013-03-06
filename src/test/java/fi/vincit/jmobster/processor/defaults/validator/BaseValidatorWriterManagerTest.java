@@ -22,7 +22,6 @@ public class BaseValidatorWriterManagerTest {
             @Override public void init( AnnotationBag annotationBag ) {}
         }
         class TestValidatorWriter extends BaseValidatorWriter<TestValidator, DataWriter> {
-            TestValidatorWriter() { super( TestValidator.class ); }
             @Override protected void write( DataWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<DataWriter> {
@@ -44,7 +43,6 @@ public class BaseValidatorWriterManagerTest {
             @Override public void init( AnnotationBag annotationBag ) {}
         }
         class TestValidatorWriter extends BaseValidatorWriter<TestValidator, TestWriter> {
-            TestValidatorWriter() { super( TestValidator.class ); }
             @Override protected void write( TestWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<TestWriter> {
@@ -66,7 +64,6 @@ public class BaseValidatorWriterManagerTest {
             @Override public void init( AnnotationBag annotationBag ) {}
         }
         class TestValidatorWriter extends BaseValidatorWriter<TestValidator, DataWriter> {
-            TestValidatorWriter() { super( TestValidator.class ); }
             @Override protected void write( DataWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<TestWriter> {

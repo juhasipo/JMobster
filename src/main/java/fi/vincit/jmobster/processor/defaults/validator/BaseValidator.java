@@ -22,11 +22,15 @@ import fi.vincit.jmobster.annotation.InitMethod;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.Optional;
 import fi.vincit.jmobster.util.collection.AnnotationBag;
+import fi.vincit.jmobster.util.reflection.CastUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,8 +136,7 @@ public abstract class BaseValidator implements Validator {
         if (genericType instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType)genericType;
             if( pt.getRawType().equals(Optional.class) ) {
-                Type actualType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-                paramType = castGenericToClass(actualType);
+                paramType = CastUtil.castGenericTypeToClass(genericType);
                 isOptional = true;
             } else {
                 throw new IllegalArgumentException("Invalid generic parameter type. Optional or Annotation expected.");
@@ -143,15 +146,6 @@ public abstract class BaseValidator implements Validator {
         }
 
         return new ParamType(paramType, isOptional);
-    }
-
-    private Class castGenericToClass(Type actualType) {
-        if( actualType instanceof WildcardType) {
-            WildcardType wildcardType = (WildcardType)actualType;
-            return (Class)wildcardType.getUpperBounds()[0];
-        } else {
-            return (Class)actualType;
-        }
     }
 
     private int collectParams(AnnotationBag annotations, Type[] paramTypes, Object[] params) {

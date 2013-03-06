@@ -22,9 +22,6 @@ import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class NotNullValidatorWriter extends JavaScriptValidatorWriter<NotNullValidator> {
-    public NotNullValidatorWriter() {
-        super( NotNullValidator.class );
-    }
 
     @Override
     protected void write( JavaScriptWriter writer, NotNullValidator validator, ItemStatus status ) {
