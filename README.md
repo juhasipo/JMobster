@@ -224,8 +224,8 @@ when constructing *ModelFields*.
 #### Validator Class
 
 The next phase is to create a wrapper for your annotation. The wrapper will be used in later phase of the process
-to get annotation values that should be written to *DataWriter*. These validator wrapper classes are generic and they
-only need to be implemented once per annotation.
+to get annotation values that should be written to *DataWriter*. These validator wrapper classes are generic and
+language independent. They only need to be implemented once per annotation.
 
 Here is an example of *MyValidator* for a custom *MyAnnotation* validator annotation:
 ```java
@@ -233,18 +233,8 @@ public class MyValidator extends BaseValidator {
     private String requiredValue;
     private String optionalValue;
 
-    @Override
-    public void init( AnnotationBag annotationBag ) {
-        MyAnnotation myAnnotation = annotationBag.getAnnotation(MyAnnotation.class);
-        this.requiredValue = myAnnotation.value();
-        if( annotationBag.hasAnnotation(MyOptionalAnnotation.class) ) {
-            MyOptionalAnnotation myOptionalAnnotation = annotationBag.getAnnotation(MyOptionalAnnotation.class);
-            optionalValue = myOptionalAnnotation.value();
-        }
-    }
-
     @InitMethod
-    public void initRequired(MyAnnotation myAnnotation, Optional<MyOptionalAnnotation> myOptionalAnnotation) {
+    public void init(MyAnnotation myAnnotation, Optional<MyOptionalAnnotation> myOptionalAnnotation) {
         this.requiredValue = myAnnotation.value();
         if( myOptionalAnnotation.isPresent() ) {
             this.optionalValue = myOptionalAnnotation.value();
