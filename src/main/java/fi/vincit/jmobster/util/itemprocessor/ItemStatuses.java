@@ -6,7 +6,7 @@ package fi.vincit.jmobster.util.itemprocessor;
  * phase. Returned {@link ItemStatus} object cannot be modified.
  */
 @SuppressWarnings( "UtilityClassWithoutPrivateConstructor" )
-public class ItemStatuses {
+public final class ItemStatuses {
 
     private static ItemStatus first = new ImmutableItemStatus(2);
     private static ItemStatus last = new ImmutableItemStatus(2, 1);

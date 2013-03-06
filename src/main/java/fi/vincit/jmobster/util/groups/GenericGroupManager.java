@@ -76,16 +76,6 @@ public class GenericGroupManager implements GroupManager<Class> {
     }
 
     @Override
-    public boolean match( Class[] groups ) {
-        return false;
-    }
-
-    @Override
-    public boolean match( Collection<Class> groups ) {
-        return false;
-    }
-
-    @Override
     public void setGroups( GroupMode groupMode, Collection<Class> requiredGroups ) {
         this.groupMode = groupMode;
         this.requiredGroups.clear();

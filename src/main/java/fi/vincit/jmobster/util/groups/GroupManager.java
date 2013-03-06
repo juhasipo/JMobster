@@ -30,18 +30,6 @@ public interface GroupManager<G> {
      * @return True if groups match, otherwise false
      */
     boolean match( HasGroups<G> groupObject );
-    /**
-     * Checks if the validator has the required groups
-     * @param groups Group array
-     * @return True if groups match, otherwise false
-     */
-    boolean match( G[] groups );
-    /**
-     * Checks if the validator has the required groups
-     * @param groups Group collection
-     * @return True if groups match, otherwise false
-     */
-    boolean match( Collection<G> groups );
 
     void setGroups( GroupMode groupMode, Collection<G> groups );
 }

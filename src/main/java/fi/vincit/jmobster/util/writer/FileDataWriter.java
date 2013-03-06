@@ -47,13 +47,13 @@ public class FileDataWriter extends StreamDataWriter {
 
     @Override
     public void close() {
-        super.close();
-        if( file != null ) {
-            try {
+        try {
+            super.close();
+            if( file != null ) {
                 file.close();
-            } catch( IOException e ) {
-                LOG.error("Error", e);
             }
+        } catch( IOException e ) {
+            LOG.error("Error", e);
         }
     }
 

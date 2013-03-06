@@ -30,7 +30,8 @@ public class DefaultNamingStrategy implements ModelNamingStrategy {
     public String getName( Class clazz ) {
         if( clazz.isAnnotationPresent(fi.vincit.jmobster.annotation.Model.class) ) {
             fi.vincit.jmobster.annotation.Model modelAnnotation =
-                    (fi.vincit.jmobster.annotation.Model)clazz.getAnnotation(fi.vincit.jmobster.annotation.Model.class);
+                    (fi.vincit.jmobster.annotation.Model)clazz
+                            .getAnnotation(fi.vincit.jmobster.annotation.Model.class);
             return modelAnnotation.name();
         } else {
            return stripDtoFromName(clazz.getSimpleName());
