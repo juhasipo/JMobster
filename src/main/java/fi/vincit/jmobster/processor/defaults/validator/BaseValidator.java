@@ -99,53 +99,18 @@ public abstract class BaseValidator implements Validator {
         }
     }
 
-    private static class ParamType {
-        private Class type;
-        private boolean isOptional;
-
-        private ParamType(Class type, boolean optional) {
-            this.type = type;
-            isOptional = optional;
-        }
-
-        public Class getType() {
-            return type;
-        }
-
-        public boolean isOptional() {
-            return isOptional;
-        }
-
-        public Object toParameter(Annotation annotation) {
-            if( isOptional ) {
-                return new Optional(annotation);
-            } else {
-                return annotation;
-            }
-        }
-
-        public boolean isOfType(Class clazz) {
-            return clazz.isAssignableFrom(type);
-        }
-    }
-
     private ParamType resolveParamType(Type type) {
-        Type genericType = type;
-        Class<?> paramType = null;
-        boolean isOptional = false;
-        if (genericType instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType)genericType;
-            if( pt.getRawType().equals(Optional.class) ) {
-                paramType = CastUtil.castGenericTypeToClass(genericType);
-                isOptional = true;
+        if( type instanceof ParameterizedType ) {
+            ParameterizedType parameterizedType = (ParameterizedType)type;
+            if( parameterizedType.getRawType().equals(Optional.class) ) {
+                Class<?> paramType = CastUtil.castGenericTypeToClass(type);
+                return new ParamType(paramType, ParamType.Type.OPTIONAL);
             } else {
                 throw new IllegalArgumentException("Invalid generic parameter type. Optional or Annotation expected.");
             }
         } else {
-            paramType = (Class)type;
+            return new ParamType((Class)type, ParamType.Type.REQUIRED);
         }
-
-        return new ParamType(paramType, isOptional);
     }
 
     private int collectParams(AnnotationBag annotations, Type[] paramTypes, Object[] params) {
@@ -187,5 +152,41 @@ public abstract class BaseValidator implements Validator {
 
     protected void setType(Class type) {
         this.type = type;
+    }
+
+
+
+    private static class ParamType {
+        public static enum Type {
+            OPTIONAL,
+            REQUIRED
+        }
+        private Class type;
+        private boolean isOptional;
+
+        private ParamType(Class paramType, Type type) {
+            this.type = paramType;
+            isOptional = type == Type.OPTIONAL;
+        }
+
+        public Class getType() {
+            return type;
+        }
+
+        public boolean isOptional() {
+            return isOptional;
+        }
+
+        public Object toParameter(Annotation annotation) {
+            if( isOptional ) {
+                return new Optional(annotation);
+            } else {
+                return annotation;
+            }
+        }
+
+        public boolean isOfType(Class clazz) {
+            return clazz.isAssignableFrom(type);
+        }
     }
 }
