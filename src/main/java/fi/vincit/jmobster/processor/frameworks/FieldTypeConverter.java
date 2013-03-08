@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.backbone.type;
+package fi.vincit.jmobster.processor.frameworks;
 
 /*
  * Copyright 2012 Juha Siponen

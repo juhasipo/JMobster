@@ -16,7 +16,9 @@ package fi.vincit.jmobster.processor.frameworks.backbone.type;
  * limitations under the License.
  */
 
-public class BackboneFieldTypeConverterManager extends FieldTypeConverterManager {
+import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverterManager;
+
+public class BackboneFieldTypeConverterManager extends BaseFieldTypeConverterManager {
     public BackboneFieldTypeConverterManager() {
         setFieldTypeConverter(new StringConverter(), new NumberConverter());
     }

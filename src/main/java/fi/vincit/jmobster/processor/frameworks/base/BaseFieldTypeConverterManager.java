@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.backbone.type;
+package fi.vincit.jmobster.processor.frameworks.base;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,15 +16,23 @@ package fi.vincit.jmobster.processor.frameworks.backbone.type;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.frameworks.FieldTypeConverter;
 import fi.vincit.jmobster.processor.model.ModelField;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FieldTypeConverterManager {
+/**
+ * Base class for field type converter managers that contain field type converters
+ * for each type.
+ *
+ * Basic usage: Use {@link BaseFieldTypeConverterManager#setFieldTypeConverter(fi.vincit.jmobster.processor.frameworks.FieldTypeConverter...)}
+ * to set supported field type converters in the subclass' constructor.
+ */
+public abstract class BaseFieldTypeConverterManager {
     private final Map<Class, FieldTypeConverter> fieldTypeConvertersByClass;
 
-    public FieldTypeConverterManager() {
+    protected BaseFieldTypeConverterManager() {
         fieldTypeConvertersByClass = new HashMap<Class, FieldTypeConverter>();
     }
 

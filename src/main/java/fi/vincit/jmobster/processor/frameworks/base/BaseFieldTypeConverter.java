@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.backbone.type;
+package fi.vincit.jmobster.processor.frameworks.base;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -15,6 +15,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone.type;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import fi.vincit.jmobster.processor.frameworks.FieldTypeConverter;
 
 public abstract class BaseFieldTypeConverter implements FieldTypeConverter {
 

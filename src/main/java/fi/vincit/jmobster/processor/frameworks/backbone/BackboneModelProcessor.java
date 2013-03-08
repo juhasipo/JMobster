@@ -19,6 +19,7 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
+import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
@@ -128,7 +129,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing(ItemStatus status) throws IOException {
         getWriter().indentBack();
-        getWriter().writeLine( NAMESPACE_END );
+        getWriter().writeLine(NAMESPACE_END);
         getWriter().close();
         LOG.trace("Processing models done");
     }

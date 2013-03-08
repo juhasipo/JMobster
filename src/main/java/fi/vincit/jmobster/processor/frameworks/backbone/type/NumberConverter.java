@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.type;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverter;
 import fi.vincit.jmobster.processor.languages.javascript.util.JavaScriptUtil;
 import fi.vincit.jmobster.processor.model.ModelField;
 

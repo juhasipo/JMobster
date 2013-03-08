@@ -20,7 +20,7 @@ import fi.vincit.jmobster.exception.BuildingError;
 import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.BackboneFieldTypeConverterManager;
-import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
+import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
@@ -33,7 +33,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
 public class ModelGeneratorBuilder {
     private ModelProcessor modelProcessor;
     private FieldValueConverter fieldValueConverter;
-    private FieldTypeConverterManager fieldTypeConverterManager;
+    private BaseFieldTypeConverterManager fieldTypeConverterManager;
     private DataWriter dataWriter;
 
     public ModelGeneratorBuilder setDataWriter(DataWriter dataWriter) {
@@ -51,7 +51,7 @@ public class ModelGeneratorBuilder {
         return this;
     }
 
-    public ModelGeneratorBuilder setFieldTypeConverterManager(FieldTypeConverterManager fieldTypeConverterManager) {
+    public ModelGeneratorBuilder setFieldTypeConverterManager(BaseFieldTypeConverterManager fieldTypeConverterManager) {
         this.fieldTypeConverterManager = fieldTypeConverterManager;
         return this;
     }
