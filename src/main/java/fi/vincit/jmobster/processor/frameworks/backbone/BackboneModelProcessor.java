@@ -18,13 +18,9 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
-import fi.vincit.jmobster.processor.frameworks.backbone.type.FieldTypeConverterManager;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
-import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
-import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -60,19 +56,39 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     private String startComment;
     private String namespaceName;
 
-    final private ValidatorProcessor validatorProcessor;
-    final private DefaultValueProcessor defaultValueProcessor;
+    private ValidatorProcessor validatorProcessor;
+    private ModelProcessor<JavaScriptWriter> defaultValueProcessor;
 
     /**
      * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
      * @param writer Writer
      */
-    public BackboneModelProcessor(DataWriter writer, FieldValueConverter valueConverter, FieldTypeConverterManager typeConverterManager) {
+    public BackboneModelProcessor(DataWriter writer,
+                                  FieldValueConverter valueConverter) {
         super(new JavaScriptWriter(writer), valueConverter);
+        initRest(
+                new ValidatorProcessor(getWriter(), valueConverter, new BackboneValidatorWriterManager( getWriter() )),
+                new DefaultValueProcessor(getWriter(), valueConverter)
+        );
+    }
+
+    public BackboneModelProcessor(DataWriter writer,
+                                  FieldValueConverter valueConverter,
+                                  ValidatorProcessor validatorProcessor,
+                                  ModelProcessor<JavaScriptWriter> valueProcessor) {
+        super(new JavaScriptWriter(writer), valueConverter);
+        initRest(
+                validatorProcessor,
+                valueProcessor
+        );
+    }
+
+    private void initRest(ValidatorProcessor validatorProcessor,
+                          ModelProcessor<JavaScriptWriter> valueProcessor) {
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.validatorProcessor = new ValidatorProcessor(getWriter(), valueConverter, new BackboneValidatorWriterManager( getWriter() ));
-        this.defaultValueProcessor = new DefaultValueProcessor(getWriter(), valueConverter);
+        this.validatorProcessor = validatorProcessor;
+        this.defaultValueProcessor = valueProcessor;
     }
 
     @Override
