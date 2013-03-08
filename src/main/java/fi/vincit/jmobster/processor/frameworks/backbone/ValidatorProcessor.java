@@ -59,6 +59,19 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
     }
 
     public ValidatorProcessor( String name,
+                               FieldValueConverter valueConverter,
+                               final BackboneValidatorWriterManager validatorWriterManager ) {
+        super(name, null, valueConverter);
+        this.validatorWriterManager = validatorWriterManager;
+        validatorWriter = new ItemHandler<Validator>() {
+            @Override
+            public void process( Validator validator, ItemStatus status ) {
+                validatorWriterManager.write( validator, status );
+            }
+        };
+    }
+
+    public ValidatorProcessor( String name,
                                DataWriter writer,
                                FieldValueConverter valueConverter,
                                BackboneValidatorWriterManager validatorWriterManager ) {

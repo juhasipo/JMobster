@@ -16,7 +16,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
@@ -29,16 +28,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public abstract class BaseBackboneModelProcessorTest {
     public static final String TEST_MODEL_NAME = "TestModel";
     protected StringBufferWriter writer;
     @Mock protected ModelProcessor<JavaScriptWriter> validatorProcessor;
     @Mock protected ModelProcessor<JavaScriptWriter> valueProcessor;
-    @Mock private FieldValueConverter fieldValueConverter;
 
     protected abstract BackboneModelProcessor.Mode getMode();
 
@@ -84,7 +80,6 @@ public abstract class BaseBackboneModelProcessorTest {
     protected BackboneModelProcessor createProcessor() {
         BackboneModelProcessor processor = new BackboneModelProcessor(
                 writer,
-                fieldValueConverter,
                 getMode(),
                 validatorProcessor,
                 valueProcessor);

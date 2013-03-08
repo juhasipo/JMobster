@@ -34,15 +34,14 @@ public class DefaultValueProcessor extends BaseModelProcessor<JavaScriptWriter> 
     private static final String RETURN_BLOCK = "return "; // Note the space
 
     public DefaultValueProcessor( String name,
-                                  JavaScriptWriter writer,
                                   FieldValueConverter valueConverter ) {
-        super( name, writer, valueConverter );
+        super( name, null, valueConverter );
     }
 
     public DefaultValueProcessor( String name,
                                   DataWriter writer,
                                   FieldValueConverter valueConverter ) {
-        this( name, new JavaScriptWriter(writer), valueConverter );
+        super( name, new JavaScriptWriter(writer), valueConverter );
     }
 
     @Override

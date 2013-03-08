@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.defaults.DummyValueConverter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
@@ -85,24 +86,21 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         super(NAME, new JavaScriptWriter(writer), valueConverter);
         List<ModelProcessor<JavaScriptWriter>> list = Arrays.asList(
                 (ModelProcessor<JavaScriptWriter>) new ValidatorProcessor(
-                        "validation",
-                        getWriter(),
+                        VALIDATOR_BLOCK_NAME,
                         valueConverter,
                         new BackboneValidatorWriterManager(getWriter())
                 ),
-                (ModelProcessor<JavaScriptWriter>) new DefaultValueProcessor(
-                        "defaults",
-                        getWriter(),
+                new DefaultValueProcessor(
+                        DEFAULTS_BLOCK_NAME,
                         valueConverter)
         );
         initRest( list, mode );
     }
 
     public BackboneModelProcessor(DataWriter writer,
-                                  FieldValueConverter valueConverter,
                                   Mode mode,
                                   ModelProcessor<JavaScriptWriter>... modelProcessors) {
-        super(NAME, new JavaScriptWriter(writer), valueConverter);
+        super(NAME, new JavaScriptWriter(writer), new DummyValueConverter());
         initRest( Arrays.asList(modelProcessors), mode );
     }
 
@@ -112,6 +110,9 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         this.namespaceName = DEFAULT_NAMESPACE;
         this.modelProcessors.addAll(validatorProcessor);
         this.mode = mode;
+        for( ModelProcessor<JavaScriptWriter> processor : validatorProcessor ) {
+            processor.setWriter(getWriter());
+        }
     }
 
     @Override
