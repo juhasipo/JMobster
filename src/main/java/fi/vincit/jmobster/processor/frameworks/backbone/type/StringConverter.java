@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.type;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.languages.javascript.util.JavaScriptUtil;
 import fi.vincit.jmobster.processor.model.ModelField;
 
 public class StringConverter extends BaseFieldTypeConverter {
@@ -26,6 +27,6 @@ public class StringConverter extends BaseFieldTypeConverter {
 
     @Override
     public String convert( ModelField field ) {
-        return "'Text'";
+        return JavaScriptUtil.asString("Text");
     }
 }

@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.backbone.type;
+package fi.vincit.jmobster.processor.languages.javascript.util;
 
 /*
  * Copyright 2012 Juha Siponen
@@ -16,16 +16,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone.type;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.languages.javascript.util.JavaScriptUtil;
-import fi.vincit.jmobster.processor.model.ModelField;
-
-public class NumberConverter extends BaseFieldTypeConverter {
-    public NumberConverter() {
-        super( Integer.class, int.class, Long.class, long.class, Double.class, double.class, Float.class, float.class );
-    }
-
-    @Override
-    public String convert( ModelField field ) {
-        return JavaScriptUtil.asString("Number");
+public class JavaScriptUtil {
+    public static String asString(String string) {
+        return "'" + string + "'";
     }
 }
