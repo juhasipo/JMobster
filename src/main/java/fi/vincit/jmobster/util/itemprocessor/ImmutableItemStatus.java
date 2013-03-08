@@ -38,4 +38,5 @@ public class ImmutableItemStatus extends ItemStatus {
     public void update( int itemIndex ) {
         throw new  UnsupportedOperationException("Cannot update immutable ItemStatus");
     }
+
 }

@@ -190,7 +190,7 @@ public class DefaultValueProcessorTest {
     }
 
     private DefaultValueProcessor createProcessor() {
-        return new DefaultValueProcessor(writer, fieldValueConverter);
+        return new DefaultValueProcessor("", writer, fieldValueConverter);
     }
 
 

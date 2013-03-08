@@ -79,4 +79,33 @@ public class ItemStatus {
     public boolean isNotFirstItem() {
         return !firstItem;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemStatus)) return false;
+
+        ItemStatus that = (ItemStatus) o;
+
+        if (firstItem != that.firstItem) return false;
+        if (lastItem != that.lastItem) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (firstItem ? 1 : 0);
+        result = 31 * result + (lastItem ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemStatus{" +
+                "numberOfItems=" + numberOfItems +
+                ", firstItem=" + firstItem +
+                ", lastItem=" + lastItem +
+                '}';
+    }
 }

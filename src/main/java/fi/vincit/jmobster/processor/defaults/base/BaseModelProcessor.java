@@ -18,23 +18,23 @@ package fi.vincit.jmobster.processor.defaults.base;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.ValueConverter;
 import fi.vincit.jmobster.util.writer.DataWriter;
-import fi.vincit.jmobster.util.writer.FileDataWriter;
-
-import java.io.IOException;
 
 public abstract class BaseModelProcessor<W extends DataWriter> implements ModelProcessor<W> {
     private W writer;
     final private FieldValueConverter valueConverter;
+    private String name;
 
     /**
      * Initializes model processor with writer
+     * @param name   Name
      * @param writer Writer to use
+     * @param valueConverter Value converter
      */
-    public BaseModelProcessor( W writer, FieldValueConverter valueConverter ) {
+    public BaseModelProcessor( String name, W writer, FieldValueConverter valueConverter ) {
         this.valueConverter = valueConverter;
         this.writer = writer;
+        this.name = name;
     }
 
     /**
@@ -56,5 +56,10 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
     @Override
     public void setWriter( W dataWriter ) {
         this.writer = dataWriter;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

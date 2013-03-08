@@ -44,8 +44,11 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
      * @param writer Writer
      * @param validatorWriterManager
      */
-    public ValidatorProcessor( JavaScriptWriter writer, FieldValueConverter valueConverter, final BackboneValidatorWriterManager validatorWriterManager ) {
-        super(writer, valueConverter);
+    public ValidatorProcessor( String name,
+                               JavaScriptWriter writer,
+                               FieldValueConverter valueConverter,
+                               final BackboneValidatorWriterManager validatorWriterManager ) {
+        super(name, writer, valueConverter);
         this.validatorWriterManager = validatorWriterManager;
         validatorWriter = new ItemHandler<Validator>() {
             @Override
@@ -55,8 +58,11 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
         };
     }
 
-    public ValidatorProcessor( DataWriter writer, FieldValueConverter valueConverter, BackboneValidatorWriterManager validatorWriterManager ) {
-        this(new JavaScriptWriter(writer), valueConverter, validatorWriterManager);
+    public ValidatorProcessor( String name,
+                               DataWriter writer,
+                               FieldValueConverter valueConverter,
+                               BackboneValidatorWriterManager validatorWriterManager ) {
+        this(name, new JavaScriptWriter(writer), valueConverter, validatorWriterManager);
     }
 
     @Override

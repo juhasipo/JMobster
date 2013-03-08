@@ -21,13 +21,17 @@ import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
+import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
-import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -37,6 +41,8 @@ import java.io.IOException;
  */
 @SuppressWarnings( "HardcodedFileSeparator" )
 public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter> {
+
+    public static final String NAME = "";
 
     public static enum Mode {
         JSON,
@@ -64,8 +70,8 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     private String startComment;
     private String namespaceName;
 
-    private ValidatorProcessor validatorProcessor;
-    private ModelProcessor<JavaScriptWriter> defaultValueProcessor;
+    private List<ModelProcessor<JavaScriptWriter>> modelProcessors =
+            new ArrayList<ModelProcessor<JavaScriptWriter>>();
 
     private Mode mode;
 
@@ -76,38 +82,35 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     public BackboneModelProcessor(DataWriter writer,
                                   FieldValueConverter valueConverter,
                                   Mode mode) {
-        super(new JavaScriptWriter(writer), valueConverter);
-        initRest(
-                new ValidatorProcessor(
+        super(NAME, new JavaScriptWriter(writer), valueConverter);
+        List<ModelProcessor<JavaScriptWriter>> list = Arrays.asList(
+                (ModelProcessor<JavaScriptWriter>) new ValidatorProcessor(
+                        "validation",
                         getWriter(),
                         valueConverter,
-                        new BackboneValidatorWriterManager( getWriter() )
+                        new BackboneValidatorWriterManager(getWriter())
                 ),
-                new DefaultValueProcessor(getWriter(), valueConverter),
-                mode
+                (ModelProcessor<JavaScriptWriter>) new DefaultValueProcessor(
+                        "defaults",
+                        getWriter(),
+                        valueConverter)
         );
+        initRest( list, mode );
     }
 
     public BackboneModelProcessor(DataWriter writer,
                                   FieldValueConverter valueConverter,
-                                  ValidatorProcessor validatorProcessor,
-                                  ModelProcessor<JavaScriptWriter> valueProcessor,
-                                  Mode mode) {
-        super(new JavaScriptWriter(writer), valueConverter);
-        initRest(
-                validatorProcessor,
-                valueProcessor,
-                mode
-        );
+                                  Mode mode,
+                                  ModelProcessor<JavaScriptWriter>... modelProcessors) {
+        super(NAME, new JavaScriptWriter(writer), valueConverter);
+        initRest( Arrays.asList(modelProcessors), mode );
     }
 
-    private void initRest(ValidatorProcessor validatorProcessor,
-                          ModelProcessor<JavaScriptWriter> valueProcessor,
+    private void initRest(List<ModelProcessor<JavaScriptWriter>> validatorProcessor,
                           Mode mode) {
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.validatorProcessor = validatorProcessor;
-        this.defaultValueProcessor = valueProcessor;
+        this.modelProcessors.addAll(validatorProcessor);
         this.mode = mode;
     }
 
@@ -116,7 +119,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         LOG.trace( "Starting to process models" );
         if( mode == Mode.FULL ) {
             getWriter().writeLine( startComment );
-            getWriter().writeLine( VARIABLE + " " + namespaceName + " = " + NAMESPACE_START );
+            getWriter().writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
         } else {
             getWriter().writeLine( NAMESPACE_START );
         }
@@ -124,7 +127,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     }
 
     @Override
-    public void processModel( Model model, ItemStatus status ) {
+    public void processModel( final Model model, ItemStatus status ) {
         LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
         if( mode == Mode.FULL ) {
@@ -132,8 +135,12 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         } else {
             getWriter().write( modelName ).write(": ").writeLine(BLOCK_START).indent();
         }
-        writeSection(VALIDATOR_BLOCK_NAME, model, validatorProcessor, ItemStatuses.first());
-        writeSection(DEFAULTS_BLOCK_NAME, model, defaultValueProcessor, ItemStatuses.last());
+        ItemProcessor.process(modelProcessors).with(new ItemHandler<ModelProcessor<JavaScriptWriter>>() {
+            @Override
+            public void process(ModelProcessor<JavaScriptWriter> item, ItemStatus status) {
+                writeSection(item.getName(), model, item, status);
+            }
+        });
 
         getWriter().indentBack();
         if( mode == Mode.FULL ) {
@@ -147,7 +154,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         try {
             getWriter().writeKey( sectionName );
             processor.startProcessing(position);
-            processor.processModel(model, ItemStatuses.firstAndLast());
+            processor.processModel(model, position);
             processor.endProcessing(position);
         } catch( IOException e ) {
             LOG.error("Error while processing section "+sectionName, e);

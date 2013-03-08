@@ -20,11 +20,9 @@ import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
-import org.mockito.InOrder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.inOrder;
 
 public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcessorTest {
 
@@ -50,8 +48,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
 
         processor.startProcessing(ItemStatuses.firstAndLast());
 
-        assertThat(writer.toString(), is("{\n"
-        ));
+        assertThat(writer.toString(), is("{\n"));
     }
 
     @Test
@@ -61,8 +58,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
 
         processor.startProcessing(ItemStatuses.firstAndLast());
 
-        assertThat(writer.toString(), is("{\n"
-        ));
+        assertThat(writer.toString(), is("{\n"));
     }
 
     @Test
@@ -82,20 +78,13 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         Model model = mockModel();
         processor.processModel(model, ItemStatuses.first());
 
-        InOrder order = inOrder(validatorProcessor, valueProcessor);
-        order.verify(validatorProcessor).startProcessing(ItemStatuses.first());
-        order.verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
-        order.verify(validatorProcessor).endProcessing(ItemStatuses.first());
-
-        order.verify(valueProcessor).startProcessing(ItemStatuses.last());
-        order.verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
-        order.verify(valueProcessor).endProcessing(ItemStatuses.last());
-
         assertThat(writer.toString(), is(
                 "TestModel: {\n" +
-                "    validation: defaults: \n" +
-                "}," +
-                "\n"
+                "    validation: {\n" +
+                "    },\n" +
+                "    defaults: {\n" +
+                "    }\n" +
+                "},\n"
         ));
     }
 
@@ -106,20 +95,13 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         Model model = mockModel();
         processor.processModel(model, ItemStatuses.notFirstNorLast());
 
-        InOrder order = inOrder(validatorProcessor, valueProcessor);
-        order.verify(validatorProcessor).startProcessing(ItemStatuses.first());
-        order.verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
-        order.verify(validatorProcessor).endProcessing(ItemStatuses.first());
-
-        order.verify(valueProcessor).startProcessing(ItemStatuses.last());
-        order.verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
-        order.verify(valueProcessor).endProcessing(ItemStatuses.last());
-
         assertThat(writer.toString(), is(
                 "TestModel: {\n" +
-                "    validation: defaults: \n" +
-                "}," +
-                "\n"
+                "    validation: {\n" +
+                "    },\n" +
+                "    defaults: {\n" +
+                "    }\n" +
+                "},\n"
         ));
     }
 
@@ -130,19 +112,13 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         Model model = mockModel();
         processor.processModel(model, ItemStatuses.last());
 
-        InOrder order = inOrder(validatorProcessor, valueProcessor);
-        order.verify(validatorProcessor).startProcessing(ItemStatuses.first());
-        order.verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
-        order.verify(validatorProcessor).endProcessing(ItemStatuses.first());
-
-        order.verify(valueProcessor).startProcessing(ItemStatuses.last());
-        order.verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
-        order.verify(valueProcessor).endProcessing(ItemStatuses.last());
-
         assertThat(writer.toString(), is(
                 "TestModel: {\n" +
-                "    validation: defaults: \n" +
-                "}" +
-                "\n"));
+                        "    validation: {\n" +
+                        "    },\n" +
+                        "    defaults: {\n" +
+                        "    }\n" +
+                        "}\n"
+        ));
     }
 }

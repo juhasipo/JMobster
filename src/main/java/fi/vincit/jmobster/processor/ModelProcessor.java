@@ -49,4 +49,6 @@ public interface ModelProcessor<W extends DataWriter> {
     void endProcessing(ItemStatus status) throws IOException;
 
     void setWriter( W dataWriter );
+
+    String getName();
 }

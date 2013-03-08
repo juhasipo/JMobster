@@ -177,7 +177,7 @@ public class ValidatorProcessorTest {
     }
 
     private ValidatorProcessor createProcessor() {
-        return new ValidatorProcessor(writer, fieldValueConverter, validatorWriterManager);
+        return new ValidatorProcessor("", writer, fieldValueConverter, validatorWriterManager);
     }
 
     private void mockFieldValueConverter() {

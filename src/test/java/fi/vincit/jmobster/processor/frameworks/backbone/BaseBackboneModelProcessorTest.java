@@ -20,23 +20,25 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public abstract class BaseBackboneModelProcessorTest {
     public static final String TEST_MODEL_NAME = "TestModel";
     protected StringBufferWriter writer;
-    @Mock
-    protected ValidatorProcessor validatorProcessor;
-    @Mock
-    protected ModelProcessor<JavaScriptWriter> valueProcessor;
-    @Mock
-    private FieldValueConverter fieldValueConverter;
+    @Mock protected ModelProcessor<JavaScriptWriter> validatorProcessor;
+    @Mock protected ModelProcessor<JavaScriptWriter> valueProcessor;
+    @Mock private FieldValueConverter fieldValueConverter;
 
     protected abstract BackboneModelProcessor.Mode getMode();
 
@@ -44,6 +46,33 @@ public abstract class BaseBackboneModelProcessorTest {
     public void init() {
         writer = new StringBufferWriter();
         MockitoAnnotations.initMocks(this);
+        when(validatorProcessor.getName()).thenReturn("validation");
+        when(valueProcessor.getName()).thenReturn("defaults");
+
+        Answer<Object> writeEmptyBlock = new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ItemStatus status = (ItemStatus)invocation.getArguments()[1];
+                if( status.isNotLastItem() ) {
+                    writer.write(
+                            "{\n" +
+                            "    },\n" +
+                            "    "
+                    );
+                } else {
+                    writer.write(
+                            "{\n" +
+                            "    }");
+                }
+                return null;
+            }
+        };
+        doAnswer(writeEmptyBlock)
+                .when(validatorProcessor)
+                .processModel(any(Model.class), any(ItemStatus.class));
+        doAnswer(writeEmptyBlock)
+                .when(valueProcessor)
+                .processModel(any(Model.class), any(ItemStatus.class));
     }
 
     protected Model mockModel() {
@@ -56,9 +85,9 @@ public abstract class BaseBackboneModelProcessorTest {
         BackboneModelProcessor processor = new BackboneModelProcessor(
                 writer,
                 fieldValueConverter,
+                getMode(),
                 validatorProcessor,
-                valueProcessor,
-                getMode());
+                valueProcessor);
 
         return processor;
     }
