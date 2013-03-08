@@ -5,7 +5,7 @@ import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
-import fi.vincit.jmobster.util.writer.DataWriter;
+import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -21,15 +21,14 @@ public class BackboneModelProcessorTest {
     public static final String COMMENT = "/*\n * Auto-generated file\n */\n";
     public static final String FIRST_LINE = "var Models = {\n";
     public static final String TEST_MODEL_NAME = "TestModel";
-    private DataWriter writer;
-    private MockWriter mockWriter;
+    private StringBufferWriter writer;
     @Mock private FieldValueConverter fieldValueConverter;
     @Mock private ValidatorProcessor validatorProcessor;
     @Mock private ModelProcessor<JavaScriptWriter> valueProcessor;
 
     @Before
     public void init() {
-        mockWriter();
+        writer = new StringBufferWriter();
         MockitoAnnotations.initMocks(this);
     }
 
@@ -39,8 +38,12 @@ public class BackboneModelProcessorTest {
 
         processor.startProcessing(ItemStatuses.firstAndLast());
 
-        verify(writer).write(COMMENT);
-        verify(writer).write(FIRST_LINE);
+        assertThat(writer.toString(), is(
+                "/*\n" +
+                " * Auto-generated file\n" +
+                " */\n" +
+                "var Models = {\n"
+        ));
     }
 
     @Test
@@ -50,8 +53,12 @@ public class BackboneModelProcessorTest {
 
         processor.startProcessing(ItemStatuses.firstAndLast());
 
-        verify(writer).write(COMMENT);
-        verify(writer).write("var Foo = {\n");
+        assertThat(writer.toString(), is(
+                "/*\n" +
+                " * Auto-generated file\n" +
+                " */\n" +
+                "var Foo = {\n"
+        ));
     }
 
     @Test
@@ -61,8 +68,10 @@ public class BackboneModelProcessorTest {
 
         processor.startProcessing(ItemStatuses.firstAndLast());
 
-        verify(writer).write("/* Foo */\n");
-        verify(writer).write(FIRST_LINE);
+        assertThat(writer.toString(), is(
+                "/* Foo */\n" +
+                "var Models = {\n"
+        ));
     }
 
     @Test
@@ -71,7 +80,7 @@ public class BackboneModelProcessorTest {
 
         processor.endProcessing(ItemStatuses.firstAndLast());
 
-        verify(writer).write("};\n");
+        assertThat(writer.toString(), is("};\n"));
         assertThat(writer.isOpen(), is(false));
     }
 
@@ -82,23 +91,21 @@ public class BackboneModelProcessorTest {
         Model model = mockModel();
         processor.processModel(model, ItemStatuses.first());
 
-        InOrder order = inOrder(writer, validatorProcessor, valueProcessor);
-        order.verify(writer).write(TEST_MODEL_NAME);
-        order.verify(writer).write(": Backbone.Model.extend({\n");
+        InOrder order = inOrder(validatorProcessor, valueProcessor);
+        order.verify(validatorProcessor).startProcessing(ItemStatuses.first());
+        order.verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
+        order.verify(validatorProcessor).endProcessing(ItemStatuses.first());
 
-        order.verify(writer).write("validation");
-        order.verify(writer).write(": ");
-        verify(validatorProcessor).startProcessing(ItemStatuses.first());
-        verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
-        verify(validatorProcessor).endProcessing(ItemStatuses.first());
+        order.verify(valueProcessor).startProcessing(ItemStatuses.last());
+        order.verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
+        order.verify(valueProcessor).endProcessing(ItemStatuses.last());
 
-        order.verify(writer).write("defaults");
-        order.verify(writer).write(": ");
-        verify(valueProcessor).startProcessing(ItemStatuses.last());
-        verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
-        verify(valueProcessor).endProcessing(ItemStatuses.last());
-
-        order.verify(writer).write("}),\n");
+        assertThat(writer.toString(), is(
+                "TestModel: Backbone.Model.extend({\n" +
+                "    validation: defaults: \n" +
+                "})," +
+                "\n"
+        ));
     }
 
     @Test
@@ -108,23 +115,21 @@ public class BackboneModelProcessorTest {
         Model model = mockModel();
         processor.processModel(model, ItemStatuses.notFirstNorLast());
 
-        InOrder order = inOrder(writer, validatorProcessor, valueProcessor);
-        order.verify(writer).write(TEST_MODEL_NAME);
-        order.verify(writer).write(": Backbone.Model.extend({\n");
+        InOrder order = inOrder(validatorProcessor, valueProcessor);
+        order.verify(validatorProcessor).startProcessing(ItemStatuses.first());
+        order.verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
+        order.verify(validatorProcessor).endProcessing(ItemStatuses.first());
 
-        order.verify(writer).write("validation");
-        order.verify(writer).write(": ");
-        verify(validatorProcessor).startProcessing(ItemStatuses.first());
-        verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
-        verify(validatorProcessor).endProcessing(ItemStatuses.first());
+        order.verify(valueProcessor).startProcessing(ItemStatuses.last());
+        order.verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
+        order.verify(valueProcessor).endProcessing(ItemStatuses.last());
 
-        order.verify(writer).write("defaults");
-        order.verify(writer).write(": ");
-        verify(valueProcessor).startProcessing(ItemStatuses.last());
-        verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
-        verify(valueProcessor).endProcessing(ItemStatuses.last());
-
-        order.verify(writer).write("}),\n");
+        assertThat(writer.toString(), is(
+                "TestModel: Backbone.Model.extend({\n" +
+                "    validation: defaults: \n" +
+                "})," +
+                "\n"
+        ));
     }
 
     @Test
@@ -134,23 +139,20 @@ public class BackboneModelProcessorTest {
         Model model = mockModel();
         processor.processModel(model, ItemStatuses.last());
 
-        InOrder order = inOrder(writer, validatorProcessor, valueProcessor);
-        order.verify(writer).write(TEST_MODEL_NAME);
-        order.verify(writer).write(": Backbone.Model.extend({\n");
+        InOrder order = inOrder(validatorProcessor, valueProcessor);
+        order.verify(validatorProcessor).startProcessing(ItemStatuses.first());
+        order.verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
+        order.verify(validatorProcessor).endProcessing(ItemStatuses.first());
 
-        order.verify(writer).write("validation");
-        order.verify(writer).write(": ");
-        verify(validatorProcessor).startProcessing(ItemStatuses.first());
-        verify(validatorProcessor).processModel(model, ItemStatuses.firstAndLast());
-        verify(validatorProcessor).endProcessing(ItemStatuses.first());
+        order.verify(valueProcessor).startProcessing(ItemStatuses.last());
+        order.verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
+        order.verify(valueProcessor).endProcessing(ItemStatuses.last());
 
-        order.verify(writer).write("defaults");
-        order.verify(writer).write(": ");
-        verify(valueProcessor).startProcessing(ItemStatuses.last());
-        verify(valueProcessor).processModel(model, ItemStatuses.firstAndLast());
-        verify(valueProcessor).endProcessing(ItemStatuses.last());
-
-        order.verify(writer).write("})\n");
+        assertThat(writer.toString(), is(
+                "TestModel: Backbone.Model.extend({\n" +
+                "    validation: defaults: \n" +
+                "})" +
+                "\n"));
     }
 
     private Model mockModel() {
@@ -162,27 +164,12 @@ public class BackboneModelProcessorTest {
 
     private BackboneModelProcessor createProcessor() {
         BackboneModelProcessor processor = new BackboneModelProcessor(
-                mockWriter,
+                writer,
                 fieldValueConverter,
                 validatorProcessor,
                 valueProcessor);
 
         return processor;
-    }
-
-    private MockWriter mockWriter() {
-        writer = mock(DataWriter.class);
-        mockWriter = new MockWriter(writer);
-
-        when(writer.indent()).thenReturn(writer);
-        when(writer.write(anyString())).thenReturn(writer);
-        when(writer.write(anyString(), anyString(), anyBoolean())).thenReturn(writer);
-        when(writer.writeLine(anyString())).thenReturn(writer);
-        when(writer.indentBack()).thenReturn(writer);
-        when(writer.writeLine(anyString(), anyString(), anyBoolean())).thenReturn(writer);
-
-
-        return new MockWriter(writer);
     }
 
 }
