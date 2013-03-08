@@ -71,7 +71,10 @@ public class ModelGeneratorBuilder {
                         JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
                 );
             }
-            modelProcessor = new BackboneModelProcessor(dataWriter, fieldValueConverter);
+            modelProcessor = new BackboneModelProcessor(
+                    dataWriter,
+                    fieldValueConverter,
+                    BackboneModelProcessor.Mode.FULL);
         }
         return new DefaultModelGenerator( modelProcessor );
     }

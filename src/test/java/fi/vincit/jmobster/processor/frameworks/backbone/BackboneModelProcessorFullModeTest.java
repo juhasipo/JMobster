@@ -1,35 +1,20 @@
 package fi.vincit.jmobster.processor.frameworks.backbone;
 
-import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
-import fi.vincit.jmobster.util.writer.StringBufferWriter;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
 
-public class BackboneModelProcessorTest {
+public class BackboneModelProcessorFullModeTest extends BaseBackboneModelProcessorTest {
 
-    public static final String COMMENT = "/*\n * Auto-generated file\n */\n";
-    public static final String FIRST_LINE = "var Models = {\n";
-    public static final String TEST_MODEL_NAME = "TestModel";
-    private StringBufferWriter writer;
-    @Mock private FieldValueConverter fieldValueConverter;
-    @Mock private ValidatorProcessor validatorProcessor;
-    @Mock private ModelProcessor<JavaScriptWriter> valueProcessor;
-
-    @Before
-    public void init() {
-        writer = new StringBufferWriter();
-        MockitoAnnotations.initMocks(this);
+    @Override
+    protected BackboneModelProcessor.Mode getMode() {
+        return BackboneModelProcessor.Mode.FULL;
     }
 
     @Test
@@ -40,9 +25,9 @@ public class BackboneModelProcessorTest {
 
         assertThat(writer.toString(), is(
                 "/*\n" +
-                " * Auto-generated file\n" +
-                " */\n" +
-                "var Models = {\n"
+                        " * Auto-generated file\n" +
+                        " */\n" +
+                        "var Models = {\n"
         ));
     }
 
@@ -55,9 +40,9 @@ public class BackboneModelProcessorTest {
 
         assertThat(writer.toString(), is(
                 "/*\n" +
-                " * Auto-generated file\n" +
-                " */\n" +
-                "var Foo = {\n"
+                        " * Auto-generated file\n" +
+                        " */\n" +
+                        "var Foo = {\n"
         ));
     }
 
@@ -70,7 +55,7 @@ public class BackboneModelProcessorTest {
 
         assertThat(writer.toString(), is(
                 "/* Foo */\n" +
-                "var Models = {\n"
+                        "var Models = {\n"
         ));
     }
 
@@ -102,9 +87,9 @@ public class BackboneModelProcessorTest {
 
         assertThat(writer.toString(), is(
                 "TestModel: Backbone.Model.extend({\n" +
-                "    validation: defaults: \n" +
-                "})," +
-                "\n"
+                        "    validation: defaults: \n" +
+                        "})," +
+                        "\n"
         ));
     }
 
@@ -126,9 +111,9 @@ public class BackboneModelProcessorTest {
 
         assertThat(writer.toString(), is(
                 "TestModel: Backbone.Model.extend({\n" +
-                "    validation: defaults: \n" +
-                "})," +
-                "\n"
+                        "    validation: defaults: \n" +
+                        "})," +
+                        "\n"
         ));
     }
 
@@ -150,26 +135,10 @@ public class BackboneModelProcessorTest {
 
         assertThat(writer.toString(), is(
                 "TestModel: Backbone.Model.extend({\n" +
-                "    validation: defaults: \n" +
-                "})" +
-                "\n"));
+                        "    validation: defaults: \n" +
+                        "})" +
+                        "\n"));
     }
 
-    private Model mockModel() {
-        Model model = mock(Model.class);
-        when(model.getName()).thenReturn(TEST_MODEL_NAME);
-        return model;
-    }
-
-
-    private BackboneModelProcessor createProcessor() {
-        BackboneModelProcessor processor = new BackboneModelProcessor(
-                writer,
-                fieldValueConverter,
-                validatorProcessor,
-                valueProcessor);
-
-        return processor;
-    }
 
 }

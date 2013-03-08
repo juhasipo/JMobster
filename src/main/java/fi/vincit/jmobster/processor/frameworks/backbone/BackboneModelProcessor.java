@@ -19,7 +19,6 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
-import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
@@ -38,12 +37,20 @@ import java.io.IOException;
  */
 @SuppressWarnings( "HardcodedFileSeparator" )
 public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter> {
+
+    public static enum Mode {
+        JSON,
+        FULL
+    }
+
     private static final Logger LOG = LoggerFactory.getLogger( BackboneModelProcessor.class );
 
-    private static final String NAMESPACE_START = "{";
+    private static final String BLOCK_START = "{";
+    private static final String NAMESPACE_START =BLOCK_START;
 
 
     private static final String VARIABLE = "var";
+    private static final String BLOCK_END = "}";
     private static final String NAMESPACE_END = "};";
     private static final String DEFAULT_START_COMMENT = "/*\n * Auto-generated file\n */";
     private static final String DEFAULT_NAMESPACE = "Models";
@@ -60,43 +67,59 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     private ValidatorProcessor validatorProcessor;
     private ModelProcessor<JavaScriptWriter> defaultValueProcessor;
 
+    private Mode mode;
+
     /**
      * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
      * @param writer Writer
      */
     public BackboneModelProcessor(DataWriter writer,
-                                  FieldValueConverter valueConverter) {
+                                  FieldValueConverter valueConverter,
+                                  Mode mode) {
         super(new JavaScriptWriter(writer), valueConverter);
         initRest(
-                new ValidatorProcessor(getWriter(), valueConverter, new BackboneValidatorWriterManager( getWriter() )),
-                new DefaultValueProcessor(getWriter(), valueConverter)
+                new ValidatorProcessor(
+                        getWriter(),
+                        valueConverter,
+                        new BackboneValidatorWriterManager( getWriter() )
+                ),
+                new DefaultValueProcessor(getWriter(), valueConverter),
+                mode
         );
     }
 
     public BackboneModelProcessor(DataWriter writer,
                                   FieldValueConverter valueConverter,
                                   ValidatorProcessor validatorProcessor,
-                                  ModelProcessor<JavaScriptWriter> valueProcessor) {
+                                  ModelProcessor<JavaScriptWriter> valueProcessor,
+                                  Mode mode) {
         super(new JavaScriptWriter(writer), valueConverter);
         initRest(
                 validatorProcessor,
-                valueProcessor
+                valueProcessor,
+                mode
         );
     }
 
     private void initRest(ValidatorProcessor validatorProcessor,
-                          ModelProcessor<JavaScriptWriter> valueProcessor) {
+                          ModelProcessor<JavaScriptWriter> valueProcessor,
+                          Mode mode) {
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
         this.validatorProcessor = validatorProcessor;
         this.defaultValueProcessor = valueProcessor;
+        this.mode = mode;
     }
 
     @Override
     public void startProcessing(ItemStatus status) throws IOException {
         LOG.trace( "Starting to process models" );
-        getWriter().writeLine( startComment );
-        getWriter().writeLine( VARIABLE + " " + namespaceName + " = " + NAMESPACE_START );
+        if( mode == Mode.FULL ) {
+            getWriter().writeLine( startComment );
+            getWriter().writeLine( VARIABLE + " " + namespaceName + " = " + NAMESPACE_START );
+        } else {
+            getWriter().writeLine( NAMESPACE_START );
+        }
         getWriter().indent();
     }
 
@@ -104,14 +127,20 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     public void processModel( Model model, ItemStatus status ) {
         LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
-
-        getWriter().write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
-
+        if( mode == Mode.FULL ) {
+            getWriter().write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
+        } else {
+            getWriter().write( modelName ).write(": ").writeLine(BLOCK_START).indent();
+        }
         writeSection(VALIDATOR_BLOCK_NAME, model, validatorProcessor, ItemStatuses.first());
         writeSection(DEFAULTS_BLOCK_NAME, model, defaultValueProcessor, ItemStatuses.last());
 
         getWriter().indentBack();
-        getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
+        if( mode == Mode.FULL ) {
+            getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
+        } else {
+            getWriter().writeLine( BLOCK_END, ",", status.isNotLastItem() );
+        }
     }
 
     private void writeSection(String sectionName, Model model, ModelProcessor processor, ItemStatus position) {
@@ -129,7 +158,11 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing(ItemStatus status) throws IOException {
         getWriter().indentBack();
-        getWriter().writeLine(NAMESPACE_END);
+        if( mode == Mode.FULL ) {
+            getWriter().writeLine(NAMESPACE_END);
+        } else {
+            getWriter().writeLine(BLOCK_END);
+        }
         getWriter().close();
         LOG.trace("Processing models done");
     }
