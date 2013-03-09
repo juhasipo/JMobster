@@ -49,6 +49,7 @@ public class JavaScriptWriter implements DataWriter {
     // Sanity checks.
     private int functionsOpen = 0;
     private int blocksOpen = 0;
+    private boolean JSONmode = false;
 
     private final DataWriter writer;
 
@@ -153,7 +154,7 @@ public class JavaScriptWriter implements DataWriter {
      * @return Writer itself for chaining writes
      */
     public JavaScriptWriter writeKey(String key) {
-        return write( key ).write( KEY_VALUE_SEPARATOR );
+        return write("", "\"", JSONmode).write( key, "\"", JSONmode ).write( KEY_VALUE_SEPARATOR );
     }
 
     /**
@@ -303,5 +304,9 @@ public class JavaScriptWriter implements DataWriter {
     @Override
     public String toString() {
         return writer.toString();
+    }
+
+    public void setJSONmode(boolean JSONmode) {
+        this.JSONmode = JSONmode;
     }
 }

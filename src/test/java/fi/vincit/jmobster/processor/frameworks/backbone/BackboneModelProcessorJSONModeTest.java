@@ -79,10 +79,10 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         processor.processModel(model, ItemStatuses.first());
 
         assertThat(writer.toString(), is(
-                "TestModel: {\n" +
-                "    validation: {\n" +
+                "\"TestModel\": {\n" +
+                "    \"validation\": {\n" +
                 "    },\n" +
-                "    defaults: {\n" +
+                "    \"defaults\": {\n" +
                 "    }\n" +
                 "},\n"
         ));
@@ -96,10 +96,10 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         processor.processModel(model, ItemStatuses.notFirstNorLast());
 
         assertThat(writer.toString(), is(
-                "TestModel: {\n" +
-                "    validation: {\n" +
+                "\"TestModel\": {\n" +
+                "    \"validation\": {\n" +
                 "    },\n" +
-                "    defaults: {\n" +
+                "    \"defaults\": {\n" +
                 "    }\n" +
                 "},\n"
         ));
@@ -113,12 +113,12 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         processor.processModel(model, ItemStatuses.last());
 
         assertThat(writer.toString(), is(
-                "TestModel: {\n" +
-                        "    validation: {\n" +
-                        "    },\n" +
-                        "    defaults: {\n" +
-                        "    }\n" +
-                        "}\n"
+                "\"TestModel\": {\n" +
+                "    \"validation\": {\n" +
+                "    },\n" +
+                "    \"defaults\": {\n" +
+                "    }\n" +
+                "}\n"
         ));
     }
 }

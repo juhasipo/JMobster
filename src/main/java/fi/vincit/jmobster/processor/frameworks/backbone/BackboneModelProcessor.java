@@ -113,6 +113,9 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         for( ModelProcessor<JavaScriptWriter> processor : validatorProcessor ) {
             processor.setWriter(getWriter());
         }
+        if( mode == Mode.JSON ) {
+            getWriter().setJSONmode(true);
+        }
     }
 
     @Override
@@ -134,7 +137,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         if( mode == Mode.FULL ) {
             getWriter().write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
         } else {
-            getWriter().write( modelName ).write(": ").writeLine(BLOCK_START).indent();
+            getWriter().writeKey( modelName ).writeLine(BLOCK_START).indent();
         }
         ItemProcessor.process(modelProcessors).with(new ItemHandler<ModelProcessor<JavaScriptWriter>>() {
             @Override
