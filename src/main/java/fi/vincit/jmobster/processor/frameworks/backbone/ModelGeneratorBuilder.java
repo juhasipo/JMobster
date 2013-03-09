@@ -24,6 +24,7 @@ import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverterManage
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
@@ -72,7 +73,7 @@ public class ModelGeneratorBuilder {
                 );
             }
             modelProcessor = new BackboneModelProcessor
-                    .Builder(dataWriter, BackboneModelProcessor.Mode.FULL)
+                    .Builder(dataWriter, OutputMode.NORMAL)
                     .setValueConverter(fieldValueConverter)
                     .useDefaultModelProcessors()
                     .build();

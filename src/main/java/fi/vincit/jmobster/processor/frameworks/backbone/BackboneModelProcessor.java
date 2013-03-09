@@ -20,6 +20,7 @@ import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
@@ -40,11 +41,6 @@ import java.io.IOException;
 public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter> {
 
     public static final String NAME = "";
-
-    public static enum Mode {
-        JSON,
-        FULL
-    }
 
     private static final Logger LOG = LoggerFactory.getLogger( BackboneModelProcessor.class );
 
@@ -67,12 +63,12 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     private String startComment;
     private String namespaceName;
 
-    private Mode mode;
+    private OutputMode outputMode;
 
     private BackboneModelProcessor(Builder builder) {
         super(NAME, builder.writer, builder.valueConverter);
 
-        initRest(builder.mode);
+        initRest(builder.outputMode);
 
         for( ModelProcessor<JavaScriptWriter> processor : builder.modelProcessors ) {
             addModelProcessor(processor);
@@ -82,16 +78,16 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     public static class Builder {
         private JavaScriptWriter writer;
         private FieldValueConverter valueConverter;
-        private Mode mode;
+        private OutputMode outputMode;
         private ModelProcessor<JavaScriptWriter>[] modelProcessors;
 
-        public Builder(DataWriter writer, Mode mode) {
-            this.mode = mode;
+        public Builder(DataWriter writer, OutputMode outputMode) {
+            this.outputMode = outputMode;
             this.writer = new JavaScriptWriter(writer);
         }
 
-        public Builder(JavaScriptWriter writer, Mode mode) {
-            this.mode = mode;
+        public Builder(JavaScriptWriter writer, OutputMode outputMode) {
+            this.outputMode = outputMode;
             this.writer = writer;
         }
 
@@ -107,14 +103,14 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
 
         public Builder useDefaultModelProcessors() {
             setModelProcessors(
-                new ValidatorProcessor(
-                    VALIDATOR_BLOCK_NAME,
-                    valueConverter,
-                    new BackboneValidatorWriterManager()
-                ),
-                new DefaultValueProcessor(
-                    DEFAULTS_BLOCK_NAME,
-                    valueConverter));
+                    new ValidatorProcessor(
+                            VALIDATOR_BLOCK_NAME,
+                            valueConverter,
+                            new BackboneValidatorWriterManager()
+                    ),
+                    new DefaultValueProcessor(
+                            DEFAULTS_BLOCK_NAME,
+                            valueConverter));
             return this;
         }
 
@@ -123,11 +119,11 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         }
     }
 
-    private void initRest(Mode mode) {
+    private void initRest(OutputMode outputMode) {
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.mode = mode;
-        if( mode == Mode.JSON ) {
+        this.outputMode = outputMode;
+        if( outputMode == OutputMode.JSON ) {
             getWriter().setJSONmode(true);
         }
     }
@@ -135,7 +131,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     @Override
     public void startProcessing(ItemStatus status) throws IOException {
         LOG.trace( "Starting to process models" );
-        if( mode == Mode.FULL ) {
+        if( outputMode == OutputMode.NORMAL) {
             getWriter().writeLine( startComment );
             getWriter().writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
         } else {
@@ -148,7 +144,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     public void processModel( final Model model, ItemStatus status ) {
         LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
-        if( mode == Mode.FULL ) {
+        if( outputMode == OutputMode.NORMAL) {
             getWriter().write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
         } else {
             getWriter().writeKey( modelName ).writeLine(BLOCK_START).indent();
@@ -163,7 +159,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
                 });
 
         getWriter().indentBack();
-        if( mode == Mode.FULL ) {
+        if( outputMode == OutputMode.NORMAL) {
             getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
         } else {
             getWriter().writeLine( BLOCK_END, ",", status.isNotLastItem() );
@@ -185,7 +181,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing(ItemStatus status) throws IOException {
         getWriter().indentBack();
-        if( mode == Mode.FULL ) {
+        if( outputMode == OutputMode.NORMAL) {
             getWriter().writeLine(NAMESPACE_END);
         } else {
             getWriter().writeLine(BLOCK_END);

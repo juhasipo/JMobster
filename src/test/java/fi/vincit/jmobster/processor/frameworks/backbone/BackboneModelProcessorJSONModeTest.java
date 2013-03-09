@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
@@ -27,8 +28,8 @@ import static org.junit.Assert.assertThat;
 public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcessorTest {
 
     @Override
-    protected BackboneModelProcessor.Mode getMode() {
-        return BackboneModelProcessor.Mode.JSON;
+    protected OutputMode getMode() {
+        return OutputMode.JSON;
     }
 
     @Test

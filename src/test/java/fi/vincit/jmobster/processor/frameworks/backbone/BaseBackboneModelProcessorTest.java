@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
@@ -36,7 +37,7 @@ public abstract class BaseBackboneModelProcessorTest {
     @Mock protected ModelProcessor<JavaScriptWriter> validatorProcessor;
     @Mock protected ModelProcessor<JavaScriptWriter> valueProcessor;
 
-    protected abstract BackboneModelProcessor.Mode getMode();
+    protected abstract OutputMode getMode();
 
     @Before
     public void init() {
@@ -81,7 +82,7 @@ public abstract class BaseBackboneModelProcessorTest {
         BackboneModelProcessor processor =
                 new BackboneModelProcessor
                         .Builder(writer, getMode())
-                        .setModelProcessors(validatorProcessor,valueProcessor)
+                        .setModelProcessors(validatorProcessor, valueProcessor)
                         .build();
 
         return processor;

@@ -26,6 +26,7 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.util.writer.CachedModelProvider;
@@ -72,7 +73,7 @@ public class TestMain {
 
         BackboneModelProcessor backboneModelProcessor =
                 new BackboneModelProcessor
-                .Builder(javaScriptWriter, BackboneModelProcessor.Mode.JSON)
+                .Builder(javaScriptWriter, OutputMode.JSON)
                 .setValueConverter(converter)
                 .setModelProcessors(
                         new ValidatorProcessor(
