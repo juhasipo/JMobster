@@ -62,6 +62,9 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
     @Override
     public void setWriter( W dataWriter ) {
         this.writer = dataWriter;
+        for( ModelProcessor<W> modelProcessor : modelProcessors ) {
+            modelProcessor.setWriter(dataWriter);
+        }
     }
 
     @Override

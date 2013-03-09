@@ -79,7 +79,8 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         private JavaScriptWriter writer;
         private FieldValueConverter valueConverter;
         private OutputMode outputMode;
-        private ModelProcessor<JavaScriptWriter>[] modelProcessors;
+        private ModelProcessor<JavaScriptWriter>[] modelProcessors =
+                new ModelProcessor[0];
 
         public Builder(DataWriter writer, OutputMode outputMode) {
             this.outputMode = outputMode;
