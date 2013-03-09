@@ -78,11 +78,11 @@ public abstract class BaseBackboneModelProcessorTest {
     }
 
     protected BackboneModelProcessor createProcessor() {
-        BackboneModelProcessor processor = new BackboneModelProcessor(
-                writer,
-                getMode(),
-                validatorProcessor,
-                valueProcessor);
+        BackboneModelProcessor processor =
+                new BackboneModelProcessor
+                        .Builder(writer, getMode())
+                        .setModelProcessors(validatorProcessor,valueProcessor)
+                        .build();
 
         return processor;
     }

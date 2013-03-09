@@ -55,31 +55,36 @@ public class TestMain {
                 DemoClasses.MyModelDto.class
         );
 
-        // Generate models
+        // Setup writers
         DataWriter modelWriter = new StringBufferWriter();
         CachedModelProvider provider1 = new CachedModelProvider(
                 CachedModelProvider.WriteMode.PRETTY,
                 modelWriter
         );
-
         JavaScriptWriter javaScriptWriter = new JavaScriptWriter(provider1.getDataWriter());
+
+        // Setup generator
         FieldValueConverter converter = new JavaToJSValueConverter(
                 ConverterMode.NULL_AS_DEFAULT,
                 EnumConverter.EnumMode.STRING,
                 JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
         );
 
-        BackboneModelProcessor backboneModelProcessor = new BackboneModelProcessor(
-                javaScriptWriter,
-                BackboneModelProcessor.Mode.JSON,
-                new ValidatorProcessor(
-                        "validation",
-                        converter,
-                        new BackboneValidatorWriterManager(javaScriptWriter)
+        BackboneModelProcessor backboneModelProcessor =
+                new BackboneModelProcessor
+                .Builder(javaScriptWriter, BackboneModelProcessor.Mode.JSON)
+                .setValueConverter(converter)
+                .setModelProcessors(
+                        new ValidatorProcessor(
+                                "validation",
+                                converter,
+                                new BackboneValidatorWriterManager()
+                        )
                 )
-        );
-
+                .build();
         ModelGenerator generator = JMobsterFactory.getModelGenerator( backboneModelProcessor );
+
+        // Generate models
         generator.processAll( models );
 
         System.out.println(modelWriter.toString());

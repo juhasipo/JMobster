@@ -53,7 +53,7 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
         validatorWriter = new ItemHandler<Validator>() {
             @Override
             public void process( Validator validator, ItemStatus status ) {
-                validatorWriterManager.write( validator, status );
+                validatorWriterManager.write(validator, status);
             }
         };
     }
@@ -98,5 +98,11 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
     @Override
     public void endProcessing(ItemStatus status) throws IOException {
         getWriter().endBlock( status );
+    }
+
+    @Override
+    public void setWriter(JavaScriptWriter dataWriter) {
+        super.setWriter(dataWriter);
+        this.validatorWriterManager.setWriter(dataWriter);
     }
 }

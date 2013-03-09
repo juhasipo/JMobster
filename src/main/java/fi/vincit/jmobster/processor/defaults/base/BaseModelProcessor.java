@@ -20,10 +20,16 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public abstract class BaseModelProcessor<W extends DataWriter> implements ModelProcessor<W> {
     private W writer;
     final private FieldValueConverter valueConverter;
     private String name;
+
+    final private List<ModelProcessor<W>> modelProcessors = new ArrayList<ModelProcessor<W>>();
 
     /**
      * Initializes model processor with writer
@@ -61,5 +67,14 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
     @Override
     public String getName() {
         return name;
+    }
+
+    public void addModelProcessor(ModelProcessor<W> modelProcessor) {
+        modelProcessors.add(modelProcessor);
+        modelProcessor.setWriter(writer);
+    }
+
+    protected Collection<ModelProcessor<W>> getModelProcessors() {
+        return modelProcessors;
     }
 }

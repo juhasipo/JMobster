@@ -42,7 +42,8 @@ public class BackboneValidatorWriterTest {
     public void initTestMethod() {
         writer = new StringBufferWriter();
         javaScriptWriter = new JavaScriptWriter(writer);
-        writerManager = new BackboneValidatorWriterManager(javaScriptWriter);
+        writerManager = new BackboneValidatorWriterManager();
+        writerManager.setWriter(javaScriptWriter);
     }
 
     /**

@@ -50,10 +50,8 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
 
     /**
      * Constructs validator writer manager with the given data writer
-     * @param dataWriter Data writer to use
      */
-    public BaseValidatorWriterManager( W dataWriter ) {
-        this.dataWriter = dataWriter;
+    public BaseValidatorWriterManager() {
     }
 
     /**

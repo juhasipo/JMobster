@@ -23,8 +23,8 @@ import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter
  * Validator writer manager for Backbone
  */
 public class BackboneValidatorWriterManager extends BaseValidatorWriterManager<JavaScriptWriter> {
-    public BackboneValidatorWriterManager( JavaScriptWriter modelWriter ) {
-        super( modelWriter );
+    public BackboneValidatorWriterManager() {
+        super();
         setValidator(
                 new SizeValidatorWriter(),
                 new PatternValidatorWriter(),

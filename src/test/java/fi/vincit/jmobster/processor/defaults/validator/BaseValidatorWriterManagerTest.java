@@ -25,7 +25,7 @@ public class BaseValidatorWriterManagerTest {
             @Override protected void write( DataWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<DataWriter> {
-            TestManager() { super( null ); }
+            TestManager() {}
         }
 
         TestManager manager = new TestManager();
@@ -46,7 +46,7 @@ public class BaseValidatorWriterManagerTest {
             @Override protected void write( TestWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<TestWriter> {
-            TestManager() { super( null ); }
+            TestManager() {}
         }
 
         TestManager manager = new TestManager();
@@ -67,7 +67,7 @@ public class BaseValidatorWriterManagerTest {
             @Override protected void write( DataWriter writer, TestValidator validator, ItemStatus status ) {}
         }
         class TestManager extends BaseValidatorWriterManager<TestWriter> {
-            TestManager() { super( null ); }
+            TestManager() {}
         }
 
         TestManager manager = new TestManager();

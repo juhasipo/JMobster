@@ -17,7 +17,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.defaults.DummyValueConverter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
@@ -30,9 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * <p>
@@ -71,48 +67,66 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     private String startComment;
     private String namespaceName;
 
-    private List<ModelProcessor<JavaScriptWriter>> modelProcessors =
-            new ArrayList<ModelProcessor<JavaScriptWriter>>();
-
     private Mode mode;
 
-    /**
-     * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
-     * @param writer Writer
-     */
-    public BackboneModelProcessor(DataWriter writer,
-                                  FieldValueConverter valueConverter,
-                                  Mode mode) {
-        super(NAME, new JavaScriptWriter(writer), valueConverter);
-        List<ModelProcessor<JavaScriptWriter>> list = Arrays.asList(
-                (ModelProcessor<JavaScriptWriter>) new ValidatorProcessor(
-                        VALIDATOR_BLOCK_NAME,
-                        valueConverter,
-                        new BackboneValidatorWriterManager(getWriter())
+    private BackboneModelProcessor(Builder builder) {
+        super(NAME, builder.writer, builder.valueConverter);
+
+        initRest(builder.mode);
+
+        for( ModelProcessor<JavaScriptWriter> processor : builder.modelProcessors ) {
+            addModelProcessor(processor);
+        }
+    }
+
+    public static class Builder {
+        private JavaScriptWriter writer;
+        private FieldValueConverter valueConverter;
+        private Mode mode;
+        private ModelProcessor<JavaScriptWriter>[] modelProcessors;
+
+        public Builder(DataWriter writer, Mode mode) {
+            this.mode = mode;
+            this.writer = new JavaScriptWriter(writer);
+        }
+
+        public Builder(JavaScriptWriter writer, Mode mode) {
+            this.mode = mode;
+            this.writer = writer;
+        }
+
+        public Builder setValueConverter(FieldValueConverter valueConverter) {
+            this.valueConverter = valueConverter;
+            return this;
+        }
+
+        public Builder setModelProcessors(ModelProcessor<JavaScriptWriter>... modelProcessors) {
+            this.modelProcessors = modelProcessors;
+            return this;
+        }
+
+        public Builder useDefaultModelProcessors() {
+            setModelProcessors(
+                new ValidatorProcessor(
+                    VALIDATOR_BLOCK_NAME,
+                    valueConverter,
+                    new BackboneValidatorWriterManager()
                 ),
                 new DefaultValueProcessor(
-                        DEFAULTS_BLOCK_NAME,
-                        valueConverter)
-        );
-        initRest( list, mode );
+                    DEFAULTS_BLOCK_NAME,
+                    valueConverter));
+            return this;
+        }
+
+        public BackboneModelProcessor build() {
+            return new BackboneModelProcessor(this);
+        }
     }
 
-    public BackboneModelProcessor(DataWriter writer,
-                                  Mode mode,
-                                  ModelProcessor<JavaScriptWriter>... modelProcessors) {
-        super(NAME, new JavaScriptWriter(writer), new DummyValueConverter());
-        initRest( Arrays.asList(modelProcessors), mode );
-    }
-
-    private void initRest(List<ModelProcessor<JavaScriptWriter>> validatorProcessor,
-                          Mode mode) {
+    private void initRest(Mode mode) {
         this.startComment = DEFAULT_START_COMMENT;
         this.namespaceName = DEFAULT_NAMESPACE;
-        this.modelProcessors.addAll(validatorProcessor);
         this.mode = mode;
-        for( ModelProcessor<JavaScriptWriter> processor : validatorProcessor ) {
-            processor.setWriter(getWriter());
-        }
         if( mode == Mode.JSON ) {
             getWriter().setJSONmode(true);
         }
@@ -139,12 +153,14 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         } else {
             getWriter().writeKey( modelName ).writeLine(BLOCK_START).indent();
         }
-        ItemProcessor.process(modelProcessors).with(new ItemHandler<ModelProcessor<JavaScriptWriter>>() {
-            @Override
-            public void process(ModelProcessor<JavaScriptWriter> item, ItemStatus status) {
-                writeSection(item.getName(), model, item, status);
-            }
-        });
+        ItemProcessor
+                .process(getModelProcessors())
+                .with(new ItemHandler<ModelProcessor<JavaScriptWriter>>() {
+                    @Override
+                    public void process(ModelProcessor<JavaScriptWriter> item, ItemStatus status) {
+                        writeSection(item.getName(), model, item, status);
+                    }
+                });
 
         getWriter().indentBack();
         if( mode == Mode.FULL ) {
