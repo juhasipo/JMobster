@@ -34,6 +34,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @SuppressWarnings( "ALL" )
@@ -51,9 +52,21 @@ public class TestMain {
                 .setValidatorFactory( new JSR303ValidatorFactory() )
                 .build();
 
+        System.out.println("Generate test classes");
+        final int n = 1000;
+        Collection<Class> classesToConvert = new ArrayList<Class>(n);
+        for( int i = 0; i < n; ++i ) {
+            if( i % 2 == 0 ) {
+                classesToConvert.add(DemoClasses.BeanPropertyDemo.class);
+            } else {
+                classesToConvert.add(DemoClasses.MyModelDto.class);
+            }
+        }
+        System.out.print("Press any key to start covert classes");
+        System.in.read();
+        System.out.println("Convert classes");
         Collection<Model> models = factory.createAll(
-                DemoClasses.BeanPropertyDemo.class,
-                DemoClasses.MyModelDto.class
+                classesToConvert
         );
 
         // Setup writers
@@ -73,21 +86,25 @@ public class TestMain {
 
         BackboneModelProcessor backboneModelProcessor =
                 new BackboneModelProcessor
-                .Builder(javaScriptWriter, OutputMode.JSON)
-                .setValueConverter(converter)
-                .setModelProcessors(
-                        new ValidatorProcessor(
-                                "validation",
-                                converter,
-                                new BackboneValidatorWriterManager()
-                        )
-                )
-                .build();
+                    .Builder(javaScriptWriter, OutputMode.JSON)
+                    .setValueConverter(converter)
+                    .setModelProcessors(
+                            new ValidatorProcessor(
+                                    "validation",
+                                    converter,
+                                    new BackboneValidatorWriterManager()
+                            )
+                    )
+                    .build();
         ModelGenerator generator = JMobsterFactory.getModelGenerator( backboneModelProcessor );
 
+        System.out.print("Press any key to start generating models");
+        System.in.read();
+        System.out.println("Generate models");
         // Generate models
         generator.processAll( models );
 
-        System.out.println(modelWriter.toString());
+        //System.out.println(modelWriter.toString());
+        System.out.println(" - Done");
     }
 }
