@@ -12,7 +12,7 @@ The project has just started so the backwards compatibility may break once in a 
 the code. The current version is not well tested yet with real Backbone.js client nor a working server so there will
 be a lot of bugs.
 
-![JMobster process](https://raw.github.com/juhasipo/JMobster/redesign/img/process.png)
+![JMobster process](https://raw.github.com/juhasipo/JMobster/master/img/process.png)
 
 
 ### Requirements
