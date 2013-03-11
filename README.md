@@ -78,20 +78,51 @@ This *ModelFactory* is same for all target languages and frameworks.
 
 In the next example a *CachedModelProvider* and a *ModelGenerator* is configured which then will take previously created JMobster models:
 ```java
-CachedModelProvider provider = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
-ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( "backbone.js", provider )
-                .setFieldValueConverter(new JavaToJSValueConverter(
-                        ConverterMode.NULL_AS_DEFAULT,
-                        EnumConverter.EnumMode.STRING,
-                        JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
-                )).build()
+// Setup writer
+CachedModelProvider provider = 
+    CachedModelProvider.createWithStringWriter(CachedModelProvider.WriteMode.PRETTY)
+
+// Setup model generator
+FieldValueConverter converter = new JavaToJSValueConverter(
+        ConverterMode.NULL_AS_DEFAULT,
+        EnumConverter.EnumMode.STRING,
+        JavaToJSValueConverter.ISO_8601_DATE_TIME_TZ_PATTERN
+);
+
+ModelProcessor<JavaScriptWriter> validatorProcessor = 
+    new ValidatorProcessor(
+        "validation",
+        converter,
+        new BackboneValidatorWriterManager()
+    );
+
+BackboneModelProcessor backboneModelProcessor =
+        new BackboneModelProcessor
+            .Builder(new JavaScriptWriter(provider.getDataWriter()), OutputMode.JSON)
+            .setValueConverter(converter)
+            .setModelProcessors(validatorProcessor)
+            .build();
+            
+ModelGenerator generator = JMobsterFactory.getModelGenerator(backboneModelProcessor);
 generator.processAll( models );
 ```
-This created *ModelGenerator* is language and framework specific. The framework is given as the first parameter. The
-second parameter is a *ModelProvider* class or a *DataWriter* which is used for the output. In this case it is a
-*CachedModelProvider* which just stores the model as string for later use. Now the *CachedModelProvider* contains our
-generated models and can be e.g. written to a file or given via HTTP message by calling `provider.getModel()` method.
+First a *CachedModelProvider** object is created which later can provide the generated model who ever needs it. 
+Then a *FieldValueConverter* is set up. In this case we use *avaToJSValueConverter* which does as the name suggests -
+converts Java to JavaScript. 
 
+Next we create a *ValidatorProcessor* which actually converts given class fields. First
+parameter tells the name of the key in JavaScript/JSON model in which the validators are added, second parameter is
+the converter to use for generating the validator specification values (numbers, dates etc.) The last parameter 
+configures the validator writers to use i.e. in which format the specifications are written to ouput. 
+
+Then we configure the main model processor for which we will finally give our previsouly configured *ValidatorProcessor*.
+First we configure two required parameters for the builder: *DataWriter*, in this case a *JavaScriptWriter*, 
+and output mode. These are completely model processor specific so processor for other target platform may have 
+completely different reuired values. Next ve set the used *ValueConverter* and finally our *ValidatorProcessor* 
+which will create the "validation" section to our output.
+
+Finally we create a *ModelGenerator* which can take our previously generated *Model* objects and generates
+our output.
 
 
 ### Property Scanning
