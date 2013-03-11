@@ -106,7 +106,7 @@ BackboneModelProcessor backboneModelProcessor =
 ModelGenerator generator = JMobsterFactory.getModelGenerator(backboneModelProcessor);
 generator.processAll( models );
 ```
-First a *CachedModelProvider** object is created which later can provide the generated model who ever needs it. 
+First a *CachedModelProvider* object is created which later can provide the generated model who ever needs it. 
 Then a *FieldValueConverter* is set up. In this case we use *avaToJSValueConverter* which does as the name suggests -
 converts Java to JavaScript. 
 
