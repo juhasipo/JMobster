@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ValidatorWriterManager;
+import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
@@ -41,10 +42,11 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
     private ItemHandler<Validator> validatorWriter;
 
     public static class Builder {
-        private String name;
+        private String name = "";
         private FieldValueConverter valueConverter;
-        private DataWriter writer;
-        private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
+        private DataWriter writer = DummyDataWriter.getInstance();
+        private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager =
+                new BackboneValidatorWriterManager();
 
         public Builder() {
         }
@@ -70,25 +72,18 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
         }
 
         public ValidatorProcessor build() {
-            if( name == null ) {
-                name = "";
-            }
-            if( validatorWriterManager == null ) {
-                validatorWriterManager = new BackboneValidatorWriterManager();
-            }
             return new ValidatorProcessor(this);
         }
     }
 
     private ValidatorProcessor(Builder builder) {
         super(builder.name);
+
         this.validatorWriterManager = builder.validatorWriterManager;
-        if( builder.writer != null ) {
-            setWriter(new JavaScriptWriter(builder.writer));
-        }
+        setWriter(new JavaScriptWriter(builder.writer));
         setFieldValueConverter(builder.valueConverter);
 
-        validatorWriter = new ItemHandler<Validator>() {
+        this.validatorWriter = new ItemHandler<Validator>() {
             @Override
             public void process( Validator validator, ItemStatus status ) {
                 validatorWriterManager.write(validator, status);

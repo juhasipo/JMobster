@@ -22,6 +22,14 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  * Writer that does not do anything
  */
 public class DummyDataWriter implements DataWriter {
+    private static final DummyDataWriter DUMMY_DATA_WRITER = new DummyDataWriter();
+
+    public static final DummyDataWriter getInstance() {
+        return DUMMY_DATA_WRITER;
+    }
+
+    private DummyDataWriter() {}
+
     @Override
     public boolean isOpen() {
         return true;

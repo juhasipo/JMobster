@@ -43,7 +43,7 @@ public class BackboneModelProcessorBuilderTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         when(model.getName()).thenReturn("Test");
-        writer = new JavaScriptWriter(new DummyDataWriter());
+        writer = new JavaScriptWriter(DummyDataWriter.getInstance());
     }
 
     @Test
