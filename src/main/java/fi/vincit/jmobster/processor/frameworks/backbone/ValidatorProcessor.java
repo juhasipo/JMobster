@@ -17,8 +17,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
@@ -37,14 +37,14 @@ import java.io.IOException;
  */
 public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
 
-    private BaseValidatorWriterManager validatorWriterManager;
+    private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
     private ItemHandler<Validator> validatorWriter;
 
     public static class Builder {
         private String name;
         private FieldValueConverter valueConverter;
         private DataWriter writer;
-        private BaseValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
+        private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
 
         public Builder() {
         }
@@ -64,7 +64,7 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
             return this;
         }
 
-        public Builder setValidatorWriterManager(BaseValidatorWriterManager<JavaScriptWriter> validatorWriterManager) {
+        public Builder setValidatorWriterManager(ValidatorWriterManager<JavaScriptWriter> validatorWriterManager) {
             this.validatorWriterManager = validatorWriterManager;
             return this;
         }

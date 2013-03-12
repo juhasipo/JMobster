@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
+import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -42,7 +43,7 @@ import java.util.Map;
  * @param <W> DataWriter to use. This has be compatible with the ValidatorWriters that are given to this manager.
  * @see BaseValidatorWriter
  */
-public abstract class BaseValidatorWriterManager<W extends DataWriter> {
+public abstract class BaseValidatorWriterManager<W extends DataWriter> implements ValidatorWriterManager<W> {
     final private Map<Class, ValidatorWriter<? extends Validator, ? super W>> writers =
             new HashMap<Class, ValidatorWriter<? extends Validator, ? super W>>();
 
@@ -54,22 +55,17 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
     public BaseValidatorWriterManager() {
     }
 
-    /**
-     * Configure new validator writer.
-     * @param validatorWriters One or more validation writers to add.
-     */
+
+    @Override
     public void setValidator(ValidatorWriter<? extends Validator, ? super W>... validatorWriters) {
         for( ValidatorWriter<? extends Validator, ? super W> validatorWriter : validatorWriters ) {
             writers.put( validatorWriter.getSupportedType(), validatorWriter );
         }
     }
 
-    /**
-     * Writes the given validator with tie configured data writer
-     * @param validator Validator to write
-     * @param status Item status
-     */
-    public void write( Validator validator, ItemStatus status ) {
+
+    @Override
+    public void write(Validator validator, ItemStatus status) {
         final Class<?> validatorType = validator.getType();
         if( writers.containsKey(validatorType) ) {
             ValidatorWriter<? extends Validator, ? super W> writer = writers.get(validatorType);
@@ -77,7 +73,8 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> {
         }
     }
 
-    public void setWriter( W dataWriter ) {
+    @Override
+    public void setWriter(W dataWriter) {
         this.dataWriter = dataWriter;
     }
 }
