@@ -21,7 +21,6 @@ import fi.vincit.jmobster.processor.ModelFactory;
 import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.ValidatorProcessor;
-import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
@@ -86,10 +85,7 @@ public class TestMain {
                     .Builder(javaScriptWriter, OutputMode.JSON)
                     .setValueConverter(converter)
                     .setModelProcessors(
-                            new ValidatorProcessor.Builder()
-                                .setName("validation")
-                                .setValidatorWriterManager(new BackboneValidatorWriterManager())
-                                .build()
+                            new ValidatorProcessor.Builder().build()
                     )
                     .build();
         ModelGenerator generator = JMobsterFactory.getModelGenerator( backboneModelProcessor );

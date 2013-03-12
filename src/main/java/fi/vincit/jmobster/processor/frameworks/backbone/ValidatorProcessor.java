@@ -42,7 +42,7 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
     private ItemHandler<Validator> validatorWriter;
 
     public static class Builder {
-        private String name = "";
+        private String name = "validation";
         private FieldValueConverter valueConverter;
         private DataWriter writer = DummyDataWriter.getInstance();
         private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager =
