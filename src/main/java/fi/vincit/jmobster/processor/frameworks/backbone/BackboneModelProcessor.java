@@ -66,12 +66,20 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     private OutputMode outputMode;
 
     private BackboneModelProcessor(Builder builder) {
-        super(NAME, builder.writer, builder.valueConverter);
-
-        initRest(builder.outputMode);
+        super(NAME);
 
         for( ModelProcessor<JavaScriptWriter> processor : builder.modelProcessors ) {
             addModelProcessor(processor);
+        }
+
+        setStartComment(DEFAULT_START_COMMENT);
+        setNamespaceName(DEFAULT_NAMESPACE);
+        setWriter(builder.writer);
+        setFieldValueConverter(builder.valueConverter);
+
+        this.outputMode = builder.outputMode;
+        if( this.outputMode == OutputMode.JSON ) {
+            getWriter().setJSONmode(true);
         }
     }
 
@@ -106,26 +114,16 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
             setModelProcessors(
                     new ValidatorProcessor(
                             VALIDATOR_BLOCK_NAME,
-                            valueConverter,
                             new BackboneValidatorWriterManager()
                     ),
                     new DefaultValueProcessor(
-                            DEFAULTS_BLOCK_NAME,
-                            valueConverter));
+                            DEFAULTS_BLOCK_NAME
+                    ));
             return this;
         }
 
         public BackboneModelProcessor build() {
             return new BackboneModelProcessor(this);
-        }
-    }
-
-    private void initRest(OutputMode outputMode) {
-        this.startComment = DEFAULT_START_COMMENT;
-        this.namespaceName = DEFAULT_NAMESPACE;
-        this.outputMode = outputMode;
-        if( outputMode == OutputMode.JSON ) {
-            getWriter().setJSONmode(true);
         }
     }
 

@@ -16,7 +16,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
@@ -25,7 +24,6 @@ import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
-import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
 
@@ -33,15 +31,8 @@ public class DefaultValueProcessor extends BaseModelProcessor<JavaScriptWriter> 
 
     private static final String RETURN_BLOCK = "return "; // Note the space
 
-    public DefaultValueProcessor( String name,
-                                  FieldValueConverter valueConverter ) {
-        super( name, null, valueConverter );
-    }
-
-    public DefaultValueProcessor( String name,
-                                  DataWriter writer,
-                                  FieldValueConverter valueConverter ) {
-        super( name, new JavaScriptWriter(writer), valueConverter );
+    public DefaultValueProcessor( String name ) {
+        super( name );
     }
 
     @Override

@@ -50,5 +50,7 @@ public interface ModelProcessor<W extends DataWriter> {
 
     void setWriter( W dataWriter );
 
+    void setFieldValueConverter(FieldValueConverter valueConverter);
+
     String getName();
 }

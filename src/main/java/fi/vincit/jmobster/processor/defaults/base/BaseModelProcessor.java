@@ -26,7 +26,7 @@ import java.util.List;
 
 public abstract class BaseModelProcessor<W extends DataWriter> implements ModelProcessor<W> {
     private W writer;
-    final private FieldValueConverter valueConverter;
+    private FieldValueConverter valueConverter;
     private String name;
 
     final private List<ModelProcessor<W>> modelProcessors = new ArrayList<ModelProcessor<W>>();
@@ -34,12 +34,8 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
     /**
      * Initializes model processor with writer
      * @param name   Name
-     * @param writer Writer to use
-     * @param valueConverter Value converter
      */
-    public BaseModelProcessor( String name, W writer, FieldValueConverter valueConverter ) {
-        this.valueConverter = valueConverter;
-        this.writer = writer;
+    public BaseModelProcessor( String name ) {
         this.name = name;
     }
 
@@ -68,6 +64,14 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
     }
 
     @Override
+    public void setFieldValueConverter(FieldValueConverter valueConverter) {
+        this.valueConverter = valueConverter;
+        for( ModelProcessor<W> modelProcessor : modelProcessors ) {
+            modelProcessor.setFieldValueConverter(valueConverter);
+        }
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -75,6 +79,7 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
     public void addModelProcessor(ModelProcessor<W> modelProcessor) {
         modelProcessors.add(modelProcessor);
         modelProcessor.setWriter(writer);
+        modelProcessor.setFieldValueConverter(valueConverter);
     }
 
     protected Collection<ModelProcessor<W>> getModelProcessors() {

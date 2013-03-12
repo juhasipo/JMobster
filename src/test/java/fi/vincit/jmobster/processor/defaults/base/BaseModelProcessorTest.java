@@ -54,8 +54,8 @@ public class BaseModelProcessorTest {
     */
 
     private static class TestModelProcessor extends BaseModelProcessor<DataWriter> {
-        private TestModelProcessor(String name, DataWriter writer, FieldValueConverter valueConverter) {
-            super(name, writer, valueConverter);
+        private TestModelProcessor(String name) {
+            super(name);
         }
 
         @Override
@@ -69,11 +69,13 @@ public class BaseModelProcessorTest {
     }
 
     private TestModelProcessor createProcessor(BuildMode buildMode) {
-        TestModelProcessor processor = new TestModelProcessor("", writer, valueConverter);
+        TestModelProcessor processor = new TestModelProcessor("");
         if( buildMode == BuildMode.ADD_MODEL_PROCESSORS ) {
             processor.addModelProcessor(validatorProcessor);
             processor.addModelProcessor(valueProcessor);
         }
+        processor.setWriter(writer);
+        processor.setFieldValueConverter(valueConverter);
         return processor;
     }
 

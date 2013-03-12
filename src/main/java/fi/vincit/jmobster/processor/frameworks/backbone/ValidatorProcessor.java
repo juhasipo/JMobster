@@ -16,7 +16,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
@@ -26,7 +25,6 @@ import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
-import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
 
@@ -36,32 +34,12 @@ import java.io.IOException;
  */
 public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
 
-    private final BackboneValidatorWriterManager validatorWriterManager;
-    private final ItemHandler<Validator> validatorWriter;
-
-    /**
-     * Construct slightly customized model processor with custom writer, naming strategy and annotation writer.
-     * @param writer Writer
-     * @param validatorWriterManager
-     */
-    public ValidatorProcessor( String name,
-                               JavaScriptWriter writer,
-                               FieldValueConverter valueConverter,
-                               final BackboneValidatorWriterManager validatorWriterManager ) {
-        super(name, writer, valueConverter);
-        this.validatorWriterManager = validatorWriterManager;
-        validatorWriter = new ItemHandler<Validator>() {
-            @Override
-            public void process( Validator validator, ItemStatus status ) {
-                validatorWriterManager.write(validator, status);
-            }
-        };
-    }
+    private BackboneValidatorWriterManager validatorWriterManager;
+    private ItemHandler<Validator> validatorWriter;
 
     public ValidatorProcessor( String name,
-                               FieldValueConverter valueConverter,
                                final BackboneValidatorWriterManager validatorWriterManager ) {
-        super(name, null, valueConverter);
+        super(name);
         this.validatorWriterManager = validatorWriterManager;
         validatorWriter = new ItemHandler<Validator>() {
             @Override
@@ -69,13 +47,6 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
                 validatorWriterManager.write( validator, status );
             }
         };
-    }
-
-    public ValidatorProcessor( String name,
-                               DataWriter writer,
-                               FieldValueConverter valueConverter,
-                               BackboneValidatorWriterManager validatorWriterManager ) {
-        this(name, new JavaScriptWriter(writer), valueConverter, validatorWriterManager);
     }
 
     @Override

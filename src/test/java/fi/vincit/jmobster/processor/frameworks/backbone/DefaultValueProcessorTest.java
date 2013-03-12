@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
@@ -190,7 +191,10 @@ public class DefaultValueProcessorTest {
     }
 
     private DefaultValueProcessor createProcessor() {
-        return new DefaultValueProcessor("", writer, fieldValueConverter);
+        DefaultValueProcessor dp = new DefaultValueProcessor("");
+        dp.setWriter(new JavaScriptWriter(writer));
+        dp.setFieldValueConverter(fieldValueConverter);
+        return dp;
     }
 
 

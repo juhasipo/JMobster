@@ -40,9 +40,6 @@ import java.util.Collection;
 @SuppressWarnings( "ALL" )
 public class TestMain {
 
-
-
-
     public static void main(String[] args) throws IOException, InterruptedException {
         // Analyze models
         ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
@@ -91,7 +88,6 @@ public class TestMain {
                     .setModelProcessors(
                             new ValidatorProcessor(
                                     "validation",
-                                    converter,
                                     new BackboneValidatorWriterManager()
                             )
                     )
