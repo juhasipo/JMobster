@@ -191,7 +191,7 @@ public class DefaultValueProcessorTest {
     }
 
     private DefaultValueProcessor createProcessor() {
-        DefaultValueProcessor dp = new DefaultValueProcessor("");
+        DefaultValueProcessor dp = new DefaultValueProcessor.Builder().setName("").build();
         dp.setWriter(new JavaScriptWriter(writer));
         dp.setFieldValueConverter(fieldValueConverter);
         return dp;

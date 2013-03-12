@@ -16,6 +16,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
@@ -24,6 +26,7 @@ import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
 
@@ -31,8 +34,38 @@ public class DefaultValueProcessor extends BaseModelProcessor<JavaScriptWriter> 
 
     private static final String RETURN_BLOCK = "return "; // Note the space
 
-    public DefaultValueProcessor( String name ) {
-        super( name );
+    public static class Builder {
+        private String name = "defaults";
+        private FieldValueConverter valueConverter;
+        private DataWriter writer = DummyDataWriter.getInstance();
+
+        public Builder() {
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setValueConverter(FieldValueConverter valueConverter) {
+            this.valueConverter = valueConverter;
+            return this;
+        }
+
+        public Builder setWriter(DataWriter writer) {
+            this.writer = writer;
+            return this;
+        }
+
+        public DefaultValueProcessor build() {
+            return new DefaultValueProcessor(this);
+        }
+    }
+
+    private DefaultValueProcessor( Builder builder ) {
+        super(builder.name);
+        setFieldValueConverter(builder.valueConverter);
+        setWriter(new JavaScriptWriter(builder.writer));
     }
 
     @Override

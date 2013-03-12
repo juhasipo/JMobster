@@ -20,6 +20,7 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelFactory;
 import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
+import fi.vincit.jmobster.processor.frameworks.backbone.DefaultValueProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.ValidatorProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
@@ -59,7 +60,7 @@ public class TestMain {
             }
         }
         System.out.print("Press any key to start covert classes");
-        System.in.read();
+        //System.in.read();
         System.out.println("Convert classes");
         Collection<Model> models = factory.createAll(
                 classesToConvert
@@ -85,18 +86,19 @@ public class TestMain {
                     .Builder(javaScriptWriter, OutputMode.JSON)
                     .setValueConverter(converter)
                     .setModelProcessors(
+                            new DefaultValueProcessor.Builder().build(),
                             new ValidatorProcessor.Builder().build()
                     )
                     .build();
         ModelGenerator generator = JMobsterFactory.getModelGenerator( backboneModelProcessor );
 
         System.out.print("Press any key to start generating models");
-        System.in.read();
+        //System.in.read();
         System.out.println("Generate models");
         // Generate models
         generator.processAll( models );
 
-        //System.out.println(modelWriter.toString());
+        System.out.println(modelWriter.toString());
         System.out.println(" - Done");
     }
 }
