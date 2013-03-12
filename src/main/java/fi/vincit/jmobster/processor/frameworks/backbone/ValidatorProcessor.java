@@ -16,7 +16,9 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
@@ -25,6 +27,7 @@ import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
+import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
 
@@ -34,17 +37,61 @@ import java.io.IOException;
  */
 public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
 
-    private BackboneValidatorWriterManager validatorWriterManager;
+    private BaseValidatorWriterManager validatorWriterManager;
     private ItemHandler<Validator> validatorWriter;
 
-    public ValidatorProcessor( String name,
-                               final BackboneValidatorWriterManager validatorWriterManager ) {
-        super(name);
-        this.validatorWriterManager = validatorWriterManager;
+    public static class Builder {
+        private String name;
+        private FieldValueConverter valueConverter;
+        private DataWriter writer;
+        private BaseValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
+
+        public Builder() {
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setValueConverter(FieldValueConverter valueConverter) {
+            this.valueConverter = valueConverter;
+            return this;
+        }
+
+        public Builder setWriter(DataWriter writer) {
+            this.writer = writer;
+            return this;
+        }
+
+        public Builder setValidatorWriterManager(BaseValidatorWriterManager<JavaScriptWriter> validatorWriterManager) {
+            this.validatorWriterManager = validatorWriterManager;
+            return this;
+        }
+
+        public ValidatorProcessor build() {
+            if( name == null ) {
+                name = "";
+            }
+            if( validatorWriterManager == null ) {
+                validatorWriterManager = new BackboneValidatorWriterManager();
+            }
+            return new ValidatorProcessor(this);
+        }
+    }
+
+    private ValidatorProcessor(Builder builder) {
+        super(builder.name);
+        this.validatorWriterManager = builder.validatorWriterManager;
+        if( builder.writer != null ) {
+            setWriter(new JavaScriptWriter(builder.writer));
+        }
+        setFieldValueConverter(builder.valueConverter);
+
         validatorWriter = new ItemHandler<Validator>() {
             @Override
             public void process( Validator validator, ItemStatus status ) {
-                validatorWriterManager.write( validator, status );
+                validatorWriterManager.write(validator, status);
             }
         };
     }
@@ -72,8 +119,8 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
     }
 
     @Override
-    public void setWriter(JavaScriptWriter dataWriter) {
-        super.setWriter(dataWriter);
-        this.validatorWriterManager.setWriter(dataWriter);
+    public void setWriter(JavaScriptWriter javaScriptWriter) {
+        super.setWriter(javaScriptWriter);
+        this.validatorWriterManager.setWriter(javaScriptWriter);
     }
 }

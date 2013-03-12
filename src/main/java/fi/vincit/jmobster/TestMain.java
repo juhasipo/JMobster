@@ -86,10 +86,10 @@ public class TestMain {
                     .Builder(javaScriptWriter, OutputMode.JSON)
                     .setValueConverter(converter)
                     .setModelProcessors(
-                            new ValidatorProcessor(
-                                    "validation",
-                                    new BackboneValidatorWriterManager()
-                            )
+                            new ValidatorProcessor.Builder()
+                                .setName("validation")
+                                .setValidatorWriterManager(new BackboneValidatorWriterManager())
+                                .build()
                     )
                     .build();
         ModelGenerator generator = JMobsterFactory.getModelGenerator( backboneModelProcessor );

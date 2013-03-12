@@ -112,10 +112,10 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
 
         public Builder useDefaultModelProcessors() {
             setModelProcessors(
-                    new ValidatorProcessor(
-                            VALIDATOR_BLOCK_NAME,
-                            new BackboneValidatorWriterManager()
-                    ),
+                    new ValidatorProcessor.Builder()
+                            .setName(VALIDATOR_BLOCK_NAME)
+                            .setValidatorWriterManager(new BackboneValidatorWriterManager())
+                            .build(),
                     new DefaultValueProcessor(
                             DEFAULTS_BLOCK_NAME
                     ));

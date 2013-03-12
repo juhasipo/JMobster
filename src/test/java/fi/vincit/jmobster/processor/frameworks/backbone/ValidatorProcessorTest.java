@@ -18,7 +18,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
@@ -178,11 +177,11 @@ public class ValidatorProcessorTest {
     }
 
     private ValidatorProcessor createProcessor() {
-        // , writer, fieldValueConverter,
-        ValidatorProcessor vp = new ValidatorProcessor("", validatorWriterManager);
-        vp.setWriter(new JavaScriptWriter(writer));
-        vp.setFieldValueConverter(fieldValueConverter);
-        return vp;
+        return new ValidatorProcessor.Builder()
+                .setValueConverter(fieldValueConverter)
+                .setWriter(writer)
+                .setValidatorWriterManager(validatorWriterManager)
+                .build();
     }
 
     private void mockFieldValueConverter() {
