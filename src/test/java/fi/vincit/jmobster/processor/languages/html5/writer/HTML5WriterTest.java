@@ -32,18 +32,33 @@ public class HTML5WriterTest {
         assertThat(mw.toString(), is("<test"));
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testWriteTagStart_InsideTagBody() {
+        writer.writeTagStart("test").writeTagStart("test2");
+    }
+
     @Test
     public void testWriteTagEnd() {
-        writer.writeTagEnd();
+        writer.writeTagStart("test").writeTagEnd();
         mw.close();
-        assertThat(mw.toString(), is(">"));
+        assertThat(mw.toString(), is("<test>"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testWriteTagEnd_WithoutStart() {
+        writer.writeTagEnd();
     }
 
     @Test
     public void testWriteAttr() {
-        writer.writeTagAttr("attr", "value");
+        writer.writeTagStart("test").writeTagAttr("attr", "value");
         mw.close();
-        assertThat(mw.toString(), is(" attr=\"value\""));
+        assertThat(mw.toString(), is("<test attr=\"value\""));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testWriteAttr_WithoutTagBody() {
+        writer.writeTagAttr("attr", "value");
     }
 
     @Test
@@ -51,6 +66,11 @@ public class HTML5WriterTest {
         writer.writeEndTag("test");
         mw.close();
         assertThat(mw.toString(), is("</test>"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testWriteEndTag_InsideTagBody() {
+        writer.writeTagStart("test").writeEndTag("test");
     }
 
     @Test
@@ -96,7 +116,7 @@ public class HTML5WriterTest {
 
     @Test
     public void testClear() {
-        writer.writeTagStart("test1").writeTagStart("test2");
+        writer.writeTagStart("test1").writeTagEnd().writeTagStart("test2");
         writer.clearTags();
         boolean exceptionThrown = false;
         try {
