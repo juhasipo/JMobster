@@ -36,4 +36,8 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
     public HTML5Writer writeTagAttr(String name, String value) {
         return write(' ').write(name).write('=').write('"').write(value).write('"');
     }
+
+    public HTML5Writer writeEndTag(String name) {
+        return write("</").write(name).write('>');
+    }
 }

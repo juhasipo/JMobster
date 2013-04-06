@@ -47,6 +47,13 @@ public class HTML5WriterTest {
     }
 
     @Test
+    public void testWriteEndTag() {
+        writer.writeEndTag("test");
+        mw.close();
+        assertThat(mw.toString(), is("</test>"));
+    }
+
+    @Test
     public void testWriteInput() {
         writer.writeInput("text", "text-id", "text-name", "text-value");
         mw.close();
