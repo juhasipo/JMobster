@@ -14,6 +14,7 @@ package fi.vincit.jmobster.processor.languages.javascript.writer;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.languages.BaseDataWriter;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
@@ -26,7 +27,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  * This feature can be turned of with {@link JavaScriptWriter#lenientModeOn}.
  */
 @SuppressWarnings( "UnusedReturnValue" )
-public class JavaScriptWriter implements DataWriter {
+public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
 
     private static final String BLOCK_START = "{";
     private static final String BLOCK_END = "}";
@@ -51,8 +52,6 @@ public class JavaScriptWriter implements DataWriter {
     private int blocksOpen = 0;
     private boolean JSONmode = false;
 
-    private final DataWriter writer;
-
     private abstract static class ItemWriter<T> implements ItemHandler<T> {
         private final JavaScriptWriter writer;
 
@@ -75,9 +74,8 @@ public class JavaScriptWriter implements DataWriter {
 
 
 
-
     public JavaScriptWriter(DataWriter writer) {
-        this.writer = writer;
+        super(writer);
     }
 
     /**
@@ -195,61 +193,12 @@ public class JavaScriptWriter implements DataWriter {
         return this;
     }
 
-    // Delegated methods
-
-    @Override
-    public JavaScriptWriter write(char c) {
-        writer.write(c);
-        return this;
-    }
-
-    @Override
-    public JavaScriptWriter write(String modelString) {
-        writer.write(modelString);
-        return this;
-    }
-
-    @Override
-    public JavaScriptWriter write(String modelString, String separator, boolean writeSeparator) {
-        writer.write(modelString, separator, writeSeparator);
-        return this;
-    }
-
-    @Override
-    public JavaScriptWriter writeLine(String modelStringLine) {
-        writer.writeLine(modelStringLine);
-        return this;
-    }
-
-    @Override
-    public JavaScriptWriter writeLine(String modelStringLine, String separator, boolean writeSeparator) {
-        writer.writeLine(modelStringLine, separator, writeSeparator);
-        return this;
-    }
-
-    @Override
-    public JavaScriptWriter indent() {
-        writer.indent();
-        return this;
-    }
-
-    @Override
-    public JavaScriptWriter indentBack() {
-        writer.indentBack();
-        return this;
-    }
-
-    @Override
-    public boolean isOpen() {
-        return writer.isOpen();
-    }
-
     /**
      * @throws IllegalStateException If lenient mode is on and the writer has unclosed functions or blocks.
      */
     @Override
     public void close() {
-        writer.close();
+        super.close();
         if( !lenientModeOn ) {
             if( functionsOpen > 0 ) {
                 throw new IllegalStateException("There are still " + functionsOpen + "unclosed functions");
@@ -263,21 +212,6 @@ public class JavaScriptWriter implements DataWriter {
                 throw new IllegalStateException("Too many blocks closed. " + Math.abs(blocksOpen) + " times too many.");
             }
         }
-    }
-
-    @Override
-    public void setIndentation(int spaces) {
-        writer.setIndentation(spaces);
-    }
-
-    @Override
-    public void setIndentationChar(char indentationChar, int characterCount) {
-        writer.setIndentationChar(indentationChar, characterCount);
-    }
-
-    @Override
-    public void setLineSeparator(String lineSeparator) {
-        writer.setLineSeparator(lineSeparator);
     }
 
     // Setters and getters
@@ -299,11 +233,6 @@ public class JavaScriptWriter implements DataWriter {
      */
     public void setSpace(String space) {
         this.space = space;
-    }
-
-    @Override
-    public String toString() {
-        return writer.toString();
     }
 
     public void setJSONmode(boolean JSONmode) {
