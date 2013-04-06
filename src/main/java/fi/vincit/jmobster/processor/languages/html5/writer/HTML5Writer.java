@@ -9,6 +9,13 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
 
     public static final String NO_VALUE = "__NO_VALUE__";
 
+    private static final char TAG_BODY_START = '<';
+    private static final char TAG_BODY_END = '>';
+    private static final String TAG_END_BODY_START = "</";
+
+    private static final String ATTR_START = "=\"";
+    private static final char ATTR_END = '"';
+
     private Stack<String> tagNameStack = new Stack<String>();
     private boolean insideTagBody = false;
 
@@ -37,7 +44,7 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
 
         tagNameStack.push(name);
         insideTagBody = true;
-        return write('<').write(name);
+        return write(TAG_BODY_START).write(name);
     }
 
     public HTML5Writer writeTagEnd() {
@@ -45,14 +52,14 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
             throw new IllegalStateException("Trying to end a tag body, but not writing a body");
         }
         insideTagBody = false;
-        return write('>');
+        return write(TAG_BODY_END);
     }
 
     public HTML5Writer writeTagAttr(String name, String value) {
         if( !insideTagBody ) {
             throw new IllegalStateException("Trying to write attributes, but not inside tag body");
         }
-        return write(' ').write(name).write('=').write('"').write(value).write('"');
+        return write(' ').write(name).write(ATTR_START).write(value).write(ATTR_END);
     }
 
     public HTML5Writer writeEndTag() {
@@ -63,7 +70,7 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
         if( insideTagBody ) {
             throw new IllegalStateException("Trying to end a tag, but still writing tag body");
         }
-        return write("</").write(name).write('>');
+        return write(TAG_END_BODY_START).write(name).write(TAG_BODY_END);
     }
 
     public String popTag() {
