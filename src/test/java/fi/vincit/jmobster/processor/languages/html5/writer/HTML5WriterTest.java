@@ -80,4 +80,40 @@ public class HTML5WriterTest {
         mw.close();
         assertThat(mw.toString(), is("<input type=\"text\" id=\"text-id\" name=\"text-name\">"));
     }
+
+    @Test
+    public void testEndTag() {
+        writer.writeTagStart("test").writeTagEnd().writeEndTag();
+        mw.close();
+        assertThat(mw.toString(), is("<test></test>"));
+    }
+
+    @Test
+    public void testPopTag() {
+        writer.writeTagStart("test");
+        assertThat(writer.popTag(), is("test"));
+    }
+
+    @Test
+    public void testClear() {
+        writer.writeTagStart("test1").writeTagStart("test2");
+        writer.clearTags();
+        boolean exceptionThrown = false;
+        try {
+            writer.popTag();
+        } catch (IllegalStateException e) {
+            exceptionThrown = true;
+        }
+        assertThat(exceptionThrown, is(true));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testEndTag_WithoutStartTag() {
+        writer.writeEndTag();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testPopEmptyStack() {
+        writer.popTag();
+    }
 }
