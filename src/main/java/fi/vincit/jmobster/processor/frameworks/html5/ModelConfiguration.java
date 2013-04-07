@@ -50,16 +50,19 @@ public class ModelConfiguration {
 
     private Class currentModel;
     private String currentField;
+    private ModelFieldConfiguration modelField;
 
     public ModelConfiguration model(Class model) {
         this.currentModel = model;
         this.currentField = null;
+        this.modelField = null;
         return this;
     }
 
     public ModelConfiguration field(String fieldName) {
         checkModelSet();
         this.currentField = fieldName;
+        this.modelField = null;
         return this;
     }
 
@@ -80,7 +83,10 @@ public class ModelConfiguration {
         checkFieldNameSet();
 
         ModelFieldConfigurations c = getOrCreate(currentModel);
-        return c.getOrCreateConfiguration(currentField);
+        if( this.modelField == null ) {
+            this.modelField = c.getOrCreateConfiguration(currentField);
+        }
+        return this.modelField;
     }
 
     private void checkModelSet() {
