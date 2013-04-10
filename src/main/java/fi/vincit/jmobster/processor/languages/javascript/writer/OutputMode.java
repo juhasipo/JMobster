@@ -26,7 +26,7 @@ public enum OutputMode {
      */
     JSON,
     /**
-     * Normal format creates hash maps without quotes.
+     * JavaScript format creates hash maps without quotes.
      */
-    NORMAL
+    JAVASCRIPT
 }

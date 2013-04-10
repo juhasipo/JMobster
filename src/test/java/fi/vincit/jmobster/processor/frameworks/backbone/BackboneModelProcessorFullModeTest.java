@@ -13,7 +13,7 @@ public class BackboneModelProcessorFullModeTest extends BaseBackboneModelProcess
 
     @Override
     protected OutputMode getMode() {
-        return OutputMode.NORMAL;
+        return OutputMode.JAVASCRIPT;
     }
 
     @Test

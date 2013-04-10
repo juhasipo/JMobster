@@ -131,7 +131,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     @Override
     public void startProcessing(ItemStatus status) throws IOException {
         LOG.trace( "Starting to process models" );
-        if( outputMode == OutputMode.NORMAL) {
+        if( outputMode == OutputMode.JAVASCRIPT) {
             getWriter().writeLine( startComment );
             getWriter().writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
         } else {
@@ -144,7 +144,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     public void processModel( final Model model, ItemStatus status ) {
         LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
-        if( outputMode == OutputMode.NORMAL) {
+        if( outputMode == OutputMode.JAVASCRIPT) {
             getWriter().write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
         } else {
             getWriter().writeKey( modelName ).writeLine(BLOCK_START).indent();
@@ -159,7 +159,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
                 });
 
         getWriter().indentBack();
-        if( outputMode == OutputMode.NORMAL) {
+        if( outputMode == OutputMode.JAVASCRIPT) {
             getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
         } else {
             getWriter().writeLine( BLOCK_END, ",", status.isNotLastItem() );
@@ -181,7 +181,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing(ItemStatus status) throws IOException {
         getWriter().indentBack();
-        if( outputMode == OutputMode.NORMAL) {
+        if( outputMode == OutputMode.JAVASCRIPT) {
             getWriter().writeLine(NAMESPACE_END);
         } else {
             getWriter().writeLine(BLOCK_END);

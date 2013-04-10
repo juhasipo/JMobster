@@ -73,7 +73,7 @@ public class ModelGeneratorBuilder {
                 );
             }
             modelProcessor = new BackboneModelProcessor
-                    .Builder(dataWriter, OutputMode.NORMAL)
+                    .Builder(dataWriter, OutputMode.JAVASCRIPT)
                     .setValueConverter(fieldValueConverter)
                     .useDefaultModelProcessors()
                     .build();

@@ -44,7 +44,7 @@ public class BaseModelProcessorTest {
     private BackboneModelProcessor createProcessor(BuildMode buildMode) {
         BackboneModelProcessor.Builder processorBuilder =
                 new BackboneModelProcessor
-                        .Builder(writer, OutputMode.NORMAL)
+                        .Builder(writer, OutputMode.JAVASCRIPT)
                 .setValueConverter(valueConverter);
         if( buildMode == BuildMode.ADD_MODEL_PROCESSORS ) {
             processorBuilder.setModelProcessors(validatorProcessor, valueProcessor);

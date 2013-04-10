@@ -49,7 +49,7 @@ public class BackboneModelProcessorBuilderTest {
     @Test
     public void testBuildWithDefaultProcessors() {
         BackboneModelProcessor processor = new BackboneModelProcessor
-                .Builder(writer, OutputMode.NORMAL)
+                .Builder(writer, OutputMode.JAVASCRIPT)
                 .setValueConverter(valueConverter)
                 .useDefaultModelProcessors()
                 .build();
@@ -59,7 +59,7 @@ public class BackboneModelProcessorBuilderTest {
     @Test
     public void testBuildWithOneProcessors() {
         BackboneModelProcessor processor = new BackboneModelProcessor
-                .Builder(writer, OutputMode.NORMAL)
+                .Builder(writer, OutputMode.JAVASCRIPT)
                 .setValueConverter(valueConverter)
                 .setModelProcessors(validatorProcessor)
                 .build();
@@ -69,7 +69,7 @@ public class BackboneModelProcessorBuilderTest {
     @Test
     public void testBuildWithTwoProcessors() {
         BackboneModelProcessor processor = new BackboneModelProcessor
-                .Builder(writer, OutputMode.NORMAL)
+                .Builder(writer, OutputMode.JAVASCRIPT)
                 .setValueConverter(valueConverter)
                 .setModelProcessors(validatorProcessor, valueProcessor)
                 .build();
@@ -83,7 +83,7 @@ public class BackboneModelProcessorBuilderTest {
     @Test
     public void testBuildWithRequiredOnly() {
         BackboneModelProcessor processor = new BackboneModelProcessor
-                .Builder(writer, OutputMode.NORMAL)
+                .Builder(writer, OutputMode.JAVASCRIPT)
                 .build();
 
         processor.processModel(model, ItemStatuses.first());
