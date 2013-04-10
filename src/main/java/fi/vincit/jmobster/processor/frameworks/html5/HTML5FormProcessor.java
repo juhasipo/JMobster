@@ -8,6 +8,9 @@ import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import java.io.IOException;
 
 public class HTML5FormProcessor extends BaseModelProcessor<HTML5Writer> {
+
+    ModelConfiguration configuration;
+
     public HTML5FormProcessor() {
         super("");
     }
@@ -18,6 +21,7 @@ public class HTML5FormProcessor extends BaseModelProcessor<HTML5Writer> {
 
     @Override
     public void processModel(Model model, ItemStatus status) {
+
     }
 
     @Override

@@ -70,7 +70,7 @@ public class ModelConfiguration {
     public ModelConfiguration field(String fieldName) {
         checkModelSet();
         this.currentField = fieldName;
-        this.modelField = null;
+        this.modelField = prepareSetFieldAttr();
         return this;
     }
 

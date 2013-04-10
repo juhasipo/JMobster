@@ -43,6 +43,17 @@ public class ModelConfigurationTest {
     }
 
     @Test
+    public void testGetModelFieldConfiguration_FieldCalledButNotSetAnything() {
+        ModelConfiguration configuration = new ModelConfiguration();
+
+        configuration.model(String.class).field("test");
+
+        ModelConfiguration.ModelFieldConfigurationImmutable field =
+                configuration.getModelFieldConfiguration(String.class, "test");
+        assertThat(field, notNullValue());
+    }
+
+    @Test
     public void testHasConfiguration() {
         ModelConfiguration configuration = new ModelConfiguration();
 
@@ -73,6 +84,49 @@ public class ModelConfigurationTest {
         boolean field =
                 configuration.hasConfiguration(String.class, "test2");
         assertThat(field, is(false));
+    }
+
+    @Test
+    public void testHasConfiguration_FieldCalledButNotSetAnything() {
+        ModelConfiguration configuration = new ModelConfiguration();
+
+        configuration.model(String.class).field("test");
+
+        boolean field =
+                configuration.hasConfiguration(String.class, "test");
+        assertThat(field, is(true));
+    }
+
+    @Test
+    public void testSetType() {
+        ModelConfiguration configuration = new ModelConfiguration();
+
+        configuration
+                .model(String.class)
+                    .field("test")
+                    .type("textarea");
+
+        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+                configuration.getModelFieldConfiguration(String.class, "test");
+
+        assertThat(field1, notNullValue());
+        assertThat(field1.getType(), is("textarea"));
+    }
+
+    @Test
+    public void testSetClasses() {
+        ModelConfiguration configuration = new ModelConfiguration();
+
+        configuration
+                .model(String.class)
+                .field("test")
+                .classes("foo bar");
+
+        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+                configuration.getModelFieldConfiguration(String.class, "test");
+
+        assertThat(field1, notNullValue());
+        assertThat(field1.getClasses(), is("foo bar"));
     }
 
     @Test
