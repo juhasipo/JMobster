@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModelConfiguration {
+
     private static class ModelFieldConfigurations {
         Map<String, ModelFieldConfiguration> modelFieldConfigurations =
                 new HashMap<String, ModelFieldConfiguration>();
@@ -24,10 +25,16 @@ public class ModelConfiguration {
         }
     }
 
-    private static class ModelFieldConfiguration {
+    public static interface ModelFieldConfigurationImmutable {
+        String getClasses();
+        String getType();
+    }
+
+    private static class ModelFieldConfiguration implements ModelFieldConfigurationImmutable {
         private String type;
         private String classes;
 
+        @Override
         public String getType() {
             return type;
         }
@@ -36,6 +43,7 @@ public class ModelConfiguration {
             this.type = type;
         }
 
+        @Override
         public String getClasses() {
             return classes;
         }
@@ -106,5 +114,18 @@ public class ModelConfiguration {
             modelConfigrations.put(clazz, new ModelFieldConfigurations());
         }
         return modelConfigrations.get(clazz);
+    }
+
+    public ModelFieldConfigurationImmutable getModelFieldConfiguration(Class model, String field) {
+        if( hasConfiguration(model, field) ) {
+            return modelConfigrations.get(model).modelFieldConfigurations.get(field);
+        } else {
+            return null;
+        }
+    }
+
+    public boolean hasConfiguration(Class model, String field) {
+        ModelFieldConfigurations c = modelConfigrations.get(model);
+        return c != null && c.isConfigurationForField(field);
     }
 }
