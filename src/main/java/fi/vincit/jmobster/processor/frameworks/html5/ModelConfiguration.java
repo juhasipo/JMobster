@@ -28,11 +28,14 @@ public class ModelConfiguration {
     public static interface ModelFieldConfigurationImmutable {
         String getClasses();
         String getType();
+        boolean useDefaultType();
+        String getName();
     }
 
     private static class ModelFieldConfiguration implements ModelFieldConfigurationImmutable {
         private String type;
         private String classes;
+        private String name;
 
         @Override
         public String getType() {
@@ -50,6 +53,20 @@ public class ModelConfiguration {
 
         public void setClasses(String classes) {
             this.classes = classes;
+        }
+
+        @Override
+        public boolean useDefaultType() {
+            return type == null;
+        }
+
+        @Override
+        public String getName() {
+            return name;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 
@@ -83,6 +100,12 @@ public class ModelConfiguration {
     public ModelConfiguration classes(String classes) {
         ModelFieldConfiguration c2 = prepareSetFieldAttr();
         c2.setClasses(classes);
+        return this;
+    }
+
+    public ModelConfiguration name(String name) {
+        ModelFieldConfiguration c2 = prepareSetFieldAttr();
+        c2.setName(name);
         return this;
     }
 

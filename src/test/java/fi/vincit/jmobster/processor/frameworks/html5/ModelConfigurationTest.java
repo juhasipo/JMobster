@@ -130,7 +130,54 @@ public class ModelConfigurationTest {
     }
 
     @Test
-    public void testSetTypeAndClasses_TwoModels() {
+    public void testSetName() {
+        ModelConfiguration configuration = new ModelConfiguration();
+
+        configuration
+                .model(String.class)
+                .field("test")
+                .name("name");
+
+        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+                configuration.getModelFieldConfiguration(String.class, "test");
+
+        assertThat(field1, notNullValue());
+        assertThat(field1.getName(), is("name"));
+    }
+
+    @Test
+    public void testSetName_DontUseDefaultName() {
+        ModelConfiguration configuration = new ModelConfiguration();
+
+        configuration
+                .model(String.class)
+                .field("test")
+                .type("foo");
+
+        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+                configuration.getModelFieldConfiguration(String.class, "test");
+
+        assertThat(field1, notNullValue());
+        assertThat(field1.useDefaultType(), is(false));
+    }
+
+    @Test
+    public void testSetNoName_CheckUseDefaultName() {
+        ModelConfiguration configuration = new ModelConfiguration();
+
+        configuration
+                .model(String.class)
+                .field("test");
+
+        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+                configuration.getModelFieldConfiguration(String.class, "test");
+
+        assertThat(field1, notNullValue());
+        assertThat(field1.useDefaultType(), is(true));
+    }
+
+    @Test
+    public void testSetTypeAndClassesAndName_TwoModels() {
         ModelConfiguration configuration = new ModelConfiguration();
 
         configuration
@@ -138,10 +185,12 @@ public class ModelConfigurationTest {
                     .field("test")
                         .type("textarea")
                         .classes("foo hidden")
+                        .name("foo")
                 .model(Long.class)
                     .field("test2")
                         .type("number")
-                        .classes("foo hidden");
+                        .classes("foo hidden")
+                        .name("bar");
 
         ModelConfiguration.ModelFieldConfigurationImmutable field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
@@ -151,10 +200,12 @@ public class ModelConfigurationTest {
         assertThat(field1, notNullValue());
         assertThat(field1.getType(), is("textarea"));
         assertThat(field1.getClasses(), is("foo hidden"));
+        assertThat(field1.getName(), is("foo"));
 
         assertThat(field2, notNullValue());
         assertThat(field2.getType(), is("number"));
         assertThat(field2.getClasses(), is("foo hidden"));
+        assertThat(field2.getName(), is("bar"));
     }
 
     @Test(expected = IllegalStateException.class)
