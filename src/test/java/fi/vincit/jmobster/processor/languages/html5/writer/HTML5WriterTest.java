@@ -56,6 +56,20 @@ public class HTML5WriterTest {
         assertThat(mw.toString(), is("<test attr=\"value\""));
     }
 
+    @Test
+    public void testWriteAttr_ConditionTrue() {
+        writer.writeTagStart("test").writeTagAttr("attr", "value", true);
+        mw.close();
+        assertThat(mw.toString(), is("<test attr=\"value\""));
+    }
+
+    @Test
+    public void testWriteAttr_ConditionFalse() {
+        writer.writeTagStart("test").writeTagAttr("attr", "value", false);
+        mw.close();
+        assertThat(mw.toString(), is("<test"));
+    }
+
     @Test(expected = IllegalStateException.class)
     public void testWriteAttr_WithoutTagBody() {
         writer.writeTagAttr("attr", "value");
@@ -99,6 +113,34 @@ public class HTML5WriterTest {
         writer.writeInput("text", "text-id", "text-name", HTML5Writer.NO_VALUE);
         mw.close();
         assertThat(mw.toString(), is("<input type=\"text\" id=\"text-id\" name=\"text-name\">"));
+    }
+
+    @Test
+    public void testWriteFormStart() {
+        writer.writeFormStart("form-name", HTML5Writer.FormMethod.GET, "/");
+        mw.close();
+        assertThat(mw.toString(), is("<form name=\"form-name\" method=\"get\" action=\"/\">"));
+    }
+
+    @Test
+    public void testWriteFormStart_NoName() {
+        writer.writeFormStart(HTML5Writer.NO_VALUE, HTML5Writer.FormMethod.GET, "/");
+        mw.close();
+        assertThat(mw.toString(), is("<form method=\"get\" action=\"/\">"));
+    }
+
+    @Test
+    public void testWriteFormStart_NoMethod() {
+        writer.writeFormStart("form-name", HTML5Writer.FormMethod.NONE, "/");
+        mw.close();
+        assertThat(mw.toString(), is("<form name=\"form-name\" action=\"/\">"));
+    }
+
+    @Test
+    public void testWriteFormStart_NoAction() {
+        writer.writeFormStart("form-name", HTML5Writer.FormMethod.GET, HTML5Writer.NO_VALUE);
+        mw.close();
+        assertThat(mw.toString(), is("<form name=\"form-name\" method=\"get\">"));
     }
 
     @Test

@@ -19,21 +19,27 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
     private Stack<String> tagNameStack = new Stack<String>();
     private boolean insideTagBody = false;
 
+    public static enum FormMethod {
+        GET, POST, PUT, DELETE, PATCH, NONE
+    }
+
     public HTML5Writer(DataWriter writer) {
         super(writer);
     }
 
+    public HTML5Writer writeFormStart(String name, FormMethod method, String action) {
+        writeTagStart("form");
+        writeTagAttr("name", name, NO_VALUE != name);
+        writeTagAttr("method", method.name().toLowerCase(), FormMethod.NONE != method);
+        writeTagAttr("action", action, NO_VALUE != action);
+        return writeTagEnd();
+    }
+
     public HTML5Writer writeInput(String type, String id, String name, String value) {
         writeTagStart("input").writeTagAttr("type", type);
-        if( NO_VALUE != id ) {
-            writeTagAttr("id", id);
-        }
-        if( NO_VALUE != name ) {
-            writeTagAttr("name", name);
-        }
-        if( NO_VALUE != value ) {
-            writeTagAttr("value", value);
-        }
+        writeTagAttr("id", id, NO_VALUE != id);
+        writeTagAttr("name", name, NO_VALUE != name);
+        writeTagAttr("value", value, NO_VALUE != value);
         return writeTagEnd();
     }
 
@@ -56,10 +62,18 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
     }
 
     public HTML5Writer writeTagAttr(String name, String value) {
+        return writeTagAttr(name, value, true);
+    }
+
+    public HTML5Writer writeTagAttr(String name, String value, boolean condition) {
         if( !insideTagBody ) {
             throw new IllegalStateException("Trying to write attributes, but not inside tag body");
         }
-        return write(' ').write(name).write(ATTR_START).write(value).write(ATTR_END);
+        if( condition ) {
+            return write(' ').write(name).write(ATTR_START).write(value).write(ATTR_END);
+        } else {
+            return this;
+        }
     }
 
     public HTML5Writer writeEndTag() {
