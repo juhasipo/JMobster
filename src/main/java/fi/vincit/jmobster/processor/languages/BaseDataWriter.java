@@ -16,11 +16,9 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  */
 public abstract class BaseDataWriter<T extends DataWriter> implements DataWriter {
     private final DataWriter writer;
-    private T extendedSelf;
 
     protected BaseDataWriter(DataWriter writer) {
         this.writer = writer;
-        this.extendedSelf = (T)this;
     }
 
     @Override
@@ -31,31 +29,31 @@ public abstract class BaseDataWriter<T extends DataWriter> implements DataWriter
     @Override
     public T write(char c) {
         writer.write(c);
-        return extendedSelf;
+        return (T)this;
     }
 
     @Override
     public T write(String modelString) {
         writer.write(modelString);
-        return extendedSelf;
+        return (T)this;
     }
 
     @Override
     public T write(String modelString, String separator, boolean writeSeparator) {
         writer.write(modelString, separator, writeSeparator);
-        return extendedSelf;
+        return (T)this;
     }
 
     @Override
     public T writeLine(String modelStringLine) {
         writer.writeLine(modelStringLine);
-        return extendedSelf;
+        return (T)this;
     }
 
     @Override
     public T writeLine(String modelStringLine, String separator, boolean writeSeparator) {
         writer.writeLine(modelStringLine, separator, writeSeparator);
-        return extendedSelf;
+        return (T)this;
     }
 
     @Override
@@ -71,13 +69,13 @@ public abstract class BaseDataWriter<T extends DataWriter> implements DataWriter
     @Override
     public T indent() {
         writer.indent();
-        return extendedSelf;
+        return (T)this;
     }
 
     @Override
     public T indentBack() {
         writer.indentBack();
-        return extendedSelf;
+        return (T)this;
     }
 
     @Override
