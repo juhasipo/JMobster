@@ -2,6 +2,18 @@ package fi.vincit.jmobster.processor.languages;
 
 import fi.vincit.jmobster.util.writer.DataWriter;
 
+/**
+ * The basic usage for BaseDataWriter is when you are creating a higher level
+ * DataWriter for some language. Then you would create the DataWriter:
+ * <pre>public class JavaScriptWriter extends BaseDataWriter&lt;JavaScriptWriter&gt;</pre>.
+ * The purpose of the generic type parameter is to allow automatically delegate
+ * the existing DataWriter methods to a concrete writer and at the same time allowing
+ * the new writer to implement chaining with the correct type. Without the generics type
+ * parameter the methods would return a plain DataWriter which would have to manually
+ * casted to the wanted writer.
+ *
+ * @param <T> DataWriter to use. Usually the one you are extending.
+ */
 public abstract class BaseDataWriter<T extends DataWriter> implements DataWriter {
     private final DataWriter writer;
     private T extendedSelf;
