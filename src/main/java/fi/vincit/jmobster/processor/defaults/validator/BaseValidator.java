@@ -46,6 +46,12 @@ import java.util.*;
  * bag. Optional parameters can be given with {@link Optional} generic
  * parameter.
  *
+ * An annotation is used instead of constructor because this way allows
+ * the BaseValidator class to initialize the object in constructor and
+ * the user doesn't have to call super() in each constructor. Forgetting
+ * to make that call in the constructor would cause strange bugs so using
+ * annotated methods is safer way.
+ *
  * Required parameters are always non null. Optional parameters may not
  * be present so you should check that before getting the parameter out
  * from optional object.
