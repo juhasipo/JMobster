@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -47,13 +48,7 @@ public class DefaultModelGenerator implements ModelGenerator {
 
     @Override
     public void process( Model model ) {
-        try {
-            modelProcessor.startProcessing(ItemStatuses.firstAndLast());
-            modelProcessor.processModel(model, ItemStatuses.firstAndLast());
-            modelProcessor.endProcessing(ItemStatuses.firstAndLast());
-        } catch (IOException e) {
-            LOG.error("Error", e);
-        }
+        processModelsInternal(Arrays.asList(model));
     }
 
     @Override
@@ -80,6 +75,5 @@ public class DefaultModelGenerator implements ModelGenerator {
             LOG.error("Error", e);
         }
     }
-
 
 }
