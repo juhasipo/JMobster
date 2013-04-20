@@ -26,7 +26,7 @@ import java.util.Collection;
  *  The error will be logged (level: Error).
  * </p>
  */
-public class DefaultModelGenerator implements ModelGenerator {
+public class DefaultModelGenerator<W extends DataWriter> implements ModelGenerator<W> {
 
     private static final Logger LOG = LoggerFactory
             .getLogger( DefaultModelGenerator.class );
@@ -52,8 +52,8 @@ public class DefaultModelGenerator implements ModelGenerator {
     }
 
     @Override
-    public void setWriter( DataWriter dataWriter ) {
-        modelProcessor.setWriter( dataWriter );
+    public void setWriter( W dataWriter ) {
+        modelProcessor.setWriter(dataWriter);
     }
 
     /**

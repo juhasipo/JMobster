@@ -21,9 +21,11 @@ import fi.vincit.jmobster.processor.*;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.BackboneFieldTypeConverterManager;
 import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverterManager;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptModelGenerator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
@@ -32,7 +34,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  * mandatory. If no model naming strategy is given, default is used.
  */
 public class ModelGeneratorBuilder {
-    private ModelProcessor modelProcessor;
+    private ModelProcessor<JavaScriptWriter> modelProcessor;
     private FieldValueConverter fieldValueConverter;
     private BaseFieldTypeConverterManager fieldTypeConverterManager;
     private DataWriter dataWriter;
@@ -78,7 +80,7 @@ public class ModelGeneratorBuilder {
                     .useDefaultModelProcessors()
                     .build();
         }
-        return new DefaultModelGenerator( modelProcessor );
+        return new JavaScriptModelGenerator( modelProcessor );
     }
 
     private void throwIfNull(Object object, String name) {

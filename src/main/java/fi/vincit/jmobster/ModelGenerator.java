@@ -24,7 +24,7 @@ import java.util.Collection;
  * in format that can be used in the target platform. Use {@link fi.vincit.jmobster.processor.ModelFactory}
  * to generate the {@link Model} objects to process.
  */
-public interface ModelGenerator {
+public interface ModelGenerator<W extends DataWriter> {
 
     /**
      * Process and create the client side model(s) for the given models.
@@ -42,5 +42,5 @@ public interface ModelGenerator {
      * Sets data writer to use
      * @param dataWriter Data writer
      */
-    void setWriter( DataWriter dataWriter );
+    void setWriter( W dataWriter );
 }
