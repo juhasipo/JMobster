@@ -15,6 +15,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -48,9 +49,9 @@ public interface ModelProcessor<W extends DataWriter> {
      */
     void endProcessing(ItemStatus status) throws IOException;
 
-    void setWriter( W dataWriter );
-
     void setFieldValueConverter(FieldValueConverter valueConverter);
 
     String getName();
+
+    void setLanguageContext(LanguageContext<W> context);
 }

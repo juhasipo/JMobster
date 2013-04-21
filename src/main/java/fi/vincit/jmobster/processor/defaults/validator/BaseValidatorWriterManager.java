@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 
 import fi.vincit.jmobster.processor.ValidatorWriter;
 import fi.vincit.jmobster.processor.ValidatorWriterManager;
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -47,7 +48,7 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> implement
     final private Map<Class, ValidatorWriter<? extends Validator, ? super W>> writers =
             new HashMap<Class, ValidatorWriter<? extends Validator, ? super W>>();
 
-    private W dataWriter;
+    private LanguageContext<W> context;
 
     /**
      * Constructs validator writer manager with the given data writer
@@ -69,12 +70,14 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> implement
         final Class<?> validatorType = validator.getType();
         if( writers.containsKey(validatorType) ) {
             ValidatorWriter<? extends Validator, ? super W> writer = writers.get(validatorType);
-            writer.write( dataWriter, validator, status );
+            writer.write( context.getWriter(), validator, status );
         }
     }
 
     @Override
-    public void setWriter(W dataWriter) {
-        this.dataWriter = dataWriter;
+    public void setLanguageContext(LanguageContext<W> context) {
+        this.context = context;
     }
+
+
 }

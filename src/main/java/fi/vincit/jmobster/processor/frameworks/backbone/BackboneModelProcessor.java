@@ -19,6 +19,7 @@ import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
@@ -63,8 +64,6 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     private String startComment;
     private String namespaceName;
 
-    private OutputMode outputMode;
-
     private BackboneModelProcessor(Builder builder) {
         super(NAME);
 
@@ -74,30 +73,37 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
 
         setStartComment(DEFAULT_START_COMMENT);
         setNamespaceName(DEFAULT_NAMESPACE);
-        setWriter(builder.writer);
+        setLanguageContext(builder.context);
         setFieldValueConverter(builder.valueConverter);
 
-        this.outputMode = builder.outputMode;
-        if( this.outputMode == OutputMode.JSON ) {
+        if( builder.context.getOutputMode() == OutputMode.JSON ) {
             getWriter().setJSONmode(true);
         }
     }
 
+    private OutputMode getOutputMode() {
+        return ((JavaScriptContext)this.getContext()).getOutputMode();
+    }
+
     public static class Builder {
-        private JavaScriptWriter writer;
+        private JavaScriptContext context;
         private FieldValueConverter valueConverter;
-        private OutputMode outputMode;
         private ModelProcessor<JavaScriptWriter>[] modelProcessors =
                 new ModelProcessor[0];
 
         public Builder(DataWriter writer, OutputMode outputMode) {
-            this.outputMode = outputMode;
-            this.writer = new JavaScriptWriter(writer);
+            context = new JavaScriptContext(
+                    new JavaScriptWriter(writer),
+                    outputMode
+            );
+        }
+
+        public Builder(JavaScriptContext languageContext) {
+            context = languageContext;
         }
 
         public Builder(JavaScriptWriter writer, OutputMode outputMode) {
-            this.outputMode = outputMode;
-            this.writer = writer;
+            context = new JavaScriptContext(writer, outputMode);
         }
 
         public Builder setValueConverter(FieldValueConverter valueConverter) {
@@ -131,7 +137,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     @Override
     public void startProcessing(ItemStatus status) throws IOException {
         LOG.trace( "Starting to process models" );
-        if( outputMode == OutputMode.JAVASCRIPT) {
+        if( getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().writeLine( startComment );
             getWriter().writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
         } else {
@@ -144,7 +150,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     public void processModel( final Model model, ItemStatus status ) {
         LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
-        if( outputMode == OutputMode.JAVASCRIPT) {
+        if( getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
         } else {
             getWriter().writeKey( modelName ).writeLine(BLOCK_START).indent();
@@ -159,7 +165,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
                 });
 
         getWriter().indentBack();
-        if( outputMode == OutputMode.JAVASCRIPT) {
+        if( getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
         } else {
             getWriter().writeLine( BLOCK_END, ",", status.isNotLastItem() );
@@ -181,7 +187,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing(ItemStatus status) throws IOException {
         getWriter().indentBack();
-        if( outputMode == OutputMode.JAVASCRIPT) {
+        if( getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().writeLine(NAMESPACE_END);
         } else {
             getWriter().writeLine(BLOCK_END);

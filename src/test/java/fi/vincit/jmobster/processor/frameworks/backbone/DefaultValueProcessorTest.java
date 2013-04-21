@@ -17,7 +17,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
@@ -32,7 +33,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DefaultValueProcessorTest {
 
@@ -192,7 +194,8 @@ public class DefaultValueProcessorTest {
 
     private DefaultValueProcessor createProcessor() {
         DefaultValueProcessor dp = new DefaultValueProcessor.Builder().setName("").build();
-        dp.setWriter(new JavaScriptWriter(writer));
+        JavaScriptContext context = new JavaScriptContext(writer, OutputMode.JSON);
+        dp.setLanguageContext(context);
         dp.setFieldValueConverter(fieldValueConverter);
         return dp;
     }

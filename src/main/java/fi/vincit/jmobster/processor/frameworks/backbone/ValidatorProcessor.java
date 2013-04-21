@@ -21,7 +21,10 @@ import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
+import fi.vincit.jmobster.processor.languages.LanguageContext;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.processor.model.Validator;
@@ -44,7 +47,10 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
     public static class Builder {
         private String name = "validation";
         private FieldValueConverter valueConverter;
-        private DataWriter writer = DummyDataWriter.getInstance();
+        private JavaScriptContext context = new JavaScriptContext(
+                new JavaScriptWriter(DummyDataWriter.getInstance()),
+                OutputMode.JAVASCRIPT
+        );
         private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager =
                 new BackboneValidatorWriterManager();
 
@@ -61,8 +67,8 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
             return this;
         }
 
-        public Builder setWriter(DataWriter writer) {
-            this.writer = writer;
+        public Builder setWriter(DataWriter writer, OutputMode outputMode) {
+            this.context = new JavaScriptContext(writer, outputMode);
             return this;
         }
 
@@ -80,7 +86,7 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
         super(builder.name);
 
         this.validatorWriterManager = builder.validatorWriterManager;
-        setWriter(new JavaScriptWriter(builder.writer));
+        setLanguageContext(builder.context);
         setFieldValueConverter(builder.valueConverter);
 
         this.validatorWriter = new ItemHandler<Validator>() {
@@ -114,8 +120,8 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
     }
 
     @Override
-    public void setWriter(JavaScriptWriter javaScriptWriter) {
-        super.setWriter(javaScriptWriter);
-        this.validatorWriterManager.setWriter(javaScriptWriter);
+    public void setLanguageContext(LanguageContext<JavaScriptWriter> context) {
+        super.setLanguageContext(context);
+        this.validatorWriterManager.setLanguageContext(context);
     }
 }

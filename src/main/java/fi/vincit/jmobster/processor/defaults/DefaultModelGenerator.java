@@ -2,6 +2,7 @@ package fi.vincit.jmobster.processor.defaults;
 
 import fi.vincit.jmobster.ModelGenerator;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
@@ -32,6 +33,7 @@ public class DefaultModelGenerator<W extends DataWriter> implements ModelGenerat
             .getLogger( DefaultModelGenerator.class );
 
     private final ModelProcessor modelProcessor;
+    private LanguageContext<W> context;
 
     /**
      * Creates new DefaultModelGenerator
@@ -52,8 +54,9 @@ public class DefaultModelGenerator<W extends DataWriter> implements ModelGenerat
     }
 
     @Override
-    public void setWriter( W dataWriter ) {
-        modelProcessor.setWriter(dataWriter);
+    public void setLanguageContext(LanguageContext<W> context) {
+        this.context = context;
+        modelProcessor.setLanguageContext(context);
     }
 
     /**

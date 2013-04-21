@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.base;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class BaseModelProcessor<W extends DataWriter> implements ModelProcessor<W> {
-    private W writer;
+    private LanguageContext<W> context;
     private FieldValueConverter valueConverter;
     private String name;
 
@@ -44,23 +45,23 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
      * @return Writer
      */
     protected W getWriter() {
-        return writer;
+        return context.getWriter();
     }
 
     protected FieldValueConverter getValueConverter() {
         return valueConverter;
     }
 
-    /**
-     * Sets writer
-     * @param dataWriter Writer to set
-     */
     @Override
-    public void setWriter( W dataWriter ) {
-        this.writer = dataWriter;
+    public void setLanguageContext(LanguageContext<W> context) {
+        this.context = context;
         for( ModelProcessor<W> modelProcessor : modelProcessors ) {
-            modelProcessor.setWriter(dataWriter);
+            modelProcessor.setLanguageContext(this.context);
         }
+    }
+
+    protected LanguageContext<W> getContext() {
+        return context;
     }
 
     @Override
@@ -78,8 +79,8 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
 
     public void addModelProcessor(ModelProcessor<W> modelProcessor) {
         modelProcessors.add(modelProcessor);
-        modelProcessor.setWriter(writer);
         modelProcessor.setFieldValueConverter(valueConverter);
+        modelProcessor.setLanguageContext(context);
     }
 
     protected Collection<ModelProcessor<W>> getModelProcessors() {

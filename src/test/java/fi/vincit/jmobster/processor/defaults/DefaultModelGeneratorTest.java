@@ -19,6 +19,7 @@ package fi.vincit.jmobster.processor.defaults;
 import fi.vincit.jmobster.ModelGenerator;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.ModelGeneratorBuilder;
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.TestUtil;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
@@ -81,13 +82,13 @@ public class DefaultModelGeneratorTest {
     }
 
     @Test
-    public void testSetWriter() throws Exception {
+    public void testSetLanguageContext() throws Exception {
         ModelProcessor modelProcessor = mock(ModelProcessor.class);
         ModelGenerator modelGenerator = new ModelGeneratorBuilder().setModelProcessor(modelProcessor).build();
 
-        DataWriter writer = mock(DataWriter.class);
-        modelGenerator.setWriter(writer);
+        LanguageContext context = mock(LanguageContext.class);
+        modelGenerator.setLanguageContext(context);
 
-        verify(modelProcessor).setWriter(writer);
+        verify(modelProcessor).setLanguageContext(any(LanguageContext.class));
     }
 }

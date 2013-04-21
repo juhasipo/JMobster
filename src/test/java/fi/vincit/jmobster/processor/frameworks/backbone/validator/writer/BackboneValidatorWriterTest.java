@@ -20,7 +20,9 @@ import fi.vincit.jmobster.processor.defaults.validator.jsr303.NotNullValidator;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.NumberRangeValidator;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.SizeValidator;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Before;
@@ -38,12 +40,16 @@ public class BackboneValidatorWriterTest {
     private StringBufferWriter writer;
     private BackboneValidatorWriterManager writerManager;
 
+    private JavaScriptContext getTestContext() {
+        return new JavaScriptContext(javaScriptWriter, OutputMode.JSON);
+    }
+
     @Before
     public void initTestMethod() {
         writer = new StringBufferWriter();
         javaScriptWriter = new JavaScriptWriter(writer);
         writerManager = new BackboneValidatorWriterManager();
-        writerManager.setWriter(javaScriptWriter);
+        writerManager.setLanguageContext(getTestContext());
     }
 
     /**

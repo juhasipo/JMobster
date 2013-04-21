@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -34,5 +35,5 @@ public interface ValidatorWriterManager<W extends DataWriter> {
      */
     void write(Validator validator, ItemStatus status);
 
-    void setWriter(W dataWriter);
+    void setLanguageContext(LanguageContext<W> context);
 }

@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.defaults.base;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -53,6 +54,10 @@ public class BaseModelProcessorTest {
     }
     */
 
+    private LanguageContext<DataWriter> getTestContext() {
+        return new LanguageContext<DataWriter>(writer);
+    }
+
     private static class TestModelProcessor extends BaseModelProcessor<DataWriter> {
         private TestModelProcessor(String name) {
             super(name);
@@ -68,13 +73,13 @@ public class BaseModelProcessorTest {
         public void endProcessing(ItemStatus status) throws IOException {}
     }
 
-    private TestModelProcessor createProcessor(BuildMode buildMode) {
+    private TestModelProcessor createProcessor(BuildMode buildMode, LanguageContext<DataWriter> context) {
         TestModelProcessor processor = new TestModelProcessor("");
         if( buildMode == BuildMode.ADD_MODEL_PROCESSORS ) {
             processor.addModelProcessor(validatorProcessor);
             processor.addModelProcessor(valueProcessor);
         }
-        processor.setWriter(writer);
+        processor.setLanguageContext(context);
         processor.setFieldValueConverter(valueConverter);
         return processor;
     }
@@ -85,25 +90,27 @@ public class BaseModelProcessorTest {
     }
 
     @Test
-    public void testSetNewWriterPropagation() {
-        TestModelProcessor processor = createProcessor(BuildMode.ADD_MODEL_PROCESSORS);
+    public void testSetNewLanguageContextPropagation() {
+        LanguageContext<DataWriter> context1 = getTestContext();
+        LanguageContext<DataWriter> context2 = getTestContext();
+        TestModelProcessor processor = createProcessor(BuildMode.ADD_MODEL_PROCESSORS, context1);
 
-        DataWriter anotherWriter = Mockito.mock(DataWriter.class);
-        processor.setWriter(anotherWriter);
+        processor.setLanguageContext(context2);
 
-        Mockito.verify(validatorProcessor).setWriter(writer);
-        Mockito.verify(valueProcessor).setWriter(writer);
+        Mockito.verify(validatorProcessor).setLanguageContext(context1);
+        Mockito.verify(valueProcessor).setLanguageContext(context1);
 
-        Mockito.verify(validatorProcessor).setWriter(anotherWriter);
-        Mockito.verify(valueProcessor).setWriter(anotherWriter);
+        Mockito.verify(validatorProcessor).setLanguageContext(context2);
+        Mockito.verify(valueProcessor).setLanguageContext(context2);
     }
 
     @Test
     public void testAddModelProcessor() {
-        TestModelProcessor processor = createProcessor(BuildMode.NO_MODEL_PROCESSORS);
+        LanguageContext<DataWriter> context = getTestContext();
+        TestModelProcessor processor = createProcessor(BuildMode.NO_MODEL_PROCESSORS, context);
 
         processor.addModelProcessor(validatorProcessor);
 
-        Mockito.verify(validatorProcessor).setWriter(writer);
+        Mockito.verify(validatorProcessor).setLanguageContext(context);
     }
 }

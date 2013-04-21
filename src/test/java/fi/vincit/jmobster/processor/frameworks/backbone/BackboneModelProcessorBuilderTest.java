@@ -19,6 +19,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
@@ -28,8 +29,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BackboneModelProcessorBuilderTest {
 
@@ -68,16 +68,17 @@ public class BackboneModelProcessorBuilderTest {
 
     @Test
     public void testBuildWithTwoProcessors() {
+        JavaScriptContext context = new JavaScriptContext(writer, OutputMode.JSON);
         BackboneModelProcessor processor = new BackboneModelProcessor
-                .Builder(writer, OutputMode.JAVASCRIPT)
+                .Builder(context)
                 .setValueConverter(valueConverter)
                 .setModelProcessors(validatorProcessor, valueProcessor)
                 .build();
 
         processor.processModel(model, ItemStatuses.first());
 
-        verify(validatorProcessor).setWriter(writer);
-        verify(valueProcessor).setWriter(writer);
+        verify(validatorProcessor).setLanguageContext(context);
+        verify(valueProcessor).setLanguageContext(context);
     }
 
     @Test

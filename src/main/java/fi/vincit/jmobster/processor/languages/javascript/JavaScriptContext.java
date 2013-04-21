@@ -17,10 +17,24 @@ package fi.vincit.jmobster.processor.languages.javascript;
  */
 
 import fi.vincit.jmobster.processor.languages.LanguageContext;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
-public class JavaScriptContext extends LanguageContext {
-    public JavaScriptContext(DataWriter writer) {
+public class JavaScriptContext extends LanguageContext<JavaScriptWriter> {
+    public JavaScriptContext(DataWriter writer, OutputMode outputMode) {
+        super(new JavaScriptWriter(writer));
+        this.outputMode = outputMode;
+    }
+
+    public JavaScriptContext(JavaScriptWriter writer, OutputMode outputMode) {
         super(writer);
+        this.outputMode = outputMode;
+    }
+
+    private OutputMode outputMode;
+
+    public OutputMode getOutputMode() {
+        return outputMode;
     }
 }

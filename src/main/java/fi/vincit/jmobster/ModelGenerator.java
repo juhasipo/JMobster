@@ -14,6 +14,7 @@ package fi.vincit.jmobster;/*
  * limitations under the License.
 */
 
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
@@ -39,8 +40,8 @@ public interface ModelGenerator<W extends DataWriter> {
     void process(Model model);
 
     /**
-     * Sets data writer to use
-     * @param dataWriter Data writer
+     * Sets language context to use
+     * @param context Language context
      */
-    void setWriter( W dataWriter );
+    void setLanguageContext( LanguageContext<W> context );
 }

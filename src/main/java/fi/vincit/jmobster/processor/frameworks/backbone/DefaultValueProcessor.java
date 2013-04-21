@@ -19,7 +19,9 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
 import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
@@ -37,7 +39,10 @@ public class DefaultValueProcessor extends BaseModelProcessor<JavaScriptWriter> 
     public static class Builder {
         private String name = "defaults";
         private FieldValueConverter valueConverter;
-        private DataWriter writer = DummyDataWriter.getInstance();
+        private JavaScriptContext context = new JavaScriptContext(
+                new JavaScriptWriter(DummyDataWriter.getInstance()),
+                OutputMode.JAVASCRIPT
+        );
 
         public Builder() {
         }
@@ -52,8 +57,8 @@ public class DefaultValueProcessor extends BaseModelProcessor<JavaScriptWriter> 
             return this;
         }
 
-        public Builder setWriter(DataWriter writer) {
-            this.writer = writer;
+        public Builder setWriter(DataWriter writer, OutputMode outputMode) {
+            this.context = new JavaScriptContext(writer, outputMode);
             return this;
         }
 
@@ -65,7 +70,7 @@ public class DefaultValueProcessor extends BaseModelProcessor<JavaScriptWriter> 
     private DefaultValueProcessor( Builder builder ) {
         super(builder.name);
         setFieldValueConverter(builder.valueConverter);
-        setWriter(new JavaScriptWriter(builder.writer));
+        setLanguageContext(builder.context);
     }
 
     @Override
