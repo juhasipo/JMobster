@@ -26,7 +26,7 @@ import java.io.IOException;
  * ModelProcessor controls how the models given from {@link fi.vincit.jmobster.ModelGenerator}
  * are processed.
  */
-public interface ModelProcessor<W extends DataWriter> {
+public interface ModelProcessor<C extends LanguageContext<W>, W extends DataWriter> {
     /**
      * Called before the first model is processed.
      * @status Item status
@@ -53,5 +53,5 @@ public interface ModelProcessor<W extends DataWriter> {
 
     String getName();
 
-    void setLanguageContext(LanguageContext<W> context);
+    void setLanguageContext(C context);
 }

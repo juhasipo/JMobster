@@ -17,10 +17,12 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.exception.BuildingError;
-import fi.vincit.jmobster.processor.*;
+import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.BackboneFieldTypeConverterManager;
 import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverterManager;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptModelGenerator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
@@ -34,7 +36,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  * mandatory. If no model naming strategy is given, default is used.
  */
 public class ModelGeneratorBuilder {
-    private ModelProcessor<JavaScriptWriter> modelProcessor;
+    private ModelProcessor<JavaScriptContext, JavaScriptWriter> modelProcessor;
     private FieldValueConverter fieldValueConverter;
     private BaseFieldTypeConverterManager fieldTypeConverterManager;
     private DataWriter dataWriter;

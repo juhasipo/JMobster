@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
@@ -34,8 +35,8 @@ import static org.mockito.Mockito.*;
 public abstract class BaseBackboneModelProcessorTest {
     public static final String TEST_MODEL_NAME = "TestModel";
     protected StringBufferWriter writer;
-    @Mock protected ModelProcessor<JavaScriptWriter> validatorProcessor;
-    @Mock protected ModelProcessor<JavaScriptWriter> valueProcessor;
+    @Mock protected ModelProcessor<JavaScriptContext, JavaScriptWriter> validatorProcessor;
+    @Mock protected ModelProcessor<JavaScriptContext, JavaScriptWriter> valueProcessor;
 
     protected abstract OutputMode getMode();
 

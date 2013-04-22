@@ -35,8 +35,8 @@ public class BackboneModelProcessorBuilderTest {
 
     private JavaScriptWriter writer;
     @Mock private FieldValueConverter valueConverter;
-    @Mock private ModelProcessor<JavaScriptWriter> validatorProcessor;
-    @Mock private ModelProcessor<JavaScriptWriter> valueProcessor;
+    @Mock private ModelProcessor<JavaScriptContext, JavaScriptWriter> validatorProcessor;
+    @Mock private ModelProcessor<JavaScriptContext, JavaScriptWriter> valueProcessor;
     @Mock private Model model;
 
     @Before

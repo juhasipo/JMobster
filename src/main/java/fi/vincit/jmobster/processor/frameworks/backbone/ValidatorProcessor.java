@@ -19,9 +19,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
-import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
-import fi.vincit.jmobster.processor.languages.LanguageContext;
+import fi.vincit.jmobster.processor.languages.javascript.BaseJavaScriptModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
@@ -39,7 +38,7 @@ import java.io.IOException;
  * Implements validation part of a Backbone.validation model
  * Can be used as a separate ModelProcessor.
  */
-public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
+public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
 
     private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
     private ItemHandler<Validator> validatorWriter;
@@ -120,7 +119,7 @@ public class ValidatorProcessor extends BaseModelProcessor<JavaScriptWriter> {
     }
 
     @Override
-    public void setLanguageContext(LanguageContext<JavaScriptWriter> context) {
+    public void setLanguageContext(JavaScriptContext context) {
         super.setLanguageContext(context);
         this.validatorWriterManager.setLanguageContext(context);
     }

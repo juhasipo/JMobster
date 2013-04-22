@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.defaults.base;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.languages.LanguageContext;
+import fi.vincit.jmobster.processor.languages.DataWriterContext;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -34,8 +34,8 @@ public class BaseModelProcessorTest {
 
     @Mock private DataWriter writer;
     @Mock private FieldValueConverter valueConverter;
-    @Mock private ModelProcessor<DataWriter> validatorProcessor;
-    @Mock private ModelProcessor<DataWriter> valueProcessor;
+    @Mock private ModelProcessor<DataWriterContext, DataWriter> validatorProcessor;
+    @Mock private ModelProcessor<DataWriterContext, DataWriter> valueProcessor;
 
     private static enum BuildMode {
         ADD_MODEL_PROCESSORS,
@@ -54,11 +54,11 @@ public class BaseModelProcessorTest {
     }
     */
 
-    private LanguageContext<DataWriter> getTestContext() {
-        return new LanguageContext<DataWriter>(writer);
+    private DataWriterContext getTestContext() {
+        return new DataWriterContext(writer);
     }
 
-    private static class TestModelProcessor extends BaseModelProcessor<DataWriter> {
+    private static class TestModelProcessor extends BaseModelProcessor<DataWriterContext, DataWriter> {
         private TestModelProcessor(String name) {
             super(name);
         }
@@ -73,7 +73,7 @@ public class BaseModelProcessorTest {
         public void endProcessing(ItemStatus status) throws IOException {}
     }
 
-    private TestModelProcessor createProcessor(BuildMode buildMode, LanguageContext<DataWriter> context) {
+    private TestModelProcessor createProcessor(BuildMode buildMode, DataWriterContext context) {
         TestModelProcessor processor = new TestModelProcessor("");
         if( buildMode == BuildMode.ADD_MODEL_PROCESSORS ) {
             processor.addModelProcessor(validatorProcessor);
@@ -91,8 +91,8 @@ public class BaseModelProcessorTest {
 
     @Test
     public void testSetNewLanguageContextPropagation() {
-        LanguageContext<DataWriter> context1 = getTestContext();
-        LanguageContext<DataWriter> context2 = getTestContext();
+        DataWriterContext context1 = getTestContext();
+        DataWriterContext context2 = getTestContext();
         TestModelProcessor processor = createProcessor(BuildMode.ADD_MODEL_PROCESSORS, context1);
 
         processor.setLanguageContext(context2);
@@ -106,7 +106,7 @@ public class BaseModelProcessorTest {
 
     @Test
     public void testAddModelProcessor() {
-        LanguageContext<DataWriter> context = getTestContext();
+        DataWriterContext context = getTestContext();
         TestModelProcessor processor = createProcessor(BuildMode.NO_MODEL_PROCESSORS, context);
 
         processor.addModelProcessor(validatorProcessor);

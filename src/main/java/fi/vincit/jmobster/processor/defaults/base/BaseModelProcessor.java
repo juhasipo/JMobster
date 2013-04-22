@@ -25,12 +25,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class BaseModelProcessor<W extends DataWriter> implements ModelProcessor<W> {
-    private LanguageContext<W> context;
+public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends DataWriter> implements ModelProcessor<C, W> {
+    private C context;
     private FieldValueConverter valueConverter;
     private String name;
 
-    final private List<ModelProcessor<W>> modelProcessors = new ArrayList<ModelProcessor<W>>();
+    final private List<ModelProcessor<C, W>> modelProcessors = new ArrayList<ModelProcessor<C, W>>();
 
     /**
      * Initializes model processor with writer
@@ -53,21 +53,21 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
     }
 
     @Override
-    public void setLanguageContext(LanguageContext<W> context) {
+    public void setLanguageContext(C context) {
         this.context = context;
-        for( ModelProcessor<W> modelProcessor : modelProcessors ) {
+        for( ModelProcessor<C, W> modelProcessor : modelProcessors ) {
             modelProcessor.setLanguageContext(this.context);
         }
     }
 
-    protected LanguageContext<W> getContext() {
+    protected C getContext() {
         return context;
     }
 
     @Override
     public void setFieldValueConverter(FieldValueConverter valueConverter) {
         this.valueConverter = valueConverter;
-        for( ModelProcessor<W> modelProcessor : modelProcessors ) {
+        for( ModelProcessor<C, W> modelProcessor : modelProcessors ) {
             modelProcessor.setFieldValueConverter(valueConverter);
         }
     }
@@ -77,13 +77,13 @@ public abstract class BaseModelProcessor<W extends DataWriter> implements ModelP
         return name;
     }
 
-    public void addModelProcessor(ModelProcessor<W> modelProcessor) {
+    public void addModelProcessor(ModelProcessor<C, W> modelProcessor) {
         modelProcessors.add(modelProcessor);
         modelProcessor.setFieldValueConverter(valueConverter);
         modelProcessor.setLanguageContext(context);
     }
 
-    protected Collection<ModelProcessor<W>> getModelProcessors() {
+    protected Collection<ModelProcessor<C, W>> getModelProcessors() {
         return modelProcessors;
     }
 }

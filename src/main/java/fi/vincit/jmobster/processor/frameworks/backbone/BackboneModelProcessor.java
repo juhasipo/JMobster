@@ -17,8 +17,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.BackboneValidatorWriterManager;
+import fi.vincit.jmobster.processor.languages.javascript.BaseJavaScriptModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
@@ -39,7 +39,7 @@ import java.io.IOException;
  * </p>
  */
 @SuppressWarnings( "HardcodedFileSeparator" )
-public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter> {
+public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
 
     public static final String NAME = "";
 
@@ -67,7 +67,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     private BackboneModelProcessor(Builder builder) {
         super(NAME);
 
-        for( ModelProcessor<JavaScriptWriter> processor : builder.modelProcessors ) {
+        for( ModelProcessor<JavaScriptContext, JavaScriptWriter> processor : builder.modelProcessors ) {
             addModelProcessor(processor);
         }
 
@@ -82,13 +82,13 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
     }
 
     private OutputMode getOutputMode() {
-        return ((JavaScriptContext)this.getContext()).getOutputMode();
+        return this.getContext().getOutputMode();
     }
 
     public static class Builder {
         private JavaScriptContext context;
         private FieldValueConverter valueConverter;
-        private ModelProcessor<JavaScriptWriter>[] modelProcessors =
+        private ModelProcessor<JavaScriptContext, JavaScriptWriter>[] modelProcessors =
                 new ModelProcessor[0];
 
         public Builder(DataWriter writer, OutputMode outputMode) {
@@ -111,7 +111,7 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
             return this;
         }
 
-        public Builder setModelProcessors(ModelProcessor<JavaScriptWriter>... modelProcessors) {
+        public Builder setModelProcessors(ModelProcessor<JavaScriptContext, JavaScriptWriter>... modelProcessors) {
             this.modelProcessors = modelProcessors;
             return this;
         }
@@ -157,9 +157,9 @@ public class BackboneModelProcessor extends BaseModelProcessor<JavaScriptWriter>
         }
         ItemProcessor
                 .process(getModelProcessors())
-                .with(new ItemHandler<ModelProcessor<JavaScriptWriter>>() {
+                .with(new ItemHandler<ModelProcessor<JavaScriptContext, JavaScriptWriter>>() {
                     @Override
-                    public void process(ModelProcessor<JavaScriptWriter> item, ItemStatus status) {
+                    public void process(ModelProcessor<JavaScriptContext, JavaScriptWriter> item, ItemStatus status) {
                         writeSection(item.getName(), model, item, status);
                     }
                 });

@@ -18,7 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
-import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.BaseJavaScriptModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
@@ -32,7 +32,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
 
-public class DefaultValueProcessor extends BaseModelProcessor<JavaScriptWriter> {
+public class DefaultValueProcessor extends BaseJavaScriptModelProcessor {
 
     private static final String RETURN_BLOCK = "return "; // Note the space
 
