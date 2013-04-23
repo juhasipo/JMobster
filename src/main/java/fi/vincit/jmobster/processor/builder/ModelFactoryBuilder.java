@@ -22,6 +22,7 @@ import fi.vincit.jmobster.processor.defaults.DefaultModelFactory;
 import fi.vincit.jmobster.processor.defaults.DefaultModelFieldFactory;
 import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
 import fi.vincit.jmobster.processor.defaults.DefaultValidatorScanner;
+import fi.vincit.jmobster.processor.defaults.validator.CombinedValidatorFactory;
 import fi.vincit.jmobster.util.groups.GenericGroupManager;
 import fi.vincit.jmobster.util.groups.GroupMode;
 
@@ -74,8 +75,21 @@ public class ModelFactoryBuilder {
         this.modelNamingStrategy = modelNamingStrategy;
         return this;
     }
-    public ModelFactoryBuilder setValidatorFactory(ValidatorFactory validatorFactory) {
-        this.validatorFactory = validatorFactory;
+
+    /**
+     * Add one or more {@link ValidatorFactory} objects to {@link ModelFactory}. If multiple
+     * factories are added, they are combined as one. See {@link CombinedValidatorFactory}
+     * for more details
+     * @param validatorFactory Primary {@link ValidatorFactory}
+     * @param validatorFactories Alternative {@link ValidatorFactory} objects
+     * @return
+     */
+    public ModelFactoryBuilder setValidatorFactory(ValidatorFactory validatorFactory, ValidatorFactory... validatorFactories) {
+        if( validatorFactories.length > 0 ) {
+            this.validatorFactory = new CombinedValidatorFactory(validatorFactory, validatorFactories);
+        } else {
+            this.validatorFactory = validatorFactory;
+        }
         return this;
     }
 
