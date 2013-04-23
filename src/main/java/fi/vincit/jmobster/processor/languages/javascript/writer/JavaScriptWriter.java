@@ -59,6 +59,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
     // Sanity checks.
     private int functionsOpen = 0;
     private int blocksOpen = 0;
+    private int functionCallsOpen = 0;
     private boolean JSONmode = false;
 
     private abstract static class ItemWriter<T> implements ItemHandler<T> {
@@ -94,8 +95,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
      * @return Writer itself for chaining writes
      */
     public JavaScriptWriter startNamedFunction(String name, String... arguments) {
-        ++functionsOpen;
-        return write(FUNCTION_DEF + space).write( name ).writeFunctionArgsAndStartBlock(arguments);
+        return write(FUNCTION_DEF + space).writeFunctionArgsAndStartBlock(name, arguments);
     }
 
     /**
@@ -104,8 +104,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
      * @return Writer itself for chaining writes
      */
     public JavaScriptWriter startAnonFunction(String... arguments) {
-        ++functionsOpen;
-        return write(FUNCTION_DEF).writeFunctionArgsAndStartBlock( arguments );
+        return write(FUNCTION_DEF).writeFunctionArgsAndStartBlock( "", arguments );
     }
 
     /**
@@ -113,8 +112,8 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
      * @param arguments Function arguments
      * @return Writer itself for chaining writes
      */
-    private JavaScriptWriter writeFunctionArgsAndStartBlock(String... arguments) {
-        write(FUNCTION_ARG_START);
+    private JavaScriptWriter writeFunctionArgsAndStartBlock(String name, String... arguments) {
+        startFunctionCall(name);
         ItemHandler<String> argumentProcessor = new ItemHandler<String>() {
             @Override
             public void process(String argument, ItemStatus status) {
@@ -122,7 +121,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
             }
         };
         ItemProcessor.process(argumentProcessor, arguments);
-        write(FUNCTION_ARG_END).writeSpace();
+        endFunctionCall().writeSpace();
         return startBlock();
     }
 
@@ -171,6 +170,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
      */
     public JavaScriptWriter endFunctionCallBlock(ItemStatus status) {
         --blocksOpen;
+        --functionCallsOpen;
         return indentBack().write( BLOCK_END + ")" ).writeLine( "", LIST_SEPARATOR, status.isNotLastItem() );
     }
 
@@ -240,11 +240,13 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
     }
 
     public JavaScriptWriter startFunctionCall(String functionName) {
+        ++functionCallsOpen;
         write(functionName).write(FUNCTION_ARG_START);
         return this;
     }
 
     public JavaScriptWriter endFunctionCall() {
+        --functionCallsOpen;
         write(FUNCTION_ARG_END);
         return this;
     }
@@ -285,6 +287,12 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
                 throw new IllegalStateException("There are still " + blocksOpen + "unclosed blocks");
             } else if( blocksOpen < 0 ) {
                 throw new IllegalStateException("Too many blocks closed. " + Math.abs(blocksOpen) + " times too many.");
+            }
+
+            if( functionCallsOpen > 0 ) {
+                throw new IllegalStateException("There are still " + functionCallsOpen + " unclosed function calls");
+            } else if( functionCallsOpen < 0 ) {
+                throw new IllegalStateException("Too many function calls closed. " + Math.abs(functionCallsOpen) + " times too many.");
             }
         }
     }

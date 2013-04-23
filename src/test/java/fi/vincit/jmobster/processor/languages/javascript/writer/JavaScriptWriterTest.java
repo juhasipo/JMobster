@@ -366,4 +366,64 @@ public class JavaScriptWriterTest {
 
         assertThat("})\n", is(mw.toString()));
     }
+
+    @Test
+    public void testCompleteFunctionCall() {
+        writer.startFunctionCall("foo").endFunctionCall();
+        writer.close();
+        assertThat("foo()", is(mw.toString()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testUnclosedFunctionCall() {
+        writer.startFunctionCall("foo");
+        writer.close();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testTooManyOpenedFunctionCalls() {
+        writer.startFunctionCall("foo");
+        writer.startFunctionCall("foo");
+        writer.endFunctionCall();
+        writer.close();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testTooManyClosedFunctionCalls() {
+        writer.startFunctionCall("foo");
+        writer.endFunctionCall();
+        writer.endFunctionCall();
+        writer.close();
+    }
+
+
+    @Test
+    public void testCompleteFunctionBlockCall() {
+        writer.startFunctionCallBlock("foo")
+                .endFunctionCallBlock(ItemStatuses.last());
+        writer.close();
+        assertThat("foo({\n})\n", is(mw.toString()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testUnclosedFunctionCallBlock() {
+        writer.startFunctionCallBlock("foo");
+        writer.close();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testTooManyOpenedFunctionCallBlocks() {
+        writer.startFunctionCallBlock("foo");
+        writer.startFunctionCallBlock("foo");
+        writer.endFunctionCallBlock(ItemStatuses.notFirstNorLast());
+        writer.close();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testTooManyClosedFunctionCallBlocks() {
+        writer.startFunctionCallBlock("foo");
+        writer.endFunctionCallBlock(ItemStatuses.notFirstNorLast());
+        writer.endFunctionCallBlock(ItemStatuses.notFirstNorLast());
+        writer.close();
+    }
 }

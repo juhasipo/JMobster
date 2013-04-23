@@ -46,7 +46,6 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger( BackboneModelProcessor.class );
 
-    //private static final String NAMESPACE_END = "};";
     private static final String DEFAULT_START_COMMENT = "Auto-generated file";
     private static final String DEFAULT_NAMESPACE = "Models";
 
