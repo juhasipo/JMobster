@@ -215,17 +215,50 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
         return this;
     }
 
+    /**
+     * What kind of variable is given.
+     */
+    public static enum VariableType {
+        /**
+         * Quotes are added around the value
+         */
+        STRING,
+        /**
+         * Starts a block
+         */
+        BLOCK,
+        /**
+         * Nothing special is done
+         */
+        OTHER
+    }
+
+    /**
+     * Writes a String variable with given name and value.
+     * The value will have quotes around it.
+     * @param name Name of the variable
+     * @param value String value of the variable
+     * @return Writer itself for chaining writes
+     */
     public JavaScriptWriter writeVariable(String name, String value) {
         return writeVariable(name, value, VariableType.STRING);
     }
 
+    /**
+     * Ends a statement (i.e. adds ;)
+     * @return Writer itself for chaining writes
+     */
     public JavaScriptWriter endStatement() {
         return writeLine(STATEMENT_END);
     }
 
-    public static enum VariableType {
-        STRING, BLOCK, OTHER
-    }
+    /**
+     * Writes a variable with given name, value and type
+     * @param name Name of the variable
+     * @param value Value of the variable
+     * @param type Type of the variable
+     * @return Writer itself for chaining writes
+     */
     public JavaScriptWriter writeVariable(String name, String value, VariableType type) {
         final String quoteMark = type == VariableType.STRING ? QUOTE : "";
         write(VARIABLE).write(KEYWORD_SEPARATOR).write(name).write(ASSIGN);
@@ -239,18 +272,32 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
         return this;
     }
 
+    /**
+     * Starts a function call. Does not start function block.
+     * @param functionName Function name
+     * @return Writer itself for chaining writes
+     */
     public JavaScriptWriter startFunctionCall(String functionName) {
         ++functionCallsOpen;
         write(functionName).write(FUNCTION_ARG_START);
         return this;
     }
 
+    /**
+     * Ends function call. Does not end function block.
+     * @return Writer itself for chaining writes
+     */
     public JavaScriptWriter endFunctionCall() {
         --functionCallsOpen;
         write(FUNCTION_ARG_END);
         return this;
     }
 
+    /**
+     * Writes multi-line comment
+     * @param comment Comment to write
+     * @return Writer itself for chaining writes
+     */
     public JavaScriptWriter writeComment(String comment) {
         writeLine(COMMENT_START);
         write(COMMENT_LINE_START);
@@ -318,6 +365,11 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
         this.space = space;
     }
 
+    /**
+     * In JSON mode the quotation marks are added around keys in
+     * key value pairs.
+     * @param JSONmode True to turn on, false to turn off
+     */
     public void setJSONmode(boolean JSONmode) {
         this.JSONmode = JSONmode;
     }
