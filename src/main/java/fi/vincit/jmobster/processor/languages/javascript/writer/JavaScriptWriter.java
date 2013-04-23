@@ -278,13 +278,13 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
         super.close();
         if( !lenientModeOn ) {
             if( functionsOpen > 0 ) {
-                throw new IllegalStateException("There are still " + functionsOpen + "unclosed functions");
+                throw new IllegalStateException("There are still " + functionsOpen + " unclosed functions");
             } else if( functionsOpen < 0 ) {
                 throw new IllegalStateException("Too many functions closed. " + Math.abs(functionsOpen) + " times too many.");
             }
 
             if( blocksOpen > 0 ) {
-                throw new IllegalStateException("There are still " + blocksOpen + "unclosed blocks");
+                throw new IllegalStateException("There are still " + blocksOpen + " unclosed blocks");
             } else if( blocksOpen < 0 ) {
                 throw new IllegalStateException("Too many blocks closed. " + Math.abs(blocksOpen) + " times too many.");
             }
