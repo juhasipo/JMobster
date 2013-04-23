@@ -1,5 +1,6 @@
 package fi.vincit.jmobster.processor.frameworks.html5;
 
+import fi.vincit.jmobster.processor.languages.html5.HTML5Context;
 import fi.vincit.jmobster.processor.languages.html5.writer.HTML5Writer;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
@@ -30,7 +31,7 @@ public class HTML5FormProcessorTest {
     @Test
     public void testBasic() {
         HTML5FormProcessor html5FormProcessor = new HTML5FormProcessor();
-        html5FormProcessor.setWriter(html5Writer);
+        html5FormProcessor.setLanguageContext(new HTML5Context(html5Writer));
 
         Model model = mock(Model.class);
         when(model.getName()).thenReturn("Test");

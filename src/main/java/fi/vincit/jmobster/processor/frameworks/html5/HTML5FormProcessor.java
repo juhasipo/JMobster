@@ -1,6 +1,6 @@
 package fi.vincit.jmobster.processor.frameworks.html5;
 
-import fi.vincit.jmobster.processor.defaults.base.BaseModelProcessor;
+import fi.vincit.jmobster.processor.languages.html5.BaseHTML5ModelProcessor;
 import fi.vincit.jmobster.processor.languages.html5.writer.HTML5Writer;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
@@ -10,10 +10,10 @@ import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 import java.io.IOException;
 
-public class HTML5FormProcessor extends BaseModelProcessor<HTML5Writer> {
+public class HTML5FormProcessor extends BaseHTML5ModelProcessor {
 
     private ModelConfiguration configuration;
-    private BaseModelProcessor<HTML5Writer> fieldProcessor;
+    private BaseHTML5ModelProcessor fieldProcessor;
 
     public HTML5FormProcessor() {
         super("");
@@ -62,7 +62,7 @@ public class HTML5FormProcessor extends BaseModelProcessor<HTML5Writer> {
         this.configuration = configuration;
     }
 
-    public void setFieldProcessor(BaseModelProcessor<HTML5Writer> fieldProcessor) {
+    public void setFieldProcessor(BaseHTML5ModelProcessor fieldProcessor) {
         this.fieldProcessor = fieldProcessor;
     }
 }
