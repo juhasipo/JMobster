@@ -266,7 +266,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
         if( type != VariableType.BLOCK ) {
             write(quoteMark).write(value).write(quoteMark).endStatement();
         } else {
-            writeLine(BLOCK_START);
+            startBlock();
         }
 
         return this;

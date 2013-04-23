@@ -223,6 +223,20 @@ public class JavaScriptWriterTest {
     }
 
     @Test
+    public void testNoSanityFunctionCall() {
+        writer.setLenientMode( true );
+        writer.startFunctionCall("foo");
+        writer.close();
+    }
+
+    @Test
+    public void testNoSanityFunctionCallBlock() {
+        writer.setLenientMode( true );
+        writer.startFunctionCallBlock("foo");
+        writer.close();
+    }
+
+    @Test
     public void testSetIndentation() {
         writer.setIndentation(3);
         writer.startBlock();
@@ -271,6 +285,7 @@ public class JavaScriptWriterTest {
         assertThat("var foo = \"bar\";\n", is(mw.toString()));
     }
 
+
     @Test
     public void testWriteVariableType_String() {
         writer.writeVariable("foo", "bar", JavaScriptWriter.VariableType.STRING);
@@ -293,6 +308,21 @@ public class JavaScriptWriterTest {
         mw.close();
 
         assertThat("var foo = {\n", is(mw.toString()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testWriteVariable_BlockLenientFails() {
+        writer.writeVariable("foo", "bar", JavaScriptWriter.VariableType.BLOCK);
+        writer.close();
+    }
+
+    @Test
+    public void testWriteVariableType_BlockLenient() {
+        writer.writeVariable("foo", "bar", JavaScriptWriter.VariableType.BLOCK);
+        writer.endBlock(ItemStatuses.last());
+        writer.close();
+
+        assertThat("var foo = {\n}\n", is(mw.toString()));
     }
 
     @Test
