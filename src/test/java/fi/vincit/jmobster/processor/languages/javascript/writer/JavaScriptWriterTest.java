@@ -304,6 +304,15 @@ public class JavaScriptWriterTest {
     }
 
     @Test
+    public void testWriteComment_JSONmode() {
+        writer.setJSONmode(true);
+        writer.writeComment("Foo Bar");
+        mw.close();
+
+        assertThat("", is(mw.toString()));
+    }
+
+    @Test
     public void testEndStatement() {
         writer.endStatement();
         mw.close();

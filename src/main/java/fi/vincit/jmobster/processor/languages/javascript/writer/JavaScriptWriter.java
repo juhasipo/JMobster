@@ -299,10 +299,12 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
      * @return Writer itself for chaining writes
      */
     public JavaScriptWriter writeComment(String comment) {
-        writeLine(COMMENT_START);
-        write(COMMENT_LINE_START);
-        writeLine(comment);
-        writeLine(COMMENT_END);
+        if( !JSONmode ) {
+            writeLine(COMMENT_START);
+            write(COMMENT_LINE_START);
+            writeLine(comment);
+            writeLine(COMMENT_END);
+        }
         return this;
     }
 
@@ -367,7 +369,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
 
     /**
      * In JSON mode the quotation marks are added around keys in
-     * key value pairs.
+     * key value pairs and comments are not written.
      * @param JSONmode True to turn on, false to turn off
      */
     public void setJSONmode(boolean JSONmode) {
