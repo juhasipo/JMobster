@@ -17,15 +17,11 @@ package fi.vincit.jmobster.processor.defaults.validator.hibernate;
  */
 
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorFactory;
-import fi.vincit.jmobster.util.combination.OptionalTypes;
-import fi.vincit.jmobster.util.combination.RequiredTypes;
-import org.hibernate.validator.constraints.Length;
 
 public class HibernateValidatorFactory extends BaseValidatorFactory {
     public HibernateValidatorFactory() {
         setValidator(
-                LengthValidator.class,
-                RequiredTypes.get(Length.class),
-                OptionalTypes.get());
+                LengthValidator.class
+        );
     }
 }

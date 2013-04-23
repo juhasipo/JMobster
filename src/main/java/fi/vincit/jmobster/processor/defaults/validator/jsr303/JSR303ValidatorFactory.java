@@ -16,7 +16,6 @@ package fi.vincit.jmobster.processor.defaults.validator.jsr303;
  * limitations under the License.
  */
 
-
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorFactory;
 
 /**

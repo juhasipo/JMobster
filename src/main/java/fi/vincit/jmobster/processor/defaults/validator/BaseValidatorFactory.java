@@ -21,10 +21,10 @@ import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.combination.OptionalTypes;
 import fi.vincit.jmobster.util.combination.RequiredTypes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Base class for validator factories. Extends this class to create factories for a
