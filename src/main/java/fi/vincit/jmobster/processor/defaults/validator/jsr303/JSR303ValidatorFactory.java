@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.defaults.validator.jsr303;
 
 /*
  * Copyright 2012-2013 Juha Siponen
@@ -16,15 +16,13 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.NotNullValidator;
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.NumberRangeValidator;
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.SizeValidator;
+
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorFactory;
 
 /**
  * Default implementation of validator factory. Contains
  * validator constructors for basic JSR-303 validation annotations.
- * Use {@link BaseValidatorFactory#setValidator(ValidatorConstructor)} to
+ * Use {@link fi.vincit.jmobster.processor.defaults.validator.BaseValidatorFactory#setValidator(fi.vincit.jmobster.processor.defaults.validator.ValidatorConstructor)} to
  * add more validators.
  */
 public class JSR303ValidatorFactory extends BaseValidatorFactory {

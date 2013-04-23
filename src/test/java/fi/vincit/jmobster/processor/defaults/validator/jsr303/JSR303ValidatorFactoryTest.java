@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.defaults.validator.jsr303;
 
 /*
  * Copyright 2012-2013 Juha Siponen
@@ -16,10 +16,6 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.NotNullValidator;
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.NumberRangeValidator;
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.SizeValidator;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.TestUtil;

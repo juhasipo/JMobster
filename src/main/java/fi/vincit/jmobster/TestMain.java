@@ -18,7 +18,7 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.processor.FieldScanMode;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelFactory;
-import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
+import fi.vincit.jmobster.processor.defaults.validator.jsr303.JSR303ValidatorFactory;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.DefaultValueProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.ValidatorProcessor;
