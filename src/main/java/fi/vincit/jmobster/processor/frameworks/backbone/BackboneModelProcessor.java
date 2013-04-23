@@ -26,6 +26,7 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,21 +46,14 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger( BackboneModelProcessor.class );
 
-    private static final String BLOCK_START = "{";
-    private static final String NAMESPACE_START =BLOCK_START;
-
-
-    private static final String VARIABLE = "var";
-    private static final String BLOCK_END = "}";
-    private static final String NAMESPACE_END = "};";
-    private static final String DEFAULT_START_COMMENT = "/*\n * Auto-generated file\n */";
+    //private static final String NAMESPACE_END = "};";
+    private static final String DEFAULT_START_COMMENT = "Auto-generated file";
     private static final String DEFAULT_NAMESPACE = "Models";
 
     private static final String DEFAULTS_BLOCK_NAME = "defaults";
     private static final String VALIDATOR_BLOCK_NAME = "validation";
 
-    private static final String MODEL_EXTEND_START = ": Backbone.Model.extend({";
-    private static final String MODEL_EXTEND_END = "})";
+    private static final String BACKBONE_MODEL_EXTEND = "Backbone.Model.extend";
 
     private String startComment;
     private String namespaceName;
@@ -138,10 +132,10 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
     public void startProcessing(ItemStatus status) throws IOException {
         LOG.trace( "Starting to process models" );
         if( getOutputMode() == OutputMode.JAVASCRIPT) {
-            getWriter().writeLine( startComment );
-            getWriter().writeLine(VARIABLE + " " + namespaceName + " = " + NAMESPACE_START);
+            getWriter().writeComment(startComment);
+            getWriter().writeVariable(namespaceName, "", JavaScriptWriter.VariableType.BLOCK);
         } else {
-            getWriter().writeLine( NAMESPACE_START );
+            getWriter().startBlock();
         }
         getWriter().indent();
     }
@@ -151,9 +145,9 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
         LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
         if( getOutputMode() == OutputMode.JAVASCRIPT) {
-            getWriter().write( modelName ).writeLine( MODEL_EXTEND_START ).indent();
+            getWriter().write(modelName).writeKey("").startFunctionCallBlock(BACKBONE_MODEL_EXTEND);
         } else {
-            getWriter().writeKey( modelName ).writeLine(BLOCK_START).indent();
+            getWriter().writeKey( modelName ).startBlock();
         }
         ItemProcessor
                 .process(getModelProcessors())
@@ -166,9 +160,9 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
 
         getWriter().indentBack();
         if( getOutputMode() == OutputMode.JAVASCRIPT) {
-            getWriter().writeLine( MODEL_EXTEND_END, ",", status.isNotLastItem() );
+            getWriter().endFunctionCallBlock(status);
         } else {
-            getWriter().writeLine( BLOCK_END, ",", status.isNotLastItem() );
+            getWriter().endBlock(status);
         }
     }
 
@@ -188,9 +182,9 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
     public void endProcessing(ItemStatus status) throws IOException {
         getWriter().indentBack();
         if( getOutputMode() == OutputMode.JAVASCRIPT) {
-            getWriter().writeLine(NAMESPACE_END);
+            getWriter().endBlockStatement();
         } else {
-            getWriter().writeLine(BLOCK_END);
+            getWriter().endBlock(ItemStatuses.last());
         }
         getWriter().close();
         LOG.trace("Processing models done");

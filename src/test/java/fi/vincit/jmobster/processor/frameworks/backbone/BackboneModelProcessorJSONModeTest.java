@@ -65,7 +65,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
     @Test
     public void testEndProcessing() throws Exception {
         ModelProcessor processor = createProcessor();
-
+        jsWriter.setLenientMode(true);
         processor.endProcessing(ItemStatuses.firstAndLast());
 
         assertThat(writer.toString(), is("}\n"));

@@ -21,9 +21,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 
 public class JavaScriptWriterTest {
     private DataWriter mw;
@@ -262,5 +261,109 @@ public class JavaScriptWriterTest {
         mw.close();
 
         assertEquals("function_SPACE_func(arg1)_SPACE_{\n}\n", mw.toString());
+    }
+
+    @Test
+    public void testWriteVariable() {
+        writer.writeVariable("foo", "bar");
+        mw.close();
+
+        assertThat("var foo = \"bar\";\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testWriteVariableType_String() {
+        writer.writeVariable("foo", "bar", JavaScriptWriter.VariableType.STRING);
+        mw.close();
+
+        assertThat("var foo = \"bar\";\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testWriteVariableType_Other() {
+        writer.writeVariable("foo", "bar", JavaScriptWriter.VariableType.OTHER);
+        mw.close();
+
+        assertThat("var foo = bar;\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testWriteVariableType_Block() {
+        writer.writeVariable("foo", "bar", JavaScriptWriter.VariableType.BLOCK);
+        mw.close();
+
+        assertThat("var foo = {\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testWriteComment() {
+        writer.writeComment("Foo Bar");
+        mw.close();
+
+        assertThat("/*\n * Foo Bar\n */\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testEndStatement() {
+        writer.endStatement();
+        mw.close();
+
+        assertThat(";\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testStartFunctionCall() {
+        writer.startFunctionCall("foo");
+        mw.close();
+
+        assertThat("foo(", is(mw.toString()));
+    }
+
+    @Test
+    public void testEndFunctionCall() {
+        writer.endFunctionCall();
+        mw.close();
+
+        assertThat(")", is(mw.toString()));
+    }
+
+    @Test
+    public void testStartFunctionCallBlock() {
+        writer.startFunctionCallBlock("foo");
+        mw.close();
+
+        assertThat("foo({\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testEndFunctionCallBlock_NotFirstNorLast() {
+        writer.endFunctionCallBlock(ItemStatuses.notFirstNorLast());
+        mw.close();
+
+        assertThat("}),\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testEndFunctionCallBlock_First() {
+        writer.endFunctionCallBlock(ItemStatuses.first());
+        mw.close();
+
+        assertThat("}),\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testEndFunctionCallBlock_Last() {
+        writer.endFunctionCallBlock(ItemStatuses.last());
+        mw.close();
+
+        assertThat("})\n", is(mw.toString()));
+    }
+
+    @Test
+    public void testEndFunctionCallBlock_FirstAndLast() {
+        writer.endFunctionCallBlock(ItemStatuses.last());
+        mw.close();
+
+        assertThat("})\n", is(mw.toString()));
     }
 }

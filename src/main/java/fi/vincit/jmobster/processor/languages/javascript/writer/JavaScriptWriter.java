@@ -29,6 +29,10 @@ import fi.vincit.jmobster.util.writer.DataWriter;
 @SuppressWarnings( "UnusedReturnValue" )
 public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
 
+    private static final String COMMENT_START = "/*";
+    private static final String COMMENT_LINE_START = " * ";
+    private static final String COMMENT_END = " */";
+    private static final String VARIABLE = "var";
     private static final String BLOCK_START = "{";
     private static final String BLOCK_END = "}";
 
@@ -43,6 +47,11 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
     private static final String LIST_SEPARATOR = ",";
 
     private static final String FUNCTION_DEF = "function";
+    private static final String STATEMENT_END = ";";
+    private static final String QUOTE = "\"";
+    private static final String ASSIGN = " = ";
+    private static final char KEYWORD_SEPARATOR = ' ';
+
     private String space = " ";
 
     private boolean lenientModeOn = false;
@@ -109,7 +118,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
         ItemHandler<String> argumentProcessor = new ItemHandler<String>() {
             @Override
             public void process(String argument, ItemStatus status) {
-                write(argument, "," + space, status.isNotLastItem());
+                write(argument, LIST_SEPARATOR + space, status.isNotLastItem());
             }
         };
         ItemProcessor.process(argumentProcessor, arguments);
@@ -138,12 +147,36 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
 
     /**
      * Ends block. Indents back. Writes list separator (default ",") if isLast is false.
-     * @param status Writes list separator item is last
+     * @param status Writes list separator if item is last
      * @return Writer itself for chaining writes
      */
     public JavaScriptWriter endBlock(ItemStatus status) {
         --blocksOpen;
-        return indentBack().write( BLOCK_END ).writeLine( "", LIST_SEPARATOR, status.isNotLastItem() );
+        return indentBack().write( BLOCK_END ).writeLine("", LIST_SEPARATOR, status.isNotLastItem());
+    }
+
+    /**
+     * Start function call with block statement inside
+     * @param name Name of the function
+     * @return Writer itself for chaining writes
+     */
+    public JavaScriptWriter startFunctionCallBlock(String name) {
+        return startFunctionCall(name).startBlock();
+    }
+
+    /**
+     * End function call with block statement
+     * @param status Writes list separator if item is last
+     * @return Writer itself for chaining writes
+     */
+    public JavaScriptWriter endFunctionCallBlock(ItemStatus status) {
+        --blocksOpen;
+        return indentBack().write( BLOCK_END + ")" ).writeLine( "", LIST_SEPARATOR, status.isNotLastItem() );
+    }
+
+    public JavaScriptWriter endBlockStatement() {
+        write(BLOCK_END).endStatement();
+        return this;
     }
 
     /**
@@ -152,7 +185,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
      * @return Writer itself for chaining writes
      */
     public JavaScriptWriter writeKey(String key) {
-        return write("", "\"", JSONmode).write( key, "\"", JSONmode ).write( KEY_VALUE_SEPARATOR );
+        return write("", QUOTE, JSONmode).write( key, QUOTE, JSONmode ).write( KEY_VALUE_SEPARATOR );
     }
 
     /**
@@ -179,6 +212,48 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
         write(ARRAY_END);
         write("", LIST_SEPARATOR, status.isNotLastItem());
         writeLine("");
+        return this;
+    }
+
+    public JavaScriptWriter writeVariable(String name, String value) {
+        return writeVariable(name, value, VariableType.STRING);
+    }
+
+    public JavaScriptWriter endStatement() {
+        return writeLine(STATEMENT_END);
+    }
+
+    public static enum VariableType {
+        STRING, BLOCK, OTHER
+    }
+    public JavaScriptWriter writeVariable(String name, String value, VariableType type) {
+        final String quoteMark = type == VariableType.STRING ? QUOTE : "";
+        write(VARIABLE).write(KEYWORD_SEPARATOR).write(name).write(ASSIGN);
+
+        if( type != VariableType.BLOCK ) {
+            write(quoteMark).write(value).write(quoteMark).endStatement();
+        } else {
+            writeLine(BLOCK_START);
+        }
+
+        return this;
+    }
+
+    public JavaScriptWriter startFunctionCall(String functionName) {
+        write(functionName).write(FUNCTION_ARG_START);
+        return this;
+    }
+
+    public JavaScriptWriter endFunctionCall() {
+        write(FUNCTION_ARG_END);
+        return this;
+    }
+
+    public JavaScriptWriter writeComment(String comment) {
+        writeLine(COMMENT_START);
+        write(COMMENT_LINE_START);
+        writeLine(comment);
+        writeLine(COMMENT_END);
         return this;
     }
 

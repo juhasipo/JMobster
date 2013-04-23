@@ -48,12 +48,12 @@ public class BackboneModelProcessorFullModeTest extends BaseBackboneModelProcess
     @Test
     public void testStartProcessingWithCustomComment() throws Exception {
         BackboneModelProcessor processor = createProcessor();
-        processor.setStartComment("/* Foo */");
+        processor.setStartComment("Foo");
 
         processor.startProcessing(ItemStatuses.firstAndLast());
 
         assertThat(writer.toString(), is(
-                "/* Foo */\n" +
+                "/*\n * Foo\n */\n" +
                 "var Models = {\n"
         ));
     }
@@ -61,7 +61,7 @@ public class BackboneModelProcessorFullModeTest extends BaseBackboneModelProcess
     @Test
     public void testEndProcessing() throws Exception {
         ModelProcessor processor = createProcessor();
-
+        jsWriter.setLenientMode(true);
         processor.endProcessing(ItemStatuses.firstAndLast());
 
         assertThat(writer.toString(), is("};\n"));
