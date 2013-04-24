@@ -45,6 +45,6 @@ public class HTML5FormProcessorTest {
 
         writer.close();
 
-        assertThat(writer.toString(), Is.is("<input type=\"text\" id=\"field1\" name=\"field1\">"));
+        assertThat(writer.toString(), Is.is("<input type=\"text\" id=\"field1\" name=\"field1\"/>\n"));
     }
 }

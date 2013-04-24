@@ -45,7 +45,7 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
         writeTagAttr("id", id, NO_VALUE != id);
         writeTagAttr("name", name, NO_VALUE != name);
         writeTagAttr("value", value, NO_VALUE != value);
-        return writeTagEnd();
+        return writeEmptyTagEnd();
     }
 
     public HTML5Writer writeTagStart(String name) {

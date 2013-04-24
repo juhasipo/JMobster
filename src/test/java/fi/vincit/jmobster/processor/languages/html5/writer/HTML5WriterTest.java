@@ -98,28 +98,28 @@ public class HTML5WriterTest {
     public void testWriteInput() {
         writer.writeInput("text", "text-id", "text-name", "text-value");
         mw.close();
-        assertThat(mw.toString(), is("<input type=\"text\" id=\"text-id\" name=\"text-name\" value=\"text-value\">"));
+        assertThat(mw.toString(), is("<input type=\"text\" id=\"text-id\" name=\"text-name\" value=\"text-value\"/>\n"));
     }
 
     @Test
     public void testWriteInput_NoID() {
         writer.writeInput("text", HTML5Writer.NO_VALUE, "text-name", "text-value");
         mw.close();
-        assertThat(mw.toString(), is("<input type=\"text\" name=\"text-name\" value=\"text-value\">"));
+        assertThat(mw.toString(), is("<input type=\"text\" name=\"text-name\" value=\"text-value\"/>\n"));
     }
 
     @Test
     public void testWriteInput_NoName() {
         writer.writeInput("text", "text-id", HTML5Writer.NO_VALUE, "text-value");
         mw.close();
-        assertThat(mw.toString(), is("<input type=\"text\" id=\"text-id\" value=\"text-value\">"));
+        assertThat(mw.toString(), is("<input type=\"text\" id=\"text-id\" value=\"text-value\"/>\n"));
     }
 
     @Test
     public void testWriteInput_NoValue() {
         writer.writeInput("text", "text-id", "text-name", HTML5Writer.NO_VALUE);
         mw.close();
-        assertThat(mw.toString(), is("<input type=\"text\" id=\"text-id\" name=\"text-name\">"));
+        assertThat(mw.toString(), is("<input type=\"text\" id=\"text-id\" name=\"text-name\"/>\n"));
     }
 
     @Test
