@@ -1,11 +1,8 @@
-package fi.vincit.jmobster.processor.frameworks.html5;
+package fi.vincit.jmobster.processor.frameworks.configuration;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 public class ModelConfigurationTest {
 
@@ -17,7 +14,7 @@ public class ModelConfigurationTest {
 
         ModelConfiguration.ModelFieldConfigurationImmutable field =
                 configuration.getModelFieldConfiguration(String.class, "test");
-        assertThat(field, notNullValue());
+        Assert.assertThat(field, CoreMatchers.notNullValue());
     }
 
     @Test
@@ -28,7 +25,7 @@ public class ModelConfigurationTest {
 
         ModelConfiguration.ModelFieldConfigurationImmutable field =
                 configuration.getModelFieldConfiguration(Long.class, "test");
-        assertThat(field, nullValue());
+        Assert.assertThat(field, CoreMatchers.nullValue());
     }
 
     @Test
@@ -39,7 +36,7 @@ public class ModelConfigurationTest {
 
         ModelConfiguration.ModelFieldConfigurationImmutable field =
                 configuration.getModelFieldConfiguration(String.class, "test2");
-        assertThat(field, nullValue());
+        Assert.assertThat(field, CoreMatchers.nullValue());
     }
 
     @Test
@@ -50,7 +47,7 @@ public class ModelConfigurationTest {
 
         ModelConfiguration.ModelFieldConfigurationImmutable field =
                 configuration.getModelFieldConfiguration(String.class, "test");
-        assertThat(field, notNullValue());
+        Assert.assertThat(field, CoreMatchers.notNullValue());
     }
 
     @Test
@@ -61,7 +58,7 @@ public class ModelConfigurationTest {
 
         boolean field =
                 configuration.hasConfiguration(String.class, "test");
-        assertThat(field, is(true));
+        Assert.assertThat(field, CoreMatchers.is(true));
     }
 
     @Test
@@ -72,7 +69,7 @@ public class ModelConfigurationTest {
 
         boolean field =
                 configuration.hasConfiguration(Long.class, "test");
-        assertThat(field, is(false));
+        Assert.assertThat(field, CoreMatchers.is(false));
     }
 
     @Test
@@ -83,7 +80,7 @@ public class ModelConfigurationTest {
 
         boolean field =
                 configuration.hasConfiguration(String.class, "test2");
-        assertThat(field, is(false));
+        Assert.assertThat(field, CoreMatchers.is(false));
     }
 
     @Test
@@ -94,7 +91,7 @@ public class ModelConfigurationTest {
 
         boolean field =
                 configuration.hasConfiguration(String.class, "test");
-        assertThat(field, is(true));
+        Assert.assertThat(field, CoreMatchers.is(true));
     }
 
     @Test
@@ -109,8 +106,8 @@ public class ModelConfigurationTest {
         ModelConfiguration.ModelFieldConfigurationImmutable field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
-        assertThat(field1, notNullValue());
-        assertThat(field1.getType(), is("textarea"));
+        Assert.assertThat(field1, CoreMatchers.notNullValue());
+        Assert.assertThat(field1.getType(), CoreMatchers.is("textarea"));
     }
 
     @Test
@@ -125,8 +122,8 @@ public class ModelConfigurationTest {
         ModelConfiguration.ModelFieldConfigurationImmutable field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
-        assertThat(field1, notNullValue());
-        assertThat(field1.getClasses(), is("foo bar"));
+        Assert.assertThat(field1, CoreMatchers.notNullValue());
+        Assert.assertThat(field1.getClasses(), CoreMatchers.is("foo bar"));
     }
 
     @Test
@@ -141,8 +138,8 @@ public class ModelConfigurationTest {
         ModelConfiguration.ModelFieldConfigurationImmutable field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
-        assertThat(field1, notNullValue());
-        assertThat(field1.getName(), is("name"));
+        Assert.assertThat(field1, CoreMatchers.notNullValue());
+        Assert.assertThat(field1.getName(), CoreMatchers.is("name"));
     }
 
     @Test
@@ -157,8 +154,8 @@ public class ModelConfigurationTest {
         ModelConfiguration.ModelFieldConfigurationImmutable field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
-        assertThat(field1, notNullValue());
-        assertThat(field1.useDefaultType(), is(false));
+        Assert.assertThat(field1, CoreMatchers.notNullValue());
+        Assert.assertThat(field1.useDefaultType(), CoreMatchers.is(false));
     }
 
     @Test
@@ -172,8 +169,8 @@ public class ModelConfigurationTest {
         ModelConfiguration.ModelFieldConfigurationImmutable field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
-        assertThat(field1, notNullValue());
-        assertThat(field1.useDefaultType(), is(true));
+        Assert.assertThat(field1, CoreMatchers.notNullValue());
+        Assert.assertThat(field1.useDefaultType(), CoreMatchers.is(true));
     }
 
     @Test
@@ -197,15 +194,15 @@ public class ModelConfigurationTest {
         ModelConfiguration.ModelFieldConfigurationImmutable field2 =
                 configuration.getModelFieldConfiguration(Long.class, "test2");
 
-        assertThat(field1, notNullValue());
-        assertThat(field1.getType(), is("textarea"));
-        assertThat(field1.getClasses(), is("foo hidden"));
-        assertThat(field1.getName(), is("foo"));
+        Assert.assertThat(field1, CoreMatchers.notNullValue());
+        Assert.assertThat(field1.getType(), CoreMatchers.is("textarea"));
+        Assert.assertThat(field1.getClasses(), CoreMatchers.is("foo hidden"));
+        Assert.assertThat(field1.getName(), CoreMatchers.is("foo"));
 
-        assertThat(field2, notNullValue());
-        assertThat(field2.getType(), is("number"));
-        assertThat(field2.getClasses(), is("foo hidden"));
-        assertThat(field2.getName(), is("bar"));
+        Assert.assertThat(field2, CoreMatchers.notNullValue());
+        Assert.assertThat(field2.getType(), CoreMatchers.is("number"));
+        Assert.assertThat(field2.getClasses(), CoreMatchers.is("foo hidden"));
+        Assert.assertThat(field2.getName(), CoreMatchers.is("bar"));
     }
 
     @Test(expected = IllegalStateException.class)

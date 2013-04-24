@@ -1,5 +1,6 @@
 package fi.vincit.jmobster.processor.frameworks.html5;
 
+import fi.vincit.jmobster.processor.frameworks.configuration.ModelConfiguration;
 import fi.vincit.jmobster.processor.languages.html5.BaseHTML5ModelProcessor;
 import fi.vincit.jmobster.processor.languages.html5.writer.HTML5Writer;
 import fi.vincit.jmobster.processor.model.Model;

@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.frameworks.html5;
+package fi.vincit.jmobster.processor.frameworks.configuration;
 
 import java.util.HashMap;
 import java.util.Map;
