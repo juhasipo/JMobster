@@ -12,7 +12,7 @@ public class ModelConfigurationTest {
 
         configuration.model(String.class).field("test").type("textarea");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field =
+        ImmutableModelFieldConfiguration field =
                 configuration.getModelFieldConfiguration(String.class, "test");
         Assert.assertThat(field, CoreMatchers.notNullValue());
     }
@@ -23,7 +23,7 @@ public class ModelConfigurationTest {
 
         configuration.model(String.class).field("test").type("textarea");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field =
+        ImmutableModelFieldConfiguration field =
                 configuration.getModelFieldConfiguration(Long.class, "test");
         Assert.assertThat(field, CoreMatchers.nullValue());
     }
@@ -34,7 +34,7 @@ public class ModelConfigurationTest {
 
         configuration.model(String.class).field("test").type("textarea");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field =
+        ImmutableModelFieldConfiguration field =
                 configuration.getModelFieldConfiguration(String.class, "test2");
         Assert.assertThat(field, CoreMatchers.nullValue());
     }
@@ -45,7 +45,7 @@ public class ModelConfigurationTest {
 
         configuration.model(String.class).field("test");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field =
+        ImmutableModelFieldConfiguration field =
                 configuration.getModelFieldConfiguration(String.class, "test");
         Assert.assertThat(field, CoreMatchers.notNullValue());
     }
@@ -103,7 +103,7 @@ public class ModelConfigurationTest {
                     .field("test")
                     .type("textarea");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+        ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
         Assert.assertThat(field1, CoreMatchers.notNullValue());
@@ -119,7 +119,7 @@ public class ModelConfigurationTest {
                 .field("test")
                 .classes("foo bar");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+        ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
         Assert.assertThat(field1, CoreMatchers.notNullValue());
@@ -135,7 +135,7 @@ public class ModelConfigurationTest {
                 .field("test")
                 .name("name");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+        ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
         Assert.assertThat(field1, CoreMatchers.notNullValue());
@@ -151,7 +151,7 @@ public class ModelConfigurationTest {
                 .field("test")
                 .type("foo");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+        ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
         Assert.assertThat(field1, CoreMatchers.notNullValue());
@@ -166,7 +166,7 @@ public class ModelConfigurationTest {
                 .model(String.class)
                 .field("test");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+        ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
 
         Assert.assertThat(field1, CoreMatchers.notNullValue());
@@ -189,9 +189,9 @@ public class ModelConfigurationTest {
                         .classes("foo hidden")
                         .name("bar");
 
-        ModelConfiguration.ModelFieldConfigurationImmutable field1 =
+        ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
-        ModelConfiguration.ModelFieldConfigurationImmutable field2 =
+        ImmutableModelFieldConfiguration field2 =
                 configuration.getModelFieldConfiguration(Long.class, "test2");
 
         Assert.assertThat(field1, CoreMatchers.notNullValue());

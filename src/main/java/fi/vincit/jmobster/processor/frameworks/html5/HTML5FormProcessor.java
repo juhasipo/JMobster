@@ -1,5 +1,6 @@
 package fi.vincit.jmobster.processor.frameworks.html5;
 
+import fi.vincit.jmobster.processor.frameworks.configuration.ImmutableModelFieldConfiguration;
 import fi.vincit.jmobster.processor.frameworks.configuration.ModelConfiguration;
 import fi.vincit.jmobster.processor.languages.html5.BaseHTML5ModelProcessor;
 import fi.vincit.jmobster.processor.languages.html5.writer.HTML5Writer;
@@ -35,7 +36,7 @@ public class HTML5FormProcessor extends BaseHTML5ModelProcessor {
                 @Override
                 public void process(ModelField item, ItemStatus status) {
                     if( hasConfiguration(model.getModelClass(), item.getName()) ) {
-                        ModelConfiguration.ModelFieldConfigurationImmutable mc =
+                        ImmutableModelFieldConfiguration mc =
                                 configuration.getModelFieldConfiguration(model.getModelClass(), item.getName());
                         String type;
                         if( mc.useDefaultType() ) {
