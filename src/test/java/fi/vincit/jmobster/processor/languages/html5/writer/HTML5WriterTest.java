@@ -76,6 +76,13 @@ public class HTML5WriterTest {
     }
 
     @Test
+    public void testWriteEmptyTagEnd() {
+        writer.writeEmptyTagEnd();
+        mw.close();
+        assertThat(mw.toString(), is("/>\n"));
+    }
+
+    @Test
     public void testWriteEndTag() {
         writer.writeEndTag("test");
         mw.close();

@@ -12,12 +12,17 @@ public class HTML5Writer extends BaseDataWriter<HTML5Writer> {
     private static final char TAG_BODY_START = '<';
     private static final char TAG_BODY_END = '>';
     private static final String TAG_END_BODY_START = "</";
+    private static final String EMPTY_TAG_END = "/>";
 
     private static final String ATTR_START = "=\"";
     private static final char ATTR_END = '"';
 
     private Stack<String> tagNameStack = new Stack<String>();
     private boolean insideTagBody = false;
+
+    public HTML5Writer writeEmptyTagEnd() {
+        return writeLine(EMPTY_TAG_END);
+    }
 
     public static enum FormMethod {
         GET, POST, PUT, DELETE, PATCH, NONE
