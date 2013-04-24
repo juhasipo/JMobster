@@ -8,9 +8,11 @@ public class ModelConfigurationTest {
 
     @Test
     public void testGetModelFieldConfiguration() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration.model(String.class).field("test").type("textarea");
+        ModelConfiguration configuration =
+                Models.configure()
+                    .model(String.class)
+                        .field("test")
+                        .type("textarea");
 
         ImmutableModelFieldConfiguration field =
                 configuration.getModelFieldConfiguration(String.class, "test");
@@ -19,9 +21,10 @@ public class ModelConfigurationTest {
 
     @Test
     public void testGetModelFieldConfiguration_ModelNotFound() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration.model(String.class).field("test").type("textarea");
+        ModelConfiguration configuration = Models.configure()
+                .model(String.class)
+                    .field("test")
+                .type("textarea");
 
         ImmutableModelFieldConfiguration field =
                 configuration.getModelFieldConfiguration(Long.class, "test");
@@ -30,9 +33,10 @@ public class ModelConfigurationTest {
 
     @Test
     public void testGetModelFieldConfiguration_FieldNotFound() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration.model(String.class).field("test").type("textarea");
+        ModelConfiguration configuration = Models.configure()
+                .model(String.class)
+                    .field("test")
+                    .type("textarea");
 
         ImmutableModelFieldConfiguration field =
                 configuration.getModelFieldConfiguration(String.class, "test2");
@@ -41,9 +45,9 @@ public class ModelConfigurationTest {
 
     @Test
     public void testGetModelFieldConfiguration_FieldCalledButNotSetAnything() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration.model(String.class).field("test");
+        ModelConfiguration configuration = Models.configure()
+                .model(String.class)
+                    .field("test");
 
         ImmutableModelFieldConfiguration field =
                 configuration.getModelFieldConfiguration(String.class, "test");
@@ -52,9 +56,10 @@ public class ModelConfigurationTest {
 
     @Test
     public void testHasConfiguration() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration.model(String.class).field("test").type("textarea");
+        ModelConfiguration configuration = Models.configure()
+                .model(String.class)
+                    .field("test")
+                    .type("textarea");
 
         boolean field =
                 configuration.hasConfiguration(String.class, "test");
@@ -63,9 +68,10 @@ public class ModelConfigurationTest {
 
     @Test
     public void testHasConfiguration_ModelNotFound() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration.model(String.class).field("test").type("textarea");
+        ModelConfiguration configuration = Models.configure()
+                .model(String.class)
+                    .field("test")
+                    .type("textarea");
 
         boolean field =
                 configuration.hasConfiguration(Long.class, "test");
@@ -74,9 +80,10 @@ public class ModelConfigurationTest {
 
     @Test
     public void testHasConfiguration_FieldNotFound() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration.model(String.class).field("test").type("textarea");
+        ModelConfiguration configuration = Models.configure()
+                .model(String.class)
+                    .field("test")
+                    .type("textarea");
 
         boolean field =
                 configuration.hasConfiguration(String.class, "test2");
@@ -85,9 +92,9 @@ public class ModelConfigurationTest {
 
     @Test
     public void testHasConfiguration_FieldCalledButNotSetAnything() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration.model(String.class).field("test");
+        ModelConfiguration configuration = Models.configure()
+                .model(String.class)
+                    .field("test");
 
         boolean field =
                 configuration.hasConfiguration(String.class, "test");
@@ -96,9 +103,7 @@ public class ModelConfigurationTest {
 
     @Test
     public void testSetType() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration
+        ModelConfiguration configuration = Models.configure()
                 .model(String.class)
                     .field("test")
                     .type("textarea");
@@ -112,12 +117,10 @@ public class ModelConfigurationTest {
 
     @Test
     public void testSetClasses() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration
+        ModelConfiguration configuration = Models.configure()
                 .model(String.class)
-                .field("test")
-                .classes("foo bar");
+                    .field("test")
+                    .classes("foo bar");
 
         ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
@@ -128,12 +131,10 @@ public class ModelConfigurationTest {
 
     @Test
     public void testSetName() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration
+        ModelConfiguration configuration = Models.configure()
                 .model(String.class)
-                .field("test")
-                .name("name");
+                    .field("test")
+                    .name("name");
 
         ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
@@ -144,12 +145,10 @@ public class ModelConfigurationTest {
 
     @Test
     public void testSetName_DontUseDefaultName() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration
+        ModelConfiguration configuration = Models.configure()
                 .model(String.class)
-                .field("test")
-                .type("foo");
+                    .field("test")
+                    .type("foo");
 
         ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
@@ -160,11 +159,9 @@ public class ModelConfigurationTest {
 
     @Test
     public void testSetNoName_CheckUseDefaultName() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration
+        ModelConfiguration configuration = Models.configure()
                 .model(String.class)
-                .field("test");
+                    .field("test");
 
         ImmutableModelFieldConfiguration field1 =
                 configuration.getModelFieldConfiguration(String.class, "test");
@@ -175,9 +172,7 @@ public class ModelConfigurationTest {
 
     @Test
     public void testSetTypeAndClassesAndName_TwoModels() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration
+        ModelConfiguration configuration = Models.configure()
                 .model(String.class)
                     .field("test")
                         .type("textarea")
@@ -207,9 +202,7 @@ public class ModelConfigurationTest {
 
     @Test(expected = IllegalStateException.class)
     public void testNoFieldAfterModel() {
-        ModelConfiguration configuration = new ModelConfiguration();
-
-        configuration
+        ModelConfiguration configuration = Models.configure()
                 .model(String.class)
                     .field("test")
                         .type("textarea")
@@ -220,7 +213,7 @@ public class ModelConfigurationTest {
 
     @Test(expected = IllegalStateException.class)
     public void testNoModelSet() {
-        ModelConfiguration configuration = new ModelConfiguration();
+        ModelConfiguration configuration = Models.configure();
 
         configuration.field("test");
     }
