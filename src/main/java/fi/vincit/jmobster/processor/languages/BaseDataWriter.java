@@ -93,4 +93,7 @@ public abstract class BaseDataWriter<T extends DataWriter> implements DataWriter
         return writer.toString();
     }
 
+    @Override
+    public void clear() {
+    }
 }

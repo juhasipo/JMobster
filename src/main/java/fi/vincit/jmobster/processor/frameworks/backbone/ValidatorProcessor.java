@@ -102,7 +102,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
     }
 
     @Override
-    public void processModel( Model model, ItemStatus status ) {
+    public void processModel(Model model, ItemStatus status) {
         ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
             @Override
             public void process( ModelField field, ItemStatus status ) {

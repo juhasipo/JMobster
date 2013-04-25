@@ -24,7 +24,6 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.TestUtil;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
-import fi.vincit.jmobster.util.writer.DataWriter;
 import org.junit.Test;
 import org.mockito.InOrder;
 
@@ -47,9 +46,9 @@ public class DefaultModelGeneratorTest {
         modelGenerator.processAll(new ArrayList<Model>());
 
         InOrder mpInOrder = inOrder(modelProcessor);
-        mpInOrder.verify(modelProcessor, times(1)).startProcessing(ItemStatuses.firstAndLast());
-        mpInOrder.verify(modelProcessor, times(1)).endProcessing(ItemStatuses.firstAndLast());
-        verify( modelProcessor, never() ).processModel( any( Model.class ), any( ItemStatus.class ) );
+        mpInOrder.verify(modelProcessor, times(1)).doStartProcessing(ItemStatuses.firstAndLast());
+        mpInOrder.verify(modelProcessor, times(1)).doEndProcessing(ItemStatuses.firstAndLast());
+        verify( modelProcessor, never() ).doProcessModel(any(Model.class), any(ItemStatus.class));
     }
 
     @Test
@@ -62,9 +61,9 @@ public class DefaultModelGeneratorTest {
         modelGenerator.processAll( TestUtil.collectionFromObjects( testModel1, testModel2 ) );
 
         InOrder mpInOrder = inOrder( modelProcessor );
-        mpInOrder.verify(modelProcessor, times(1)).startProcessing( ItemStatuses.firstAndLast() );
-        mpInOrder.verify(modelProcessor, times(2)).processModel( any( Model.class ), any( ItemStatus.class ) );
-        mpInOrder.verify(modelProcessor, times(1)).endProcessing( ItemStatuses.firstAndLast() );
+        mpInOrder.verify(modelProcessor, times(1)).doStartProcessing(ItemStatuses.firstAndLast());
+        mpInOrder.verify(modelProcessor, times(2)).doProcessModel(any(Model.class), any(ItemStatus.class));
+        mpInOrder.verify(modelProcessor, times(1)).doEndProcessing(ItemStatuses.firstAndLast());
     }
 
     @Test
@@ -76,9 +75,9 @@ public class DefaultModelGeneratorTest {
         modelGenerator.process( testModel1 );
 
         InOrder mpInOrder = inOrder( modelProcessor );
-        mpInOrder.verify(modelProcessor).startProcessing( ItemStatuses.firstAndLast() );
-        mpInOrder.verify(modelProcessor).processModel( eq(testModel1), eq(ItemStatuses.firstAndLast()) );
-        mpInOrder.verify(modelProcessor).endProcessing( ItemStatuses.firstAndLast() );
+        mpInOrder.verify(modelProcessor).doStartProcessing(ItemStatuses.firstAndLast());
+        mpInOrder.verify(modelProcessor).doProcessModel(eq(testModel1), eq(ItemStatuses.firstAndLast()));
+        mpInOrder.verify(modelProcessor).doEndProcessing(ItemStatuses.firstAndLast());
     }
 
     @Test

@@ -36,7 +36,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
     public void testStartProcessing() throws Exception {
         ModelProcessor processor = createProcessor();
 
-        processor.startProcessing(ItemStatuses.firstAndLast());
+        processor.doStartProcessing(ItemStatuses.firstAndLast());
 
         assertThat(writer.toString(), is("{\n"
         ));
@@ -47,7 +47,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         BackboneModelProcessor processor = createProcessor();
         processor.setNamespaceName("Foo");
 
-        processor.startProcessing(ItemStatuses.firstAndLast());
+        processor.doStartProcessing(ItemStatuses.firstAndLast());
 
         assertThat(writer.toString(), is("{\n"));
     }
@@ -57,7 +57,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         BackboneModelProcessor processor = createProcessor();
         processor.setStartComment("/* Foo */");
 
-        processor.startProcessing(ItemStatuses.firstAndLast());
+        processor.doStartProcessing(ItemStatuses.firstAndLast());
 
         assertThat(writer.toString(), is("{\n"));
     }
@@ -66,7 +66,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
     public void testEndProcessing() throws Exception {
         ModelProcessor processor = createProcessor();
         jsWriter.setLenientMode(true);
-        processor.endProcessing(ItemStatuses.firstAndLast());
+        processor.doEndProcessing(ItemStatuses.firstAndLast());
 
         assertThat(writer.toString(), is("}\n"));
         assertThat(writer.isOpen(), is(false));
@@ -77,7 +77,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         ModelProcessor processor = createProcessor();
 
         Model model = mockModel();
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
 
         assertThat(writer.toString(), is(
                 "\"TestModel\": {\n" +
@@ -94,7 +94,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         ModelProcessor processor = createProcessor();
 
         Model model = mockModel();
-        processor.processModel(model, ItemStatuses.notFirstNorLast());
+        processor.doProcessModel(model, ItemStatuses.notFirstNorLast());
 
         assertThat(writer.toString(), is(
                 "\"TestModel\": {\n" +
@@ -111,7 +111,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         ModelProcessor processor = createProcessor();
 
         Model model = mockModel();
-        processor.processModel(model, ItemStatuses.last());
+        processor.doProcessModel(model, ItemStatuses.last());
 
         assertThat(writer.toString(), is(
                 "\"TestModel\": {\n" +

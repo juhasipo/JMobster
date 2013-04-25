@@ -55,7 +55,7 @@ public class ValidatorProcessorTest {
     public void testStartProcessingFirst() throws Exception {
         ValidatorProcessor processor = createProcessor();
 
-        processor.startProcessing(ItemStatuses.first());
+        processor.doStartProcessing(ItemStatuses.first());
 
         assertThat(writer.toString(), is("{\n"));
     }
@@ -64,7 +64,7 @@ public class ValidatorProcessorTest {
     public void testStartProcessingLast() throws Exception {
         ValidatorProcessor processor = createProcessor();
 
-        processor.startProcessing(ItemStatuses.last());
+        processor.doStartProcessing(ItemStatuses.last());
 
         assertThat(writer.toString(), is("{\n"));
     }
@@ -73,7 +73,7 @@ public class ValidatorProcessorTest {
     public void testEndProcessingFirst() throws Exception {
         ValidatorProcessor processor = createProcessor();
 
-        processor.endProcessing(ItemStatuses.first());
+        processor.doEndProcessing(ItemStatuses.first());
 
         assertThat(writer.toString(), is("},\n"));
     }
@@ -82,7 +82,7 @@ public class ValidatorProcessorTest {
     public void testEndProcessingLast() throws Exception {
         ValidatorProcessor processor = createProcessor();
 
-        processor.endProcessing(ItemStatuses.last());
+        processor.doEndProcessing(ItemStatuses.last());
 
         assertThat(writer.toString(), is("}\n"));
     }
@@ -102,7 +102,7 @@ public class ValidatorProcessorTest {
         when(model.getFields()).thenReturn(fields);
         mockFieldValueConverter();
 
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
 
         assertThat(writer.toString(), is(
                 "field1: {\n" +
@@ -133,7 +133,7 @@ public class ValidatorProcessorTest {
 
         mockValidators("Foo: bar");
 
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
 
         assertThat(writer.toString(), is(
                 "field1: {\n" +
@@ -166,7 +166,7 @@ public class ValidatorProcessorTest {
 
         mockValidators("validator1: test1,\n", "    validator2: test2,\n", "    validator3: test3");
 
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
 
         assertThat(writer.toString(), is(
                 "field1: {\n" +

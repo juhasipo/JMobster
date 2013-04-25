@@ -64,6 +64,13 @@ public interface DataWriter {
     DataWriter writeLine( String modelStringLine, String separator, boolean writeSeparator );
 
     /**
+     * Clears the whole data writer if possible.
+     * If not possible, does nothing. E.g. {@link StringBufferWriter}
+     * can be cleared while {@link FileDataWriter} cannot be cleared.
+     */
+    void clear();
+
+    /**
      * Close the stream and file if necessary.
      */
     void close();

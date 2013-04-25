@@ -53,7 +53,7 @@ public class BackboneModelProcessorBuilderTest {
                 .setValueConverter(valueConverter)
                 .useDefaultModelProcessors()
                 .build();
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class BackboneModelProcessorBuilderTest {
                 .setValueConverter(valueConverter)
                 .setModelProcessors(validatorProcessor)
                 .build();
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class BackboneModelProcessorBuilderTest {
                 .setModelProcessors(validatorProcessor, valueProcessor)
                 .build();
 
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
 
         verify(validatorProcessor).setLanguageContext(context);
         verify(valueProcessor).setLanguageContext(context);
@@ -87,6 +87,6 @@ public class BackboneModelProcessorBuilderTest {
                 .Builder(writer, OutputMode.JAVASCRIPT)
                 .build();
 
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
     }
 }

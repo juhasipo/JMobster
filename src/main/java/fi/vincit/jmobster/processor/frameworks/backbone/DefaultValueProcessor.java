@@ -79,7 +79,7 @@ public class DefaultValueProcessor extends BaseJavaScriptModelProcessor {
     }
 
     @Override
-    public void processModel( Model model, ItemStatus status ) {
+    public void processModel(Model model, ItemStatus status) {
         getWriter().write( RETURN_BLOCK ).startBlock();
         ItemProcessor.process( model.getFields() ).with(new ItemHandler<ModelField>() {
             @Override

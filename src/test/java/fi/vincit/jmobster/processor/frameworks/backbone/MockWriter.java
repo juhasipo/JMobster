@@ -96,4 +96,8 @@ class MockWriter implements DataWriter {
     @Override
     public void setLineSeparator(String lineSeparator) {
     }
+
+    @Override
+    public void clear() {
+    }
 }

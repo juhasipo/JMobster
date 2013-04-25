@@ -19,8 +19,11 @@ package fi.vincit.jmobster.processor.defaults.base;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.languages.LanguageContext;
+import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +32,7 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
     private C context;
     private FieldValueConverter valueConverter;
     private String name;
+    private boolean clearWriterBeforeProcessing;
 
     final private List<ModelProcessor<C, W>> modelProcessors = new ArrayList<ModelProcessor<C, W>>();
 
@@ -48,6 +52,10 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
         return context.getWriter();
     }
 
+    protected C getContext() {
+        return context;
+    }
+
     protected FieldValueConverter getValueConverter() {
         return valueConverter;
     }
@@ -58,10 +66,6 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
         for( ModelProcessor<C, W> modelProcessor : modelProcessors ) {
             modelProcessor.setLanguageContext(this.context);
         }
-    }
-
-    protected C getContext() {
-        return context;
     }
 
     @Override
@@ -86,4 +90,30 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
     protected Collection<ModelProcessor<C, W>> getModelProcessors() {
         return modelProcessors;
     }
+
+    public void setClearWriterBeforeProcessing(boolean clearWriterBeforeProcessing) {
+        this.clearWriterBeforeProcessing = clearWriterBeforeProcessing;
+    }
+
+    @Override
+    public void doStartProcessing(ItemStatus status) throws IOException {
+        if( clearWriterBeforeProcessing ) {
+            getWriter().clear();
+        }
+        startProcessing(status);
+    }
+
+    @Override
+    public void doProcessModel(Model model, ItemStatus status) {
+        processModel(model, status);
+    }
+
+    @Override
+    public void doEndProcessing(ItemStatus status) throws IOException {
+        endProcessing(status);
+    }
+
+    protected abstract void processModel( Model model, ItemStatus status );
+    protected abstract void startProcessing(ItemStatus status) throws IOException;
+    protected abstract void endProcessing(ItemStatus status) throws IOException;
 }

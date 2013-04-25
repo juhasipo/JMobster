@@ -43,4 +43,6 @@ public class StringBufferWriter extends StreamDataWriter {
     public void clear() {
         this.outputStream.reset();
     }
+
+
 }

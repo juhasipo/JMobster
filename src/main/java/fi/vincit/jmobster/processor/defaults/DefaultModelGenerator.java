@@ -22,7 +22,7 @@ import java.util.Collection;
  * </p>
  * <p>
  *     If uncaught IOExceptions are caught, the model processing will be terminated.
- *  {@link fi.vincit.jmobster.processor.ModelProcessor#endProcessing(ItemStatus)}
+ *  {@link fi.vincit.jmobster.processor.ModelProcessor#doEndProcessing(ItemStatus)}
  *  is not called in those cases (of unless the exception was thrown from that method).
  *  The error will be logged (level: Error).
  * </p>
@@ -66,14 +66,14 @@ public class DefaultModelGenerator<W extends DataWriter> implements ModelGenerat
      */
     private void processModelsInternal( Collection<Model> models ) {
         try {
-            modelProcessor.startProcessing(ItemStatuses.firstAndLast());
+            modelProcessor.doStartProcessing(ItemStatuses.firstAndLast());
             ItemProcessor.process(models).with(new ItemHandler<Model>() {
                 @Override
                 public void process( Model model, ItemStatus status ) {
-                    modelProcessor.processModel( model, status );
+                    modelProcessor.doProcessModel(model, status);
                 }
             });
-            modelProcessor.endProcessing(ItemStatuses.firstAndLast());
+            modelProcessor.doEndProcessing(ItemStatuses.firstAndLast());
         } catch (IOException e) {
             LOG.error("Error", e);
         }

@@ -69,10 +69,10 @@ public abstract class BaseBackboneModelProcessorTest {
         };
         doAnswer(writeEmptyBlock)
                 .when(validatorProcessor)
-                .processModel(any(Model.class), any(ItemStatus.class));
+                .doProcessModel(any(Model.class), any(ItemStatus.class));
         doAnswer(writeEmptyBlock)
                 .when(valueProcessor)
-                .processModel(any(Model.class), any(ItemStatus.class));
+                .doProcessModel(any(Model.class), any(ItemStatus.class));
     }
 
     protected Model mockModel() {

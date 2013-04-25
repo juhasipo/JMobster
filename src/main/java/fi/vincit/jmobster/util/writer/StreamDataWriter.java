@@ -56,6 +56,10 @@ public abstract class StreamDataWriter implements DataWriter {
         }
     }
 
+    @Override
+    public void clear() {
+    }
+
     private void initDone() {
         isOpen = true;
     }

@@ -85,4 +85,8 @@ public class DummyDataWriter implements DataWriter {
     public DataWriter write(char c) {
         return this;
     }
+
+    @Override
+    public void clear() {
+    }
 }

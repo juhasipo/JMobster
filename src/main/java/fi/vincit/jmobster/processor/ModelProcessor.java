@@ -32,7 +32,7 @@ public interface ModelProcessor<C extends LanguageContext<W>, W extends DataWrit
      * @status Item status
      * @throws IOException If something goes wrong with writing the data
      */
-    void startProcessing(ItemStatus status) throws IOException;
+    void doStartProcessing(ItemStatus status) throws IOException;
 
     /**
      * Called exactly once for each model once in the order the models
@@ -40,14 +40,14 @@ public interface ModelProcessor<C extends LanguageContext<W>, W extends DataWrit
      * @param model Model to process
      * @param status Item status
      */
-    void processModel( Model model, ItemStatus status );
+    void doProcessModel(Model model, ItemStatus status);
 
     /**
      * Called when the last model has been processed.
      * @status Item status
      * @throws IOException If something goes wrong with writing the data
      */
-    void endProcessing(ItemStatus status) throws IOException;
+    void doEndProcessing(ItemStatus status) throws IOException;
 
     void setFieldValueConverter(FieldValueConverter valueConverter);
 

@@ -90,13 +90,16 @@ public class TestMain {
                             new ValidatorProcessor.Builder().build()
                     )
                     .build();
+        backboneModelProcessor.setClearWriterBeforeProcessing(true);
         ModelGenerator generator = JMobsterFactory.getModelGenerator( backboneModelProcessor );
 
         System.out.print("Press any key to start generating models");
         //System.in.read();
         System.out.println("Generate models");
         // Generate models
-        generator.processAll( models );
+        for( Model model : models ) {
+            generator.process( model );
+        }
 
         System.out.println(modelWriter.toString());
         System.out.println(" - Done");

@@ -63,4 +63,9 @@ public class FileDataWriter extends StreamDataWriter {
     public String getPath() {
         return this.path;
     }
+
+    @Override
+    public void clear() {
+        // No-op - can't clear a file
+    }
 }

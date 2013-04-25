@@ -51,7 +51,7 @@ public class DefaultValueProcessorTest {
     public void testStartProcessingFirst() throws Exception {
         DefaultValueProcessor processor = createProcessor();
 
-        processor.startProcessing(ItemStatuses.first());
+        processor.doStartProcessing(ItemStatuses.first());
 
         assertThat(writer.toString(), is("function() {\n"));
     }
@@ -60,7 +60,7 @@ public class DefaultValueProcessorTest {
     public void testStartProcessingMiddle() throws Exception {
         DefaultValueProcessor processor = createProcessor();
 
-        processor.startProcessing(ItemStatuses.notFirstNorLast());
+        processor.doStartProcessing(ItemStatuses.notFirstNorLast());
 
         assertThat(writer.toString(), is("function() {\n"));
     }
@@ -69,7 +69,7 @@ public class DefaultValueProcessorTest {
     public void testStartProcessingLast() throws Exception {
         DefaultValueProcessor processor = createProcessor();
 
-        processor.startProcessing(ItemStatuses.last());
+        processor.doStartProcessing(ItemStatuses.last());
 
         assertThat(writer.toString(), is("function() {\n"));
     }
@@ -78,7 +78,7 @@ public class DefaultValueProcessorTest {
     public void testEndProcessingFirst() throws Exception {
         DefaultValueProcessor processor = createProcessor();
 
-        processor.endProcessing(ItemStatuses.first());
+        processor.doEndProcessing(ItemStatuses.first());
 
         assertThat(writer.toString(), is("},\n"));
     }
@@ -87,7 +87,7 @@ public class DefaultValueProcessorTest {
     public void testEndProcessingMiddle() throws Exception {
         DefaultValueProcessor processor = createProcessor();
 
-        processor.endProcessing(ItemStatuses.notFirstNorLast());
+        processor.doEndProcessing(ItemStatuses.notFirstNorLast());
 
         assertThat(writer.toString(), is("},\n"));
     }
@@ -96,7 +96,7 @@ public class DefaultValueProcessorTest {
     public void testEndProcessingLast() throws Exception {
         DefaultValueProcessor processor = createProcessor();
 
-        processor.endProcessing(ItemStatuses.last());
+        processor.doEndProcessing(ItemStatuses.last());
 
         assertThat(writer.toString(), is("}\n"));
     }
@@ -116,7 +116,7 @@ public class DefaultValueProcessorTest {
         when(model.getFields()).thenReturn(fields);
         mockFieldValueConverter();
 
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
 
         assertThat(writer.toString(), is(
                 "return {\n" +
@@ -146,7 +146,7 @@ public class DefaultValueProcessorTest {
         when(model.getFields()).thenReturn(fields);
         mockFieldValueConverter();
 
-        processor.processModel(model, ItemStatuses.first());
+        processor.doProcessModel(model, ItemStatuses.first());
 
         assertThat(writer.toString(), is(
                 "return {\n" +
@@ -177,7 +177,7 @@ public class DefaultValueProcessorTest {
         when(model.getFields()).thenReturn(fields);
         mockFieldValueConverter();
 
-        processor.processModel(model, ItemStatuses.last());
+        processor.doProcessModel(model, ItemStatuses.last());
 
         assertThat(writer.toString(), is(
                 "return {\n" +

@@ -74,10 +74,6 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
         }
     }
 
-    private OutputMode getOutputMode() {
-        return this.getContext().getOutputMode();
-    }
-
     public static class Builder {
         private JavaScriptContext context;
         private FieldValueConverter valueConverter;
@@ -130,7 +126,7 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
     @Override
     public void startProcessing(ItemStatus status) throws IOException {
         LOG.trace( "Starting to process models" );
-        if( getOutputMode() == OutputMode.JAVASCRIPT) {
+        if( getContext().getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().writeComment(startComment);
             getWriter().writeVariable(namespaceName, "", JavaScriptWriter.VariableType.BLOCK);
         } else {
@@ -143,7 +139,7 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
     public void processModel( final Model model, ItemStatus status ) {
         LOG.trace("Processing model: {}", model.toString());
         String modelName = model.getName();
-        if( getOutputMode() == OutputMode.JAVASCRIPT) {
+        if( getContext().getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().write(modelName).writeKey("").startFunctionCallBlock(BACKBONE_MODEL_EXTEND);
         } else {
             getWriter().writeKey( modelName ).startBlock();
@@ -158,7 +154,7 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
                 });
 
         getWriter().indentBack();
-        if( getOutputMode() == OutputMode.JAVASCRIPT) {
+        if( getContext().getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().endFunctionCallBlock(status);
         } else {
             getWriter().endBlock(status);
@@ -168,9 +164,9 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
     private void writeSection(String sectionName, Model model, ModelProcessor processor, ItemStatus position) {
         try {
             getWriter().writeKey( sectionName );
-            processor.startProcessing(position);
-            processor.processModel(model, position);
-            processor.endProcessing(position);
+            processor.doStartProcessing(position);
+            processor.doProcessModel(model, position);
+            processor.doEndProcessing(position);
         } catch( IOException e ) {
             LOG.error("Error while processing section "+sectionName, e);
         }
@@ -180,7 +176,7 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing(ItemStatus status) throws IOException {
         getWriter().indentBack();
-        if( getOutputMode() == OutputMode.JAVASCRIPT) {
+        if( getContext().getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().endBlockStatement();
         } else {
             getWriter().endBlock(ItemStatuses.last());
