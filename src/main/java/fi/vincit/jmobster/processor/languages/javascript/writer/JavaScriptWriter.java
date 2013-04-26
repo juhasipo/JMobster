@@ -113,6 +113,7 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
      * @return Writer itself for chaining writes
      */
     private JavaScriptWriter writeFunctionArgsAndStartBlock(String name, String... arguments) {
+        ++functionsOpen;
         startFunctionCall(name);
         ItemHandler<String> argumentProcessor = new ItemHandler<String>() {
             @Override

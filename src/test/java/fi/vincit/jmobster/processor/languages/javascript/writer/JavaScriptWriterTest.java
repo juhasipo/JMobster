@@ -465,4 +465,13 @@ public class JavaScriptWriterTest {
         writer.endFunctionCallBlock(ItemStatuses.notFirstNorLast());
         writer.close();
     }
+
+    @Test
+    public void testFoo() {
+        writer.startAnonFunction();
+        writer.endFunction(ItemStatuses.last());
+        writer.close();
+
+        assertThat("function() {\n}\n", is(mw.toString()));
+    }
 }

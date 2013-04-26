@@ -50,7 +50,7 @@ public class TestMain {
                 .build();
 
         System.out.println("Generate test classes");
-        final int n = 1000;
+        final int n = 1;
         Collection<Class> classesToConvert = new ArrayList<Class>(n);
         for( int i = 0; i < n; ++i ) {
             if( i % 2 == 0 ) {
