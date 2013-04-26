@@ -19,8 +19,6 @@ package fi.vincit.jmobster.processor;
 import fi.vincit.jmobster.processor.defaults.validator.ValidatorConstructor;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.combination.OptionalTypes;
-import fi.vincit.jmobster.util.combination.RequiredTypes;
 
 import java.util.Collection;
 import java.util.List;
@@ -45,10 +43,8 @@ public interface ValidatorFactory {
     void setValidator(ValidatorConstructor validatorConstructor);
 
     /**
-     * Configures validator constructor for given type
-     * @param validatorClass Validator class
-     * @param requiredTypes Required annotations
-     * @param optionalTypes Optional annotations
+     * Adds new validators to the factory
+     * @param validatorClasses Validator classes to set
      */
-    void setValidator(Class validatorClass, RequiredTypes requiredTypes, OptionalTypes optionalTypes);
+    void setValidator(Class... validatorClasses);
 }

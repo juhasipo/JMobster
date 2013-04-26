@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -45,6 +44,15 @@ import java.util.*;
  * every required method parameter is found from the given annotation
  * bag. Optional parameters can be given with {@link Optional} generic
  * parameter.
+ *
+ * If the validator doesn't require any parameters the required validators
+ * can be given to the class with {@link fi.vincit.jmobster.annotation.RequiresAnnotations}
+ * annotation.
+ *
+ * It is important to give either init method parameters or
+ * {@link fi.vincit.jmobster.annotation.RequiresAnnotations} annotation.
+ * Otherwise the validator won't appear since it can't be associated
+ * to any validator.
  *
  * An annotation is used instead of constructor because this way allows
  * the BaseValidator class to initialize the object in constructor and
@@ -129,24 +137,10 @@ public abstract class BaseValidator implements Validator {
         }
     }
 
-    private ParamType resolveParamType(Type type) {
-        if( type instanceof ParameterizedType ) {
-            ParameterizedType parameterizedType = (ParameterizedType)type;
-            if( parameterizedType.getRawType().equals(Optional.class) ) {
-                Class<?> paramType = CastUtil.castGenericTypeToClass(type);
-                return new ParamType(paramType, ParamType.Type.OPTIONAL);
-            } else {
-                throw new IllegalArgumentException("Invalid generic parameter type. Optional or Annotation expected.");
-            }
-        } else {
-            return new ParamType((Class)type, ParamType.Type.REQUIRED);
-        }
-    }
-
     private int collectParams(AnnotationBag annotations, Type[] paramTypes, Object[] params) {
         int numberFound = 0;
         for( int i = 0; i < paramTypes.length; ++i ) {
-            ParamType type = resolveParamType(paramTypes[i]);
+            CastUtil.ParamType type = CastUtil.resolveParamType(paramTypes[i]);
             if( type.isOfType(Annotation.class) ) {
                 // Now we know that the paramType is an Annotation
                 // We can cast it to correct type of class type
@@ -156,7 +150,7 @@ public abstract class BaseValidator implements Validator {
                 // Only add as found, if the annotation is actually found.
                 // Ensures that init methods are always called with non null values.
                 Annotation annotation = annotations.getAnnotation(annotationType);
-                if( annotation != null || type.isOptional ) {
+                if( annotation != null || type.isOptional() ) {
                     params[i] = type.toParameter(annotation);
                     ++numberFound;
                 }
@@ -187,39 +181,4 @@ public abstract class BaseValidator implements Validator {
         this.type = type;
     }
 
-
-
-    private static class ParamType {
-        public static enum Type {
-            OPTIONAL,
-            REQUIRED
-        }
-        private Class type;
-        private boolean isOptional;
-
-        private ParamType(Class paramType, Type type) {
-            this.type = paramType;
-            isOptional = type == Type.OPTIONAL;
-        }
-
-        public Class getType() {
-            return type;
-        }
-
-        public boolean isOptional() {
-            return isOptional;
-        }
-
-        public Object toParameter(Annotation annotation) {
-            if( isOptional ) {
-                return new Optional(annotation);
-            } else {
-                return annotation;
-            }
-        }
-
-        public boolean isOfType(Class clazz) {
-            return clazz.isAssignableFrom(type);
-        }
-    }
 }

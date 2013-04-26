@@ -16,6 +16,9 @@ package fi.vincit.jmobster.util.reflection;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.util.Optional;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
@@ -33,6 +36,54 @@ public class CastUtil {
             }
         } else {
             return (Class)genericType;
+        }
+    }
+
+    public static class ParamType {
+        public static enum Type {
+            OPTIONAL,
+            REQUIRED
+        }
+        private Class type;
+        private boolean isOptional;
+
+        private ParamType(Class paramType, Type type) {
+            this.type = paramType;
+            isOptional = type == Type.OPTIONAL;
+        }
+
+        public Class getType() {
+            return type;
+        }
+
+        public boolean isOptional() {
+            return isOptional;
+        }
+
+        public Object toParameter(Annotation annotation) {
+            if( isOptional ) {
+                return new Optional(annotation);
+            } else {
+                return annotation;
+            }
+        }
+
+        public boolean isOfType(Class clazz) {
+            return clazz.isAssignableFrom(type);
+        }
+    }
+
+    public static ParamType resolveParamType(Type type) {
+        if( type instanceof ParameterizedType ) {
+            ParameterizedType parameterizedType = (ParameterizedType)type;
+            if( parameterizedType.getRawType().equals(Optional.class) ) {
+                Class<?> paramType = CastUtil.castGenericTypeToClass(type);
+                return new ParamType(paramType, ParamType.Type.OPTIONAL);
+            } else {
+                throw new IllegalArgumentException("Invalid generic parameter type. Optional or Annotation expected.");
+            }
+        } else {
+            return new ParamType((Class)type, ParamType.Type.REQUIRED);
         }
     }
 }

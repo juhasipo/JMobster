@@ -1,22 +1,24 @@
 package fi.vincit.jmobster.processor.defaults.validator;
 
+import fi.vincit.jmobster.annotation.InitMethod;
+import fi.vincit.jmobster.annotation.RequiresAnnotations;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.AbstractAnnotation;
-import fi.vincit.jmobster.util.collection.AnnotationBag;
+import fi.vincit.jmobster.util.Optional;
 import fi.vincit.jmobster.util.TestUtil;
-import fi.vincit.jmobster.util.combination.OptionalTypes;
-import fi.vincit.jmobster.util.combination.RequiredTypes;
+import fi.vincit.jmobster.util.collection.AnnotationBag;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ValidatorConstructorTest {
     public static class TestValidator extends BaseValidator {
-        static private int initCalled;
+        static protected int initCalled;
 
-        public TestValidator() {}
+    public TestValidator() {}
 
         @Override
         public void init( AnnotationBag annotationBag ) {
@@ -63,10 +65,32 @@ public class ValidatorConstructorTest {
     public static class Type1 extends AbstractAnnotation {}
     public static class Type2 extends AbstractAnnotation {}
 
+    public static class OneRequired extends TestValidator {
+        @InitMethod
+        public void init(Type1 required1) {
+        }
+    }
+
+    public static class TwoRequired extends TestValidator {
+        @InitMethod
+        public void init(Type1 required1, Type2 required2) {
+        }
+    }
+
+    public static class OnlyOptional extends TestValidator {
+        @InitMethod
+        public void init(Optional<Type1> optional1) {
+        }
+    }
+
+    @RequiresAnnotations(Type1.class)
+    public static class NoParameters extends TestValidator {
+    }
+
     @Test
-    public void testInitValidatorConstructor() throws Exception {
+    public void testInitValidatorConstructor_OnlyRequired() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(TestValidator.class, RequiredTypes.get(Type1.class), OptionalTypes.get());
+        ValidatorConstructor constructor = new ValidatorConstructor(OneRequired.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type1.class);
@@ -77,9 +101,39 @@ public class ValidatorConstructorTest {
     }
 
     @Test
-    public void testInitValidatorConstructorOnlyOptional() throws Exception {
+    public void testInitValidatorConstructor_TwoRequired_OneGiven() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(TestValidator.class, RequiredTypes.get(), OptionalTypes.get(Type1.class));
+        ValidatorConstructor constructor = new ValidatorConstructor(TwoRequired.class);
+
+        FieldAnnotation annotation = mock(FieldAnnotation.class);
+        when(annotation.getType()).thenReturn(Type1.class);
+        Validator validatorOut = constructor.construct( TestUtil.collectionFromObjects(annotation) );
+
+        assertNull(validatorOut);
+        assertEquals( TestValidator.initCalled(), 0 );
+    }
+
+
+
+    @Test
+    public void testInitValidatorConstructorOnlyOptional() throws Exception {
+
+        TestValidator.resetCalls();
+        ValidatorConstructor constructor = new ValidatorConstructor(OnlyOptional.class);
+
+        FieldAnnotation annotation = mock(FieldAnnotation.class);
+        when(annotation.getType()).thenReturn(Type1.class);
+        Validator validatorOut = constructor.construct( TestUtil.collectionFromObjects(annotation) );
+
+        assertNotNull(validatorOut);
+        assertEquals( TestValidator.initCalled(), 1 );
+    }
+
+    @Test
+    public void testInitValidatorConstructorNoValidatorInInitMethod() throws Exception {
+
+        TestValidator.resetCalls();
+        ValidatorConstructor constructor = new ValidatorConstructor(NoParameters.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type1.class);
@@ -92,7 +146,7 @@ public class ValidatorConstructorTest {
     @Test
     public void testInitValidatorConstructorOnlyOptionalDontGenerate() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(TestValidator.class, RequiredTypes.get(), OptionalTypes.get(Type2.class));
+        ValidatorConstructor constructor = new ValidatorConstructor(TestValidator.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type1.class);
@@ -105,7 +159,7 @@ public class ValidatorConstructorTest {
     @Test
     public void testInitValidatorConstructorNotFound() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(TestValidator.class, RequiredTypes.get(Type1.class), OptionalTypes.get());
+        ValidatorConstructor constructor = new ValidatorConstructor(TestValidator.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type2.class);
@@ -118,7 +172,7 @@ public class ValidatorConstructorTest {
     @Test
     public void testPrivateConstructor() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(PrivateConstructorValidator.class, RequiredTypes.get(Type1.class), OptionalTypes.get());
+        ValidatorConstructor constructor = new ValidatorConstructor(PrivateConstructorValidator.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type1.class);
@@ -130,7 +184,7 @@ public class ValidatorConstructorTest {
     @Test
     public void testInvalidConstructor() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(InvalidConstructorValidator.class, RequiredTypes.get(Type1.class), OptionalTypes.get());
+        ValidatorConstructor constructor = new ValidatorConstructor(InvalidConstructorValidator.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type1.class);
@@ -142,7 +196,7 @@ public class ValidatorConstructorTest {
     @Test
     public void testConstructorThrowsRuntimeException() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(ConstructorThrowsValidator.class, RequiredTypes.get(Type1.class), OptionalTypes.get());
+        ValidatorConstructor constructor = new ValidatorConstructor(ConstructorThrowsValidator.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type1.class);
@@ -154,7 +208,7 @@ public class ValidatorConstructorTest {
     @Test
     public void testInitThrowsRuntimeException() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(InitThrowsValidator.class, RequiredTypes.get(Type1.class), OptionalTypes.get());
+        ValidatorConstructor constructor = new ValidatorConstructor(InitThrowsValidator.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type1.class);
@@ -166,7 +220,7 @@ public class ValidatorConstructorTest {
     @Test
     public void testAbstractValidator() throws Exception {
         TestValidator.resetCalls();
-        ValidatorConstructor constructor = new ValidatorConstructor(AbstractClassValidator.class, RequiredTypes.get(Type1.class), OptionalTypes.get());
+        ValidatorConstructor constructor = new ValidatorConstructor(AbstractClassValidator.class);
 
         FieldAnnotation annotation = mock(FieldAnnotation.class);
         when(annotation.getType()).thenReturn(Type1.class);

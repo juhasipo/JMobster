@@ -16,22 +16,32 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.annotation.InitMethod;
+import fi.vincit.jmobster.annotation.RequiresAnnotations;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.collection.AnnotationBag;
 import fi.vincit.jmobster.util.combination.CombinationManager;
 import fi.vincit.jmobster.util.combination.OptionalTypes;
 import fi.vincit.jmobster.util.combination.RequiredTypes;
+import fi.vincit.jmobster.util.reflection.CastUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>
  *     Constructs validator instance of configured type. The class will
- * initialize the constructed validator with correct parameters.
+ * initialize the constructed validator with correct parameters. The required and
+ * optional parameters are determined from {@link RequiresAnnotations} annotation
+ * and init method parameters.
  * </p>
  * <p>
  *     If required annotations are given, the constructor constructs the validator
@@ -55,12 +65,61 @@ public class ValidatorConstructor {
      * creates, must be extended from {@link fi.vincit.jmobster.processor.defaults.validator.BaseValidator}
      * class so that the validator can be initialized correctly.
      * @param validatorClass Type of validator this constructs (Validator class e.g. SizeValidator.class)
-     * @param requiredTypes Required annotation types (classes) that are required for this validator
-     * @param optionalTypes Optional annotation types (classes) that can be given to this validator
      */
-    public ValidatorConstructor(Class validatorClass, RequiredTypes requiredTypes, OptionalTypes optionalTypes) {
+    public ValidatorConstructor(Class validatorClass) {
+        RequiredTypes requiredTypes = findRequiredTypes(validatorClass);
+        OptionalTypes optionalTypes = findOptionalTypes(validatorClass);
         this.combinationManager = new CombinationManager<FieldAnnotation>(requiredTypes, optionalTypes);
         this.validatorClass = validatorClass;
+    }
+
+    private OptionalTypes findOptionalTypes(Class validatorClass) {
+        return OptionalTypes.get(findTypes(validatorClass, false));
+    }
+
+    private RequiredTypes findRequiredTypes(Class validatorClass) {
+        return RequiredTypes.get(findTypes(validatorClass, true));
+    }
+    
+    Class[] findTypes(Class validatorClass, boolean required) {
+        List<Method> methods = findInitMethods(validatorClass);
+        List<Class> types = new ArrayList<Class>();
+        resolveParameters(required, methods, types);
+        resolveAnnotationParameters(validatorClass, types);
+        return types.toArray(new Class[types.size()]);
+    }
+
+    private void resolveAnnotationParameters(Class validatorClass, List<Class> types) {
+        RequiresAnnotations requiredAnnotation = (RequiresAnnotations)validatorClass.getAnnotation(RequiresAnnotations.class);
+        if( requiredAnnotation != null ) {
+            Collections.addAll(types, requiredAnnotation.value());
+        }
+    }
+
+    private List<Class> resolveParameters(boolean required, List<Method> methods, List<Class> types) {
+        for( Method method : methods ) {
+            Type[] parameters = method.getGenericParameterTypes();
+            for( Type parameter : parameters ) {
+                CastUtil.ParamType resolvedType = CastUtil.resolveParamType(parameter);
+                Class type = resolvedType.getType();
+                if( !resolvedType.isOptional() && required ) {
+                    types.add(type);
+                } else if( resolvedType.isOptional() && !required ) {
+                    types.add(type);
+                }
+            }
+        }
+        return types;
+    }
+
+    private List<Method> findInitMethods(Class validatorClass) {
+        List<Method> methods = new ArrayList<Method>();
+        for( Method method : validatorClass.getDeclaredMethods() ) {
+            if( method.isAnnotationPresent(InitMethod.class) ) {
+                methods.add(method);
+            }
+        }
+        return methods;
     }
 
     /**

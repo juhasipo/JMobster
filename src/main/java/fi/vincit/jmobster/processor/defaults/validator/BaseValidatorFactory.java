@@ -55,16 +55,16 @@ public abstract class BaseValidatorFactory implements ValidatorFactory {
     }
 
     /**
-     * Adds new validator constructor to the factory. The order in which the constructors
-     * are added determines the priority. Constructors are always executed in same order:
+     * Adds new validators to the factory. The order in which the validators
+     * are added determines the priority. Validators are always executed in same order:
      * First added first executed.
-     * @param validatorClass Validator class
-     * @param requiredTypes Required types for validator
-     * @param optionalTypes Optional types for validator
+     * @param validatorClasses Validator classes to set
      */
     @Override
-    public void setValidator(Class validatorClass, RequiredTypes requiredTypes, OptionalTypes optionalTypes) {
-        validatorConstructors.add( new ValidatorConstructor(validatorClass, requiredTypes, optionalTypes) );
+    public void setValidator(Class... validatorClasses) {
+        for( Class validatorClass : validatorClasses ) {
+            validatorConstructors.add( new ValidatorConstructor(validatorClass) );
+        }
     }
 
     /**

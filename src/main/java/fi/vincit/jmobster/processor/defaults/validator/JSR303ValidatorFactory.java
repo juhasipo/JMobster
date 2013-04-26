@@ -16,15 +16,10 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.NotNullValidator;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.NumberRangeValidator;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.SizeValidator;
-import fi.vincit.jmobster.util.combination.OptionalTypes;
-import fi.vincit.jmobster.util.combination.RequiredTypes;
-
-import javax.validation.constraints.*;
 
 /**
  * Default implementation of validator factory. Contains
@@ -36,19 +31,9 @@ public class JSR303ValidatorFactory extends BaseValidatorFactory {
     public JSR303ValidatorFactory() {
         setValidator(
                 SizeValidator.class,
-                RequiredTypes.get(Size.class),
-                OptionalTypes.get());
-        setValidator(
                 PatternValidator.class,
-                RequiredTypes.get(Pattern.class),
-                OptionalTypes.get(OverridePattern.class));
-        setValidator(
                 NumberRangeValidator.class,
-                RequiredTypes.get(),
-                OptionalTypes.get(Min.class, Max.class));
-        setValidator(
-                NotNullValidator.class,
-                RequiredTypes.get(NotNull.class),
-                OptionalTypes.get());
+                NotNullValidator.class
+        );
     }
 }

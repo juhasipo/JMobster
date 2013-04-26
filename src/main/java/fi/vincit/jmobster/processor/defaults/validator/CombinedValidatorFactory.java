@@ -19,12 +19,9 @@ package fi.vincit.jmobster.processor.defaults.validator;
 import fi.vincit.jmobster.processor.ValidatorFactory;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.combination.OptionalTypes;
-import fi.vincit.jmobster.util.combination.RequiredTypes;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -77,7 +74,7 @@ public class CombinedValidatorFactory extends BaseValidatorFactory {
     }
 
     @Override
-    public void setValidator(Class validatorClass, RequiredTypes requiredTypes, OptionalTypes optionalTypes) {
-        super.setValidator(validatorClass, requiredTypes, optionalTypes);
+    public void setValidator(Class... validatorClasses) {
+        super.setValidator(validatorClasses);
     }
 }

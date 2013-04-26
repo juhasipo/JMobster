@@ -16,8 +16,11 @@ package fi.vincit.jmobster.processor.defaults.validator.jsr303;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.annotation.RequiresAnnotations;
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
-import fi.vincit.jmobster.util.collection.AnnotationBag;
 
+import javax.validation.constraints.NotNull;
+
+@RequiresAnnotations({NotNull.class})
 public class NotNullValidator extends BaseValidator {
 }
