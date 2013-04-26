@@ -50,7 +50,7 @@ public class TestMain {
                 .build();
 
         System.out.println("Generate test classes");
-        final int n = 1;
+        final int n = 2;
         Collection<Class> classesToConvert = new ArrayList<Class>(n);
         for( int i = 0; i < n; ++i ) {
             if( i % 2 == 0 ) {
@@ -99,9 +99,8 @@ public class TestMain {
         // Generate models
         for( Model model : models ) {
             generator.process( model );
+            System.out.println(modelWriter.toString());
         }
-
-        System.out.println(modelWriter.toString());
         System.out.println(" - Done");
     }
 }

@@ -181,7 +181,6 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
         } else {
             getWriter().endBlock(ItemStatuses.last());
         }
-        getWriter().close();
         LOG.trace("Processing models done");
     }
 

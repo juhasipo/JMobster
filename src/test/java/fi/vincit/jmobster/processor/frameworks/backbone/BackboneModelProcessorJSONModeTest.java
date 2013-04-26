@@ -69,7 +69,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
         processor.doEndProcessing(ItemStatuses.firstAndLast());
 
         assertThat(writer.toString(), is("}\n"));
-        assertThat(writer.isOpen(), is(false));
+        assertThat(writer.isOpen(), is(true));
     }
 
     @Test

@@ -95,11 +95,12 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
         this.clearWriterBeforeProcessing = clearWriterBeforeProcessing;
     }
 
+    public boolean isClearWriterBeforeProcessing() {
+        return clearWriterBeforeProcessing;
+    }
+
     @Override
     public void doStartProcessing(ItemStatus status) throws IOException {
-        if( clearWriterBeforeProcessing ) {
-            getWriter().clear();
-        }
         startProcessing(status);
     }
 

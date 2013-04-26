@@ -95,5 +95,6 @@ public abstract class BaseDataWriter<T extends DataWriter> implements DataWriter
 
     @Override
     public void clear() {
+        this.writer.clear();
     }
 }
