@@ -467,7 +467,7 @@ public class JavaScriptWriterTest {
     }
 
     @Test
-    public void testFoo() {
+    public void testClosingAnonFunction() {
         writer.startAnonFunction();
         writer.endFunction(ItemStatuses.last());
         writer.close();
