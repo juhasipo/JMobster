@@ -34,6 +34,7 @@ import static org.mockito.Mockito.*;
 public class BackboneModelProcessorBuilderTest {
 
     private JavaScriptWriter writer;
+    private JavaScriptContext context;
     @Mock private FieldValueConverter valueConverter;
     @Mock private ModelProcessor<JavaScriptContext, JavaScriptWriter> validatorProcessor;
     @Mock private ModelProcessor<JavaScriptContext, JavaScriptWriter> valueProcessor;
@@ -44,12 +45,13 @@ public class BackboneModelProcessorBuilderTest {
         MockitoAnnotations.initMocks(this);
         when(model.getName()).thenReturn("Test");
         writer = new JavaScriptWriter(DummyDataWriter.getInstance());
+        context = new JavaScriptContext(writer, OutputMode.JAVASCRIPT);
     }
 
     @Test
     public void testBuildWithDefaultProcessors() {
         BackboneModelProcessor processor = new BackboneModelProcessor
-                .Builder(writer, OutputMode.JAVASCRIPT)
+                .Builder(context)
                 .setValueConverter(valueConverter)
                 .useDefaultModelProcessors()
                 .build();
@@ -59,7 +61,7 @@ public class BackboneModelProcessorBuilderTest {
     @Test
     public void testBuildWithOneProcessors() {
         BackboneModelProcessor processor = new BackboneModelProcessor
-                .Builder(writer, OutputMode.JAVASCRIPT)
+                .Builder(context)
                 .setValueConverter(valueConverter)
                 .setModelProcessors(validatorProcessor)
                 .build();
@@ -68,7 +70,6 @@ public class BackboneModelProcessorBuilderTest {
 
     @Test
     public void testBuildWithTwoProcessors() {
-        JavaScriptContext context = new JavaScriptContext(writer, OutputMode.JSON);
         BackboneModelProcessor processor = new BackboneModelProcessor
                 .Builder(context)
                 .setValueConverter(valueConverter)
@@ -84,7 +85,7 @@ public class BackboneModelProcessorBuilderTest {
     @Test
     public void testBuildWithRequiredOnly() {
         BackboneModelProcessor processor = new BackboneModelProcessor
-                .Builder(writer, OutputMode.JAVASCRIPT)
+                .Builder(context)
                 .build();
 
         processor.doProcessModel(model, ItemStatuses.first());

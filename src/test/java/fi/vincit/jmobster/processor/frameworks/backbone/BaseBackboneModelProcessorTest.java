@@ -36,6 +36,7 @@ public abstract class BaseBackboneModelProcessorTest {
     public static final String TEST_MODEL_NAME = "TestModel";
     protected StringBufferWriter writer;
     protected JavaScriptWriter jsWriter;
+    protected JavaScriptContext context;
     @Mock protected ModelProcessor<JavaScriptContext, JavaScriptWriter> validatorProcessor;
     @Mock protected ModelProcessor<JavaScriptContext, JavaScriptWriter> valueProcessor;
 
@@ -45,6 +46,7 @@ public abstract class BaseBackboneModelProcessorTest {
     public void init() {
         writer = new StringBufferWriter();
         jsWriter = new JavaScriptWriter(writer);
+        context = new JavaScriptContext(jsWriter, getMode());
         MockitoAnnotations.initMocks(this);
         when(validatorProcessor.getName()).thenReturn("validation");
         when(valueProcessor.getName()).thenReturn("defaults");
@@ -84,7 +86,7 @@ public abstract class BaseBackboneModelProcessorTest {
     protected BackboneModelProcessor createProcessor() {
         BackboneModelProcessor processor =
                 new BackboneModelProcessor
-                        .Builder(jsWriter, getMode())
+                        .Builder(context)
                         .setModelProcessors(validatorProcessor, valueProcessor)
                         .build();
 

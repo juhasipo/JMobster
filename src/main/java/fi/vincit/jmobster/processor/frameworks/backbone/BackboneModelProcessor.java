@@ -27,7 +27,6 @@ import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
-import fi.vincit.jmobster.util.writer.DataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,19 +79,8 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
         private ModelProcessor<JavaScriptContext, JavaScriptWriter>[] modelProcessors =
                 new ModelProcessor[0];
 
-        public Builder(DataWriter writer, OutputMode outputMode) {
-            context = new JavaScriptContext(
-                    new JavaScriptWriter(writer),
-                    outputMode
-            );
-        }
-
         public Builder(JavaScriptContext languageContext) {
             context = languageContext;
-        }
-
-        public Builder(JavaScriptWriter writer, OutputMode outputMode) {
-            context = new JavaScriptContext(writer, outputMode);
         }
 
         public Builder setValueConverter(FieldValueConverter valueConverter) {

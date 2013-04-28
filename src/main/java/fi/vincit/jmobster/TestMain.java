@@ -22,10 +22,10 @@ import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.DefaultValueProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.ValidatorProcessor;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.groups.GroupMode;
@@ -72,7 +72,7 @@ public class TestMain {
                 CachedModelProvider.WriteMode.PRETTY,
                 modelWriter
         );
-        JavaScriptWriter javaScriptWriter = new JavaScriptWriter(provider1.getDataWriter());
+        JavaScriptContext context = new JavaScriptContext(modelWriter, OutputMode.JSON);
 
         // Setup generator
         FieldValueConverter converter = new JavaToJSValueConverter(
@@ -83,7 +83,7 @@ public class TestMain {
 
         BackboneModelProcessor backboneModelProcessor =
                 new BackboneModelProcessor
-                    .Builder(javaScriptWriter, OutputMode.JSON)
+                    .Builder(context)
                     .setValueConverter(converter)
                     .setModelProcessors(
                             new DefaultValueProcessor.Builder().build(),

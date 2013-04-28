@@ -1,11 +1,13 @@
 package fi.vincit.jmobster;
 
 import fi.vincit.jmobster.exception.UnsupportedFramework;
-import fi.vincit.jmobster.processor.*;
+import fi.vincit.jmobster.processor.ModelFactory;
+import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.builder.ModelFactoryBuilder;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
 import fi.vincit.jmobster.processor.frameworks.backbone.ModelGeneratorBuilder;
-import fi.vincit.jmobster.util.writer.DataWriter;
+import fi.vincit.jmobster.processor.languages.LanguageContext;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 
 /**
  * <p>
@@ -28,28 +30,20 @@ public class JMobsterFactory {
     /**
      * Creates a model generator instance that is pre-configured for the given framework.
      * @param framework Framework ID
-     * @param writer Writer to use
+     * @param context Language context
      * @return Configured model generator
      * @throws UnsupportedFramework If the framework is not supported
      */
-    public static ModelGeneratorBuilder getModelGeneratorBuilder( String framework, DataWriter writer ) {
+    public static ModelGeneratorBuilder getModelGeneratorBuilder( String framework, LanguageContext context ) {
         if( "backbone.js".equalsIgnoreCase(framework) || "backbone".equalsIgnoreCase(framework) ) {
-            return new ModelGeneratorBuilder().setDataWriter(writer);
+            if( !(context instanceof JavaScriptContext) ) {
+                throw new IllegalArgumentException("Language context must be JavaScriptContext");
+            }
+            return new ModelGeneratorBuilder().setLanguageContext((JavaScriptContext)context);
         } else {
             throwFrameworkNotSupported( framework );
         }
         return null;
-    }
-
-    /**
-     * Creates a model generator instance that is pre-configured for the given framework.
-     * @param framework Framework ID
-     * @param provider Model provider to use
-     * @return Configured model generator
-     * @throws UnsupportedFramework If the framework is not supported
-     */
-    public static ModelGeneratorBuilder getModelGeneratorBuilder( String framework, ModelProvider provider ) {
-        return getModelGeneratorBuilder( framework, provider.getDataWriter() );
     }
 
     /**

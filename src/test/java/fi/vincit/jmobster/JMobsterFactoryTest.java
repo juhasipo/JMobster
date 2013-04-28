@@ -15,7 +15,8 @@ package fi.vincit.jmobster;/*
 */
 
 import fi.vincit.jmobster.exception.UnsupportedFramework;
-import fi.vincit.jmobster.util.writer.DataWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Test;
 
@@ -25,24 +26,24 @@ import static org.junit.Assert.assertNotNull;
 
 public class JMobsterFactoryTest {
 
-    private DataWriter getModelWriter() {
-        return new StringBufferWriter();
+    private JavaScriptContext getLanguageContext() {
+        return new JavaScriptContext(new StringBufferWriter(), OutputMode.JAVASCRIPT);
     }
 
     @Test
     public void testCreateBackboneInstance() throws IOException {
-        ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( "Backbone", getModelWriter() ).build();
+        ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( "Backbone", getLanguageContext() ).build();
         assertNotNull(generator);
     }
 
     @Test
     public void testCreateBackboneJSInstance() throws IOException {
-        ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( "Backbone.js", getModelWriter() ).build();
+        ModelGenerator generator = JMobsterFactory.getModelGeneratorBuilder( "Backbone.js", getLanguageContext() ).build();
         assertNotNull(generator);
     }
 
     @Test(expected = UnsupportedFramework.class)
     public void testCreateUnsupportedInstance() throws IOException {
-        JMobsterFactory.getModelGeneratorBuilder( "Invalid framework", getModelWriter() );
+        JMobsterFactory.getModelGeneratorBuilder( "Invalid framework", getLanguageContext() );
     }
 }

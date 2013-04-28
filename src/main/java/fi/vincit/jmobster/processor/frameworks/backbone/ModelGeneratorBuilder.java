@@ -28,8 +28,6 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
-import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
-import fi.vincit.jmobster.util.writer.DataWriter;
 
 /**
  * ModelGenerator builder for Backbone-validation. Model processor and model field factory are
@@ -39,10 +37,10 @@ public class ModelGeneratorBuilder {
     private ModelProcessor<JavaScriptContext, JavaScriptWriter> modelProcessor;
     private FieldValueConverter fieldValueConverter;
     private BaseFieldTypeConverterManager fieldTypeConverterManager;
-    private DataWriter dataWriter;
+    private JavaScriptContext context;
 
-    public ModelGeneratorBuilder setDataWriter(DataWriter dataWriter) {
-        this.dataWriter = dataWriter;
+    public ModelGeneratorBuilder setLanguageContext(JavaScriptContext context) {
+        this.context = context;
         return this;
     }
 
@@ -63,7 +61,7 @@ public class ModelGeneratorBuilder {
 
     public DefaultModelGenerator build() {
         if( this.modelProcessor == null ) {
-            throwIfNull(dataWriter, "DataWriter");
+            throwIfNull(context, "LanguageContext");
 
             if( this.fieldTypeConverterManager == null ) {
                 this.fieldTypeConverterManager = new BackboneFieldTypeConverterManager();
@@ -77,7 +75,7 @@ public class ModelGeneratorBuilder {
                 );
             }
             modelProcessor = new BackboneModelProcessor
-                    .Builder(dataWriter, OutputMode.JAVASCRIPT)
+                    .Builder(context)
                     .setValueConverter(fieldValueConverter)
                     .useDefaultModelProcessors()
                     .build();
