@@ -16,6 +16,9 @@ package fi.vincit.jmobster.util.writer;/*
 
 import fi.vincit.jmobster.processor.ModelProvider;
 
+import static fi.vincit.jmobster.util.writer.WriterUtil.configureCompactMode;
+import static fi.vincit.jmobster.util.writer.WriterUtil.configurePrettyMode;
+
 /**
  * Cached model provider caches processed models so that the models
  * can be efficiently provided e.g. via HTTP to the client. This
@@ -24,24 +27,10 @@ import fi.vincit.jmobster.processor.ModelProvider;
  */
 public class CachedModelProvider implements ModelProvider {
 
-    /**
-     * How the model should be written
-     */
-    public static enum WriteMode {
-        /**
-         * Compact mode. No additional spaces, indentations or lines. Compact size but, hard to read by human.
-         */
-        COMPACT,
-        /**
-         * Pretty mode. Normal spaces, indentations and line changes. Human readable.
-         */
-        PRETTY
-    }
-
     private String cachedModel;
     private final DataWriter dataWriter;
 
-    public static CachedModelProvider createWithStringWriter(WriteMode writeMode) {
+    public static CachedModelProvider createWithStringWriter(WriterUtil.WriteMode writeMode) {
         return new CachedModelProvider(writeMode, new StringBufferWriter());
     }
 
@@ -49,30 +38,12 @@ public class CachedModelProvider implements ModelProvider {
      * Creates new model provider that caches the model output.
      * @param writeMode Write mode
      */
-    public CachedModelProvider( WriteMode writeMode, DataWriter dataWriter ) {
+    public CachedModelProvider( WriterUtil.WriteMode writeMode, DataWriter dataWriter ) {
         this.dataWriter = dataWriter;
         switch ( writeMode ) {
             case COMPACT: configureCompactMode( dataWriter ); break;
             case PRETTY: configurePrettyMode( dataWriter ); break;
         }
-    }
-
-    /**
-     * Make necessary configurations for pretty write mode
-     * @param dataWriter Model writer to configure
-     */
-    private void configurePrettyMode(DataWriter dataWriter ) {
-        dataWriter.setIndentationChar(' ', 4);
-        dataWriter.setLineSeparator("\n");
-    }
-
-    /**
-     * Make necessary configurations for compact write mode
-     * @param dataWriter Model writer to configure
-     */
-    private void configureCompactMode(DataWriter dataWriter ) {
-        dataWriter.setIndentation(0);
-        dataWriter.setLineSeparator("");
     }
 
     @Override

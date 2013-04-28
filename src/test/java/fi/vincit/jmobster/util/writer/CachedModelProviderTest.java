@@ -1,8 +1,5 @@
 package fi.vincit.jmobster.util.writer;
 
-import fi.vincit.jmobster.util.writer.CachedModelProvider;
-import fi.vincit.jmobster.util.writer.DataWriter;
-import fi.vincit.jmobster.util.writer.StringBufferWriter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +12,7 @@ public class CachedModelProviderTest {
         DataWriter dataWriter = mock(DataWriter.class);
         when(dataWriter.toString()).thenReturn("");
 
-        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.COMPACT, dataWriter );
+        CachedModelProvider provider = new CachedModelProvider( WriterUtil.WriteMode.COMPACT, dataWriter );
 
         String model = provider.getModel();
 
@@ -25,7 +22,7 @@ public class CachedModelProviderTest {
 
     @Test
     public void testCreateWithStringWriter() throws Exception {
-        CachedModelProvider provider = CachedModelProvider.createWithStringWriter( CachedModelProvider.WriteMode.PRETTY );
+        CachedModelProvider provider = CachedModelProvider.createWithStringWriter( WriterUtil.WriteMode.PRETTY );
         assertEquals( StringBufferWriter.class, provider.getDataWriter().getClass() );
     }
 
@@ -34,7 +31,7 @@ public class CachedModelProviderTest {
         DataWriter dataWriter = mock(DataWriter.class);
         when(dataWriter.toString()).thenReturn("");
 
-        new CachedModelProvider( CachedModelProvider.WriteMode.PRETTY, dataWriter );
+        new CachedModelProvider( WriterUtil.WriteMode.PRETTY, dataWriter );
 
         verify(dataWriter).setIndentationChar(' ', 4);
         verify(dataWriter).setLineSeparator("\n");
@@ -45,7 +42,7 @@ public class CachedModelProviderTest {
         DataWriter dataWriter = mock(DataWriter.class);
         when(dataWriter.toString()).thenReturn("");
 
-        new CachedModelProvider( CachedModelProvider.WriteMode.COMPACT, dataWriter );
+        new CachedModelProvider( WriterUtil.WriteMode.COMPACT, dataWriter );
 
         verify(dataWriter).setIndentation(0);
         verify(dataWriter).setLineSeparator( "" );
@@ -56,7 +53,7 @@ public class CachedModelProviderTest {
         DataWriter dataWriter = mock(DataWriter.class);
         when(dataWriter.toString()).thenReturn("");
 
-        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.COMPACT, dataWriter );
+        CachedModelProvider provider = new CachedModelProvider( WriterUtil.WriteMode.COMPACT, dataWriter );
 
         assertEquals(dataWriter, provider.getDataWriter());
     }
@@ -66,7 +63,7 @@ public class CachedModelProviderTest {
         DataWriter dataWriter = mock(DataWriter.class);
         when(dataWriter.toString()).thenReturn("model", "model2");
 
-        CachedModelProvider provider = new CachedModelProvider( CachedModelProvider.WriteMode.COMPACT, dataWriter );
+        CachedModelProvider provider = new CachedModelProvider( WriterUtil.WriteMode.COMPACT, dataWriter );
 
         String model = provider.getModel();
         assertNotNull(model);

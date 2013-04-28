@@ -29,7 +29,6 @@ import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumCon
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.groups.GroupMode;
-import fi.vincit.jmobster.util.writer.CachedModelProvider;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 
@@ -68,11 +67,8 @@ public class TestMain {
 
         // Setup writers
         DataWriter modelWriter = new StringBufferWriter();
-        CachedModelProvider provider1 = new CachedModelProvider(
-                CachedModelProvider.WriteMode.PRETTY,
-                modelWriter
-        );
         JavaScriptContext context = new JavaScriptContext(modelWriter, OutputMode.JSON);
+
 
         // Setup generator
         FieldValueConverter converter = new JavaToJSValueConverter(
