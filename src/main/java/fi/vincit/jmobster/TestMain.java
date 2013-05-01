@@ -22,14 +22,13 @@ import fi.vincit.jmobster.processor.defaults.validator.JSR303ValidatorFactory;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.DefaultValueProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.ValidatorProcessor;
+import fi.vincit.jmobster.processor.languages.JavaScriptModelCache;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.ConverterMode;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
-import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.groups.GroupMode;
-import fi.vincit.jmobster.util.writer.DataWriter;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 
 import java.io.IOException;
@@ -58,17 +57,9 @@ public class TestMain {
                 classesToConvert.add(DemoClasses.MyModelDto.class);
             }
         }
-        System.out.print("Press any key to start covert classes");
-        //System.in.read();
-        System.out.println("Convert classes");
-        Collection<Model> models = factory.createAll(
-                classesToConvert
-        );
 
         // Setup writers
-        DataWriter modelWriter = new StringBufferWriter();
-        JavaScriptContext context = new JavaScriptContext(modelWriter, OutputMode.JSON);
-
+        JavaScriptContext context = new JavaScriptContext(new StringBufferWriter(), OutputMode.JSON);
 
         // Setup generator
         FieldValueConverter converter = new JavaToJSValueConverter(
@@ -87,16 +78,17 @@ public class TestMain {
                     )
                     .build();
         backboneModelProcessor.setClearWriterBeforeProcessing(true);
-        ModelGenerator generator = JMobsterFactory.getModelGenerator( backboneModelProcessor );
-
+        JavaScriptModelCache modelCache = new JavaScriptModelCache(backboneModelProcessor, factory);
+        modelCache.addModels(classesToConvert);
+        for(String modelName : modelCache.getModelNames() ) {
+            System.out.println(modelName);
+        }
         System.out.print("Press any key to start generating models");
         //System.in.read();
         System.out.println("Generate models");
         // Generate models
-        for( Model model : models ) {
-            generator.process( model );
-            System.out.println(modelWriter.toString());
-        }
+        System.out.println("Model:\n" + modelCache.getModel("MyModel"));
+        System.out.println("Model:\n" + modelCache.getModel("BeanPropertyDemo"));
         System.out.println(" - Done");
     }
 }

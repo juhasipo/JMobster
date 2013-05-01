@@ -69,6 +69,11 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
     }
 
     @Override
+    public C getLanguageContext() {
+        return context;
+    }
+
+    @Override
     public void setFieldValueConverter(FieldValueConverter valueConverter) {
         this.valueConverter = valueConverter;
         for( ModelProcessor<C, W> modelProcessor : modelProcessors ) {

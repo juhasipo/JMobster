@@ -54,4 +54,6 @@ public interface ModelProcessor<C extends LanguageContext<W>, W extends DataWrit
     String getName();
 
     void setLanguageContext(C context);
+
+    C getLanguageContext();
 }
