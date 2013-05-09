@@ -1,7 +1,7 @@
 package fi.vincit.jmobster.processor.languages.javascript.writer;
 
 /*
- * Copyright 2012 Juha Siponen
+ * Copyright 2012-2013 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
