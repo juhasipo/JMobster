@@ -22,6 +22,8 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -81,10 +83,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
 
         assertThat(writer.toString(), is(
                 "\"TestModel\": {\n" +
-                "    \"validation\": {\n" +
-                "    },\n" +
-                "    \"defaults\": {\n" +
-                "    }\n" +
+                "    \"validation\": {}, \"defaults\": {}\n" +
                 "},\n"
         ));
     }
@@ -98,10 +97,7 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
 
         assertThat(writer.toString(), is(
                 "\"TestModel\": {\n" +
-                "    \"validation\": {\n" +
-                "    },\n" +
-                "    \"defaults\": {\n" +
-                "    }\n" +
+                "    \"validation\": {}, \"defaults\": {}\n" +
                 "},\n"
         ));
     }
@@ -115,9 +111,24 @@ public class BackboneModelProcessorJSONModeTest extends BaseBackboneModelProcess
 
         assertThat(writer.toString(), is(
                 "\"TestModel\": {\n" +
-                "    \"validation\": {\n" +
-                "    },\n" +
-                "    \"defaults\": {\n" +
+                "    \"validation\": {}, \"defaults\": {}\n" +
+                "}\n"
+        ));
+    }
+
+    @Test
+    public void testWholeProcess() throws IOException {
+        ModelProcessor processor = createProcessor();
+
+        Model model = mockModel();
+        processor.doStartProcessing(ItemStatuses.last());
+        processor.doProcessModel(model, ItemStatuses.last());
+        processor.doEndProcessing(ItemStatuses.last());
+
+        assertThat(writer.toString(), is(
+                "{\n" +
+                "    \"TestModel\": {\n" +
+                "        \"validation\": {}, \"defaults\": {}\n" +
                 "    }\n" +
                 "}\n"
         ));

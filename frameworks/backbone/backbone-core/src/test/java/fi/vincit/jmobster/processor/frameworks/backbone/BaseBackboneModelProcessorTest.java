@@ -57,14 +57,11 @@ public abstract class BaseBackboneModelProcessorTest {
                 ItemStatus status = (ItemStatus)invocation.getArguments()[1];
                 if( status.isNotLastItem() ) {
                     writer.write(
-                            "{\n" +
-                            "    },\n" +
-                            "    "
+                            "{}, "
                     );
                 } else {
                     writer.write(
-                            "{\n" +
-                            "    }");
+                            "{}");
                 }
                 return null;
             }

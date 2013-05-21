@@ -93,10 +93,7 @@ public class BackboneModelProcessorFullModeTest extends BaseBackboneModelProcess
 
         assertThat(writer.toString(), is(
                 "TestModel: Backbone.Model.extend({\n" +
-                "    validation: {\n" +
-                "    },\n" +
-                "    defaults: {\n" +
-                "    }\n" +
+                "    validation: {}, defaults: {}\n" +
                 "}),\n"
         ));
     }
@@ -110,10 +107,7 @@ public class BackboneModelProcessorFullModeTest extends BaseBackboneModelProcess
 
         assertThat(writer.toString(), is(
                 "TestModel: Backbone.Model.extend({\n" +
-                "    validation: {\n" +
-                "    },\n" +
-                "    defaults: {\n" +
-                "    }\n" +
+                "    validation: {}, defaults: {}\n" +
                 "}),\n"
         ));
     }
@@ -127,10 +121,7 @@ public class BackboneModelProcessorFullModeTest extends BaseBackboneModelProcess
 
         assertThat(writer.toString(), is(
                 "TestModel: Backbone.Model.extend({\n" +
-                "    validation: {\n" +
-                "    },\n" +
-                "    defaults: {\n" +
-                "    }\n" +
+                "    validation: {}, defaults: {}\n" +
                 "})\n"
         ));
     }

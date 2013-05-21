@@ -117,10 +117,10 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
         if( getContext().getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().writeComment(startComment);
             getWriter().writeVariable(namespaceName, "", JavaScriptWriter.VariableType.BLOCK);
+            getWriter().indent();
         } else {
             getWriter().startBlock();
         }
-        getWriter().indent();
     }
 
     @Override
@@ -141,7 +141,6 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
                     }
                 });
 
-        getWriter().indentBack();
         if( getContext().getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().endFunctionCallBlock(status);
         } else {
@@ -163,7 +162,6 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
     @Override
     @SuppressWarnings( "RedundantThrows" )
     public void endProcessing(ItemStatus status) throws IOException {
-        getWriter().indentBack();
         if( getContext().getOutputMode() == OutputMode.JAVASCRIPT) {
             getWriter().endBlockStatement();
         } else {
