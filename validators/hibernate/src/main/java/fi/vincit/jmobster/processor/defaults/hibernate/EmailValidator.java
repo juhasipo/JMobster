@@ -1,7 +1,7 @@
 package fi.vincit.jmobster.processor.defaults.hibernate;
 
 /*
- * Copyright 2012 Juha Siponen
+ * Copyright 2012-2013 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,10 @@ package fi.vincit.jmobster.processor.defaults.hibernate;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorFactory;
+import fi.vincit.jmobster.annotation.RequiresAnnotations;
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidator;
+import org.hibernate.validator.constraints.Email;
 
-public class HibernateValidatorFactory extends BaseValidatorFactory {
-    public HibernateValidatorFactory() {
-        setValidator(
-                LengthValidator.class,
-                EmailValidator.class,
-                NotEmptyValidator.class
-        );
-    }
+@RequiresAnnotations(Email.class)
+public class EmailValidator extends BaseValidator {
 }

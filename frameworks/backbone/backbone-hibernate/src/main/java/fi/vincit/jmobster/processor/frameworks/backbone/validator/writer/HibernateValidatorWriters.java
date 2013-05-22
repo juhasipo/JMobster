@@ -1,7 +1,7 @@
-package fi.vincit.jmobster.processor.defaults.hibernate;
+package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 /*
- * Copyright 2012 Juha Siponen
+ * Copyright 2012-2013 Juha Siponen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,16 @@ package fi.vincit.jmobster.processor.defaults.hibernate;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorFactory;
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 
-public class HibernateValidatorFactory extends BaseValidatorFactory {
-    public HibernateValidatorFactory() {
+public class HibernateValidatorWriters extends BaseValidatorWriterManager<JavaScriptWriter> {
+    public HibernateValidatorWriters() {
+        super();
         setValidator(
-                LengthValidator.class,
-                EmailValidator.class,
-                NotEmptyValidator.class
+                new LengthValidatorWriter(),
+                new EmailValidatorWriter(),
+                new NotEmptyValidatorWriter()
         );
     }
 }

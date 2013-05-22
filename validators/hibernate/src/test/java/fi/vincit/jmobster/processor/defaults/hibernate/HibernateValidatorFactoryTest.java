@@ -19,7 +19,9 @@ package fi.vincit.jmobster.processor.defaults.hibernate;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.test.TestUtil;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -42,5 +44,38 @@ public class HibernateValidatorFactoryTest {
         Assert.assertNotNull(validators);
         Assert.assertEquals( 1, validators.size() );
         Assert.assertEquals( LengthValidator.class, validators.get( 0 ).getType() );
+    }
+
+    @Test
+    public void testEmailValidator() {
+        HibernateValidatorFactory factory = new HibernateValidatorFactory();
+        class EmailClass {
+            @Email public String s;
+        }
+
+        Annotation[] annotations = TestUtil.getAnnotationsFromClassField(EmailClass.class, 0);
+        Collection<FieldAnnotation> fieldAnnotations = FieldAnnotation.convertToFieldAnnotations(annotations);
+        List<Validator> validators = factory.createValidators( fieldAnnotations );
+
+        Assert.assertNotNull(validators);
+        Assert.assertEquals( 1, validators.size() );
+        Assert.assertEquals( EmailValidator.class, validators.get( 0 ).getType() );
+    }
+
+
+    @Test
+    public void testNotEmptyValidator() {
+        HibernateValidatorFactory factory = new HibernateValidatorFactory();
+        class NotEmptyClass {
+            @NotEmpty public String s;
+        }
+
+        Annotation[] annotations = TestUtil.getAnnotationsFromClassField(NotEmptyClass.class, 0);
+        Collection<FieldAnnotation> fieldAnnotations = FieldAnnotation.convertToFieldAnnotations(annotations);
+        List<Validator> validators = factory.createValidators( fieldAnnotations );
+
+        Assert.assertNotNull(validators);
+        Assert.assertEquals( 1, validators.size() );
+        Assert.assertEquals( NotEmptyValidator.class, validators.get( 0 ).getType() );
     }
 }
