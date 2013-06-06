@@ -33,7 +33,7 @@ import javax.validation.constraints.Pattern;
 
 import static org.junit.Assert.assertEquals;
 
-public class BackboneValidatorWriterTest {
+public class BackboneValidatorWriterJSONTest {
 
     private JavaScriptWriter javaScriptWriter;
     private StringBufferWriter writer;
@@ -302,7 +302,68 @@ public class BackboneValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern: /[ABCdef]*/,\n";
+        final String expected = "pattern__regexp: [\"[ABCdef]*\", \"\"],\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWritePatternWithFlags() {
+        final PatternValidator validator = mockPatternValidator( "[ABCdef]*" );
+        Mockito.when(validator.getFlags()).thenReturn(new Pattern.Flag[] {Pattern.Flag.CASE_INSENSITIVE});
+
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "pattern__regexp: [\"[ABCdef]*\", \"i\"],\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWritePatternWithQuote() {
+        final PatternValidator validator = mockPatternValidator( "[\"ABCdef]*" );
+
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "pattern__regexp: [\"[\\\"ABCdef]*\", \"\"],\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWritePatternWithQuote2() {
+        final PatternValidator validator = mockPatternValidator( "\"[\"ABCdef\"]*\"\"" );
+
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "pattern__regexp: [\"\\\"[\\\"ABCdef\\\"]*\\\"\\\"\", \"\"],\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWritePatternWithEscapedChar() {
+        final PatternValidator validator = mockPatternValidator( "[\\.ABCdef]*" );
+
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "pattern__regexp: [\"[\\\\.ABCdef]*\", \"\"],\n";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testWritePatternWithEscapedChar2() {
+        final PatternValidator validator = mockPatternValidator( "\\\"[\\.ABCdef]*" );
+
+        writerManager.write( validator, ItemStatuses.notFirstNorLast() );
+        writer.close();
+
+        final String result = writer.toString();
+        final String expected = "pattern__regexp: [\"\\\\\\\"[\\\\.ABCdef]*\", \"\"],\n";
         assertEquals(expected, result);
     }
 
@@ -314,7 +375,7 @@ public class BackboneValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern: /[ABCdef]*/\n";
+        final String expected = "pattern__regexp: [\"[ABCdef]*\", \"\"]\n";
         assertEquals(expected, result);
     }
 

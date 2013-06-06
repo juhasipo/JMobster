@@ -20,6 +20,7 @@ import fi.vincit.jmobster.processor.defaults.hibernate.EmailValidator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSPatternConverter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 import javax.validation.constraints.Pattern;
@@ -35,12 +36,21 @@ public class EmailValidatorWriter extends JavaScriptValidatorWriter<EmailValidat
     static String EMAIL_REG_EXP = "^" + ATOM + "+(\\." + ATOM + "+)*@"
             + DOMAIN + "|" + IP_DOMAIN + ")$";
 
+    // ^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@([a-z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])$
     @Override
     protected void write(JavaScriptContext context, EmailValidator validator, ItemStatus status) {
-        context.getWriter().writeKeyValue(
-                "pattern",
-                JavaToJSPatternConverter.convertFromJava(EMAIL_REG_EXP, Pattern.Flag.CASE_INSENSITIVE),
-                status
-        );
+        if( context.getOutputMode() == OutputMode.JSON ) {
+            String pattern = JavaToJSPatternConverter.convertFromJavaToJSON(EMAIL_REG_EXP);
+            pattern = pattern.replaceAll("\\\\", "\\\\\\\\");
+            pattern = pattern.replaceAll("\"", "\\\\\"");
+            pattern = "\"" + pattern + "\"";
+            String flags = JavaToJSPatternConverter.getModifiersFromFlags(Pattern.Flag.CASE_INSENSITIVE);
+            flags = "\"" + flags + "\"";
+            context.getWriter().writeKey("pattern__regexp");
+            context.getWriter().writeArray(status, pattern, flags);
+        } else {
+            String pattern = JavaToJSPatternConverter.convertFromJava(EMAIL_REG_EXP, Pattern.Flag.CASE_INSENSITIVE);
+            context.getWriter().writeKeyValue("pattern", pattern, status);
+        }
     }
 }

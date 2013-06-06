@@ -56,6 +56,21 @@ public final class JavaToJSPatternConverter {
     }
 
     /**
+     * Coverts the given regular expression patter from Java form
+     * to JavaScript form.
+     * @param javaPattern Java regular expression pattern
+     * @return Pattern in JSON form. If empty pattern is given, an empty pattern is returned.
+     */
+    public static String convertFromJavaToJSON(String javaPattern) {
+        assert javaPattern != null : "javaPattern must not be null";
+
+        if( javaPattern.trim().length() == 0 ) {
+            return convertToJSONForm("");
+        }
+        return convertToJSONForm(javaPattern);
+    }
+
+    /**
      * Modifies the given Java pattern to JavaScript pattern
      * without modifiers.
      * @param javaPattern Java regular expression pattern
@@ -65,12 +80,16 @@ public final class JavaToJSPatternConverter {
         return JAVASCRIPT_REGEXP_START + javaPattern + JAVASCRIPT_REGEXP_END;
     }
 
+    private static String convertToJSONForm(String javaPattern) {
+        return javaPattern;
+    }
+
     /**
      * Returns modifiers in JavaScript from
      * @param flags Java pattern flags
      * @return Modifier string. Empty string if no modifiers
      */
-    private static String getModifiersFromFlags( Pattern.Flag... flags ) {
+    public static String getModifiersFromFlags( Pattern.Flag... flags ) {
         String modifiers = "";
         for( Pattern.Flag flag : flags ) {
             if( Pattern.Flag.CASE_INSENSITIVE.equals(flag) ) {

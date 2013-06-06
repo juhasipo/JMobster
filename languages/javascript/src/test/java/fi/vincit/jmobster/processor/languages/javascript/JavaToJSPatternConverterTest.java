@@ -79,4 +79,27 @@ public class JavaToJSPatternConverterTest {
                 Pattern.Flag.MULTILINE);
         assertEquals( "/[\\dA-Z]/im", result );
     }
+
+    @Test
+    public void testPatternAnnotationProcessorSimple_JSON() {
+        String result = JavaToJSPatternConverter.convertFromJavaToJSON("[\\dA-Z]");
+        assertEquals( "[\\dA-Z]", result );
+    }
+
+    @Test
+    public void testPatternAnnotationProcessorEmpty_JSON() {
+        String result = JavaToJSPatternConverter.convertFromJavaToJSON("");
+        assertEquals( "", result );
+    }
+
+    @Test
+    public void testPatternAnnotationProcessorWhitespaceOnly_JSON() {
+        String result = JavaToJSPatternConverter.convertFromJavaToJSON("   \t   ");
+        assertEquals( "", result );
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testPatternAnnotationProcessorNull_JSON() {
+        String result = JavaToJSPatternConverter.convertFromJavaToJSON(null);
+    }
 }

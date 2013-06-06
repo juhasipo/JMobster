@@ -20,13 +20,28 @@ import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSPatternConverter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class PatternValidatorWriter extends JavaScriptValidatorWriter<PatternValidator> {
 
     @Override
     protected void write( JavaScriptContext context, PatternValidator validator, ItemStatus status ) {
-        String pattern = JavaToJSPatternConverter.convertFromJava(validator.getRegexp(), validator.getFlags());
-        context.getWriter().writeKeyValue("pattern", pattern, status);
+        /*
+            JSON can't output JS regexp. Change the reg exp to string
+         */
+        if( context.getOutputMode() == OutputMode.JSON ) {
+            String pattern = JavaToJSPatternConverter.convertFromJavaToJSON(validator.getRegexp());
+            pattern = pattern.replaceAll("\\\\", "\\\\\\\\");
+            pattern = pattern.replaceAll("\"", "\\\\\"");
+            pattern = "\"" + pattern + "\"";
+            String flags = JavaToJSPatternConverter.getModifiersFromFlags(validator.getFlags());
+            flags = "\"" + flags + "\"";
+            context.getWriter().writeKey("pattern__regexp");
+            context.getWriter().writeArray(status, pattern, flags);
+        } else {
+            String pattern = JavaToJSPatternConverter.convertFromJava(validator.getRegexp(), validator.getFlags());
+            context.getWriter().writeKeyValue("pattern", pattern, status);
+        }
     }
 }

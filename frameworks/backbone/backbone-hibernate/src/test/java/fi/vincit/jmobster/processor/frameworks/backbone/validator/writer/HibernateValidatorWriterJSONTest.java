@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class LengthValidatorWriterTest {
+public class HibernateValidatorWriterJSONTest {
 
     private JavaScriptWriter javaScriptWriter;
     private StringBufferWriter writer;
@@ -176,7 +176,7 @@ public class LengthValidatorWriterTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern: /"+ EmailValidatorWriter.EMAIL_REG_EXP + "/i\n";
+        final String expected = "pattern__regexp: [\"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@([a-z0-9!#$%&'*+/=?^_`{|}~-]+(\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\\\\[[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\])$\", \"i\"]\n";
         assertEquals(expected, result);
     }
 
