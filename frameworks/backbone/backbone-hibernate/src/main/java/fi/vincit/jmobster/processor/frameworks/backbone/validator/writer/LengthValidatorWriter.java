@@ -17,8 +17,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  */
 
 import fi.vincit.jmobster.processor.defaults.hibernate.LengthValidator;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class LengthValidatorWriter extends JavaScriptValidatorWriter<LengthValidator> {
@@ -28,16 +28,16 @@ public class LengthValidatorWriter extends JavaScriptValidatorWriter<LengthValid
     private static final String MAX_ONLY_KEY = "maxLength";
 
     @Override
-    protected void write(JavaScriptWriter writer, LengthValidator validator, ItemStatus status) {
+    protected void write(JavaScriptContext context, LengthValidator validator, ItemStatus status) {
         if( validator.hasMin() && validator.hasMax() ) {
-            writer.writeKey( MIN_AND_MAX_KEY );
-            writer.writeArray( status, validator.getMin(), validator.getMax() );
+            context.getWriter().writeKey( MIN_AND_MAX_KEY );
+            context.getWriter().writeArray( status, validator.getMin(), validator.getMax() );
         } else if( validator.hasMin() ) {
             String value = String.valueOf(validator.getMin());
-            writer.writeKeyValue( MIN_ONLY_KEY, value, status);
+            context.getWriter().writeKeyValue( MIN_ONLY_KEY, value, status);
         } else if( validator.hasMax() ) {
             String value = String.valueOf(validator.getMax());
-            writer.writeKeyValue( MAX_ONLY_KEY, value, status);
+            context.getWriter().writeKeyValue( MAX_ONLY_KEY, value, status);
         }
     }
 

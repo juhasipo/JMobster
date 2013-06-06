@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
@@ -29,16 +30,17 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  * </p>
  *
  * @param <V> Validator type the writer uses
+ * @param <C> LanguageContext that excepts DataWriters of type W
  * @param <W> Data writer type. Should be compatible with corresponding {@link fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager}
  */
-public interface ValidatorWriter<V extends Validator, W extends DataWriter> {
+public interface ValidatorWriter<V extends Validator, C extends LanguageContext<? extends W>, W extends DataWriter> {
     /**
      * Writes the given validator with the given writer
-     * @param writer Writer to use
+     * @param languageContext Language context to use
      * @param validator Validator to write
      * @param status Item status
      */
-    void write( W writer, Object validator, ItemStatus status );
+    void write( C languageContext, Object validator, ItemStatus status );
 
     /**
      * Returns the type this validator writer supports

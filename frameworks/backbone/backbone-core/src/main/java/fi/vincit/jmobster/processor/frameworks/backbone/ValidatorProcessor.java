@@ -39,7 +39,7 @@ import java.io.IOException;
  */
 public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
 
-    private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
+    private ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
     private ItemHandler<Validator> validatorWriter;
 
     public static class Builder {
@@ -49,7 +49,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
                 new JavaScriptWriter(DummyDataWriter.getInstance()),
                 OutputMode.JAVASCRIPT
         );
-        private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
+        private ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
 
         public Builder() {
         }
@@ -69,7 +69,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
             return this;
         }
 
-        public Builder setValidatorWriterManager(ValidatorWriterManager<JavaScriptWriter> validatorWriterManager) {
+        public Builder setValidatorWriterManager(ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
             this.validatorWriterManager = validatorWriterManager;
             return this;
         }
@@ -105,7 +105,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
             @Override
             public void process( ModelField field, ItemStatus status ) {
                 getWriter().writeKey( field.getName() ).startBlock();
-                ItemProcessor.process(validatorWriter, field.getValidators());
+                ItemProcessor.process(field.getValidators()).with(validatorWriter);
                 getWriter().endBlock( status );
             }
         });

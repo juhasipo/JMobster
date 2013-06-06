@@ -44,11 +44,11 @@ import java.util.Map;
  * @param <W> DataWriter to use. This has be compatible with the ValidatorWriters that are given to this manager.
  * @see BaseValidatorWriter
  */
-public abstract class BaseValidatorWriterManager<W extends DataWriter> implements ValidatorWriterManager<W> {
-    final private Map<Class, ValidatorWriter<? extends Validator, ? super W>> writers =
-            new HashMap<Class, ValidatorWriter<? extends Validator, ? super W>>();
+public abstract class BaseValidatorWriterManager<C extends LanguageContext<? extends W>, W extends DataWriter> implements ValidatorWriterManager<C, W> {
+    final private Map<Class, ValidatorWriter<? extends Validator, ? super C, ? super W>> writers =
+            new HashMap<Class, ValidatorWriter<? extends Validator, ? super C, ? super W>>();
 
-    private LanguageContext<W> context;
+    private C context;
 
     /**
      * Constructs validator writer manager with the given data writer
@@ -58,8 +58,8 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> implement
 
 
     @Override
-    public void setValidator(ValidatorWriter<? extends Validator, ? super W>... validatorWriters) {
-        for( ValidatorWriter<? extends Validator, ? super W> validatorWriter : validatorWriters ) {
+    public void setValidator(ValidatorWriter<? extends Validator, ? super C, ? super W>... validatorWriters) {
+        for( ValidatorWriter<? extends Validator, ? super C, ? super W> validatorWriter : validatorWriters ) {
             writers.put( validatorWriter.getSupportedType(), validatorWriter );
         }
     }
@@ -69,13 +69,14 @@ public abstract class BaseValidatorWriterManager<W extends DataWriter> implement
     public void write(Validator validator, ItemStatus status) {
         final Class<?> validatorType = validator.getType();
         if( writers.containsKey(validatorType) ) {
-            ValidatorWriter<? extends Validator, ? super W> writer = writers.get(validatorType);
-            writer.write( context.getWriter(), validator, status );
+            ValidatorWriter<? extends Validator, ? super C, ? super W> writer =
+                    writers.get(validatorType);
+            writer.write( context, validator, status );
         }
     }
 
     @Override
-    public void setLanguageContext(LanguageContext<W> context) {
+    public void setLanguageContext(C context) {
         this.context = context;
     }
 

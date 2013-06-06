@@ -17,13 +17,13 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  */
 
 import fi.vincit.jmobster.processor.defaults.hibernate.NotEmptyValidator;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class NotEmptyValidatorWriter extends JavaScriptValidatorWriter<NotEmptyValidator> {
     @Override
-    protected void write(JavaScriptWriter writer, NotEmptyValidator validator, ItemStatus status) {
-        writer.writeKeyValue("required", "true", status);
+    protected void write(JavaScriptContext context, NotEmptyValidator validator, ItemStatus status) {
+        context.getWriter().writeKeyValue("required", "true", status);
     }
 }

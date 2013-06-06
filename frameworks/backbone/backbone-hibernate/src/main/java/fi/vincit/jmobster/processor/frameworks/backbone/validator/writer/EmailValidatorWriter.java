@@ -17,9 +17,9 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  */
 
 import fi.vincit.jmobster.processor.defaults.hibernate.EmailValidator;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSPatternConverter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 import javax.validation.constraints.Pattern;
@@ -36,8 +36,8 @@ public class EmailValidatorWriter extends JavaScriptValidatorWriter<EmailValidat
             + DOMAIN + "|" + IP_DOMAIN + ")$";
 
     @Override
-    protected void write(JavaScriptWriter writer, EmailValidator validator, ItemStatus status) {
-        writer.writeKeyValue(
+    protected void write(JavaScriptContext context, EmailValidator validator, ItemStatus status) {
+        context.getWriter().writeKeyValue(
                 "pattern",
                 JavaToJSPatternConverter.convertFromJava(EMAIL_REG_EXP, Pattern.Flag.CASE_INSENSITIVE),
                 status

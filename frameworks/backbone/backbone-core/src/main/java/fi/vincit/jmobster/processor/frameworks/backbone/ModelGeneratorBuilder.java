@@ -39,7 +39,7 @@ public class ModelGeneratorBuilder {
     private FieldValueConverter fieldValueConverter;
     private BaseFieldTypeConverterManager fieldTypeConverterManager;
     private JavaScriptContext context;
-    private ValidatorWriterManager<JavaScriptWriter> validatorWriterManager;
+    private ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
 
     public ModelGeneratorBuilder setLanguageContext(JavaScriptContext context) {
         this.context = context;
@@ -61,7 +61,7 @@ public class ModelGeneratorBuilder {
         return this;
     }
 
-    public ModelGeneratorBuilder setValidatorWriterManager(ValidatorWriterManager<JavaScriptWriter> validatorWriterManager) {
+    public ModelGeneratorBuilder setValidatorWriterManager(ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
         this.validatorWriterManager = validatorWriterManager;
         return this;
     }

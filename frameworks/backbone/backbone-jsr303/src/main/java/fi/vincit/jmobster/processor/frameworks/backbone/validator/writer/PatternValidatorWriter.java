@@ -17,16 +17,16 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  */
 
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
-import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSPatternConverter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptValidatorWriter;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 
 public class PatternValidatorWriter extends JavaScriptValidatorWriter<PatternValidator> {
 
     @Override
-    protected void write( JavaScriptWriter writer, PatternValidator validator, ItemStatus status ) {
+    protected void write( JavaScriptContext context, PatternValidator validator, ItemStatus status ) {
         String pattern = JavaToJSPatternConverter.convertFromJava(validator.getRegexp(), validator.getFlags());
-        writer.writeKeyValue("pattern", pattern, status);
+        context.getWriter().writeKeyValue("pattern", pattern, status);
     }
 }

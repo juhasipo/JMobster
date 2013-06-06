@@ -21,12 +21,12 @@ import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
-public interface ValidatorWriterManager<W extends DataWriter> {
+public interface ValidatorWriterManager<C extends LanguageContext<? extends W>, W extends DataWriter> {
     /**
      * Configure new validator writer.
      * @param validatorWriters One or more validation writers to add.
      */
-    void setValidator(ValidatorWriter<? extends Validator, ? super W>... validatorWriters);
+    void setValidator(ValidatorWriter<? extends Validator, ? super C, ? super W>... validatorWriters);
 
     /**
      * Writes the given validator with tie configured data writer
@@ -35,5 +35,5 @@ public interface ValidatorWriterManager<W extends DataWriter> {
      */
     void write(Validator validator, ItemStatus status);
 
-    void setLanguageContext(LanguageContext<W> context);
+    void setLanguageContext(C context);
 }

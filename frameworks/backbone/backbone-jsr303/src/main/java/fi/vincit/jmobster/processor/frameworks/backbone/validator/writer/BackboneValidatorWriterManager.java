@@ -17,12 +17,13 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  */
 
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 
 /**
  * Validator writer manager for Backbone
  */
-public class BackboneValidatorWriterManager extends BaseValidatorWriterManager<JavaScriptWriter> {
+public class BackboneValidatorWriterManager extends BaseValidatorWriterManager<JavaScriptContext, JavaScriptWriter> {
     public BackboneValidatorWriterManager() {
         super();
         setValidator(

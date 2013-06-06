@@ -17,9 +17,11 @@ package fi.vincit.jmobster.processor.languages.javascript.writer;
  */
 
 import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.model.Validator;
 
-public abstract class JavaScriptValidatorWriter<T extends Validator> extends BaseValidatorWriter<T, JavaScriptWriter> {
+public abstract class JavaScriptValidatorWriter<T extends Validator>
+        extends BaseValidatorWriter<T, JavaScriptContext, JavaScriptWriter> {
     protected JavaScriptValidatorWriter() {
         super();
     }
