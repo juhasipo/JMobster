@@ -23,18 +23,19 @@ import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * <p>
- *     Abstract implementation for a manager that provides validator
+ * Abstract implementation for a manager that provides validator
  * writers. The subclasses should configure the used validator writers
  * in the constructor or other suitable method before using.
  * </p>
- *
+ * <p/>
  * <p>
- *     The concrete type of data writer can be configured via generic parameter.
+ * The concrete type of data writer can be configured via generic parameter.
  * This will allow the user to use higher level data writers to write validators
  * instead of using just a low level {@link DataWriter}. This writer will be given
  * to the validator writers as the correct type as long as the validator writer
@@ -44,23 +45,31 @@ import java.util.Map;
  * @param <W> DataWriter to use. This has be compatible with the ValidatorWriters that are given to this manager.
  * @see BaseValidatorWriter
  */
-public abstract class BaseValidatorWriterManager<C extends LanguageContext<? extends W>, W extends DataWriter> implements ValidatorWriterManager<C, W> {
+public class BaseValidatorWriterManager<C extends LanguageContext<? extends W>, W extends DataWriter> implements ValidatorWriterManager<C, W> {
     final private Map<Class, ValidatorWriter<? extends Validator, ? super C, ? super W>> writers =
             new HashMap<Class, ValidatorWriter<? extends Validator, ? super C, ? super W>>();
 
     private C context;
 
-    /**
-     * Constructs validator writer manager with the given data writer
-     */
-    public BaseValidatorWriterManager() {
+
+    public BaseValidatorWriterManager(Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>> requiredValidatorWriter,
+                                      Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>>... validatorWriters) {
+        addValidatorWriters(requiredValidatorWriter);
+        for (Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>> validatorWriterCollection : validatorWriters) {
+            addValidatorWriters(validatorWriterCollection);
+        }
     }
 
+    private void addValidatorWriters(Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>> validatorWriterCollection) {
+        for (ValidatorWriter<? extends Validator, ? super C, ? super W> validatorWriter : validatorWriterCollection) {
+            this.writers.put(validatorWriter.getSupportedType(), validatorWriter);
+        }
+    }
 
     @Override
     public void setValidator(ValidatorWriter<? extends Validator, ? super C, ? super W>... validatorWriters) {
-        for( ValidatorWriter<? extends Validator, ? super C, ? super W> validatorWriter : validatorWriters ) {
-            writers.put( validatorWriter.getSupportedType(), validatorWriter );
+        for (ValidatorWriter<? extends Validator, ? super C, ? super W> validatorWriter : validatorWriters) {
+            writers.put(validatorWriter.getSupportedType(), validatorWriter);
         }
     }
 
@@ -68,10 +77,10 @@ public abstract class BaseValidatorWriterManager<C extends LanguageContext<? ext
     @Override
     public void write(Validator validator, ItemStatus status) {
         final Class<?> validatorType = validator.getType();
-        if( writers.containsKey(validatorType) ) {
+        if (writers.containsKey(validatorType)) {
             ValidatorWriter<? extends Validator, ? super C, ? super W> writer =
                     writers.get(validatorType);
-            writer.write( context, validator, status );
+            writer.write(context, validator, status);
         }
     }
 
