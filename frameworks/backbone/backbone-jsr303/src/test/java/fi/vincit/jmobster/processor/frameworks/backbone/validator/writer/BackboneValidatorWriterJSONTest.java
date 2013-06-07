@@ -47,6 +47,7 @@ public class BackboneValidatorWriterJSONTest {
     public void initTestMethod() {
         writer = new StringBufferWriter();
         javaScriptWriter = new JavaScriptWriter(writer);
+        javaScriptWriter.setJSONmode(true);
         writerManager = new BackboneValidatorWriterManager();
         writerManager.setLanguageContext(getTestContext());
     }
@@ -77,7 +78,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "rangeLength: [1, 255],\n";
+        final String expected = "\"rangeLength\": [1, 255],\n";
         assertEquals(expected, result);
     }
 
@@ -113,7 +114,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "rangeLength: [1, 255]\n";
+        final String expected = "\"rangeLength\": [1, 255]\n";
         assertEquals(expected, result);
     }
 
@@ -125,7 +126,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "minLength: 1,\n";
+        final String expected = "\"minLength\": 1,\n";
         assertEquals(expected, result);
     }
 
@@ -137,7 +138,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "minLength: 1\n";
+        final String expected = "\"minLength\": 1\n";
         assertEquals(expected, result);
     }
 
@@ -149,7 +150,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "maxLength: 255,\n";
+        final String expected = "\"maxLength\": 255,\n";
         assertEquals(expected, result);
     }
 
@@ -161,7 +162,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "maxLength: 255\n";
+        final String expected = "\"maxLength\": 255\n";
         assertEquals(expected, result);
     }
 
@@ -192,7 +193,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "range: [1, 255],\n";
+        final String expected = "\"range\": [1, 255],\n";
         assertEquals(expected, result);
     }
 
@@ -228,7 +229,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "range: [1, 255]\n";
+        final String expected = "\"range\": [1, 255]\n";
         assertEquals(expected, result);
     }
 
@@ -240,7 +241,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "min: 1,\n";
+        final String expected = "\"min\": 1,\n";
         assertEquals(expected, result);
     }
 
@@ -252,7 +253,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "min: 1\n";
+        final String expected = "\"min\": 1\n";
         assertEquals(expected, result);
     }
 
@@ -264,7 +265,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "max: 255,\n";
+        final String expected = "\"max\": 255,\n";
         assertEquals(expected, result);
     }
 
@@ -276,7 +277,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "max: 255\n";
+        final String expected = "\"max\": 255\n";
         assertEquals(expected, result);
     }
 
@@ -302,7 +303,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern__regexp: [\"[ABCdef]*\", \"\"],\n";
+        final String expected = "\"pattern__regexp\": [\"[ABCdef]*\", \"\"],\n";
         assertEquals(expected, result);
     }
 
@@ -315,7 +316,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern__regexp: [\"[ABCdef]*\", \"i\"],\n";
+        final String expected = "\"pattern__regexp\": [\"[ABCdef]*\", \"i\"],\n";
         assertEquals(expected, result);
     }
 
@@ -327,7 +328,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern__regexp: [\"[\\\"ABCdef]*\", \"\"],\n";
+        final String expected = "\"pattern__regexp\": [\"[\\\"ABCdef]*\", \"\"],\n";
         assertEquals(expected, result);
     }
 
@@ -339,7 +340,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern__regexp: [\"\\\"[\\\"ABCdef\\\"]*\\\"\\\"\", \"\"],\n";
+        final String expected = "\"pattern__regexp\": [\"\\\"[\\\"ABCdef\\\"]*\\\"\\\"\", \"\"],\n";
         assertEquals(expected, result);
     }
 
@@ -351,7 +352,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern__regexp: [\"[\\\\.ABCdef]*\", \"\"],\n";
+        final String expected = "\"pattern__regexp\": [\"[\\\\.ABCdef]*\", \"\"],\n";
         assertEquals(expected, result);
     }
 
@@ -363,7 +364,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern__regexp: [\"\\\\\\\"[\\\\.ABCdef]*\", \"\"],\n";
+        final String expected = "\"pattern__regexp\": [\"\\\\\\\"[\\\\.ABCdef]*\", \"\"],\n";
         assertEquals(expected, result);
     }
 
@@ -375,7 +376,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern__regexp: [\"[ABCdef]*\", \"\"]\n";
+        final String expected = "\"pattern__regexp\": [\"[ABCdef]*\", \"\"]\n";
         assertEquals(expected, result);
     }
 
@@ -392,7 +393,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "required: true,\n";
+        final String expected = "\"required\": true,\n";
         assertEquals(expected, result);
     }
 
@@ -404,7 +405,7 @@ public class BackboneValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "required: true\n";
+        final String expected = "\"required\": true\n";
         assertEquals(expected, result);
     }
 }

@@ -45,6 +45,7 @@ public class HibernateValidatorWriterJSONTest {
     public void initTestMethod() {
         writer = new StringBufferWriter();
         javaScriptWriter = new JavaScriptWriter(writer);
+        javaScriptWriter.setJSONmode(true);
         writerManager = new HibernateValidatorWriters();
         writerManager.setLanguageContext(getTestContext());
     }
@@ -75,7 +76,7 @@ public class HibernateValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "rangeLength: [1, 255],\n";
+        final String expected = "\"rangeLength\": [1, 255],\n";
         assertEquals(expected, result);
     }
 
@@ -111,7 +112,7 @@ public class HibernateValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "rangeLength: [1, 255]\n";
+        final String expected = "\"rangeLength\": [1, 255]\n";
         assertEquals(expected, result);
     }
 
@@ -123,7 +124,7 @@ public class HibernateValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "minLength: 1,\n";
+        final String expected = "\"minLength\": 1,\n";
         assertEquals(expected, result);
     }
 
@@ -135,7 +136,7 @@ public class HibernateValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "minLength: 1\n";
+        final String expected = "\"minLength\": 1\n";
         assertEquals(expected, result);
     }
 
@@ -147,7 +148,7 @@ public class HibernateValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "maxLength: 255,\n";
+        final String expected = "\"maxLength\": 255,\n";
         assertEquals(expected, result);
     }
 
@@ -159,7 +160,7 @@ public class HibernateValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "maxLength: 255\n";
+        final String expected = "\"maxLength\": 255\n";
         assertEquals(expected, result);
     }
 
@@ -176,7 +177,7 @@ public class HibernateValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "pattern__regexp: [\"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@([a-z0-9!#$%&'*+/=?^_`{|}~-]+(\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\\\\[[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\])$\", \"i\"]\n";
+        final String expected = "\"pattern__regexp\": [\"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@([a-z0-9!#$%&'*+/=?^_`{|}~-]+(\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\\\\[[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\])$\", \"i\"]\n";
         assertEquals(expected, result);
     }
 
@@ -193,7 +194,7 @@ public class HibernateValidatorWriterJSONTest {
         writer.close();
 
         final String result = writer.toString();
-        final String expected = "required: true\n";
+        final String expected = "\"required\": true\n";
         assertEquals(expected, result);
     }
 }
