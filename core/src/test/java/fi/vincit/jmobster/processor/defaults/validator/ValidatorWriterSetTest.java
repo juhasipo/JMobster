@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class BaseValidatorWriterManagerTest {
+public class ValidatorWriterSetTest {
 
     /*
     Following classes test only the possibilities to construct validator writer managers and
@@ -44,8 +44,8 @@ public class BaseValidatorWriterManagerTest {
             @Override protected void write( LanguageContext<DataWriter> languageContext, TestValidator validator, ItemStatus status ) {}
         }
 
-        BaseValidatorWriterManager manager =
-                new BaseValidatorWriterManager(Arrays.asList(new TestValidatorWriter()));
+        ValidatorWriterSet manager =
+                new ValidatorWriterSet(Arrays.asList(new TestValidatorWriter()));
     }
 
     /**
@@ -62,8 +62,8 @@ public class BaseValidatorWriterManagerTest {
             @Override protected void write( LanguageContext<TestWriter> languageContext, TestValidator validator, ItemStatus status ) {}
         }
 
-        BaseValidatorWriterManager manager =
-                new BaseValidatorWriterManager(Arrays.asList(new TestValidatorWriter()));
+        ValidatorWriterSet manager =
+                new ValidatorWriterSet(Arrays.asList(new TestValidatorWriter()));
     }
 
     /**
@@ -80,7 +80,7 @@ public class BaseValidatorWriterManagerTest {
         class TestValidatorWriter extends BaseValidatorWriter<TestValidator, LanguageContext<DataWriter>, DataWriter> {
             @Override protected void write(LanguageContext<DataWriter> languageContext, TestValidator validator, ItemStatus status ) {}
         }
-        class TestManager extends BaseValidatorWriterManager<LanguageContext<TestWriter>, TestWriter> {
+        class TestManager extends ValidatorWriterSet<LanguageContext<TestWriter>, TestWriter> {
             TestManager() {}
         }
 

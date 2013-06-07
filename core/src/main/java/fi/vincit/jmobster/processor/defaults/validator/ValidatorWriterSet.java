@@ -29,11 +29,10 @@ import java.util.Map;
 
 /**
  * <p>
- * Abstract implementation for a manager that provides validator
- * writers. The subclasses should configure the used validator writers
- * in the constructor or other suitable method before using.
+ * Implementation for a manager that provides validator writers.
+ * Constructor takes at least one collection of validator writers but
+ * it can be given multiple collection if required.
  * </p>
- * <p/>
  * <p>
  * The concrete type of data writer can be configured via generic parameter.
  * This will allow the user to use higher level data writers to write validators
@@ -42,18 +41,19 @@ import java.util.Map;
  * has the correct generic type set.
  * </p>
  *
+ * @param <C> LanguageContext that supports DataWriter type W
  * @param <W> DataWriter to use. This has be compatible with the ValidatorWriters that are given to this manager.
  * @see BaseValidatorWriter
  */
-public class BaseValidatorWriterManager<C extends LanguageContext<? extends W>, W extends DataWriter> implements ValidatorWriterManager<C, W> {
+public class ValidatorWriterSet<C extends LanguageContext<? extends W>, W extends DataWriter> implements ValidatorWriterManager<C, W> {
     final private Map<Class, ValidatorWriter<? extends Validator, ? super C, ? super W>> writers =
             new HashMap<Class, ValidatorWriter<? extends Validator, ? super C, ? super W>>();
 
     private C context;
 
 
-    public BaseValidatorWriterManager(Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>> requiredValidatorWriter,
-                                      Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>>... validatorWriters) {
+    public ValidatorWriterSet(Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>> requiredValidatorWriter,
+                              Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>>... validatorWriters) {
         addValidatorWriters(requiredValidatorWriter);
         for (Collection<ValidatorWriter<? extends Validator, ? super C, ? super W>> validatorWriterCollection : validatorWriters) {
             addValidatorWriters(validatorWriterCollection);

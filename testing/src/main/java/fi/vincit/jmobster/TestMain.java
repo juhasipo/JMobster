@@ -19,7 +19,7 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.processor.FieldScanMode;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelFactory;
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.JSR303ValidatorFactory;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.DefaultValueProcessor;
@@ -79,7 +79,7 @@ public class TestMain {
                             new DefaultValueProcessor.Builder()
                                     .build(),
                             new ValidatorProcessor.Builder()
-                                    .setValidatorWriterManager(new BaseValidatorWriterManager(JSR303Validators.get()))
+                                    .setValidatorWriterManager(new ValidatorWriterSet(JSR303Validators.get()))
                                     .build()
                     )
                     .build();

@@ -31,7 +31,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
  *
  * @param <V> Validator type the writer uses
  * @param <C> LanguageContext that excepts DataWriters of type W
- * @param <W> Data writer type. Should be compatible with corresponding {@link fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager}
+ * @param <W> Data writer type. Should be compatible with corresponding {@link fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet}
  */
 public interface ValidatorWriter<V extends Validator, C extends LanguageContext<? extends W>, W extends DataWriter> {
     /**

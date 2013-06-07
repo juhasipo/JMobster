@@ -19,7 +19,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 import fi.vincit.jmobster.processor.defaults.hibernate.EmailValidator;
 import fi.vincit.jmobster.processor.defaults.hibernate.LengthValidator;
 import fi.vincit.jmobster.processor.defaults.hibernate.NotEmptyValidator;
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
@@ -36,7 +36,7 @@ public class HibernateValidatorWriterJSONTest {
 
     private JavaScriptWriter javaScriptWriter;
     private StringBufferWriter writer;
-    private BaseValidatorWriterManager writerManager;
+    private ValidatorWriterSet writerManager;
 
     private JavaScriptContext getTestContext() {
         return new JavaScriptContext(javaScriptWriter, OutputMode.JSON);
@@ -47,7 +47,7 @@ public class HibernateValidatorWriterJSONTest {
         writer = new StringBufferWriter();
         javaScriptWriter = new JavaScriptWriter(writer);
         javaScriptWriter.setJSONmode(true);
-        writerManager = new BaseValidatorWriterManager(HibernateValidators.get());
+        writerManager = new ValidatorWriterSet(HibernateValidators.get());
         writerManager.setLanguageContext(getTestContext());
     }
 

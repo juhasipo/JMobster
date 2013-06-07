@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriterManager;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.NotNullValidator;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.NumberRangeValidator;
 import fi.vincit.jmobster.processor.defaults.validator.jsr303.PatternValidator;
@@ -38,7 +38,7 @@ public class BackboneValidatorWriterJavaScriptTest {
 
     private JavaScriptWriter javaScriptWriter;
     private StringBufferWriter writer;
-    private BaseValidatorWriterManager writerManager;
+    private ValidatorWriterSet writerManager;
 
     private JavaScriptContext getTestContext() {
         return new JavaScriptContext(javaScriptWriter, OutputMode.JAVASCRIPT);
@@ -48,7 +48,7 @@ public class BackboneValidatorWriterJavaScriptTest {
     public void initTestMethod() {
         writer = new StringBufferWriter();
         javaScriptWriter = new JavaScriptWriter(writer);
-        writerManager = new BaseValidatorWriterManager(JSR303Validators.get());
+        writerManager = new ValidatorWriterSet(JSR303Validators.get());
         writerManager.setLanguageContext(getTestContext());
     }
 

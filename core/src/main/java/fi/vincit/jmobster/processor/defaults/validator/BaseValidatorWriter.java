@@ -33,7 +33,7 @@ import java.lang.reflect.Type;
  * @param <V> Validator type the writer uses
  * @param <C> Language context that can use DataWriter of type W
  * @param <W> Writer used to write the validator
- * @see BaseValidatorWriterManager
+ * @see ValidatorWriterSet
  */
 public abstract class BaseValidatorWriter<V extends Validator, C extends LanguageContext<? extends W>, W extends DataWriter> implements ValidatorWriter<V, C, W> {
     final private Class supportedType;
