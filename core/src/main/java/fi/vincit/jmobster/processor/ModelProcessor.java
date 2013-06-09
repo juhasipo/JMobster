@@ -29,7 +29,7 @@ import java.io.IOException;
 public interface ModelProcessor<C extends LanguageContext<W>, W extends DataWriter> {
     /**
      * Called before the first model is processed.
-     * @status Item status
+     * @param status Item status
      * @throws IOException If something goes wrong with writing the data
      */
     void doStartProcessing(ItemStatus status) throws IOException;
@@ -44,7 +44,7 @@ public interface ModelProcessor<C extends LanguageContext<W>, W extends DataWrit
 
     /**
      * Called when the last model has been processed.
-     * @status Item status
+     * @param status Item status
      * @throws IOException If something goes wrong with writing the data
      */
     void doEndProcessing(ItemStatus status) throws IOException;

@@ -21,7 +21,6 @@ import fi.vincit.jmobster.processor.ModelFactory;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.builder.ModelFactoryBuilder;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
-import fi.vincit.jmobster.processor.languages.LanguageContext;
 
 /**
  * <p>
@@ -43,8 +42,8 @@ public class JMobsterFactory {
 
     /**
      * Creates a model generator instance with custom {@link ModelProcessor}.
-     * @param modelProcessor
-     * @return
+     * @param modelProcessor Model processor to use
+     * @return {@link ModelGenerator}
      */
     public static ModelGenerator getModelGenerator(ModelProcessor modelProcessor) {
         return new DefaultModelGenerator(modelProcessor);

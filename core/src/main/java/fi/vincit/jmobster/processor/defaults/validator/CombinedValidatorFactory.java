@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Combines one or more {@ValidatorFactory} instances into single validator factory. The
+ * Combines one or more {@link ValidatorFactory} instances into single validator factory. The
  * order in which the factories are given tells which of the factories is in
  * higher priority. If the first encountered factory can create validators, the
  * rest of the validators will not be executed.

@@ -19,8 +19,6 @@ package fi.vincit.jmobster.processor.defaults.validator;
 import fi.vincit.jmobster.processor.ValidatorFactory;
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.combination.OptionalTypes;
-import fi.vincit.jmobster.util.combination.RequiredTypes;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +28,7 @@ import java.util.List;
  * Base class for validator factories. Extends this class to create factories for a
  * custom set of validators. If you only need to add more validators to an existing factory
  * you don't need to create new class. Use {@link BaseValidatorFactory#setValidator(ValidatorConstructor)} or
- * {@link BaseValidatorFactory#setValidator(Class, fi.vincit.jmobster.util.combination.RequiredTypes, fi.vincit.jmobster.util.combination.OptionalTypes)}
+ * {@link BaseValidatorFactory#setValidator(Class[])} )}
  * to add new validators to the factory.
  */
 public abstract class BaseValidatorFactory implements ValidatorFactory {

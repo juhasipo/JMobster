@@ -49,9 +49,9 @@ public class ModelFactoryBuilder {
 
     /**
      * Overrides {@link ModelFactoryBuilder#setModelFieldFactory(fi.vincit.jmobster.processor.ModelFieldFactory)}
-     * @param scanMode
-     * @param validatorScanner
-     * @return
+     * @param scanMode What fields should be scanned for validation annotations
+     * @param validatorScanner {@link ValidatorScanner} to use for producing validators
+     * @return Builder
      */
     public ModelFactoryBuilder setFieldScanMode( FieldScanMode scanMode, ValidatorScanner validatorScanner ) {
         this.scanMode = scanMode;
@@ -63,8 +63,8 @@ public class ModelFactoryBuilder {
     /**
      * Overrides {@link ModelFactoryBuilder#setFieldScanMode(fi.vincit.jmobster.processor.FieldScanMode, fi.vincit.jmobster.processor.ValidatorScanner)} and
      * {@link ModelFactoryBuilder#setFieldScanMode(fi.vincit.jmobster.processor.FieldScanMode)}.
-     * @param modelFieldFactory
-     * @return
+     * @param modelFieldFactory {@link ModelFieldFactory} to use
+     * @return Builder
      */
     public ModelFactoryBuilder setModelFieldFactory(ModelFieldFactory modelFieldFactory) {
         this.modelFieldFactory = modelFieldFactory;
@@ -82,7 +82,7 @@ public class ModelFactoryBuilder {
      * for more details
      * @param validatorFactory Primary {@link ValidatorFactory}
      * @param validatorFactories Alternative {@link ValidatorFactory} objects
-     * @return
+     * @return Builder
      */
     public ModelFactoryBuilder setValidatorFactory(ValidatorFactory validatorFactory, ValidatorFactory... validatorFactories) {
         if( validatorFactories.length > 0 ) {
