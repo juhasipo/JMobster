@@ -22,6 +22,11 @@ package fi.vincit.jmobster.util.itemprocessor;
  * the processing is. Initialize the Item status with the item
  * count and then call {@link ItemStatus#update(int)} method with
  * the current index.
+ *
+ * Item statuses are equal if both are first, both are last or
+ * neither is first nor last. ItemStatus object is not supposed to
+ * be used for precise position in the list. Only for first, middle
+ * and last position checking.
  */
 public class ItemStatus {
     final private int numberOfItems;
@@ -82,15 +87,15 @@ public class ItemStatus {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ItemStatus)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ItemStatus)) {
+            return false;
+        }
 
         ItemStatus that = (ItemStatus) o;
-
-        if (firstItem != that.firstItem) return false;
-        if (lastItem != that.lastItem) return false;
-
-        return true;
+        return firstItem == that.firstItem && lastItem == that.lastItem;
     }
 
     @Override

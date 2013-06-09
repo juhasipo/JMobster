@@ -16,10 +16,12 @@ package fi.vincit.jmobster.util.itemprocessor;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class ItemStatusTest {
@@ -99,4 +101,105 @@ public class ItemStatusTest {
         assertTrue(status.isNotFirstItem());
         assertTrue(status.isNotLastItem());
     }
+
+
+    @Test
+    public void testEqualsFirst_SameNumberOfItems() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(0);
+
+        ItemStatus status2 = new ItemStatus(10);
+        status2.update(0);
+
+        assertThat(status1, is(status2));
+    }
+
+    @Test
+    public void testEqualsFirst_DifferentNumberOfItems() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(0);
+
+        ItemStatus status2 = new ItemStatus(100);
+        status2.update(0);
+
+        assertThat(status1, is(status2));
+    }
+
+    @Test
+    public void testEqualsLast_SameNumberOfItems() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(9);
+
+        ItemStatus status2 = new ItemStatus(10);
+        status2.update(9);
+
+        assertThat(status1, is(status2));
+    }
+
+    @Test
+    public void testEqualsLast_DifferentNumberOfItems() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(9);
+
+        ItemStatus status2 = new ItemStatus(100);
+        status2.update(99);
+
+        assertThat(status1, is(status2));
+    }
+
+    @Test
+    public void testEqualsInMiddle_SameNumberOfItems() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(3);
+
+        ItemStatus status2 = new ItemStatus(10);
+        status2.update(5);
+
+        assertThat(status1, is(status2));
+    }
+
+    @Test
+    public void testEqualsInMiddle_DifferentNumberOfItems() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(4);
+
+        ItemStatus status2 = new ItemStatus(100);
+        status2.update(54);
+
+        assertThat(status1, is(status2));
+    }
+
+    @Test
+    public void testNotEqualsInMiddle_FirstAndMiddle() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(0);
+
+        ItemStatus status2 = new ItemStatus(10);
+        status2.update(5);
+
+        assertThat(status1, is(not(status2)));
+    }
+
+    @Test
+    public void testNotEqualsInMiddle_FirstAndLast() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(0);
+
+        ItemStatus status2 = new ItemStatus(10);
+        status2.update(9);
+
+        assertThat(status1, is(not(status2)));
+    }
+
+    @Test
+    public void testNotEqualsInMiddle_LastAndMiddle() {
+        ItemStatus status1 = new ItemStatus(10);
+        status1.update(9);
+
+        ItemStatus status2 = new ItemStatus(10);
+        status2.update(5);
+
+        assertThat(status1, is(not(status2)));
+    }
+
 }
