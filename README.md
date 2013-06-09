@@ -393,7 +393,7 @@ public class MyLanguageContext extends LanguageContext<CustomDataWriter> {
 // Now you can write
 ValidatorWriterManager<MyLanguageContext, CustomDataWriter> manager;
 // and
-public abstract class JavaScriptValidatorWriter<T extends Validator>
+public abstract class MyLanguageValidatorWriter<T extends Validator>
         extends BaseValidatorWriter<T, JavaScriptContext, JavaScriptWriter> {
     // ...
 }
@@ -401,7 +401,7 @@ public abstract class JavaScriptValidatorWriter<T extends Validator>
 // Instead of
 ValidatorWriterManager<LanguageContext<CustomDataWriter>, CustomDataWriter> manager;
 // and
-public abstract class JavaScriptValidatorWriter<T extends Validator>
+public abstract class MyLanguageValidatorWriter<T extends Validator>
         extends BaseValidatorWriter<T, LanguageContext<CustomDataWriter>, CustomDataWriter> {
     // ...
 }
