@@ -191,7 +191,7 @@ public class GenericGroupManager implements GroupManager<Class> {
         final List<Class> groupsToCheck = new ArrayList<Class>();
         if( groupsGiven.length > 0 ) {
             for( Class groupGiven : groupsGiven ) {
-                addLeavesToList((Class)groupGiven, groupsToCheck);
+                addLeavesToList(groupGiven, groupsToCheck);
             }
         }
         return groupsToCheck;
@@ -200,7 +200,7 @@ public class GenericGroupManager implements GroupManager<Class> {
     private List<Class> breakDownGenericGroupsToLeaves( Collection<Class> requiredGroups ) {
         final List<Class> groupTreeLeaves = new ArrayList<Class>();
         for( Class group : requiredGroups ) {
-            addLeavesToList((Class)group, (List)groupTreeLeaves);
+            addLeavesToList(group, (List)groupTreeLeaves);
         }
         return groupTreeLeaves;
     }

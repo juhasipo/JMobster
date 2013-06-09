@@ -24,7 +24,7 @@ import fi.vincit.jmobster.util.writer.DataWriter;
 public class DummyDataWriter implements DataWriter {
     private static final DummyDataWriter DUMMY_DATA_WRITER = new DummyDataWriter();
 
-    public static final DummyDataWriter getInstance() {
+    public static DummyDataWriter getInstance() {
         return DUMMY_DATA_WRITER;
     }
 

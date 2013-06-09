@@ -49,7 +49,6 @@ public class DefaultModelGenerator<W extends DataWriter> implements ModelGenerat
             .getLogger( DefaultModelGenerator.class );
 
     private final ModelProcessor modelProcessor;
-    private LanguageContext<W> context;
 
     /**
      * Creates new DefaultModelGenerator
@@ -71,7 +70,6 @@ public class DefaultModelGenerator<W extends DataWriter> implements ModelGenerat
 
     @Override
     public void setLanguageContext(LanguageContext<W> context) {
-        this.context = context;
         modelProcessor.setLanguageContext(context);
     }
 

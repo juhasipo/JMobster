@@ -44,8 +44,7 @@ public class ValidatorWriterSetTest {
             @Override protected void write( LanguageContext<DataWriter> languageContext, TestValidator validator, ItemStatus status ) {}
         }
 
-        ValidatorWriterSet manager =
-                new ValidatorWriterSet(Arrays.asList(new TestValidatorWriter()));
+        new ValidatorWriterSet(Arrays.asList(new TestValidatorWriter()));
     }
 
     /**
@@ -62,8 +61,7 @@ public class ValidatorWriterSetTest {
             @Override protected void write( LanguageContext<TestWriter> languageContext, TestValidator validator, ItemStatus status ) {}
         }
 
-        ValidatorWriterSet manager =
-                new ValidatorWriterSet(Arrays.asList(new TestValidatorWriter()));
+        new ValidatorWriterSet(Arrays.asList(new TestValidatorWriter()));
     }
 
     /**

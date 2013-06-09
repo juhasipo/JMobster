@@ -60,7 +60,7 @@ public class ItemStatus {
      * Update the processing
      * @param itemIndex 0 based index.
      */
-    final private void updateInternal(int itemIndex) {
+    private void updateInternal(int itemIndex) {
         firstItem = itemIndex == 0;
         lastItem = itemIndex == (numberOfItems-1);
     }

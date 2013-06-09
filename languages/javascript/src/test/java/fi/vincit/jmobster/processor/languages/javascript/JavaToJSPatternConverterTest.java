@@ -42,13 +42,13 @@ public class JavaToJSPatternConverterTest {
 
     @Test(expected = AssertionError.class)
     public void testPatternAnnotationProcessorNull() {
-        String result = JavaToJSPatternConverter.convertFromJava(null);
+        JavaToJSPatternConverter.convertFromJava(null);
     }
 
     @Test(expected = AssertionError.class)
     public void testPatternAnnotationProcessorNullFlags() {
         Pattern.Flag[] flags = null;
-        String result = JavaToJSPatternConverter.convertFromJava("", flags);
+        JavaToJSPatternConverter.convertFromJava("", flags);
     }
 
     @Test
@@ -100,6 +100,6 @@ public class JavaToJSPatternConverterTest {
 
     @Test(expected = AssertionError.class)
     public void testPatternAnnotationProcessorNull_JSON() {
-        String result = JavaToJSPatternConverter.convertFromJavaToJSON(null);
+        JavaToJSPatternConverter.convertFromJavaToJSON(null);
     }
 }

@@ -18,7 +18,6 @@ package fi.vincit.jmobster.util.collection;
 
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.util.AbstractAnnotation;
-import fi.vincit.jmobster.util.collection.AnnotationBag;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -27,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 public class AnnotationBagTest {
     public static class Type1 extends AbstractAnnotation {}
-    public static class Type2 extends AbstractAnnotation {};
+    public static class Type2 extends AbstractAnnotation {}
 
     @Test
     public void testFindAnnotation() {

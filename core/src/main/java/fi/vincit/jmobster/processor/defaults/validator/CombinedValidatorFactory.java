@@ -22,6 +22,7 @@ import fi.vincit.jmobster.processor.model.Validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,9 +46,7 @@ public class CombinedValidatorFactory extends BaseValidatorFactory {
      */
     public CombinedValidatorFactory(ValidatorFactory validatorFactory, ValidatorFactory... additionalFactories) {
         validatorFactories.add(validatorFactory);
-        for( ValidatorFactory additionalFactory : additionalFactories ) {
-            validatorFactories.add(additionalFactory);
-        }
+        Collections.addAll(validatorFactories, additionalFactories);
     }
 
     @Override

@@ -19,20 +19,17 @@ package fi.vincit.jmobster.processor.model;
 import fi.vincit.jmobster.util.test.TestUtil;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ModelTest {
     @Test
     public void testConstructModelNoFields() throws Exception {
-        class TestModelClass {};
+        class TestModelClass {}
         Collection<ModelField> modelFields = Collections.emptyList();
 
         Model model = new Model(TestModelClass.class, "TestModel", modelFields);
@@ -45,7 +42,7 @@ public class ModelTest {
 
     @Test
     public void testConstructModelValidations() throws Exception {
-        class TestModelClass {};
+        class TestModelClass {}
         ModelField fieldWithoutValidation = mock(ModelField.class);
         when(fieldWithoutValidation.hasValidators()).thenReturn(false);
         ModelField fieldWithValidation = mock(ModelField.class);
@@ -61,7 +58,7 @@ public class ModelTest {
 
     @Test
     public void testConstructModelNoValidations() throws Exception {
-        class TestModelClass {};
+        class TestModelClass {}
         ModelField fieldWithoutValidation1 = mock(ModelField.class);
         when(fieldWithoutValidation1.hasValidators()).thenReturn( false );
         ModelField fieldWithoutValidation2 = mock(ModelField.class);

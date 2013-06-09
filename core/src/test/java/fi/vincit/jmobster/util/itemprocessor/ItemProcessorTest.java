@@ -17,15 +17,11 @@ package fi.vincit.jmobster.util.itemprocessor;
 
 
 import fi.vincit.jmobster.util.test.TestUtil;
-import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
-import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
-import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 
 public class ItemProcessorTest {
@@ -99,7 +95,7 @@ public class ItemProcessorTest {
         LastItemCaller lic = new LastItemCaller();
         ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        ItemProcessor.process(itemProcessor, new String[] {"item1"});
+        ItemProcessor.process(itemProcessor, "item1");
 
         assertEquals("item1", sb.toString());
         assertEquals(1, lic.calledWithLastTrue);
@@ -125,7 +121,7 @@ public class ItemProcessorTest {
         LastItemCaller lic = new LastItemCaller();
         ItemHandler<String> itemProcessor = getItemProcessor(sb,  lic);
 
-        ItemProcessor.process(itemProcessor, new String[] {"item1", "item2", "item3", "item4"});
+        ItemProcessor.process(itemProcessor, "item1", "item2", "item3", "item4");
 
         assertEquals("item1item2item3item4", sb.toString());
         assertEquals(1, lic.calledWithLastTrue);

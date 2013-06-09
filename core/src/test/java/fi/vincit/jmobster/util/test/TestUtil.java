@@ -44,6 +44,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,9 +100,7 @@ public class TestUtil {
      */
     public static <T>List<T> listFromObjects(T... objects) {
         List<T> arrayList = new ArrayList<T>(objects.length);
-        for( T t : objects ) {
-            arrayList.add(t);
-        }
+        Collections.addAll(arrayList, objects);
         return arrayList;
     }
 
@@ -113,9 +112,7 @@ public class TestUtil {
      */
     public static <T>Collection<T> collectionFromObjects(T... objects) {
         Collection<T> arrayList = new ArrayList<T>(objects.length);
-        for( T t : objects ) {
-            arrayList.add(t);
-        }
+        Collections.addAll(arrayList, objects);
         return arrayList;
     }
 

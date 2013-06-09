@@ -53,6 +53,7 @@ public abstract class StreamDataWriter implements DataWriter {
         try {
             this.writer.flush();
         } catch( IOException e ) {
+            LOG.error("Exception while flushing writer", e);
         }
     }
 

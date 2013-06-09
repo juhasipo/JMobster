@@ -19,23 +19,12 @@ package fi.vincit.jmobster.processor.model;
 import org.junit.Test;
 
 import javax.validation.constraints.Size;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FieldAnnotationTest {
-    @Test
-    public void testConvertToFieldAnnotations() throws Exception {
-        Annotation annotation = mock(Annotation.class);
-
-        //List<FieldAnnotation> annotationList = FieldAnnotation.convertToFieldAnnotations();
-    }
 
     @Test(expected = NullPointerException.class)
     public void testNullAnnotation() {
