@@ -69,7 +69,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
             return this;
         }
 
-        public Builder setValidatorWriterManager(ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
+        public Builder setValidatorWriters(ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
             this.validatorWriterManager = validatorWriterManager;
             return this;
         }

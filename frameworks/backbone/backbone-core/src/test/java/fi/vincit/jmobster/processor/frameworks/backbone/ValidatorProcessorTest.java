@@ -181,7 +181,7 @@ public class ValidatorProcessorTest {
         return new ValidatorProcessor.Builder()
                 .setValueConverter(fieldValueConverter)
                 .setWriter(writer, OutputMode.JSON)
-                .setValidatorWriterManager(validatorWriterManager)
+                .setValidatorWriters(validatorWriterManager)
                 .build();
     }
 

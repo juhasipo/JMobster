@@ -79,7 +79,7 @@ public class TestMain {
                             new DefaultValueProcessor.Builder()
                                     .build(),
                             new ValidatorProcessor.Builder()
-                                    .setValidatorWriterManager(new ValidatorWriterSet(JSR303Validators.get()))
+                                    .setValidatorWriters(new ValidatorWriterSet(JSR303Validators.get()))
                                     .build()
                     )
                     .build();
