@@ -55,7 +55,6 @@ public class BackboneModelProcessorBuilderTest {
     public void testBuildWithDefaultProcessors() {
         BackboneModelProcessor processor = new BackboneModelProcessor
                 .Builder(context)
-                .setValueConverter(valueConverter)
                 .useDefaultModelProcessors(validatorWriterManager)
                 .build();
         processor.doProcessModel(model, ItemStatuses.first());
@@ -65,7 +64,6 @@ public class BackboneModelProcessorBuilderTest {
     public void testBuildWithOneProcessors() {
         BackboneModelProcessor processor = new BackboneModelProcessor
                 .Builder(context)
-                .setValueConverter(valueConverter)
                 .setModelProcessors(validatorProcessor)
                 .build();
         processor.doProcessModel(model, ItemStatuses.first());
@@ -75,7 +73,6 @@ public class BackboneModelProcessorBuilderTest {
     public void testBuildWithTwoProcessors() {
         BackboneModelProcessor processor = new BackboneModelProcessor
                 .Builder(context)
-                .setValueConverter(valueConverter)
                 .setModelProcessors(validatorProcessor, valueProcessor)
                 .build();
 

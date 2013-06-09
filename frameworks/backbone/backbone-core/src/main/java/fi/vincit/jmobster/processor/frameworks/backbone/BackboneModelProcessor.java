@@ -15,7 +15,6 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import fi.vincit.jmobster.processor.languages.javascript.BaseJavaScriptModelProcessor;
@@ -66,7 +65,6 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
         setStartComment(DEFAULT_START_COMMENT);
         setNamespaceName(DEFAULT_NAMESPACE);
         setLanguageContext(builder.context);
-        setFieldValueConverter(builder.valueConverter);
 
         if( builder.context.getOutputMode() == OutputMode.JSON ) {
             getWriter().setJSONmode(true);
@@ -75,17 +73,11 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
 
     public static class Builder {
         private JavaScriptContext context;
-        private FieldValueConverter valueConverter;
         private ModelProcessor<JavaScriptContext, JavaScriptWriter>[] modelProcessors =
                 new ModelProcessor[0];
 
         public Builder(JavaScriptContext languageContext) {
             context = languageContext;
-        }
-
-        public Builder setValueConverter(FieldValueConverter valueConverter) {
-            this.valueConverter = valueConverter;
-            return this;
         }
 
         public Builder setModelProcessors(ModelProcessor<JavaScriptContext, JavaScriptWriter>... modelProcessors) {

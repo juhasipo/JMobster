@@ -74,9 +74,9 @@ public class TestMain {
         BackboneModelProcessor backboneModelProcessor =
                 new BackboneModelProcessor
                     .Builder(context)
-                    .setValueConverter(converter)
                     .setModelProcessors(
                             new DefaultValueProcessor.Builder()
+                                    .setValueConverter(converter)
                                     .build(),
                             new ValidatorProcessor.Builder()
                                     .setValidatorWriters(new ValidatorWriterSet(JSR303Validators.get()))

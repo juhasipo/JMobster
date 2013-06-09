@@ -30,6 +30,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 
+import static org.mockito.Mockito.never;
+
 public class BaseModelProcessorTest {
 
     @Mock private DataWriter writer;
@@ -73,14 +75,23 @@ public class BaseModelProcessorTest {
         public void endProcessing(ItemStatus status) throws IOException {}
     }
 
-    private TestModelProcessor createProcessor(BuildMode buildMode, DataWriterContext context) {
+    private final int USE_NONE = 0;
+    private final int USE_FIELD_CONVERTER = 1;
+    private final int USE_CONTEXT = 2;
+    private final int USE_BOTH = USE_CONTEXT | USE_FIELD_CONVERTER;
+
+    private TestModelProcessor createProcessor(BuildMode buildMode, DataWriterContext context, int flags) {
         TestModelProcessor processor = new TestModelProcessor("");
         if( buildMode == BuildMode.ADD_MODEL_PROCESSORS ) {
             processor.addModelProcessor(validatorProcessor);
             processor.addModelProcessor(valueProcessor);
         }
-        processor.setLanguageContext(context);
-        processor.setFieldValueConverter(valueConverter);
+        if( (flags & USE_CONTEXT) > 0 ) {
+            processor.setLanguageContext(context);
+        }
+        if( (flags & USE_FIELD_CONVERTER) > 0 ) {
+            processor.setFieldValueConverter(valueConverter);
+        }
         return processor;
     }
 
@@ -93,7 +104,7 @@ public class BaseModelProcessorTest {
     public void testSetNewLanguageContextPropagation() {
         DataWriterContext context1 = getTestContext();
         DataWriterContext context2 = getTestContext();
-        TestModelProcessor processor = createProcessor(BuildMode.ADD_MODEL_PROCESSORS, context1);
+        TestModelProcessor processor = createProcessor(BuildMode.ADD_MODEL_PROCESSORS, context1, USE_BOTH);
 
         processor.setLanguageContext(context2);
 
@@ -107,10 +118,44 @@ public class BaseModelProcessorTest {
     @Test
     public void testAddModelProcessor() {
         DataWriterContext context = getTestContext();
-        TestModelProcessor processor = createProcessor(BuildMode.NO_MODEL_PROCESSORS, context);
+        TestModelProcessor processor = createProcessor(BuildMode.NO_MODEL_PROCESSORS, context, USE_BOTH);
 
         processor.addModelProcessor(validatorProcessor);
 
         Mockito.verify(validatorProcessor).setLanguageContext(context);
+        Mockito.verify(validatorProcessor).setFieldValueConverter(valueConverter);
+    }
+
+    @Test
+    public void testAddModelProcessor_NoContext() {
+        DataWriterContext context = getTestContext();
+        TestModelProcessor processor = createProcessor(BuildMode.NO_MODEL_PROCESSORS, context, USE_FIELD_CONVERTER);
+
+        processor.addModelProcessor(validatorProcessor);
+
+        Mockito.verify(validatorProcessor, never()).setLanguageContext(context);
+        Mockito.verify(validatorProcessor).setFieldValueConverter(valueConverter);
+    }
+
+    @Test
+    public void testAddModelProcessor_NoFieldConverter() {
+        DataWriterContext context = getTestContext();
+        TestModelProcessor processor = createProcessor(BuildMode.NO_MODEL_PROCESSORS, context, USE_CONTEXT);
+
+        processor.addModelProcessor(validatorProcessor);
+
+        Mockito.verify(validatorProcessor).setLanguageContext(context);
+        Mockito.verify(validatorProcessor, never()).setFieldValueConverter(valueConverter);
+    }
+
+    @Test
+    public void testAddModelProcessor_NoContextNorFieldConverter() {
+        DataWriterContext context = getTestContext();
+        TestModelProcessor processor = createProcessor(BuildMode.NO_MODEL_PROCESSORS, context, USE_NONE);
+
+        processor.addModelProcessor(validatorProcessor);
+
+        Mockito.verify(validatorProcessor, never()).setLanguageContext(context);
+        Mockito.verify(validatorProcessor, never()).setFieldValueConverter(valueConverter);
     }
 }

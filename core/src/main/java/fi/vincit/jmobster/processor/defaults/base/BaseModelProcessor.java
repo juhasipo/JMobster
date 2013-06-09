@@ -86,10 +86,19 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
         return name;
     }
 
+    /**
+     * If value converter or context is set, the default one in the given model processor
+     * will be overridden.
+     * @param modelProcessor Model processor to add.
+     */
     public void addModelProcessor(ModelProcessor<C, W> modelProcessor) {
         modelProcessors.add(modelProcessor);
-        modelProcessor.setFieldValueConverter(valueConverter);
-        modelProcessor.setLanguageContext(context);
+        if( valueConverter != null ) {
+            modelProcessor.setFieldValueConverter(valueConverter);
+        }
+        if( context != null ) {
+            modelProcessor.setLanguageContext(context);
+        }
     }
 
     protected Collection<ModelProcessor<C, W>> getModelProcessors() {

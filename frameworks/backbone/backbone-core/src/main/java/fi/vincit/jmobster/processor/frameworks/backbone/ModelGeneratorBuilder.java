@@ -83,7 +83,6 @@ public class ModelGeneratorBuilder {
             }
             modelProcessor = new fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor
                     .Builder(context)
-                    .setValueConverter(fieldValueConverter)
                     .useDefaultModelProcessors(validatorWriterManager)
                     .build();
         }
