@@ -12,8 +12,11 @@ The project has just started so the backwards compatibility may break once in a 
 the code. The current version is not well tested yet with real Backbone.js client nor a working server so there will
 be a lot of bugs.
 
+#### JMobster Process
 ![JMobster process](https://raw.github.com/juhasipo/JMobster/master/img/process.png)
 
+#### JMobster Package Dependencies
+![JMobster package dependencies](https://raw.github.com/juhasipo/JMobster/validator-refactor/img/dependencies.png)
 
 ### Requirements
 
