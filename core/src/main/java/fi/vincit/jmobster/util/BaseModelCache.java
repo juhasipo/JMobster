@@ -25,9 +25,9 @@ import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The purpose of model cache is to provide an easy way to generate and store generated
@@ -38,9 +38,9 @@ import java.util.Set;
  * @param <W> {@link DataWriter} the LanguageContext uses
  */
 public abstract class BaseModelCache<C extends LanguageContext<W>, W extends DataWriter> {
-    private Map<String, String> generatedModelsByName = new HashMap<String, String>();
+    private Map<String, String> generatedModelsByName = new ConcurrentHashMap<String, String>();
 
-    private Map<String, Model> modelsByName = new HashMap<String, Model>();
+    private Map<String, Model> modelsByName = new ConcurrentHashMap<String, Model>();
 
     private ModelGenerator<W> modelGenerator;
     private ModelFactory modelFactory;
@@ -68,7 +68,7 @@ public abstract class BaseModelCache<C extends LanguageContext<W>, W extends Dat
         return generatedModelsByName.get(internalModelName);
     }
 
-    private void generateModelAndAddToCache(String internalModelName) {
+    private synchronized void generateModelAndAddToCache(String internalModelName) {
         Model model = modelsByName.get(internalModelName);
         modelGenerator.process(model);
         String modelData = getLanguageContext().getWriter().toString();
