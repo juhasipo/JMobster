@@ -83,7 +83,7 @@ public class BaseModelCacheTest {
     @Test(expected = IllegalArgumentException.class)
     public void testGetModel_NoneFound() {
         TestModelCache modelCache = getModelCache();
-        modelCache.getModel("test");
+        modelCache.getModelByNameAndGroupClasses("test");
     }
 
     @Test
@@ -92,7 +92,7 @@ public class BaseModelCacheTest {
 
         modelCache.addModels(TEST_CLASSES);
 
-        String generatedModel = modelCache.getModel("TestModel");
+        String generatedModel = modelCache.getModelByNameAndGroupClasses("TestModel");
 
         assertThat(generatedModel, is("Test_Model"));
 
@@ -105,8 +105,8 @@ public class BaseModelCacheTest {
 
         modelCache.addModels(TEST_CLASSES);
 
-        String generatedModel1 = modelCache.getModel("TestModel");
-        String generatedModel2 = modelCache.getModel("TestModel");
+        String generatedModel1 = modelCache.getModelByNameAndGroupClasses("TestModel");
+        String generatedModel2 = modelCache.getModelByNameAndGroupClasses("TestModel");
 
         assertThat(generatedModel1, is("Test_Model"));
         assertThat(generatedModel2, is("Test_Model"));
@@ -120,9 +120,9 @@ public class BaseModelCacheTest {
 
         modelCache.addModels(TEST_CLASSES);
 
-        String generatedModel1 = modelCache.getModel("TestModel");
+        String generatedModel1 = modelCache.getModelByNameAndGroupClasses("TestModel");
         modelCache.clearModelCache();
-        String generatedModel2 = modelCache.getModel("TestModel");
+        String generatedModel2 = modelCache.getModelByNameAndGroupClasses("TestModel");
 
         assertThat(generatedModel1, is("Test_Model"));
         assertThat(generatedModel2, is("Test_Model_2"));
@@ -136,9 +136,9 @@ public class BaseModelCacheTest {
 
         modelCache.addModels(TEST_CLASSES);
 
-        modelCache.getModel("TestModel");
+        modelCache.getModelByNameAndGroupClasses("TestModel");
         modelCache.clearModelCacheAndModels();
-        modelCache.getModel("TestModel");
+        modelCache.getModelByNameAndGroupClasses("TestModel");
     }
 
     @Test

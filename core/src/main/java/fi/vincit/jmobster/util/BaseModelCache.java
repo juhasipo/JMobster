@@ -22,11 +22,10 @@ import fi.vincit.jmobster.processor.ModelFactory;
 import fi.vincit.jmobster.processor.ModelProcessor;
 import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -38,16 +37,58 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <W> {@link DataWriter} the LanguageContext uses
  */
 public abstract class BaseModelCache<C extends LanguageContext<W>, W extends DataWriter> {
-    private Map<String, String> generatedModelsByName = new ConcurrentHashMap<String, String>();
 
+    static class ModelIdentity {
+        public String name;
+        public Set<Class> groups;
+        public Class[] groupArray;
+
+        public ModelIdentity(String name, Set<Class> groups) {
+            this.name = name;
+            this.groups = groups;
+            // TODO Optimize array creation
+            groupArray = new Class[groups.size()];
+            int i = 0;
+            for( Class group : groups ) {
+                groupArray[i] = group;
+                ++i;
+            }
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ModelIdentity)) return false;
+
+            ModelIdentity that = (ModelIdentity) o;
+            return groups.equals(that.groups) && name.equals(that.name);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = name.hashCode();
+            result = 31 * result + groups.hashCode();
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return name + ":" + groups;
+        }
+    }
+
+    private Map<ModelIdentity, String> generatedModelsByName = new ConcurrentHashMap<ModelIdentity, String>();
     private Map<String, Model> modelsByName = new ConcurrentHashMap<String, Model>();
+    private Map<String, Class> groupDirectory = new ConcurrentHashMap<String, Class>();
 
     private ModelGenerator<W> modelGenerator;
     private ModelFactory modelFactory;
+    private ModelProcessor<C,W> modelProcessor;
     private C languageContext;
 
     public BaseModelCache(ModelProcessor<C, W> modelProcessor, ModelFactory modelFactory) {
         this.modelGenerator = JMobsterFactory.getModelGenerator(modelProcessor);
+        this.modelProcessor = modelProcessor;
         this.modelFactory = modelFactory;
         this.languageContext = modelProcessor.getLanguageContext();
     }
@@ -56,11 +97,19 @@ public abstract class BaseModelCache<C extends LanguageContext<W>, W extends Dat
         return languageContext;
     }
 
-    public String getModel(String name) {
-        String internalModelName = nameToInternalName(name);
+    public void addGroup(Class group, String groupName) {
+        groupDirectory.put(groupName, group);
+    }
+
+    public String getModelByNameAndGroupNames(String name, String... groups) {
+        Set<Class> groupSet = groupNamesToClasses(groups);
+        return getModelInternal(new ModelIdentity(name, groupSet));
+    }
+
+    private String getModelInternal(ModelIdentity internalModelName) {
         if( !generatedModelsByName.containsKey(internalModelName) ) {
-            if( !modelsByName.containsKey(internalModelName) ) {
-                throw new IllegalArgumentException("No such model: " + name);
+            if( !modelsByName.containsKey(internalModelName.name) ) {
+                throw new IllegalArgumentException("No such model: " + internalModelName);
             }
 
             generateModelAndAddToCache(internalModelName);
@@ -68,24 +117,44 @@ public abstract class BaseModelCache<C extends LanguageContext<W>, W extends Dat
         return generatedModelsByName.get(internalModelName);
     }
 
-    private synchronized void generateModelAndAddToCache(String internalModelName) {
-        Model model = modelsByName.get(internalModelName);
+    private Set<Class> groupNamesToClasses(String... groups) {
+        Set<Class> groupClasses = new HashSet<Class>();
+        for( String group : groups ) {
+            if( groupDirectory.containsKey(group) ) {
+                groupClasses.add(groupDirectory.get(group));
+            } else {
+                throw new RuntimeException("Could not map " + group + " to a group");
+            }
+        }
+        return groupClasses;
+    }
+
+    public String getModelByNameAndGroupClasses(String name, Class... groups) {
+        return getModelInternal(nameToInternalName(name, groups));
+    }
+
+    private synchronized void generateModelAndAddToCache(ModelIdentity modelIdentity) {
+        Model model = modelsByName.get(modelIdentity.name);
+        assert(model != null);
+        modelProcessor.setValidatorFilter(GroupMode.ANY_OF_REQUIRED, modelIdentity.groupArray);
         modelGenerator.process(model);
         String modelData = getLanguageContext().getWriter().toString();
-        generatedModelsByName.put(internalModelName, modelData);
+        generatedModelsByName.put(modelIdentity, modelData);
         getLanguageContext().getWriter().clear();
     }
 
     public void addModels(Collection<Class> classes) {
         Collection<Model> models = modelFactory.createAll(classes);
         for( Model model : models ) {
-            String modelName = nameToInternalName(model.getName());
-            modelsByName.put(modelName, model);
+            ModelIdentity modelName = nameToInternalName(model.getName());
+            modelsByName.put(modelName.name, model);
         }
     }
 
-    private String nameToInternalName(String name) {
-        return name;
+    private ModelIdentity nameToInternalName(String name, Class... groups) {
+        Set<Class> groupSet = new HashSet<Class>(groups.length);
+        Collections.addAll(groupSet, groups);
+        return new ModelIdentity(name, groupSet);
     }
 
     public void clearModelCache() {
@@ -98,6 +167,10 @@ public abstract class BaseModelCache<C extends LanguageContext<W>, W extends Dat
     }
 
     public Set<String> getModelNames() {
-        return modelsByName.keySet();
+        Set<String> names = new TreeSet<String>();
+        for( String identity : modelsByName.keySet() ) {
+            names.add(identity);
+        }
+        return names;
     }
 }

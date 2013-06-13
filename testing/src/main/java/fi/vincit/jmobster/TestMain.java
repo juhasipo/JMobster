@@ -82,6 +82,9 @@ public class TestMain {
         backboneModelProcessor.setValidatorFilter(GroupMode.ANY_OF_REQUIRED, DemoClasses.Group2.class);
         JavaScriptModelCache modelCache = new JavaScriptModelCache(backboneModelProcessor, factory);
         modelCache.addModels(classesToConvert);
+        modelCache.addGroup(DemoClasses.Group1.class, "Group1");
+        modelCache.addGroup(DemoClasses.Group2.class, "Group2");
+
         for(String modelName : modelCache.getModelNames() ) {
             System.out.println(modelName);
         }
@@ -89,8 +92,9 @@ public class TestMain {
         //System.in.read();
         System.out.println("Generate models");
         // Generate models
-        //System.out.println("Model:\n" + modelCache.getModel("MyModel"));
-        System.out.println("Model:\n" + modelCache.getModel("BeanPropertyDemo"));
+        System.out.println("Model:\n" + modelCache.getModelByNameAndGroupClasses("MyModel"));
+        System.out.println("Model:\n" + modelCache.getModelByNameAndGroupNames("BeanPropertyDemo", "Group1"));
+        System.out.println("Model:\n" + modelCache.getModelByNameAndGroupClasses("BeanPropertyDemo", DemoClasses.Group2.class));
         System.out.println(" - Done");
     }
 
