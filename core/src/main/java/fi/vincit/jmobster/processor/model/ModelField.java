@@ -15,10 +15,7 @@ package fi.vincit.jmobster.processor.model;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.collection.AnnotationBag;
-
 import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,34 +27,31 @@ import java.util.Collections;
 public class ModelField {
 
     final private Class fieldType;
-    final private Collection<Validator> validators;
-    final private AnnotationBag fieldAnnotations;
+    final private Collection<FieldAnnotation> annotations;
     final private String name;
 
     /**
      * Model field constructed from Java object field
      * @param field Java field
-     * @param validators Validators
+     * @param annotations Annotations
      */
-    public ModelField( Field field, Collection<Validator> validators ) {
+    public ModelField( Field field, Collection<FieldAnnotation> annotations) {
         this.fieldType = field.getType();
         this.name = field.getName();
-        this.validators = new ArrayList<Validator>();
-        this.fieldAnnotations = new AnnotationBag();
-        addValidators(validators);
+        this.annotations = new ArrayList<FieldAnnotation>();
+        addAnnotations(annotations);
     }
 
     /**
      * Model field constructed from bean property
      * @param property Bean property
-     * @param validators Validators
+     * @param annotations Annotations
      */
-    public ModelField( PropertyDescriptor property, Collection<Validator> validators ) {
+    public ModelField( PropertyDescriptor property, Collection<FieldAnnotation> annotations ) {
         this.fieldType  = property.getPropertyType();
         this.name = property.getName();
-        this.validators = new ArrayList<Validator>();
-        this.fieldAnnotations = new AnnotationBag();
-        addValidators(validators);
+        this.annotations = new ArrayList<FieldAnnotation>();
+        addAnnotations(annotations);
     }
 
     public String getName() {
@@ -68,31 +62,19 @@ public class ModelField {
         return fieldType;
     }
 
-    public final void addValidators(Collection<? extends Validator> validators) {
-        this.validators.addAll(validators);
-    }
-
-    public Collection<Validator> getValidators() {
-        return Collections.unmodifiableCollection(this.validators);
-    }
-
-    public boolean hasValidators() {
-        return !this.validators.isEmpty();
-    }
-
     public void addAnnotation(FieldAnnotation annotation) {
-        this.fieldAnnotations.addAnnotation(annotation);
+        this.annotations.add(annotation);
     }
 
-    public <T extends Annotation> T getAnnotation( Class<T> clazz ) {
-        return fieldAnnotations.getAnnotation( clazz );
+    public final void addAnnotations(Collection<? extends FieldAnnotation> validators) {
+        this.annotations.addAll(validators);
     }
 
-    public <T extends Annotation> boolean hasAnnotation( Class<T> annotationType ) {
-        return fieldAnnotations.hasAnnotation( annotationType );
+    public Collection<FieldAnnotation> getAnnotations() {
+        return Collections.unmodifiableCollection(this.annotations);
     }
 
     public boolean hasAnnotations() {
-        return this.fieldAnnotations.hasAnnotations();
+        return !this.annotations.isEmpty();
     }
 }

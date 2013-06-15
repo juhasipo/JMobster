@@ -62,7 +62,11 @@ public class CastUtil {
 
         public Object toParameter(Annotation annotation) {
             if( isOptional ) {
-                return new Optional(annotation);
+                if( annotation == null ) {
+                    return Optional.empty();
+                } else {
+                    return new Optional(annotation);
+                }
             } else {
                 return annotation;
             }

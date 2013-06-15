@@ -34,8 +34,8 @@ import fi.vincit.jmobster.annotation.FieldGroupFilter;
 import fi.vincit.jmobster.annotation.IgnoreField;
 import fi.vincit.jmobster.processor.FieldScanMode;
 import fi.vincit.jmobster.processor.ValidatorScanner;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.groups.GenericGroupManager;
 import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.util.test.TestUtil;
@@ -44,39 +44,25 @@ import org.junit.Test;
 import javax.validation.constraints.Min;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static fi.vincit.jmobster.util.test.TestUtil.assertFieldFoundOnce;
 import static fi.vincit.jmobster.util.test.TestUtil.assertFieldNotFound;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DefaultModelFieldFactoryTest {
 
     private DefaultModelFieldFactory getFieldScanner(FieldScanMode scanMode) {
         ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
         when(validatorScanner.getValidators(any(Field.class)))
-                .thenReturn( TestUtil.collectionFromObjects(mock(Validator.class)) );
+                .thenReturn( TestUtil.collectionFromObjects(mock(FieldAnnotation.class)) );
         when(validatorScanner.getValidators(any(PropertyDescriptor.class)))
-                .thenReturn(TestUtil.collectionFromObjects(mock(Validator.class)));
+                .thenReturn(TestUtil.collectionFromObjects(mock(FieldAnnotation.class)));
         GenericGroupManager fieldGroupManager = new GenericGroupManager(GroupMode.ANY_OF_REQUIRED);
         return new DefaultModelFieldFactory(scanMode, validatorScanner, fieldGroupManager);
-    }
-
-    @Test
-    public void testSetValidatorFilterGroups() {
-        ValidatorScanner validatorScanner = mock(ValidatorScanner.class);
-        GenericGroupManager fieldGroupManager = mock(GenericGroupManager.class);
-        DefaultModelFieldFactory fs =
-                new DefaultModelFieldFactory( FieldScanMode.DIRECT_FIELD_ACCESS, validatorScanner, fieldGroupManager );
-        final GroupMode groupMode = GroupMode.ANY_OF_REQUIRED;
-        final Collection<Class> groups = new ArrayList<Class>();
-        fs.setValidatorFilterGroups(groupMode, groups);
-
-        verify(validatorScanner, times(1)).setFilterGroups(groupMode, groups);
     }
 
     public static class SimpleTestClass {
@@ -129,7 +115,7 @@ public class DefaultModelFieldFactoryTest {
         assertFieldFoundOnce( models, "privateStringField" );
 
         ModelField fieldWithAnnotations = models.get(fieldIndexWithAnnotations);
-        assertEquals(1, fieldWithAnnotations.getValidators().size());
+        assertEquals(1, fieldWithAnnotations.getAnnotations().size());
     }
 
     public static class TestClassNoDefaultConstructor {
@@ -261,7 +247,7 @@ public class DefaultModelFieldFactoryTest {
         List<ModelField> models = fs.getFields( SimpleTestGetterClass.class );
 
         int i = assertFieldFoundOnce( models, "longValue" );
-        assertEquals(1, models.get(i).getValidators().size());
+        assertEquals(1, models.get(i).getAnnotations().size());
     }
 
     public static class IgnoreBeanPropertyClass {

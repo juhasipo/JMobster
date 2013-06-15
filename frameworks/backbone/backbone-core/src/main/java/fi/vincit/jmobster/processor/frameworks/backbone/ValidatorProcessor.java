@@ -17,21 +17,24 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
-import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorFilter;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
 import fi.vincit.jmobster.processor.languages.javascript.BaseJavaScriptModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.processor.model.Validator;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.util.itemprocessor.ItemHandler;
 import fi.vincit.jmobster.util.itemprocessor.ItemProcessor;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.Collection;
 
 /**
  * Implements validation part of a Backbone.validation model
@@ -39,8 +42,8 @@ import java.io.IOException;
  */
 public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
 
-    private ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
-    private ItemHandler<Validator> validatorWriter;
+    private ValidatorWriterSet<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
+    private ValidatorFilter validatorFilter;
 
     public static class Builder {
         private String name = "validation";
@@ -49,7 +52,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
                 new JavaScriptWriter(DummyDataWriter.getInstance()),
                 OutputMode.JAVASCRIPT
         );
-        private ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
+        private ValidatorWriterSet<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
 
         public Builder() {
         }
@@ -69,7 +72,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
             return this;
         }
 
-        public Builder setValidatorWriters(ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
+        public Builder setValidatorWriters(ValidatorWriterSet<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
             this.validatorWriterManager = validatorWriterManager;
             return this;
         }
@@ -83,15 +86,9 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
         super(builder.name);
 
         this.validatorWriterManager = builder.validatorWriterManager;
+        this.validatorFilter = new ValidatorFilter(GroupMode.ANY_OF_REQUIRED);
         setLanguageContext(builder.context);
         setFieldValueConverter(builder.valueConverter);
-
-        this.validatorWriter = new ItemHandler<Validator>() {
-            @Override
-            public void process( Validator validator, ItemStatus status ) {
-                validatorWriterManager.write(validator, status);
-            }
-        };
     }
 
     @Override
@@ -105,7 +102,8 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
             @Override
             public void process( ModelField field, ItemStatus status ) {
                 getWriter().writeKey( field.getName() ).startBlock();
-                ItemProcessor.process(field.getValidators()).with(validatorWriter);
+                Collection<Annotation> annotations = validatorFilter.filterByGroup(field.getAnnotations());
+                validatorWriterManager.write(annotations, status);
                 getWriter().endBlock( status );
             }
         });

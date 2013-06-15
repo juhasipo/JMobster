@@ -45,4 +45,10 @@ public class OptionalTest {
         Optional<Long> optional = new Optional<Long>(null);
         optional.getValue();
     }
+
+    @Test
+    public void testOptionalEmpty() throws Exception {
+        Optional<Long> optional = Optional.empty();
+        assertThat(optional.isPresent(), is(false));
+    }
 }

@@ -18,8 +18,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import fi.vincit.jmobster.processor.defaults.DummyDataWriter;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
@@ -41,7 +41,7 @@ public class BackboneModelProcessorBuilderTest {
     @Mock private ModelProcessor<JavaScriptContext, JavaScriptWriter> validatorProcessor;
     @Mock private ModelProcessor<JavaScriptContext, JavaScriptWriter> valueProcessor;
     @Mock private Model model;
-    @Mock private ValidatorWriterManager validatorWriterManager;
+    @Mock private ValidatorWriterSet validatorWriterManager;
 
     @Before
     public void init() {

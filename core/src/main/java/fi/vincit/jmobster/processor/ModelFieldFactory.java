@@ -48,13 +48,6 @@ public interface ModelFieldFactory {
     void setAllowFinalFields( boolean allowFinalFields );
 
     /**
-     * Sets filters which are used for filtering validators
-     * @param groupMode Group mode
-     * @param groups Groups to use for filtering
-     */
-    void setValidatorFilterGroups( GroupMode groupMode, Collection<Class> groups );
-
-    /**
      * Sets filters which are used for filtering fields
      * @param groupMode Group mode
      * @param groups Groups to use for filtering

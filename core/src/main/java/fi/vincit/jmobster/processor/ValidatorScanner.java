@@ -16,8 +16,7 @@ package fi.vincit.jmobster.processor;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.model.Validator;
-import fi.vincit.jmobster.util.groups.GroupMode;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
@@ -35,19 +34,12 @@ public interface ValidatorScanner {
      * @param field Field to scan
      * @return Validation annotation. If nothing found returns an empty collection.
      */
-    Collection<Validator> getValidators( Field field );
+    Collection<FieldAnnotation> getValidators( Field field );
 
     /**
      * Gets the validators for the given property
      * @param property Property to scan
      * @return Validation annotation. If nothing found returns an empty collection.
      */
-    Collection<Validator> getValidators( PropertyDescriptor property );
-
-    /**
-     * Sets filter group mode and filter groups for validation scanning.
-     * @param groupMode Filter group mode
-     * @param groups Groups to filter with
-     */
-    void setFilterGroups( GroupMode groupMode, Collection<Class> groups );
+    Collection<FieldAnnotation> getValidators( PropertyDescriptor property );
 }

@@ -17,14 +17,14 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Model;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
-import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -33,6 +33,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -44,7 +45,7 @@ public class ValidatorProcessorTest {
 
     private StringBufferWriter writer;
     @Mock private FieldValueConverter fieldValueConverter;
-    @Mock private ValidatorWriterManager validatorWriterManager;
+    @Mock private ValidatorWriterSet validatorWriterManager;
     @Before
     public void init() {
         writer = new StringBufferWriter();
@@ -119,11 +120,11 @@ public class ValidatorProcessorTest {
         ModelField field1 = mock(ModelField.class); {
             when(field1.getFieldType()).thenReturn(String.class);
             when(field1.getName()).thenReturn("field1");
-            when(field1.hasValidators()).thenReturn(true);
+            when(field1.hasAnnotations()).thenReturn(true);
 
-            List<Validator> validators = new ArrayList<Validator>();
-            when(field1.getValidators()).thenReturn(validators);
-            validators.add(mock(Validator.class));
+            List<FieldAnnotation> validators = new ArrayList<FieldAnnotation>();
+            when(field1.getAnnotations()).thenReturn(validators);
+            validators.add(mock(FieldAnnotation.class));
         }
 
         List<ModelField> fields = new ArrayList<ModelField>();
@@ -150,13 +151,13 @@ public class ValidatorProcessorTest {
         ModelField field1 = mock(ModelField.class); {
             when(field1.getFieldType()).thenReturn(String.class);
             when(field1.getName()).thenReturn("field1");
-            when(field1.hasValidators()).thenReturn(true);
+            when(field1.hasAnnotations()).thenReturn(true);
 
-            List<Validator> validators = new ArrayList<Validator>();
-            when(field1.getValidators()).thenReturn(validators);
-            validators.add(mock(Validator.class));
-            validators.add(mock(Validator.class));
-            validators.add(mock(Validator.class));
+            List<FieldAnnotation> validators = new ArrayList<FieldAnnotation>();
+            when(field1.getAnnotations()).thenReturn(validators);
+            validators.add(mock(FieldAnnotation.class));
+            validators.add(mock(FieldAnnotation.class));
+            validators.add(mock(FieldAnnotation.class));
         }
 
         List<ModelField> fields = new ArrayList<ModelField>();
@@ -192,18 +193,19 @@ public class ValidatorProcessorTest {
 
     private void mockValidators(final String... validatorStrings) {
         if( validatorStrings.length == 0 ) {
-            doNothing().when(validatorWriterManager).write(any(Validator.class), any(ItemStatus.class));
+            doNothing().when(validatorWriterManager).write(anyCollection(), any(ItemStatus.class));
         } else {
             doAnswer(new Answer() {
-                int i = 0;
                 @Override
                 public Object answer(InvocationOnMock invocation) throws Throwable {
-                    assert i <= validatorStrings.length : "Out of validator strings";
-                    writer.write(validatorStrings[i]);
-                    ++i;
+                    int numOfAnnotations = ((Collection)invocation.getArguments()[0]).size();
+                    for( int i = 0; i < numOfAnnotations; ++i ) {
+                        assert i <= validatorStrings.length : "Out of validator strings";
+                        writer.write(validatorStrings[i]);
+                    }
                     return null;
                 }
-            }).when(validatorWriterManager).write(any(Validator.class), any(ItemStatus.class));
+            }).when(validatorWriterManager).write(anyCollection(), any(ItemStatus.class));
         }
     }
 }

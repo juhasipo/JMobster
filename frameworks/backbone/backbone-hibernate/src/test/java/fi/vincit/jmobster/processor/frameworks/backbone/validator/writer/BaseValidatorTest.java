@@ -16,15 +16,19 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.Collection;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.util.writer.StringBufferWriter;
 
-public class HibernateValidators {
-    public static Collection get() {
-        return Arrays.asList(
-                new NotEmptyValidator(),
-                new LengthValidator(),
-                new EmailValidator()
-        );
+public abstract class BaseValidatorTest {
+
+    protected JavaScriptContext mockWriter(OutputMode mode) {
+        StringBufferWriter stringWriter = new StringBufferWriter();
+        JavaScriptWriter writer = new JavaScriptWriter(stringWriter);
+        if( mode == OutputMode.JSON ) {
+            writer.setJSONmode(true);
+        }
+        return new JavaScriptContext(writer, mode);
     }
 }

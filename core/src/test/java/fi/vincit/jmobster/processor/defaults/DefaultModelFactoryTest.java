@@ -92,17 +92,6 @@ public class DefaultModelFactoryTest {
     public static interface Group2 {}
 
     @Test
-    public void testSetValidatorFilterGroups() throws Exception {
-        ModelFactory factory = createModelFactory();
-
-        factory.setValidatorFilterGroups( GroupMode.EXACTLY_REQUIRED, Group1.class, Group2.class );
-
-        ArgumentCaptor<Collection> groupsArgument = ArgumentCaptor.forClass( Collection.class );
-        verify( modelFieldFactory, times( 1 ) ).setValidatorFilterGroups( eq( GroupMode.EXACTLY_REQUIRED ), groupsArgument.capture() );
-        assertEquals( 2, groupsArgument.getValue().size() );
-    }
-
-    @Test
     public void testSetFieldFilterGroups() throws Exception {
         ModelFactory factory = createModelFactory();
 

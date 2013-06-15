@@ -19,16 +19,15 @@ package fi.vincit.jmobster;
 import fi.vincit.jmobster.processor.FieldScanMode;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelFactory;
-import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
-import fi.vincit.jmobster.processor.defaults.validator.jsr303.JSR303ValidatorFactory;
+import fi.vincit.jmobster.processor.defaults.DefaultValidatorScanner;
 import fi.vincit.jmobster.processor.frameworks.backbone.BackboneModelProcessor;
-import fi.vincit.jmobster.processor.frameworks.backbone.DefaultValueProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.ValidatorProcessor;
 import fi.vincit.jmobster.processor.frameworks.backbone.validator.writer.JSR303Validators;
 import fi.vincit.jmobster.processor.languages.JavaScriptModelCache;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.JavaToJSValueConverter;
 import fi.vincit.jmobster.processor.languages.javascript.valueconverters.EnumConverter;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriterSet;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.ConverterMode;
 import fi.vincit.jmobster.util.groups.GroupMode;
@@ -44,10 +43,9 @@ public class TestMain {
     public static void main(String[] args) throws IOException, InterruptedException {
         // Analyze models
         ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
-                .setFieldScanMode( FieldScanMode.DIRECT_FIELD_ACCESS )
-                .setFieldGroups( GroupMode.ANY_OF_REQUIRED )
-                .setValidatorGroups( GroupMode.ANY_OF_REQUIRED, String.class, Integer.class )
-                .setValidatorFactory( new JSR303ValidatorFactory() )
+                .setFieldScanMode(FieldScanMode.DIRECT_FIELD_ACCESS)
+                .setFieldGroups(GroupMode.ANY_OF_REQUIRED)
+                .setValidatorScanner(new DefaultValidatorScanner())
                 .build();
 
         System.out.println("Generate test classes");
@@ -75,11 +73,8 @@ public class TestMain {
                 new BackboneModelProcessor
                     .Builder(context)
                     .setModelProcessors(
-                            new DefaultValueProcessor.Builder()
-                                    .setValueConverter(converter)
-                                    .build(),
                             new ValidatorProcessor.Builder()
-                                    .setValidatorWriters(new ValidatorWriterSet(JSR303Validators.get()))
+                                    .setValidatorWriters(new JavaScriptWriterSet(JSR303Validators.get()))
                                     .build()
                     )
                     .build();

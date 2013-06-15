@@ -37,13 +37,13 @@ public class ModelFieldTest {
 
         Field field = TestUtil.getFieldFromClass(TestClass.class, 0);
         final Class fieldType = String.class;
-        Collection<Validator> validators = Collections.emptyList();
+        Collection<FieldAnnotation> validators = Collections.emptyList();
 
         ModelField modelField = new ModelField(field, validators);
 
         assertEquals("testFieldName", modelField.getName());
         assertEquals(fieldType, modelField.getFieldType());
-        assertFalse(modelField.hasValidators());
+        assertFalse(modelField.hasAnnotations());
         assertFalse(modelField.hasAnnotations());
     }
 
@@ -53,13 +53,13 @@ public class ModelFieldTest {
 
         PropertyDescriptor field = TestUtil.getPropertyFromClass( TestClass.class, "testFieldName" );
         final Class fieldType = String.class;
-        Collection<Validator> validators = Collections.emptyList();
+        Collection<FieldAnnotation> validators = Collections.emptyList();
 
         ModelField modelField = new ModelField(field, validators);
 
         assertEquals("testFieldName", modelField.getName());
         assertEquals(fieldType, modelField.getFieldType());
-        assertFalse(modelField.hasValidators());
+        assertFalse(modelField.hasAnnotations());
         assertFalse(modelField.hasAnnotations());
     }
 
@@ -68,18 +68,18 @@ public class ModelFieldTest {
         class TestClass { public String testFieldName; }
 
         Field field = TestUtil.getFieldFromClass(TestClass.class, 0);
-        Collection<Validator> validators = Collections.emptyList();
+        Collection<FieldAnnotation> validators = Collections.emptyList();
 
         ModelField modelField = new ModelField(field, validators);
 
-        Validator validator1 = mock(Validator.class);
-        Validator validator2 = mock(Validator.class);
-        Collection<Validator> validatorsToAdd = TestUtil.collectionFromObjects(validator1, validator2);
+        FieldAnnotation validator1 = mock(FieldAnnotation.class);
+        FieldAnnotation validator2 = mock(FieldAnnotation.class);
+        Collection<FieldAnnotation> validatorsToAdd = TestUtil.collectionFromObjects(validator1, validator2);
 
-        modelField.addValidators(validatorsToAdd);
+        modelField.addAnnotations(validatorsToAdd);
 
-        assertTrue(modelField.hasValidators());
-        assertEquals(2, modelField.getValidators().size());
+        assertTrue(modelField.hasAnnotations());
+        assertEquals(2, modelField.getAnnotations().size());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class ModelFieldTest {
         class TestClass { public String testFieldName; }
 
         Field field = TestUtil.getFieldFromClass(TestClass.class, 0);
-        Collection<Validator> validators = Collections.emptyList();
+        Collection<FieldAnnotation> validators = Collections.emptyList();
 
         ModelField modelField = new ModelField(field, validators);
 
@@ -100,8 +100,5 @@ public class ModelFieldTest {
         modelField.addAnnotation(annotation2);
 
         assertTrue( modelField.hasAnnotations() );
-        final Class classToFind = TestClass.class;
-        assertTrue(modelField.hasAnnotation(classToFind));
-        assertNotNull(modelField.getAnnotation(classToFind));
     }
 }

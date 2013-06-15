@@ -16,10 +16,7 @@ package fi.vincit.jmobster.processor.defaults;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.util.groups.GroupMode;
-import fi.vincit.jmobster.processor.ValidatorFactory;
-import fi.vincit.jmobster.util.test.TestUtil;
-import fi.vincit.jmobster.util.groups.GroupManager;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import org.junit.Test;
 
 import javax.validation.constraints.NotNull;
@@ -27,46 +24,27 @@ import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.util.Collection;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class DefaultValidatorScannerTest {
     @Test
     public void testGetValidatorsFromField() throws Exception {
-        ValidatorFactory validatorFactory = mock(ValidatorFactory.class);
-        GroupManager<Class> groupManager = mock(GroupManager.class);
-        DefaultValidatorScanner validatorScanner = new DefaultValidatorScanner(validatorFactory, groupManager);
+        DefaultValidatorScanner validatorScanner = new DefaultValidatorScanner();
 
         class T {@NotNull int field;}
-        validatorScanner.getValidators(T.class.getDeclaredFields()[0]);
-
-        verify(validatorFactory,times(1)).createValidators(any(Collection.class));
+        Collection<FieldAnnotation> annotations = validatorScanner.getValidators(T.class.getDeclaredFields()[0]);
+        assertThat(annotations.size(), is(1));
     }
 
     @Test
     public void testGetValidatorsFromProperty() throws Exception {
-        ValidatorFactory validatorFactory = mock(ValidatorFactory.class);
-        GroupManager<Class> groupManager = mock(GroupManager.class);
-        DefaultValidatorScanner validatorScanner = new DefaultValidatorScanner(validatorFactory, groupManager);
+        DefaultValidatorScanner validatorScanner = new DefaultValidatorScanner();
 
         class T {int field; @NotNull public int getField() { return field; }}
         final BeanInfo beanInfo = Introspector.getBeanInfo( T.class );
-        validatorScanner.getValidators(beanInfo.getPropertyDescriptors()[0]);
-
-        verify(validatorFactory,times(1)).createValidators(any(Collection.class));
-    }
-
-    @Test
-    public void testSetFilterGroups() throws Exception {
-        ValidatorFactory validatorFactory = mock(ValidatorFactory.class);
-        GroupManager<Class> groupManager = mock(GroupManager.class);
-        DefaultValidatorScanner validatorScanner = new DefaultValidatorScanner(validatorFactory, groupManager);
-
-        Collection<Class> groups = (Collection)TestUtil.listFromObjects( String.class );
-        validatorScanner.setFilterGroups( GroupMode.EXACTLY_REQUIRED, groups );
-        verify( groupManager, times(1) ).setGroups( eq( GroupMode.EXACTLY_REQUIRED ), any( Collection.class ) );
+        // getClass is in index 0. getField is in index 1
+        Collection<FieldAnnotation> annotations = validatorScanner.getValidators(beanInfo.getPropertyDescriptors()[1]);
+        assertThat(annotations.size(), is(1));
     }
 }

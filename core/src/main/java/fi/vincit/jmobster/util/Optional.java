@@ -28,6 +28,12 @@ package fi.vincit.jmobster.util;
  * @param <T> Type the optional object contains.
  */
 public class Optional<T> {
+
+    private static Optional EMPTY_VALUE = new Optional(null);
+    public static Optional empty() {
+        return EMPTY_VALUE;
+    }
+
     private T value;
 
     public Optional(T value) {

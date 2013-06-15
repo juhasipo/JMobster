@@ -17,16 +17,13 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.processor.languages.LanguageContext;
-import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
-public interface ValidatorWriterSet<C extends LanguageContext<? extends W>, W extends DataWriter> {
-    void setValidator(ValidatorWriter<? super C, ? super W>... validatorWriters);
-
-    void write(Collection<? extends Annotation> annotations, ItemStatus status);
-
-    void setLanguageContext(C context);
+public interface ValidatorWriter<C extends LanguageContext<? extends W>, W extends DataWriter> {
+    void setContext(C context);
+    void write(Collection<? extends Annotation> annotations);
+    boolean supportsAnnotations(Collection<? extends Annotation> annotations);
 }

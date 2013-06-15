@@ -1,4 +1,4 @@
-package fi.vincit.jmobster.processor.defaults.validator;
+package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 /*
  * Copyright 2012-2013 Juha Siponen
@@ -16,17 +16,14 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
-import fi.vincit.jmobster.processor.languages.LanguageContext;
-import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
-import fi.vincit.jmobster.util.writer.DataWriter;
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
+import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
+import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 
-import java.lang.annotation.Annotation;
-import java.util.Collection;
+import javax.validation.constraints.NotNull;
 
-public interface ValidatorWriterSet<C extends LanguageContext<? extends W>, W extends DataWriter> {
-    void setValidator(ValidatorWriter<? super C, ? super W>... validatorWriters);
-
-    void write(Collection<? extends Annotation> annotations, ItemStatus status);
-
-    void setLanguageContext(C context);
+public class NotNullValidator extends BaseValidatorWriter<JavaScriptContext, JavaScriptWriter> {
+    public void write(NotNull notNull) {
+        getWriter().writeKeyValue("required", "true");
+    }
 }

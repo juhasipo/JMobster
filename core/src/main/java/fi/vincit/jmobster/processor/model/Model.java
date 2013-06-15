@@ -17,7 +17,6 @@ package fi.vincit.jmobster.processor.model;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * A single model that is converted to the target platform.
@@ -44,7 +43,7 @@ public class Model {
 
     private void checkIfValidationsInFields() {
         for( ModelField field : this.fields ) {
-            if( field.hasValidators() ) {
+            if( field.hasAnnotations() ) {
                 this.validations = true;
                 break;
             }

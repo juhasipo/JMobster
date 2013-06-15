@@ -32,7 +32,6 @@ package fi.vincit.jmobster.util.test;/*
 
 import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.ModelField;
-import fi.vincit.jmobster.processor.model.Validator;
 import fi.vincit.jmobster.util.collection.AnnotationBag;
 import org.junit.Assert;
 
@@ -123,7 +122,7 @@ public class TestUtil {
      * @param validators Annotations
      * @return Model field with given annotations
      */
-    public static ModelField getField(List<Validator> validators) {
+    public static ModelField getField(List<FieldAnnotation> validators) {
         class T {int field;}
         ModelField field = new ModelField(T.class.getDeclaredFields()[0], validators);
         return field;

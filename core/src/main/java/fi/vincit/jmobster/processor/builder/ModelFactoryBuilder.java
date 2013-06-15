@@ -17,12 +17,13 @@ package fi.vincit.jmobster.processor.builder;
  */
 
 import fi.vincit.jmobster.exception.BuildingError;
-import fi.vincit.jmobster.processor.*;
+import fi.vincit.jmobster.processor.FieldScanMode;
+import fi.vincit.jmobster.processor.ModelFieldFactory;
+import fi.vincit.jmobster.processor.ModelNamingStrategy;
+import fi.vincit.jmobster.processor.ValidatorScanner;
 import fi.vincit.jmobster.processor.defaults.DefaultModelFactory;
 import fi.vincit.jmobster.processor.defaults.DefaultModelFieldFactory;
 import fi.vincit.jmobster.processor.defaults.DefaultNamingStrategy;
-import fi.vincit.jmobster.processor.defaults.DefaultValidatorScanner;
-import fi.vincit.jmobster.processor.defaults.validator.CombinedValidatorFactory;
 import fi.vincit.jmobster.util.groups.GenericGroupManager;
 import fi.vincit.jmobster.util.groups.GroupMode;
 
@@ -33,14 +34,12 @@ import fi.vincit.jmobster.util.groups.GroupMode;
 public class ModelFactoryBuilder {
     // These classes may have some default values since there are no external dependencies
     private FieldScanMode scanMode = FieldScanMode.DIRECT_FIELD_ACCESS;
-    private GenericGroupManager validatorGroupManager = new GenericGroupManager(GroupMode.ANY_OF_REQUIRED);
     private GenericGroupManager fieldGroupManager = new GenericGroupManager( GroupMode.ANY_OF_REQUIRED);
 
     // Following classes have dependencies so they cannot have any default values at this point
     private ModelFieldFactory modelFieldFactory;
     private ModelNamingStrategy modelNamingStrategy;
     private ValidatorScanner validatorScanner;
-    private ValidatorFactory validatorFactory;
 
     public ModelFactoryBuilder setFieldScanMode( FieldScanMode scanMode ) {
         this.scanMode = scanMode;
@@ -76,32 +75,6 @@ public class ModelFactoryBuilder {
         return this;
     }
 
-    /**
-     * Add one or more {@link ValidatorFactory} objects to {@link ModelFactory}. If multiple
-     * factories are added, they are combined as one. See {@link CombinedValidatorFactory}
-     * for more details
-     * @param validatorFactory Primary {@link ValidatorFactory}
-     * @param validatorFactories Alternative {@link ValidatorFactory} objects
-     * @return Builder
-     */
-    public ModelFactoryBuilder setValidatorFactory(ValidatorFactory validatorFactory, ValidatorFactory... validatorFactories) {
-        if( validatorFactories.length > 0 ) {
-            this.validatorFactory = new CombinedValidatorFactory(validatorFactory, validatorFactories);
-        } else {
-            this.validatorFactory = validatorFactory;
-        }
-        return this;
-    }
-
-    public ModelFactoryBuilder setValidatorGroupManager( GenericGroupManager validatorGroupManager ) {
-        this.validatorGroupManager = validatorGroupManager;
-        return this;
-    }
-    public ModelFactoryBuilder setValidatorGroups( GroupMode groupMode, Class... groups ) {
-        this.validatorGroupManager = new GenericGroupManager(groupMode, groups);
-        return this;
-    }
-
     public ModelFactoryBuilder setFieldGroupManager( GenericGroupManager fieldGroupManager ) {
         this.fieldGroupManager = fieldGroupManager;
         return this;
@@ -111,15 +84,14 @@ public class ModelFactoryBuilder {
         return this;
     }
 
+    public ModelFactoryBuilder setValidatorScanner(ValidatorScanner validatorScanner) {
+        this.validatorScanner = validatorScanner;
+        return this;
+    }
+
     public DefaultModelFactory build() {
         if( modelNamingStrategy == null ) {
             modelNamingStrategy = new DefaultNamingStrategy();
-        }
-
-        if( this.validatorScanner == null ) {
-            throwIfNull(validatorFactory, "ValidatorFactory");
-            throwIfNull(validatorGroupManager, "GroupManager");
-            this.validatorScanner = new DefaultValidatorScanner(this.validatorFactory, this.validatorGroupManager );
         }
 
         throwIfNull(fieldGroupManager, "FieldGroupManager");
@@ -128,6 +100,7 @@ public class ModelFactoryBuilder {
             if( this.scanMode == null ) {
                 throw new BuildingError("Either ModelFieldFactory or ScanMode (+ optionally ValidatorScanner) has to be set.");
             }
+            throwIfNull(validatorScanner, "ValidatorScanner");
             this.modelFieldFactory = new DefaultModelFieldFactory(this.scanMode, this.validatorScanner, fieldGroupManager);
         }
         return new DefaultModelFactory( modelFieldFactory, modelNamingStrategy );

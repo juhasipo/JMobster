@@ -217,9 +217,19 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
     }
 
     /**
+     * Writes object key and value. Writes list separator (default ",") if isLast is false.
+     * @param key Key name
+     * @param value Value
+     * @return Writer itself for chaining writes
+     */
+    public JavaScriptWriter writeKeyValue(String key, String value) {
+        return writeKey(key).write(value).writeLine("");
+    }
+
+    /**
      * Writes array of objects. Objects must have {@link Object#toString()} method
      * implemented.
-     * @param status Writes list separator item is last
+     * @param status Writes list separator if the item is last
      * @param objects Objects to write
      * @return Writer itself for chaining writes
      */
@@ -228,6 +238,20 @@ public class JavaScriptWriter extends BaseDataWriter<JavaScriptWriter> {
         ItemProcessor.process(arrayWriter, objects);
         write(ARRAY_END);
         write("", LIST_SEPARATOR, status.isNotLastItem());
+        writeLine("");
+        return this;
+    }
+
+    /**
+     * Writes array of objects. Objects must have {@link Object#toString()} method
+     * implemented.
+     * @param objects Objects to write
+     * @return Writer itself for chaining writes
+     */
+    public JavaScriptWriter writeArray(Object... objects) {
+        write(ARRAY_START);
+        ItemProcessor.process(arrayWriter, objects);
+        write(ARRAY_END);
         writeLine("");
         return this;
     }

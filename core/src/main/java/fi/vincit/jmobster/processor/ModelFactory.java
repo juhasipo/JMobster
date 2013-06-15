@@ -48,13 +48,6 @@ public interface ModelFactory {
     Collection<Model> createAll( Class... classes );
 
     /**
-     * Sets validator filter groups
-     * @param groupMode Group mode
-     * @param classes Classes used for filtering
-     */
-    void setValidatorFilterGroups( GroupMode groupMode, Class... classes );
-
-    /**
      * Sets field filter groups
      * @param groupMode Group mode
      * @param classes Classes used for filtering

@@ -19,8 +19,8 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
 import fi.vincit.jmobster.exception.BuildingError;
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.ValidatorWriterManager;
 import fi.vincit.jmobster.processor.defaults.DefaultModelGenerator;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
 import fi.vincit.jmobster.processor.frameworks.backbone.type.BackboneFieldTypeConverterManager;
 import fi.vincit.jmobster.processor.frameworks.base.BaseFieldTypeConverterManager;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
@@ -39,7 +39,7 @@ public class ModelGeneratorBuilder {
     private FieldValueConverter fieldValueConverter;
     private BaseFieldTypeConverterManager fieldTypeConverterManager;
     private JavaScriptContext context;
-    private ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
+    private ValidatorWriterSet<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
 
     public ModelGeneratorBuilder setLanguageContext(JavaScriptContext context) {
         this.context = context;
@@ -61,7 +61,7 @@ public class ModelGeneratorBuilder {
         return this;
     }
 
-    public ModelGeneratorBuilder setValidatorWriterManager(ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
+    public ModelGeneratorBuilder setValidatorWriterManager(ValidatorWriterSet<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
         this.validatorWriterManager = validatorWriterManager;
         return this;
     }

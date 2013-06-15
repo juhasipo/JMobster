@@ -44,9 +44,9 @@ public class ModelTest {
     public void testConstructModelValidations() throws Exception {
         class TestModelClass {}
         ModelField fieldWithoutValidation = mock(ModelField.class);
-        when(fieldWithoutValidation.hasValidators()).thenReturn(false);
+        when(fieldWithoutValidation.hasAnnotations()).thenReturn(false);
         ModelField fieldWithValidation = mock(ModelField.class);
-        when(fieldWithoutValidation.hasValidators()).thenReturn(true);
+        when(fieldWithoutValidation.hasAnnotations()).thenReturn(true);
 
         Model model = new Model(TestModelClass.class, "TestModel", TestUtil.collectionFromObjects(fieldWithoutValidation, fieldWithValidation));
 
@@ -60,9 +60,9 @@ public class ModelTest {
     public void testConstructModelNoValidations() throws Exception {
         class TestModelClass {}
         ModelField fieldWithoutValidation1 = mock(ModelField.class);
-        when(fieldWithoutValidation1.hasValidators()).thenReturn( false );
+        when(fieldWithoutValidation1.hasAnnotations()).thenReturn( false );
         ModelField fieldWithoutValidation2 = mock(ModelField.class);
-        when(fieldWithoutValidation1.hasValidators()).thenReturn( false );
+        when(fieldWithoutValidation1.hasAnnotations()).thenReturn( false );
 
         Model model = new Model(TestModelClass.class, "TestModel", TestUtil.collectionFromObjects(fieldWithoutValidation1, fieldWithoutValidation2));
 

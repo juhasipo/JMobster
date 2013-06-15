@@ -16,7 +16,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone;
  */
 
 import fi.vincit.jmobster.processor.ModelProcessor;
-import fi.vincit.jmobster.processor.ValidatorWriterManager;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorWriterSet;
 import fi.vincit.jmobster.processor.languages.javascript.BaseJavaScriptModelProcessor;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
@@ -85,7 +85,7 @@ public class BackboneModelProcessor extends BaseJavaScriptModelProcessor {
             return this;
         }
 
-        public Builder useDefaultModelProcessors(ValidatorWriterManager<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
+        public Builder useDefaultModelProcessors(ValidatorWriterSet<JavaScriptContext, JavaScriptWriter> validatorWriterManager) {
             setModelProcessors(
                     new ValidatorProcessor.Builder()
                             .setName(VALIDATOR_BLOCK_NAME)
