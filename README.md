@@ -1,6 +1,6 @@
 JMobster - Java Model to Backbone.js generator
 ==============================================
-Version preview-alpha 0.3
+Version preview-alpha 0.4
 
 ### Purpose and Current Status
 
@@ -71,8 +71,6 @@ from three DTO classes:
 ```java
 ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
                 .setFieldScanMode( FieldScanMode.DIRECT_FIELD_ACCESS )
-                .setFieldGroups( GroupMode.ANY_OF_REQUIRED )
-                .setValidatorFactory( new JSR303ValidatorFactory() )
                 .build();
 Collection<Model> models = factory.createAll( MyModelDto1.class, MyModelDto2.class, MyModelDto3.class );
 ```
@@ -210,20 +208,24 @@ specified groups exist in the validator or field. *GroupMode.EXACTLY_REQUIRED* m
 group combination is exactly the same. *GroupMode.AT_LEAST_REQUIRED* mode will include validator or field when there
 are at least the specified groups.
 
-Groups and groupmodes can be given to *ModelFactory* when building the class and, after the factory has been built,
-with *setValidatorFilterGroups* and *setFieldFilterGroups* methods.
+Groups and groupmodes can be given to *ModelProcessor* before processing a model:
 
 ```java
-ModelFactory factory = JMobsterFactory.getModelFactoryBuilder()
-                .setFieldScanMode( FieldScanMode.DIRECT_FIELD_ACCESS )
-                .setFieldGroups( GroupMode.ANY_OF_REQUIRED )
-                .setValidatorGroups( GroupMode.ANY_OF_REQUIRED, Group1.class, Group2.class )
-                .setValidatorFactory( new JSR303ValidatorFactory() )
-                .build();
+ModelProcessor processor = new ValidatorProcessor.Builder()
+                               .setValidatorWriters(new JavaScriptWriterSet(JSR303Validators.get()))
+                               .build();
+ModelGenerator generator = JMobsterFactory.getModelGenerator(processor);
 
-factory.setValidatorFilterGroups(GroupMode.AT_LEAST_REQUIRED, Group1.class, Group2.class);
-factory.setFieldFilterGroups(GroupMode.AT_LEAST_REQUIRED, Group1.class, Group2.class);
+processor.setValidatorFilter(GroupMode.ANY_OF_REQUIRED, Group1.class);
+generator.process(model);
+
+processor.setValidatorFilter(GroupMode.ANY_OF_REQUIRED, Group2.class);
+generator.process(model);
 ```
+
+With the default implementations the validator filter setting is propagated to nested model processors. So in case you
+have a *BackboneModelProcessor* with *ValidatorProcessor* the *setValidatorFilter()* call is only required for the
+*BackboneModelProcessor*.
 
 
 Default Process
@@ -252,108 +254,35 @@ Configuring
 
 ### Custom Validators
 
-To support new validators you will have implement several classes.
-
-#### Validator Annotation
-
-The first phase is to create your annotation. The annotation should have a method called
-*groups* which has to return an array of *Classes*. This method is used for filtering annotations
-when constructing *ModelFields*.
-
-
-#### Validator Class
-
-The next phase is to create a wrapper for your annotation. The wrapper will be used in later phase of the process
-to get annotation values that should be written to *DataWriter*. These validator wrapper classes are generic and
-language independent. They only need to be implemented once per annotation.
-
-Here is an example of *MyValidator* for a custom *MyAnnotation* validator annotation:
-```java
-public class MyValidator extends BaseValidator {
-    private String requiredValue;
-    private String optionalValue;
-
-    @InitMethod
-    public void init(MyAnnotation myAnnotation, Optional<MyOptionalAnnotation> myOptionalAnnotation) {
-        this.requiredValue = myAnnotation.value();
-        if( myOptionalAnnotation.isPresent() ) {
-            this.optionalValue = myOptionalAnnotation.value();
-        }
-    }
-
-    // Getters
-}
-```
-
-As you can see, the *MyValidator* contains a two fields *requiredValue* and *optionalValue*. Values is set in the *init* method
-which takes required and optional annotations as parameters. These parameters are used to determine what annotations
-the validator requires. Required annotations are given as is in the argument list and optional annotations are given
-by using an *Optional* class with the desired optional annotation as generic parameter. Difference
-between required and optional annotations is that required annotations are quaranteed to be present when the
-*Validator* is initialized. Optional annotations are not. You must always check that optional parameters are present
-before using them. Otherwise an *IllegalStateException* is thrown.
-
-In case the validator doesn't need any data from annotations, you can configure the required annotation(s) with
-*RequiresAnnotations* annotation which takes one or more annotation classes as parameter:
-
-```java
-@RequiresAnnotations({Annotation1.class, Annotation2.class})
-public class MyNoDataValidator extends BaseValidator {
-}
-```
-
-
-#### Configuring Factory for the Validator
-
-Now that you have your *Validator* class, it requires required and optional annotations. This is done in
-*ValidatorFactories*. You have two choises:
-
-1. Use *DefaultValidatorFactory and configure* it to use your own custom validator
-2. Create your own *ValidatorFactory* which you configure by yourself
-
-Using the *DefaultValidatorFactory* is the easiest choise and it will contain supported JSR-303 validators. You can
-configure like following:
-
-```java
-DefaultValidatorFactory validatorFactory = new DefaultValidatorFactory();
-validatorFactory.setValidator(MyValidator.class);
-```
-
-This will add *MyValidator* class to the factory. Required and optional parameters are automagically checked
-from the init methods.
-
 #### ValidatorWriter Class
 
-Now you have your validator configured. Next you can make your *ValidatorWriter*. *ValidatorWriters* are language
-and framework specific. They get previously written *Validator* class as parameter.
+The first thing to do is to make a *ValidatorWriter*. *ValidatorWriters* are language
+and framework specific and their purpose is to write the supported annotaion(s) to a writer.
+They get raw *Annotation* objects as parameters.
 
 Here is an example of a *ValidatorWriter*:
 ```java
-public class MyValidatorWriter extends BaseValidatorWriter<MyValidator, JavaScriptContext, JavaScriptWriter> {
+public class MyValidatorWriter extends BaseValidatorWriter<JavaScriptContext, JavaScriptWriter> {
 
-    @Override
-    protected void write( JavaScriptContext context, MyValidator validator, ItemStatus status ) {
-        String value = validator.getRequiredValue();
-        if( validator.hasOptionalValue() ) {
-            value += validator.getOptionalValue();
+    public void write( MyAnnotation myAnnotation, Optional<MyOtherAnnotation> otherAnnotations ) {
+        String value;
+        if( otherAnnotation.isPresent() ) {
+            value = otherAnnotation.getValue().value();
+        } else {
+            value = myAnnotation.value();
         }
-        context.getWriter().writeKeyValue("value", value, isLast);
+        getWriter().writeKeyValue("value", value);
     }
 }
 ```
 
-The example implementation uses a *JavaScriptContext* *LanguageContext* which can be used for the output. The first
-generic parameter must match your *Validator* (in this case *MyValidator*) and the second is the *LanguageContext* used.
-The third parameter is the *DataWriter* used and must match the writer in the *LanguageContext*.
-The *LanguageContext* and *DataWriter* must match the ones that your framework's *ValidatorWriterManager* uses.
-More about implementing *ValidatorWriterManager* is discused in chapter Supporting New Target Framework.
+The example implementation uses a *JavaScriptContext* *LanguageContext* which can be used for the output. These are
+automatically injected to the *ValidatorWriter* so they are ready to be used when the write method is called. Context
+is accessed via *getContext()* and the writer via *getWriter()* method.
 
-The write method gets a *LanguageContext*, *Validator* and an *ItemStatus* as parameters. The *LanguageContext*
-contains a writer that can be used for the output. It can also contain other context information such as what kind
-of output is desired (e.g. JSON/plain JavaScript). *ItemStatus* parameter contains information of the position
-in a list the validation rule is written.
-
-**Notice**: *ValidatorWriters* instances are reused so the internal state will stay across calls.
+**Notice**: *ValidatorWriters* instances are reused so the internal state will stay across calls. The current implementation
+doesn't support concurrency when using the same *ModelGenerator*/*ModelProcessors*. Using multiple
+*ModelGenerators*/*ModelProcessors* still works since they all have their own validator instances.
 
 
 #### Configuring ValidatorWriter to ValidatorWriterManager
@@ -396,16 +325,16 @@ public class MyLanguageContext extends LanguageContext<CustomDataWriter> {
 // Now you can write
 ValidatorWriterManager<MyLanguageContext, CustomDataWriter> manager;
 // and
-public abstract class MyLanguageValidatorWriter<T extends Validator>
-        extends BaseValidatorWriter<T, JavaScriptContext, JavaScriptWriter> {
+public abstract class MyLanguageValidatorWriter
+        extends BaseValidatorWriter<JavaScriptContext, JavaScriptWriter> {
     // ...
 }
 
 // Instead of
 ValidatorWriterManager<LanguageContext<CustomDataWriter>, CustomDataWriter> manager;
 // and
-public abstract class MyLanguageValidatorWriter<T extends Validator>
-        extends BaseValidatorWriter<T, LanguageContext<CustomDataWriter>, CustomDataWriter> {
+public abstract class MyLanguageValidatorWriter
+        extends BaseValidatorWriter<LanguageContext<CustomDataWriter>, CustomDataWriter> {
     // ...
 }
 ```
