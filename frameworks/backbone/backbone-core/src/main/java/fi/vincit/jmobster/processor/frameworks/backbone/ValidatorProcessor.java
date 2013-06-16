@@ -43,7 +43,7 @@ import java.util.Collection;
 public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
 
     private ValidatorWriterSet<JavaScriptContext, JavaScriptWriter> validatorWriterManager;
-    private ValidatorFilter validatorFilter;
+
 
     public static class Builder {
         private String name = "validation";
@@ -86,7 +86,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
         super(builder.name);
 
         this.validatorWriterManager = builder.validatorWriterManager;
-        this.validatorFilter = new ValidatorFilter(GroupMode.ANY_OF_REQUIRED);
+        setValidatorFilter(GroupMode.ANY_OF_REQUIRED);
         setLanguageContext(builder.context);
         setFieldValueConverter(builder.valueConverter);
     }
@@ -102,7 +102,7 @@ public class ValidatorProcessor extends BaseJavaScriptModelProcessor {
             @Override
             public void process( ModelField field, ItemStatus status ) {
                 getWriter().writeKey( field.getName() ).startBlock();
-                Collection<Annotation> annotations = validatorFilter.filterByGroup(field.getAnnotations());
+                Collection<Annotation> annotations = filterByGroup(field.getAnnotations());
                 validatorWriterManager.write(annotations, status);
                 getWriter().endBlock( status );
             }

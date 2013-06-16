@@ -18,12 +18,16 @@ package fi.vincit.jmobster.processor.defaults.base;
 
 import fi.vincit.jmobster.processor.FieldValueConverter;
 import fi.vincit.jmobster.processor.ModelProcessor;
+import fi.vincit.jmobster.processor.defaults.validator.ValidatorFilter;
 import fi.vincit.jmobster.processor.languages.LanguageContext;
+import fi.vincit.jmobster.processor.model.FieldAnnotation;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +37,7 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
     private FieldValueConverter valueConverter;
     private String name;
     private boolean clearWriterBeforeProcessing;
+    private ValidatorFilter validatorFilter;
 
     final private List<ModelProcessor<C, W>> modelProcessors = new ArrayList<ModelProcessor<C, W>>();
 
@@ -42,6 +47,7 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
      */
     public BaseModelProcessor( String name ) {
         this.name = name;
+        setValidatorFilter(GroupMode.ANY_OF_REQUIRED); // No filtering
     }
 
     /**
@@ -71,6 +77,18 @@ public abstract class BaseModelProcessor<C extends LanguageContext<W>, W extends
     @Override
     public C getLanguageContext() {
         return context;
+    }
+
+    public Collection<Annotation> filterByGroup(Collection<FieldAnnotation> annotations) {
+        return this.validatorFilter.filterByGroup(annotations);
+    }
+
+    @Override
+    public void setValidatorFilter(GroupMode mode, Class... groups) {
+        this.validatorFilter = new ValidatorFilter(mode, groups);
+        for( ModelProcessor processor : this.modelProcessors ) {
+            processor.setValidatorFilter(mode, groups);
+        }
     }
 
     @Override

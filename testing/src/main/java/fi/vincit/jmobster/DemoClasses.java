@@ -27,6 +27,9 @@ import java.util.TreeMap;
 
 public class DemoClasses {
 
+    public static class Group1 {}
+    public static class Group2 {}
+
     @SuppressWarnings( { "MismatchedReadAndWriteOfArray", "MismatchedQueryAndUpdateOfCollection", "UnusedDeclaration" } )
     public static class InnerClass {
         @NotNull
@@ -87,8 +90,8 @@ public class DemoClasses {
 
     @SuppressWarnings( { "MismatchedReadAndWriteOfArray", "MismatchedQueryAndUpdateOfCollection", "UnusedDeclaration", "HardcodedFileSeparator" } )
     public static class BeanPropertyDemo {
-        @OverridePattern(regexp = "foo", groups={Integer.class})
-        @Pattern(regexp = "[\\w]*", groups={String.class, Integer.class})
+        @OverridePattern(regexp = "foo", groups={Group2.class})
+        @Pattern(regexp = "[\\w]*", groups={Group1.class, Group2.class})
         private String firstName = "John";
         @Size(min = 0, max = 255)
         @Pattern(regexp = "[\\w]*")

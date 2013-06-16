@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor;
 
 import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.Model;
+import fi.vincit.jmobster.util.groups.GroupMode;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
@@ -56,4 +57,6 @@ public interface ModelProcessor<C extends LanguageContext<W>, W extends DataWrit
     void setLanguageContext(C context);
 
     C getLanguageContext();
+
+    void setValidatorFilter(GroupMode mode, Class... groups);
 }

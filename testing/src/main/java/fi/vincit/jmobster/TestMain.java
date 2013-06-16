@@ -79,6 +79,7 @@ public class TestMain {
                     )
                     .build();
         backboneModelProcessor.setClearWriterBeforeProcessing(true);
+        backboneModelProcessor.setValidatorFilter(GroupMode.ANY_OF_REQUIRED, DemoClasses.Group2.class);
         JavaScriptModelCache modelCache = new JavaScriptModelCache(backboneModelProcessor, factory);
         modelCache.addModels(classesToConvert);
         for(String modelName : modelCache.getModelNames() ) {
@@ -88,7 +89,7 @@ public class TestMain {
         //System.in.read();
         System.out.println("Generate models");
         // Generate models
-        System.out.println("Model:\n" + modelCache.getModel("MyModel"));
+        //System.out.println("Model:\n" + modelCache.getModel("MyModel"));
         System.out.println("Model:\n" + modelCache.getModel("BeanPropertyDemo"));
         System.out.println(" - Done");
     }
