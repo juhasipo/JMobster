@@ -23,10 +23,7 @@ import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public abstract class DefaultValidatorWriterSet<C extends LanguageContext<? extends W>, W extends DataWriter> implements ValidatorWriterSet<C,W> {
     final private Set<ValidatorWriter<? super C, ? super W>> writers =
@@ -50,9 +47,7 @@ public abstract class DefaultValidatorWriterSet<C extends LanguageContext<? exte
 
     @Override
     public void setValidator(ValidatorWriter<? super C, ? super W>... validatorWriters) {
-        for (ValidatorWriter<? super C, ? super W> validatorWriter : validatorWriters) {
-            writers.add(validatorWriter);
-        }
+        Collections.addAll(writers, validatorWriters);
     }
 
     @Override

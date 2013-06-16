@@ -68,7 +68,7 @@ public abstract class BaseValidatorWriter<C extends LanguageContext<? extends W>
         }
     }
 
-    private List<Class> resolveParameters(boolean required, Method method, List<Class> types) {
+    private void resolveParameters(boolean required, Method method, List<Class> types) {
         Type[] parameters = method.getGenericParameterTypes();
         for( Type parameter : parameters ) {
             CastUtil.ParamType resolvedType = CastUtil.resolveParamType(parameter);
@@ -79,7 +79,6 @@ public abstract class BaseValidatorWriter<C extends LanguageContext<? extends W>
                 types.add(type);
             }
         }
-        return types;
     }
 
     private Method findWriteMethods(Class validatorClass) {
@@ -119,9 +118,9 @@ public abstract class BaseValidatorWriter<C extends LanguageContext<? extends W>
             Map<Class, Annotation> bag = constructAnnotationBag(annotations);
             callWriteMethod(bag, this.writeMethod);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e);
         }
     }
 
