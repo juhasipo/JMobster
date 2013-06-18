@@ -48,21 +48,6 @@ project(':core') {
     }
 }
 
-// Validators
-
-project(':validators:hibernate') {
-    dependencies {
-        compile project(':core')
-        testCompile project(path: ':core', configuration: 'testutil')
-    }
-}
-project(':validators:jsr303') {
-    dependencies {
-        compile project(':core')
-        testCompile project(path: ':core', configuration: 'testutil')
-    }
-}
-
 
 // Languages
 
