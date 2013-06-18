@@ -24,7 +24,9 @@ import fi.vincit.jmobster.util.writer.DataWriter;
 import org.junit.Test;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -244,5 +246,85 @@ public class BaseValidatorWriterTest {
 
         assertThat(writer.getContext(), is(mockContext));
         assertThat(writer.getWriter(), is(mockDataWriter));
+    }
+
+
+    public static class TestWriterOneOptional extends TestBaseValidatorWriter {
+        public void write(NotNull notNull, Optional<Size> size) {
+        }
+    }
+
+    public static class TestWriterBothOptional extends TestBaseValidatorWriter {
+        public void write(Optional<NotNull> notNull, Optional<Size> size) {
+        }
+    }
+
+    @Test
+    public void testSupportsAnnotation() {
+        TestWriterOneOptional writer = new TestWriterOneOptional();
+
+        NotNull notNull = mockAnnotation( NotNull.class );
+        Size size = mockAnnotation( Size.class );
+        assertThat( writer.supportsAnnotations( Arrays.asList(notNull, size) ), is( true ) );
+    }
+
+    @Test
+    public void testSupportsAnnotation_OnlyRequired() {
+        TestWriterOneOptional writer = new TestWriterOneOptional();
+
+        NotNull notNull = mockAnnotation( NotNull.class );
+        assertThat( writer.supportsAnnotations( Arrays.asList(notNull) ), is( true ) );
+    }
+
+    @Test
+    public void testSupportsAnnotation_OnlyOptional() {
+        TestWriterOneOptional writer = new TestWriterOneOptional();
+
+        Size size = mockAnnotation( Size.class );
+        assertThat( writer.supportsAnnotations( Arrays.asList(size) ), is( false ) );
+    }
+
+    @Test
+    public void testSupportsAnnotation_AllOptional_OnlyOptional() {
+        TestWriterBothOptional writer = new TestWriterBothOptional();
+
+        NotNull notNull = mockAnnotation( NotNull.class );
+        Size size = mockAnnotation( Size.class );
+        assertThat( writer.supportsAnnotations( Arrays.asList(notNull, size) ), is( true ) );
+    }
+
+    @Test
+    public void testSupportsAnnotation_AllOptional_OneOptional() {
+        TestWriterBothOptional writer = new TestWriterBothOptional();
+
+        Size size = mockAnnotation( Size.class );
+        assertThat( writer.supportsAnnotations( Arrays.asList(size) ), is( true ) );
+    }
+
+    @Test
+    public void testSupportsAnnotation_NoSupport() {
+        TestWriterOneOptional writer = new TestWriterOneOptional();
+
+        Null nullValidator = mockAnnotation( Null.class );
+        assertThat( writer.supportsAnnotations( Arrays.asList(nullValidator) ), is( false ) );
+    }
+
+    @Test
+    public void testSupportsAnnotation_Nothing() {
+        TestWriterOneOptional writer = new TestWriterOneOptional();
+        assertThat( writer.supportsAnnotations( Collections.EMPTY_LIST ), is( false ) );
+    }
+
+    @Test
+    public void testSupportsAnnotation_AllOptional_Nothing() {
+        TestWriterBothOptional writer = new TestWriterBothOptional();
+        assertThat( writer.supportsAnnotations( Collections.EMPTY_LIST ), is( false ) );
+    }
+
+
+    private static <T extends Annotation> T mockAnnotation(Class<T> type) {
+        T t = mock( type );
+        when( t.annotationType() ).thenReturn( (Class)type );
+        return t;
     }
 }
