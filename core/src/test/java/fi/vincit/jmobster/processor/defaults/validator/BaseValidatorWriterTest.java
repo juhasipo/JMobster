@@ -16,6 +16,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.exception.InvalidImplementationError;
 import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.util.Optional;
 import fi.vincit.jmobster.util.test.TestUtil;
@@ -197,8 +198,8 @@ public class BaseValidatorWriterTest {
         assertThat(writer.wasCalled, is(true));
     }
 
-    @Test(expected = RuntimeException.class)
-     public void testWrite_TooManyWriteMethods() {
+    @Test(expected = InvalidImplementationError.class)
+    public void testWrite_TooManyWriteMethods() {
         class TestWriter extends TestBaseValidatorWriter {
             public void write(NotNull notNull, Optional<Size> size) {
             }
@@ -207,7 +208,15 @@ public class BaseValidatorWriterTest {
         }
 
         new TestWriter();
-     }
+    }
+
+    @Test(expected = InvalidImplementationError.class)
+    public void testWrite_NoWriteMethods() {
+        class TestWriter extends TestBaseValidatorWriter {
+        }
+
+        new TestWriter();
+    }
 
     @Test
     public void testWrite_Context() {

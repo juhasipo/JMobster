@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.annotation.RequiresAnnotations;
+import fi.vincit.jmobster.exception.InvalidImplementationError;
 import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.processor.model.HasType;
 import fi.vincit.jmobster.util.combination.CombinationManager;
@@ -91,10 +92,10 @@ public abstract class BaseValidatorWriter<C extends LanguageContext<? extends W>
             }
         }
         if( numberOfWriteMethods == 0 ) {
-            throw new RuntimeException("Validator writer must have exactly one method called write");
+            throw new InvalidImplementationError("Validator writer must have exactly one method called write");
         }
         if( numberOfWriteMethods > 1 ) {
-            throw new RuntimeException("Validator writer must have exactly one method called write");
+            throw new InvalidImplementationError("Validator writer must have exactly one method called write");
         }
         return writeMethod;
     }
