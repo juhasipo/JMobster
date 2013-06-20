@@ -16,12 +16,23 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
  * limitations under the License.
  */
 
+import fi.vincit.jmobster.processor.defaults.validator.BaseValidatorWriter;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.JavaScriptWriter;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.StringBufferWriter;
 
 public abstract class BaseValidatorTest {
+
+    private OutputMode mode;
+
+    protected BaseValidatorTest() {
+    }
+
+    protected BaseValidatorTest( OutputMode mode ) {
+        this.mode = mode;
+    }
 
     protected JavaScriptContext mockWriter(OutputMode mode) {
         StringBufferWriter stringWriter = new StringBufferWriter();
@@ -30,5 +41,15 @@ public abstract class BaseValidatorTest {
             writer.setJSONmode(true);
         }
         return new JavaScriptContext(writer, mode);
+    }
+
+    protected JavaScriptContext createAndInjectContext( BaseValidatorWriter validator, ItemStatus status ) {
+        if( mode == null ) {
+            throw new IllegalStateException( "Mode must be set before using this method. Call the correct constructor." );
+        }
+        JavaScriptContext context = mockWriter(mode);
+        validator.setItemStatus( status );
+        validator.setContext(context);
+        return context;
     }
 }

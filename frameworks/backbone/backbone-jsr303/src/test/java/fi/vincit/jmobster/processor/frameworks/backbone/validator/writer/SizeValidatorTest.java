@@ -18,129 +18,111 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import javax.validation.constraints.Size;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith( Parameterized.class )
 public class SizeValidatorTest extends BaseValidatorTest {
-    @Test
-    public void testWrite_JavaScript_Min() throws Exception {
-        SizeValidator validator = new SizeValidator();
-        Size size = mockSize(1, null);
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(size);
+    private String output;
+    private Integer min;
+    private Integer max;
 
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("minLength: 1\n"));
+    private static final String EMPTY = "";
+
+    public SizeValidatorTest( OutputMode mode, Integer min, Integer max, String output ) {
+        super(mode);
+        this.output = output;
+        this.min = min;
+        this.max = max;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        Object[][] data = new Object[][] {
+                { OutputMode.JAVASCRIPT, 10, 200, "rangeLength: [10, 200]" },
+                { OutputMode.JAVASCRIPT, 11, null, "minLength: 11" },
+                { OutputMode.JAVASCRIPT, null, 100, "maxLength: 100" },
+                { OutputMode.JAVASCRIPT, null, null, EMPTY },
+                { OutputMode.JSON, 10, 200, "\"rangeLength\": [10, 200]" },
+                { OutputMode.JSON, 11, null, "\"minLength\": 11" },
+                { OutputMode.JSON, null, 100, "\"maxLength\": 100" },
+                { OutputMode.JSON, null, null, EMPTY },
+        };
+        return Arrays.asList( data );
     }
 
     @Test
-    public void testWrite_JavaScript_Max() throws Exception {
+    public void testWrite_FirstNotLast() throws Exception {
         SizeValidator validator = new SizeValidator();
-        Size size = mockSize(null, 100);
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.first() );
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(size);
+        executeWrite( validator );
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("maxLength: 100\n"));
+        assertOutput( context, ItemStatuses.first() );
     }
 
     @Test
-    public void testWrite_JavaScript_MinAndMax() throws Exception {
+    public void testWrite_Middle() throws Exception {
         SizeValidator validator = new SizeValidator();
-        Size size = mockSize(2, 255);
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.notFirstNorLast() );
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(size);
+        executeWrite( validator );
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("rangeLength: [2, 255]\n"));
+        assertOutput( context, ItemStatuses.notFirstNorLast() );
     }
 
     @Test
-    public void testWrite_JavaScript_NoMinOrdMax() throws Exception {
+    public void testWrite_FirstAndLast() throws Exception {
         SizeValidator validator = new SizeValidator();
-        Size size = mockSize(null, null);
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.last() );
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(size);
+        executeWrite( validator );
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is(""));
-    }
-
-
-
-    @Test
-    public void testWrite_JSON_Min() throws Exception {
-        SizeValidator validator = new SizeValidator();
-        Size size = mockSize(1, null);
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(size);
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"minLength\": 1\n"));
+        assertOutput( context, ItemStatuses.last() );
     }
 
     @Test
-    public void testWrite_JSON_Max() throws Exception {
+    public void testWrite_Last() throws Exception {
         SizeValidator validator = new SizeValidator();
-        Size size = mockSize(null, 100);
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.last() );
 
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(size);
+        executeWrite( validator );
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"maxLength\": 100\n"));
+        assertOutput( context, ItemStatuses.last() );
     }
 
-    @Test
-    public void testWrite_JSON_MinAndMax() throws Exception {
-        SizeValidator validator = new SizeValidator();
-        Size size = mockSize(2, 255);
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
+    private void executeWrite( SizeValidator validator ) {
+        Size size = mockSize( this.min, this.max );
         validator.write(size);
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"rangeLength\": [2, 255]\n"));
     }
 
-    @Test
-    public void testWrite_JSON_NoMinOrdMax() throws Exception {
-        SizeValidator validator = new SizeValidator();
-        Size size = mockSize(null, null);
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(size);
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is(""));
+    private void assertOutput( JavaScriptContext context, ItemStatus status ) {
+        String prefix;
+        if( output.equals( EMPTY ) ) {
+            prefix = EMPTY;
+        } else if( status.isLastItem() ) {
+            prefix = "\n";
+        } else {
+            prefix = ",\n";
+        }
+        assertThat(context.getWriter().toString(), is(output + prefix));
     }
 
     private Size mockSize(Integer min, Integer max) {

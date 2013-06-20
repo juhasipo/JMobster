@@ -20,202 +20,155 @@ import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.Optional;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import javax.validation.constraints.Pattern;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith( Parameterized.class )
 public class PatternValidatorTest extends BaseValidatorTest {
-    @Test
-    public void testWrite_JavaScript_NoFlags() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]");
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, Optional.empty());
+    private String output;
+    private String regexp;
+    private String overriddenRegexp;
+    private Pattern.Flag[] flags;
+
+    private static final Pattern.Flag[] EMPTY_FLAGS = new Pattern.Flag[0];
+    private static final Pattern.Flag[] I_FLAG = new Pattern.Flag[] {Pattern.Flag.CASE_INSENSITIVE};
+    private static final Pattern.Flag[] TWO_FLAGS = new Pattern.Flag[] {Pattern.Flag.CASE_INSENSITIVE, Pattern.Flag.MULTILINE};
+    private static final String NO_OVERRIDDEN = "";
+
+    public PatternValidatorTest( OutputMode mode,
+                                 String regexp,
+                                 String overriddenRegexp,
+                                 Pattern.Flag[] flags,
+                                 String output) {
+        super(mode);
+        this.output = output;
+        this.regexp = regexp;
+        this.overriddenRegexp = overriddenRegexp;
+        this.flags = flags;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        Object[][] data = new Object[][] {
+                { OutputMode.JAVASCRIPT, "[abc]", NO_OVERRIDDEN, EMPTY_FLAGS, "pattern: /[abc]/" },
+                { OutputMode.JAVASCRIPT, "[abc]", "[qwerty]", EMPTY_FLAGS, "pattern: /[qwerty]/" },
+                { OutputMode.JAVASCRIPT, "[abc]", NO_OVERRIDDEN, I_FLAG, "pattern: /[abc]/i" },
+                { OutputMode.JAVASCRIPT, "[abc]", NO_OVERRIDDEN, TWO_FLAGS, "pattern: /[abc]/im" },
+                { OutputMode.JAVASCRIPT, "[abc]", "[qwerty]", I_FLAG, "pattern: /[qwerty]/i" },
+                { OutputMode.JAVASCRIPT, "[abc]", "[qwerty]", TWO_FLAGS, "pattern: /[qwerty]/im" },
+
+                { OutputMode.JAVASCRIPT, "[\"ABCdef]*", NO_OVERRIDDEN, EMPTY_FLAGS, "pattern: /[\"ABCdef]*/" },
+                { OutputMode.JAVASCRIPT, "\"[\"ABCdef\"]*\"\"", NO_OVERRIDDEN, EMPTY_FLAGS, "pattern: /\"[\"ABCdef\"]*\"\"/" },
+                { OutputMode.JAVASCRIPT, "[\\.ABCdef]*", NO_OVERRIDDEN, EMPTY_FLAGS, "pattern: /[\\.ABCdef]*/" },
+                { OutputMode.JAVASCRIPT, "\\\"[\\.ABCdef]*", NO_OVERRIDDEN, EMPTY_FLAGS, "pattern: /\\\"[\\.ABCdef]*/" },
+
+                { OutputMode.JAVASCRIPT, "[abc]", "[\"ABCdef]*", EMPTY_FLAGS, "pattern: /[\"ABCdef]*/" },
+                { OutputMode.JAVASCRIPT, "[abc]", "\"[\"ABCdef\"]*\"\"", EMPTY_FLAGS, "pattern: /\"[\"ABCdef\"]*\"\"/" },
+                { OutputMode.JAVASCRIPT, "[abc]", "[\\.ABCdef]*", EMPTY_FLAGS, "pattern: /[\\.ABCdef]*/" },
+                { OutputMode.JAVASCRIPT, "[abc]", "\\\"[\\.ABCdef]*", EMPTY_FLAGS, "pattern: /\\\"[\\.ABCdef]*/" },
+
+                { OutputMode.JSON, "[abc]", NO_OVERRIDDEN, EMPTY_FLAGS, "\"pattern__regexp\": [\"[abc]\", \"\"]" },
+                { OutputMode.JSON, "[abc]", "[qwerty]", EMPTY_FLAGS, "\"pattern__regexp\": [\"[qwerty]\", \"\"]" },
+                { OutputMode.JSON, "[abc]", NO_OVERRIDDEN, I_FLAG, "\"pattern__regexp\": [\"[abc]\", \"i\"]" },
+                { OutputMode.JSON, "[abc]", NO_OVERRIDDEN, TWO_FLAGS, "\"pattern__regexp\": [\"[abc]\", \"im\"]" },
+                { OutputMode.JSON, "[abc]", "[qwerty]", I_FLAG, "\"pattern__regexp\": [\"[qwerty]\", \"i\"]" },
+                { OutputMode.JSON, "[abc]", "[qwerty]", TWO_FLAGS, "\"pattern__regexp\": [\"[qwerty]\", \"im\"]" },
+
+                { OutputMode.JSON, "[\"ABCdef]*", NO_OVERRIDDEN, EMPTY_FLAGS, "\"pattern__regexp\": [\"[\\\"ABCdef]*\", \"\"]" },
+                { OutputMode.JSON, "\"[\"ABCdef\"]*\"\"", NO_OVERRIDDEN, EMPTY_FLAGS, "\"pattern__regexp\": [\"\\\"[\\\"ABCdef\\\"]*\\\"\\\"\", \"\"]" },
+                { OutputMode.JSON, "[\\.ABCdef]*", NO_OVERRIDDEN, EMPTY_FLAGS, "\"pattern__regexp\": [\"[\\\\.ABCdef]*\", \"\"]" },
+                { OutputMode.JSON, "\\\"[\\.ABCdef]*", NO_OVERRIDDEN, EMPTY_FLAGS, "\"pattern__regexp\": [\"\\\\\\\"[\\\\.ABCdef]*\", \"\"]" },
+
+                { OutputMode.JSON, "[abc]", "[\"ABCdef]*", EMPTY_FLAGS, "\"pattern__regexp\": [\"[\\\"ABCdef]*\", \"\"]" },
+                { OutputMode.JSON, "[abc]", "\"[\"ABCdef\"]*\"\"", EMPTY_FLAGS, "\"pattern__regexp\": [\"\\\"[\\\"ABCdef\\\"]*\\\"\\\"\", \"\"]" },
+                { OutputMode.JSON, "[abc]", "[\\.ABCdef]*", EMPTY_FLAGS, "\"pattern__regexp\": [\"[\\\\.ABCdef]*\", \"\"]" },
+                { OutputMode.JSON, "[abc]", "\\\"[\\.ABCdef]*", EMPTY_FLAGS, "\"pattern__regexp\": [\"\\\\\\\"[\\\\.ABCdef]*\", \"\"]" },
+
+                { OutputMode.JSON, "[\"ABCdef]*", NO_OVERRIDDEN, I_FLAG, "\"pattern__regexp\": [\"[\\\"ABCdef]*\", \"i\"]" },
+                { OutputMode.JSON, "\"[\"ABCdef\"]*\"\"", NO_OVERRIDDEN, I_FLAG, "\"pattern__regexp\": [\"\\\"[\\\"ABCdef\\\"]*\\\"\\\"\", \"i\"]" },
+                { OutputMode.JSON, "[\\.ABCdef]*", NO_OVERRIDDEN, I_FLAG, "\"pattern__regexp\": [\"[\\\\.ABCdef]*\", \"i\"]" },
+                { OutputMode.JSON, "\\\"[\\.ABCdef]*", NO_OVERRIDDEN, I_FLAG, "\"pattern__regexp\": [\"\\\\\\\"[\\\\.ABCdef]*\", \"i\"]" },
+        };
+        return Arrays.asList( data );
+    }
+
+
+    @Test
+    public void testWrite_FirstNotLast() throws Exception {
+        PatternValidator validator = new PatternValidator();
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.first() );
+
+        executeWrite( validator );
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("pattern: /[abc]/\n"));
+        assertOutput( context, ItemStatuses.first() );
     }
 
     @Test
-    public void testWrite_JavaScript_Override_NoFlags() throws Exception {
+    public void testWrite_Middle() throws Exception {
         PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]");
-        OverridePattern override = mockOverride("[qwerty]");
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.notFirstNorLast() );
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, new Optional<OverridePattern>(override));
+        executeWrite( validator );
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("pattern: /[qwerty]/\n"));
+        assertOutput( context, ItemStatuses.notFirstNorLast() );
     }
 
     @Test
-    public void testWrite_JavaScript_CaseInsensitiveFlag() throws Exception {
+    public void testWrite_FirstAndLast() throws Exception {
         PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]", Pattern.Flag.CASE_INSENSITIVE);
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.last() );
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, Optional.empty());
+        executeWrite( validator );
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("pattern: /[abc]/i\n"));
+        assertOutput( context, ItemStatuses.last() );
     }
 
     @Test
-    public void testWrite_JavaScript_Override_CaseInsensitiveFlag() throws Exception {
+    public void testWrite_Last() throws Exception {
         PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]", Pattern.Flag.CASE_INSENSITIVE);
-        OverridePattern override = mockOverride("[qwerty]");
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.last() );
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, new Optional<OverridePattern>(override));
+        executeWrite( validator );
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("pattern: /[qwerty]/i\n"));
+        assertOutput( context, ItemStatuses.last() );
     }
 
-    @Test
-    public void testWrite_JSON_NoFlags() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]");
+    private void executeWrite( PatternValidator validator ) {
+        Pattern pattern = mockPattern( this.regexp, flags );
+        if( this.overriddenRegexp.equals( NO_OVERRIDDEN ) ) {
+            validator.write(pattern, Optional.empty());
+        } else {
+            OverridePattern overridePattern = mockOverride(this.overriddenRegexp);
+            validator.write(pattern, new Optional<OverridePattern>( overridePattern ));
+        }
 
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, Optional.empty());
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"[abc]\", \"\"]\n"));
     }
 
-    @Test
-    public void testWrite_JSON_Override_NoFlags() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]");
-        OverridePattern override = mockOverride("[qwerty]");
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, new Optional<OverridePattern>(override));
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"[qwerty]\", \"\"]\n"));
-    }
-
-    @Test
-    public void testWrite_JSON_Escape_Quote() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[\"ABCdef]*");
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, Optional.empty());
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"[\\\"ABCdef]*\", \"\"]\n"));
-    }
-
-    @Test
-    public void testWrite_JSON_Escape_Quote2() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("\"[\"ABCdef\"]*\"\"");
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, Optional.empty());
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"\\\"[\\\"ABCdef\\\"]*\\\"\\\"\", \"\"]\n"));
-    }
-
-    @Test
-    public void testWrite_JSON_Escape_OtherChar() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[\\.ABCdef]*");
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, Optional.empty());
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"[\\\\.ABCdef]*\", \"\"]\n"));
-    }
-
-    @Test
-    public void testWrite_JSON_Escape_OtherChar2() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("\\\"[\\.ABCdef]*");
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, Optional.empty());
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"\\\\\\\"[\\\\.ABCdef]*\", \"\"]\n"));
-    }
-
-    @Test
-    public void testWrite_JSON_Override_Escape_OtherChar() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]");
-        OverridePattern override = mockOverride("\\\"[\\.ABCdef]*");
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, new Optional<OverridePattern>(override));
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"\\\\\\\"[\\\\.ABCdef]*\", \"\"]\n"));
-    }
-
-    @Test
-    public void testWrite_JSON_CaseInsensitiveFlag() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]", Pattern.Flag.CASE_INSENSITIVE);
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, Optional.empty());
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"[abc]\", \"i\"]\n"));
-    }
-
-    @Test
-    public void testWrite_JSON_Override_CaseInsensitiveFlag() throws Exception {
-        PatternValidator validator = new PatternValidator();
-        Pattern pattern = mockPattern("[abc]", Pattern.Flag.CASE_INSENSITIVE);
-        OverridePattern override = mockOverride("[qwerty]");
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
-        validator.write(pattern, new Optional<OverridePattern>(override));
-
-        context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"pattern__regexp\": [\"[qwerty]\", \"i\"]\n"));
+    private void assertOutput( JavaScriptContext context, ItemStatus status ) {
+        String prefix;
+        if( status.isLastItem() ) {
+            prefix = "\n";
+        } else {
+            prefix = ",\n";
+        }
+        assertThat(context.getWriter().toString(), is(output + prefix));
     }
 
     private Pattern mockPattern(String regexp, Pattern.Flag... flags) {

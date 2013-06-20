@@ -20,42 +20,78 @@ import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+@RunWith( Parameterized.class )
 public class NotNullValidatorTest extends BaseValidatorTest {
 
-    @Test
-    public void testWrite_JavaScript() throws Exception {
-        NotNullValidator validator = new NotNullValidator();
+    private String output;
 
-        JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
+    public NotNullValidatorTest( OutputMode mode, String output ) {
+        super(mode);
+        this.output = output;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        Object[][] data = new Object[][] {
+                { OutputMode.JAVASCRIPT, "required: true" },
+                { OutputMode.JSON, "\"required\": true" }
+        };
+        return Arrays.asList( data );
+    }
+
+    @Test
+    public void testWrite_FirstNotLast() throws Exception {
+        NotNullValidator validator = new NotNullValidator();
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.first() );
 
         validator.write(mock(NotNull.class));
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("required: true\n"));
+        assertThat(context.getWriter().toString(), is(output + ",\n"));
     }
 
     @Test
-    public void testWrite_JSON() throws Exception {
+    public void testWrite_Middle() throws Exception {
         NotNullValidator validator = new NotNullValidator();
-
-        JavaScriptContext context = mockWriter(OutputMode.JSON);
-        validator.setItemStatus( ItemStatuses.last() );
-        validator.setContext(context);
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.notFirstNorLast() );
 
         validator.write(mock(NotNull.class));
 
         context.getWriter().close();
-        assertThat(context.getWriter().toString(), is("\"required\": true\n"));
+        assertThat(context.getWriter().toString(), is(output + ",\n"));
     }
 
+    @Test
+    public void testWrite_FirstAndLast() throws Exception {
+        NotNullValidator validator = new NotNullValidator();
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.last() );
+
+        validator.write(mock(NotNull.class));
+
+        context.getWriter().close();
+        assertThat(context.getWriter().toString(), is(output + "\n"));
+    }
+
+    @Test
+    public void testWrite_Last() throws Exception {
+        NotNullValidator validator = new NotNullValidator();
+        JavaScriptContext context = createAndInjectContext( validator, ItemStatuses.last() );
+
+        validator.write(mock(NotNull.class));
+
+        context.getWriter().close();
+        assertThat(context.getWriter().toString(), is(output + "\n"));
+    }
 
 }
