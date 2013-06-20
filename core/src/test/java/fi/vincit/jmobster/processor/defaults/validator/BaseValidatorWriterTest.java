@@ -19,6 +19,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
 import fi.vincit.jmobster.exception.InvalidImplementationError;
 import fi.vincit.jmobster.processor.languages.LanguageContext;
 import fi.vincit.jmobster.util.Optional;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.test.TestUtil;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.junit.Test;
@@ -246,6 +247,25 @@ public class BaseValidatorWriterTest {
 
         assertThat(writer.getContext(), is(mockContext));
         assertThat(writer.getWriter(), is(mockDataWriter));
+    }
+
+    @Test
+    public void testWrite_Status() {
+        class TestWriter extends TestBaseValidatorWriter {
+            public boolean status = false;
+            public void write(NotNull notNull, Optional<Size> size) {
+                status = getItemStatus() != null;
+            }
+        }
+
+        TestWriter writer = new TestWriter();
+        writer.setItemStatus( ItemStatuses.first() );
+
+        NotNull notNull = (NotNull)TestUtil.getAnnotationFromClass(Annotations.class, 0, 0);
+        Size size = (Size)TestUtil.getAnnotationFromClass(Annotations.class, 0, 1);
+        writer.write(Arrays.asList(notNull, size));
+
+        assertThat(writer.status, is(true));
     }
 
 

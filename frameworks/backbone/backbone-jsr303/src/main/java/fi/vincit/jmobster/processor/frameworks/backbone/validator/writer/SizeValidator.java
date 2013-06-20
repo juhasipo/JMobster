@@ -33,13 +33,13 @@ public class SizeValidator extends BaseValidatorWriter<JavaScriptContext, JavaSc
         final boolean hasMax = size.max() < Integer.MAX_VALUE;
         if( hasMin && hasMax ) {
             getWriter().writeKey( MIN_AND_MAX_KEY );
-            getWriter().writeArray( size.min(), size.max() );
+            getWriter().writeArray( getItemStatus(), size.min(), size.max() );
         } else if( hasMin ) {
             String value = String.valueOf(size.min());
-            getWriter().writeKeyValue( MIN_ONLY_KEY, value);
+            getWriter().writeKeyValue( MIN_ONLY_KEY, value, getItemStatus() );
         } else if( hasMax ) {
             String value = String.valueOf(size.max());
-            getWriter().writeKeyValue( MAX_ONLY_KEY, value);
+            getWriter().writeKeyValue( MAX_ONLY_KEY, value, getItemStatus() );
         }
     }
 }

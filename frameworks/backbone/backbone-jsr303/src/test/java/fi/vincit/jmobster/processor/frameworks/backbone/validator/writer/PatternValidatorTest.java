@@ -20,6 +20,7 @@ import fi.vincit.jmobster.annotation.OverridePattern;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.Optional;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
 
 import javax.validation.constraints.Pattern;
@@ -36,7 +37,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         Pattern pattern = mockPattern("[abc]");
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, Optional.empty());
 
@@ -51,7 +52,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         OverridePattern override = mockOverride("[qwerty]");
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, new Optional<OverridePattern>(override));
 
@@ -65,7 +66,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         Pattern pattern = mockPattern("[abc]", Pattern.Flag.CASE_INSENSITIVE);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, Optional.empty());
 
@@ -80,7 +81,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         OverridePattern override = mockOverride("[qwerty]");
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, new Optional<OverridePattern>(override));
 
@@ -94,7 +95,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         Pattern pattern = mockPattern("[abc]");
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, Optional.empty());
 
@@ -109,7 +110,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         OverridePattern override = mockOverride("[qwerty]");
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, new Optional<OverridePattern>(override));
 
@@ -123,7 +124,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         Pattern pattern = mockPattern("[\"ABCdef]*");
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, Optional.empty());
 
@@ -137,7 +138,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         Pattern pattern = mockPattern("\"[\"ABCdef\"]*\"\"");
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, Optional.empty());
 
@@ -151,7 +152,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         Pattern pattern = mockPattern("[\\.ABCdef]*");
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, Optional.empty());
 
@@ -165,7 +166,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         Pattern pattern = mockPattern("\\\"[\\.ABCdef]*");
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, Optional.empty());
 
@@ -180,7 +181,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         OverridePattern override = mockOverride("\\\"[\\.ABCdef]*");
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, new Optional<OverridePattern>(override));
 
@@ -194,7 +195,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         Pattern pattern = mockPattern("[abc]", Pattern.Flag.CASE_INSENSITIVE);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, Optional.empty());
 
@@ -209,7 +210,7 @@ public class PatternValidatorTest extends BaseValidatorTest {
         OverridePattern override = mockOverride("[qwerty]");
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
-
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(pattern, new Optional<OverridePattern>(override));
 

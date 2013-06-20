@@ -60,18 +60,21 @@ public abstract class DefaultValidatorWriterSet<C extends LanguageContext<? exte
             }
         }
 
-        ItemProcessor.process(supportedWriters).with(new ItemHandler<ValidatorWriter<? super C, ? super W>>() {
+        ItemProcessor.process( supportedWriters ).with( new ItemHandler<ValidatorWriter<? super C, ? super W>>() {
             @Override
-            public void process(ValidatorWriter<? super C, ? super W> writer, ItemStatus status) {
-                beforeWrite(status);
-                writer.setContext(context);
+            public void process( ValidatorWriter<? super C, ? super W> writer, ItemStatus status ) {
+                beforeWrite( status );
+                writer.setContext( context );
+                writer.setItemStatus( status );
 
-                writer.write(annotations);
-                // Reset context just to be sure if user does something stupid
-                writer.setContext(null);
-                afterWrite(status);
+                writer.write( annotations );
+                // Reset context and status just to be sure if user does something stupid
+                writer.setContext( null );
+                writer.setItemStatus( null );
+                afterWrite( status );
             }
-        });
+        }
+        );
     }
 
     protected abstract void beforeWrite(ItemStatus status);

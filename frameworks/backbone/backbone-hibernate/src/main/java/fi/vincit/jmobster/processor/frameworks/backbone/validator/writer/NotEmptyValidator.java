@@ -23,6 +23,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class NotEmptyValidator extends BaseValidatorWriter<JavaScriptContext, JavaScriptWriter> {
     public void write(NotEmpty notEmpty) {
-        getWriter().writeKeyValue("required", "true");
+        getWriter().writeKeyValue("required", "true", getItemStatus());
     }
 }

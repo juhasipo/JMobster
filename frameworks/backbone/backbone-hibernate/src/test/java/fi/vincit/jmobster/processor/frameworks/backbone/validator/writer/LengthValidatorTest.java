@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.hibernate.validator.constraints.Length;
 import org.junit.Test;
 
@@ -33,6 +34,7 @@ public class LengthValidatorTest extends BaseValidatorTest {
         Length length = mockLength(1, null);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(length);
 
@@ -46,6 +48,7 @@ public class LengthValidatorTest extends BaseValidatorTest {
         Length length = mockLength(null, 100);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(length);
 
@@ -59,6 +62,7 @@ public class LengthValidatorTest extends BaseValidatorTest {
         Length length = mockLength(2, 255);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(length);
 
@@ -72,6 +76,7 @@ public class LengthValidatorTest extends BaseValidatorTest {
         Length length = mockLength(null, null);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(length);
 
@@ -87,6 +92,7 @@ public class LengthValidatorTest extends BaseValidatorTest {
         Length length = mockLength(1, null);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(length);
 
@@ -100,6 +106,7 @@ public class LengthValidatorTest extends BaseValidatorTest {
         Length length = mockLength(null, 100);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(length);
 
@@ -113,6 +120,7 @@ public class LengthValidatorTest extends BaseValidatorTest {
         Length length = mockLength(2, 255);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(length);
 
@@ -126,6 +134,7 @@ public class LengthValidatorTest extends BaseValidatorTest {
         Length length = mockLength(null, null);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(length);
 

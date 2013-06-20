@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.junit.Test;
 
@@ -31,6 +32,7 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
         NotEmptyValidator validator = new NotEmptyValidator();
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
 
         validator.write(mock(NotEmpty.class));
@@ -44,6 +46,7 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
         NotEmptyValidator validator = new NotEmptyValidator();
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
 
         validator.write(mock(NotEmpty.class));

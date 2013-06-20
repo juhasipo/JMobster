@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
 
 import javax.validation.constraints.NotNull;
@@ -33,6 +34,7 @@ public class NotNullValidatorTest extends BaseValidatorTest {
         NotNullValidator validator = new NotNullValidator();
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
 
         validator.write(mock(NotNull.class));
@@ -46,6 +48,7 @@ public class NotNullValidatorTest extends BaseValidatorTest {
         NotNullValidator validator = new NotNullValidator();
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
 
         validator.write(mock(NotNull.class));

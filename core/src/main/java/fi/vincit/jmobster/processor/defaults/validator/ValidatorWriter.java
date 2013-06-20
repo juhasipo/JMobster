@@ -17,6 +17,7 @@ package fi.vincit.jmobster.processor.defaults.validator;
  */
 
 import fi.vincit.jmobster.processor.languages.LanguageContext;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
 import java.lang.annotation.Annotation;
@@ -26,4 +27,5 @@ public interface ValidatorWriter<C extends LanguageContext<? extends W>, W exten
     void setContext(C context);
     void write(Collection<? extends Annotation> annotations);
     boolean supportsAnnotations(Collection<? extends Annotation> annotations);
+    void setItemStatus( ItemStatus status );
 }

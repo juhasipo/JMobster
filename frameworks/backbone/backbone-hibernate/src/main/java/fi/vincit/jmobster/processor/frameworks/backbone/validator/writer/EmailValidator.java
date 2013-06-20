@@ -58,10 +58,10 @@ public class EmailValidator extends BaseValidatorWriter<JavaScriptContext, JavaS
             String flagsString = convertFlagsToJSON(flags);
 
             getWriter().writeKey(PATTERN_KEY_JSON);
-            getWriter().writeArray(patternString, flagsString);
+            getWriter().writeArray(getItemStatus(), patternString, flagsString);
         } else {
             String patternString = JavaToJSPatternConverter.convertFromJava(EMAIL_REG_EXP, flags);
-            getWriter().writeKeyValue(PATTERN_KEY_JAVASCRIPT, patternString);
+            getWriter().writeKeyValue(PATTERN_KEY_JAVASCRIPT, patternString, getItemStatus());
         }
     }
 

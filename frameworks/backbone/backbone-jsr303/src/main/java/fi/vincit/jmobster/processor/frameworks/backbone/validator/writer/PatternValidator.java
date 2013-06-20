@@ -55,10 +55,10 @@ public class PatternValidator extends BaseValidatorWriter<JavaScriptContext, Jav
             String flagsString = convertFlagsToJSON(flags);
 
             getWriter().writeKey(PATTERN_KEY_JSON);
-            getWriter().writeArray(patternString, flagsString);
+            getWriter().writeArray(getItemStatus(), patternString, flagsString);
         } else {
             String patternString = JavaToJSPatternConverter.convertFromJava(regexp, flags);
-            getWriter().writeKeyValue(PATTERN_KEY_JAVASCRIPT, patternString);
+            getWriter().writeKeyValue(PATTERN_KEY_JAVASCRIPT, patternString, getItemStatus());
         }
     }
 

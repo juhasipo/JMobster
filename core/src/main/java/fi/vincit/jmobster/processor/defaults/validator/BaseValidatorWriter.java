@@ -23,6 +23,7 @@ import fi.vincit.jmobster.processor.model.HasType;
 import fi.vincit.jmobster.util.combination.CombinationManager;
 import fi.vincit.jmobster.util.combination.OptionalTypes;
 import fi.vincit.jmobster.util.combination.RequiredTypes;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.reflection.CastUtil;
 import fi.vincit.jmobster.util.writer.DataWriter;
 
@@ -36,6 +37,7 @@ public abstract class BaseValidatorWriter<C extends LanguageContext<? extends W>
 
     private C context;
     private Method writeMethod;
+    private ItemStatus status;
 
     private final CombinationManager<HasType> combinationManager;
 
@@ -111,6 +113,15 @@ public abstract class BaseValidatorWriter<C extends LanguageContext<? extends W>
 
     protected W getWriter() {
         return context.getWriter();
+    }
+
+    @Override
+    public void setItemStatus( ItemStatus status ) {
+        this.status = status;
+    }
+
+    protected ItemStatus getItemStatus() {
+        return status;
     }
 
     @Override

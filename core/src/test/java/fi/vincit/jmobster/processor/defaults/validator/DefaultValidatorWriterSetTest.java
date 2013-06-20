@@ -21,6 +21,8 @@ import fi.vincit.jmobster.util.itemprocessor.ItemStatus;
 import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import fi.vincit.jmobster.util.writer.DataWriter;
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Matchers;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -53,7 +55,7 @@ public class DefaultValidatorWriterSetTest {
     }
 
     @Test
-    public void testWriteAnnotation() {
+    public void testWriteAnnotation_Context() {
         ValidatorWriter mockWriter = mock(ValidatorWriter.class);
         when(mockWriter.supportsAnnotations(anyCollection())).thenReturn(true);
         Collection writers = Arrays.asList(mockWriter);
@@ -67,9 +69,31 @@ public class DefaultValidatorWriterSetTest {
         Collection<Annotation> annotations = Arrays.asList(mock(Annotation.class));
         validatorWriterSet.write(annotations, ItemStatuses.first());
 
-        verify(mockWriter).setContext(mockContext);
-        verify(mockWriter).write(annotations);
-        verify(mockWriter).setContext(null);
+        InOrder order = inOrder( mockWriter );
+        order.verify(mockWriter).setContext(mockContext);
+        order.verify(mockWriter).write(annotations);
+        order.verify(mockWriter).setContext(null);
+    }
+
+    @Test
+    public void testWriteAnnotation_Status() {
+        ValidatorWriter mockWriter = mock(ValidatorWriter.class);
+        when(mockWriter.supportsAnnotations(anyCollection())).thenReturn(true);
+        Collection writers = Arrays.asList(mockWriter);
+
+        ValidatorWriterSet validatorWriterSet =
+                new TestValidatorWriterSet(writers);
+
+        LanguageContext mockContext = mock(LanguageContext.class);
+        validatorWriterSet.setLanguageContext(mockContext);
+
+        Collection<Annotation> annotations = Arrays.asList(mock(Annotation.class));
+        validatorWriterSet.write(annotations, ItemStatuses.first());
+
+        InOrder order = inOrder( mockWriter );
+        order.verify(mockWriter).setItemStatus( Matchers.any(ItemStatus.class) );
+        order.verify(mockWriter).write(annotations);
+        order.verify(mockWriter).setItemStatus( null );
     }
 
     @Test

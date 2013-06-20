@@ -35,6 +35,5 @@ public class JavaScriptWriterSet extends DefaultValidatorWriterSet<JavaScriptCon
 
     @Override
     protected void afterWrite(ItemStatus status) {
-        getWriter().write("", ",", status.isNotLastItem());
     }
 }

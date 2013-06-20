@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
 
 import javax.validation.constraints.Size;
@@ -34,6 +35,7 @@ public class SizeValidatorTest extends BaseValidatorTest {
         Size size = mockSize(1, null);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(size);
 
@@ -47,6 +49,7 @@ public class SizeValidatorTest extends BaseValidatorTest {
         Size size = mockSize(null, 100);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(size);
 
@@ -60,6 +63,7 @@ public class SizeValidatorTest extends BaseValidatorTest {
         Size size = mockSize(2, 255);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(size);
 
@@ -73,6 +77,7 @@ public class SizeValidatorTest extends BaseValidatorTest {
         Size size = mockSize(null, null);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(size);
 
@@ -88,6 +93,7 @@ public class SizeValidatorTest extends BaseValidatorTest {
         Size size = mockSize(1, null);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(size);
 
@@ -101,6 +107,7 @@ public class SizeValidatorTest extends BaseValidatorTest {
         Size size = mockSize(null, 100);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(size);
 
@@ -114,6 +121,7 @@ public class SizeValidatorTest extends BaseValidatorTest {
         Size size = mockSize(2, 255);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(size);
 
@@ -127,6 +135,7 @@ public class SizeValidatorTest extends BaseValidatorTest {
         Size size = mockSize(null, null);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(size);
 

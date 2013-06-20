@@ -19,6 +19,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
 import fi.vincit.jmobster.util.Optional;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.junit.Test;
 
 import javax.validation.constraints.Max;
@@ -37,6 +38,7 @@ public class NumberRangeValidatorTest extends BaseValidatorTest {
         Max max = mockMax(200);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(new Optional<Min>(min), new Optional<Max>(max));
 
@@ -47,9 +49,10 @@ public class NumberRangeValidatorTest extends BaseValidatorTest {
     @Test
     public void test_JavaAScript_Min() throws Exception {
         NumberRangeValidator validator = new NumberRangeValidator();
-        Min min = mockMin(10);
+        Min min = mockMin( 10 );
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(new Optional<Min>(min), Optional.empty());
 
@@ -60,9 +63,10 @@ public class NumberRangeValidatorTest extends BaseValidatorTest {
     @Test
     public void test_JavaAScript_Max() throws Exception {
         NumberRangeValidator validator = new NumberRangeValidator();
-        Max max = mockMax(1000);
+        Max max = mockMax( 1000 );
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(Optional.empty(), new Optional<Max>(max));
 
@@ -75,6 +79,7 @@ public class NumberRangeValidatorTest extends BaseValidatorTest {
         NumberRangeValidator validator = new NumberRangeValidator();
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(Optional.empty(), Optional.empty());
 
@@ -90,6 +95,7 @@ public class NumberRangeValidatorTest extends BaseValidatorTest {
         Max max = mockMax(200);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(new Optional<Min>(min), new Optional<Max>(max));
 
@@ -103,6 +109,7 @@ public class NumberRangeValidatorTest extends BaseValidatorTest {
         Min min = mockMin(10);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(new Optional<Min>(min), Optional.empty());
 
@@ -116,6 +123,7 @@ public class NumberRangeValidatorTest extends BaseValidatorTest {
         Max max = mockMax(1000);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(Optional.empty(), new Optional<Max>(max));
 
@@ -128,6 +136,7 @@ public class NumberRangeValidatorTest extends BaseValidatorTest {
         NumberRangeValidator validator = new NumberRangeValidator();
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(Optional.empty(), Optional.empty());
 

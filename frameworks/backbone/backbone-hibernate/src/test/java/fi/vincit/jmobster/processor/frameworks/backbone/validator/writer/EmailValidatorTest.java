@@ -18,6 +18,7 @@ package fi.vincit.jmobster.processor.frameworks.backbone.validator.writer;
 
 import fi.vincit.jmobster.processor.languages.javascript.JavaScriptContext;
 import fi.vincit.jmobster.processor.languages.javascript.writer.OutputMode;
+import fi.vincit.jmobster.util.itemprocessor.ItemStatuses;
 import org.hibernate.validator.constraints.Email;
 import org.junit.Test;
 
@@ -33,6 +34,7 @@ public class EmailValidatorTest extends BaseValidatorTest {
         Email email = mock(Email.class);
 
         JavaScriptContext context = mockWriter(OutputMode.JAVASCRIPT);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(email);
 
@@ -48,6 +50,7 @@ public class EmailValidatorTest extends BaseValidatorTest {
         Email email = mock(Email.class);
 
         JavaScriptContext context = mockWriter(OutputMode.JSON);
+        validator.setItemStatus( ItemStatuses.last() );
         validator.setContext(context);
         validator.write(email);
 

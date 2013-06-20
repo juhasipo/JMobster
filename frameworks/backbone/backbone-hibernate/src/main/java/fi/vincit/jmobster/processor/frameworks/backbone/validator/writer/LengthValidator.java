@@ -31,13 +31,13 @@ public class LengthValidator extends BaseValidatorWriter<JavaScriptContext, Java
         final boolean hasMax = length.max() < Integer.MAX_VALUE;
         if( hasMin && hasMax ) {
             getWriter().writeKey( MIN_AND_MAX_KEY );
-            getWriter().writeArray(length.min(), length.max());
+            getWriter().writeArray(getItemStatus(), length.min(), length.max());
         } else if( hasMin ) {
             String value = String.valueOf(length.min());
-            getWriter().writeKeyValue( MIN_ONLY_KEY, value);
+            getWriter().writeKeyValue( MIN_ONLY_KEY, value, getItemStatus() );
         } else if( hasMax ) {
             String value = String.valueOf(length.max());
-            getWriter().writeKeyValue( MAX_ONLY_KEY, value);
+            getWriter().writeKeyValue( MAX_ONLY_KEY, value, getItemStatus() );
         }
     }
 }

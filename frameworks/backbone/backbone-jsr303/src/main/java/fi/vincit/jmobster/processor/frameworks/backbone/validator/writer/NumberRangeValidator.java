@@ -33,13 +33,13 @@ public class NumberRangeValidator extends BaseValidatorWriter<JavaScriptContext,
     public void write(Optional<Min> min, Optional<Max> max) {
         if( min.isPresent() && max.isPresent() ) {
             getWriter().writeKey( MIN_AND_MAX_KEY );
-            getWriter().writeArray( min.getValue().value(), max.getValue().value() );
+            getWriter().writeArray( getItemStatus(), min.getValue().value(), max.getValue().value() );
         } else if( min.isPresent() ) {
             String value = String.valueOf(min.getValue().value());
-            getWriter().writeKeyValue( MIN_ONLY_KEY, value );
+            getWriter().writeKeyValue( MIN_ONLY_KEY, value, getItemStatus() );
         } else if( max.isPresent() ) {
             String value = String.valueOf(max.getValue().value());
-            getWriter().writeKeyValue( MAX_ONLY_KEY, value );
+            getWriter().writeKeyValue( MAX_ONLY_KEY, value, getItemStatus() );
         }
     }
 }

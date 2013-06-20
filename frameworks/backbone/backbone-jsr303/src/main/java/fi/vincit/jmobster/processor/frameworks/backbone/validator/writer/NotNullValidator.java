@@ -24,6 +24,6 @@ import javax.validation.constraints.NotNull;
 
 public class NotNullValidator extends BaseValidatorWriter<JavaScriptContext, JavaScriptWriter> {
     public void write(NotNull notNull) {
-        getWriter().writeKeyValue("required", "true");
+        getWriter().writeKeyValue("required", "true", getItemStatus());
     }
 }
