@@ -16,7 +16,7 @@ be a lot of bugs.
 ![JMobster process](https://raw.github.com/juhasipo/JMobster/master/img/process.png)
 
 #### JMobster Package Dependencies
-![JMobster package dependencies](https://raw.github.com/juhasipo/JMobster/validator-refactor/img/dependencies.png)
+![JMobster package dependencies](https://raw.github.com/juhasipo/JMobster/master/img/dependencies.png)
 
 ### Requirements
 
